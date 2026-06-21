@@ -1,0 +1,73 @@
+/* base style/theme of app */
+
+/* common colors */
+:root{
+    --black-text-color: rgb(34, 34, 34);
+    --orange-color: rgb(250, 129, 18);
+    --yellow-color: rgb(255, 218, 98);
+    --dark-orange-color:rgb(196, 12, 12) ;
+    --beige-color:rgb(245, 231, 198);
+    --lighter-beige:rgb(250, 243, 225);
+}
+
+/* fonts */
+*{
+    /* setting the font for the web */
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+}
+
+
+
+
+
+/* button themes */
+button{
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
+    border-radius: 30px;
+
+    cursor: pointer;
+    color: white;
+    background: var(--orange-color);
+    border: none;
+    padding: 10px 50px;
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+button:hover{
+    transform: translateY(-3px);
+    transition: transform 0.4s ease;
+    filter: brightness(1.20);
+}
+
+button#login-btn,button#logout-btn{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* background themes */
+body {
+    margin: 0;
+    /* top margin of 60px so content wont get blocked by the nav bar */
+    margin-top: 60px;
+    /* max-width: 100%; */
+    color: var(--black-text-color);
+    /* using an image as a background, and its fixed */
+    background-image: url('../images/background-img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: var(--lighter-beige);
+    /* temporary background color in case bg image doesnt load? */
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- link to main css -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <!-- google rounded icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"/>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    
+    <title>BED Hawker Centre Management System</title>
+</head>
+<body>
+
+    <!-- navigation bar section done by ada-->
+    <header id="navigationbar">
+      <div class="logo">
+        <a href="index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
+      <ul class="navitems">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="order-hawker.html">Order</a></li>
+        <li><a href="main-hawkers.html">Hawkers</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Login</button>
+        </a>
+        <button id="logout-btn" style="display: none">Logout</button>
+      </div>
+      
+      <button id="open-history-btn">Order History</button>
+      <!-- hamburger menu -->
+      <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+    </header>
+
+
+    <!-- the "order now" section -->
+    <section id="content">
+      <!-- content of index.html here -->
+      <div class="hero-bg"></div>
+
+      <div class="desc-container">
+        <div class="desctext-box">
+          <h2>Welcome to <em>HawkerSG!</em></h2>
+          <p>
+            Your one-stop solution for managing and exploring Singapore's
+            vibrant hawker centres. Whether you're a food lover looking to
+            discover new culinary delights or a hawker centre manager aiming to
+            streamline operations, HawkerSG has got you covered.
+          </p>
+
+          <a href="order-hawker.html">
+            <button id="orderbutton">Order Now</button>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+</body>
+</html>

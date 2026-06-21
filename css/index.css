@@ -1,0 +1,217 @@
+#navigationbar{
+    
+    /*font noto serif  */
+    /* font-family: 'Noto Serif', serif; */
+    position: fixed; 
+    /* fixed position so that it will stay as u scroll */
+    z-index: 1000;
+    /* z index to make layer stay on top of everything else */
+    top: 0;
+    /* left: 0; */
+
+    display: flex;
+    flex-direction: row;
+
+    /* making the navigation bar background translucent/glass look colour */
+    background-color: rgb(255, 255, 255,0.85);
+    backdrop-filter: blur(6px);
+
+    height: 60px;
+    /* 100% width so that it will take up the whole width */
+    width: 100%;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 30px;
+
+    /* padding inside the width of nav bar */
+    box-sizing: border-box;
+    margin-left: auto;
+
+}
+
+/* logo of the page */
+.logo a{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+.logo span{
+    /* the logo symbol icon */
+    font-size: 32px;
+    color: #ffffff;
+    background: var(--orange-color);
+    border-radius: 20px;
+    padding: 4px;
+}
+
+#logotitle{
+    font-size: 24px;
+    font-weight: 550;
+    color: var(--orange-color);
+    text-decoration: none;
+}
+
+#logotitle em{
+    font-style: italic;
+    color: var(--black-text-color);
+    font-weight: 750;
+}
+
+.navitems{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+
+    /* gap so they r not too close to each other */
+    gap: 32px;
+
+    list-style: none;
+    margin: 0;
+    margin-left: auto;
+    padding: 0px;
+}
+
+.navitems li{
+    font-size: 20px;
+    /* list-style: none; */
+}
+
+/* navigations */
+.navitems a{
+    text-decoration: none;  
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--orange-color);
+    padding: 6px 10px;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+/* animation for when hovering the nav items */
+.navitems a:hover{
+    color: var(--dark-orange-color);
+    transition: color 0.3s ease;
+    /* text-decoration: underline; */
+}
+
+/* while the navigation is active state */
+.navitems a.active{
+    /* dark orange color for active nav */
+    color: var(--dark-orange-color);
+    font-weight: 600;
+}
+
+/* animation for hovering over nav items */
+.navitems a::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: var(--dark-orange-color);
+    transition: width 0.25s ease;
+}
+
+.navitems a:hover::after,
+.navitems a.active::after{
+    width: 100%;
+}
+
+
+
+/* hero section */
+#content{
+    position: relative;
+    height: 100vh;
+        overflow: hidden;
+    /* make the image fill up the height of the viewport */
+}
+
+#main{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+/* hero section set background */
+#content .hero-bg{
+    position: absolute;
+    inset: -20px;
+
+    background-image: url("../images/bg-img.jpg");
+    background-size: cover;
+    background-position: center;
+
+    filter: blur(8px) brightness(45%);
+    transform: scale(1.05);
+    inset: -40px;
+    z-index: -1;
+}
+
+.desc-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    margin-top: 45px;
+    padding-right: 0;
+
+}
+
+.desctext-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 32px;
+    border-radius: 20px;
+    max-width: 500px;
+    height: 550px;
+    margin-right: 150px;
+
+    /* designing the container */
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+}
+
+.desctext-box h2{
+    font-size: 50px;
+    text-align: center;
+    color: white;
+}
+
+.desctext-box h2 em{
+    font-style: italic;
+    color: var(--orange-color);
+    font-weight: 700;
+    text-shadow: 3px 3px 8px rgba(0,0,0,0.6);;
+}
+.desctext-box p{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 90px;
+    
+}
+
+.desctext-box{
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.desctext-box:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+}
