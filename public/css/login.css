@@ -1,0 +1,442 @@
+/* set a universal input design... so to keep consistency*/
+input{
+    width: 400px;
+    height: 50px;
+    padding: 0 20px;
+
+    border-radius: 25px;
+    border: 2px solid transparent;
+
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--black-text-color);
+
+    background-color: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+    outline: none;
+    transition: 
+        border 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.2s ease;
+}
+input:focus{
+    border-color: var(--orange-color);
+    box-shadow: 
+        0 0 0 4px rgba(250, 129, 18, 0.2),
+        0 10px 20px rgba(0, 0, 0, 0.12);
+}
+input::placeholder{
+    color: #999;
+    font-weight: 500;
+}
+
+
+body {
+    margin: 0;
+    background-image: none;
+    background-color: var(--orange-color);
+}
+
+.back-btn{
+    position: absolute;
+    top: 30px;
+    left: 30px;
+
+    background: none;
+    color: var(--black-text-color);
+    box-shadow: none;
+    padding: 0;
+    font-size: 18px;
+}
+
+.back-btn:hover{
+    transform: none;
+    color: var(--orange-color);
+}
+
+
+.login-container{
+    /* position: absolute; */
+    width: 100%;
+    /* height is = height of the view port */
+    height: 100vh;
+    /* background-color: aliceblue; */
+
+    display: flex;
+    flex-direction: row;
+}
+
+.left-container,
+.right-container{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+.bg-image{    
+    position: absolute;
+    background-image: url("../images/bg-img.jpg");
+    background-size: cover;
+    background-position: center;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    
+    filter: blur(10px) brightness(90%);
+    transform: scale(1.05);
+    /* inset: -40px;
+    z-index: -1; */
+    /* z-index: -3; */
+}
+
+.logo{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    /* left: 20px; */
+    top: 40%;
+
+}
+
+.logo a{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: none;
+}
+.logo span{
+    /* the logo symbol icon */
+    font-size: 60px;
+    color: #ffffff;
+    background: var(--orange-color);
+    border-radius: 20px;
+    padding: 4px;
+}
+
+#logotitle{
+    font-size: 60px;
+    font-weight: 550;
+    color: var(--orange-color);
+    text-decoration: none;
+    text-shadow: 0 10px 10px black;
+}
+
+#logotitle em{
+    font-style: italic;
+    color: var(--black-text-color);
+    font-weight: 750;
+}
+
+
+/* right container */
+/* login containers */
+
+.title h1{
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.right-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* display only on active state */
+.login-state.active{
+    display: block;
+    display: flex;
+
+}
+.login-state{
+    display: none;
+}
+
+/* same border card design for all states to keep consistency */
+#choose-role,
+#customer-login,
+#other-login,
+#register-acc{
+    background-color: var(--lighter-beige);
+    width: 70%;
+    height: 80%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.10);
+}
+
+.roles{
+    /* display: grid;
+    grid-template-columns: repeat(2, 1fr); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    gap: 20px;
+}
+
+.roles button{
+    /* override universal width of button */
+    width: 350px;
+    margin: 6px;
+}
+.roles select{
+    right: 22px; 
+}
+/* dropdown list deco */
+#role-select{
+    width: 500px;
+    height: 50px;
+    border-radius: 25px;
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+
+    border: none;
+    outline: none;
+
+    background-color: white;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    cursor: pointer;
+}
+
+.register{
+    display: flex;
+    flex-direction: column;
+}
+.register p{
+    font-size: 20px;
+    margin: 0;
+    margin-top: 60px;
+    margin-bottom: 15px;
+}
+
+/* state customer login  */
+#customer-login .login-info{
+    display: flex;
+    flex-direction: column;
+}
+/* #customer-login .login-info input{
+
+} */
+
+.email-title,.pass-title{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /* margin: 0;
+    margin-top: 15px; */
+    margin: 10px 0px 10px 0px;
+
+    font-size: 25px;
+    gap: 8px;
+}
+
+.forgot-pass{
+    margin: 20px;
+}
+
+.login{
+    margin: 20px;
+}
+
+.login-with-google{
+    border-top: 1px solid black;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.google-title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+/* google image icon */
+.login-with-google .google-title img{
+    width: 40px;
+    height: auto;
+}
+.google-title a{
+    font-size: 20px;
+    text-decoration: none;
+}
+
+
+/* singpass login methods */
+/* for vendor, nea and operator */
+
+/* if the login type is active, button ui is lighter color */
+.singpass-login.active{
+    background: var(--ligter-orange);
+}
+/* if not toggled - not active = default button color */
+
+/* show only the active states of the login methods */
+
+.login-method.active{
+    display:block;
+    width: 100%;
+}
+.login-method{
+    display: none;
+}
+.singpass-input,
+.qr-input{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 1. password login singpasss */
+#login-password{
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#login-password form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
+/* 2. using qr login singpass */
+#login-qr .qr-input .title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.singpass-qr-code{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: 5px solid red;
+    border-radius: 15px;
+}
+.singpass-qr-code img{
+    width: 300px;
+    height: auto;
+    border-radius: 15px;
+}
+.login-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    margin-top: 20px;
+    text-align: center;
+}
+.login-footer a{
+    text-decoration: none;
+    margin: 0;
+    color: rgb(26, 26, 165);
+}
+.login-footer a:hover{
+    color: rgb(83, 83, 255);
+}
+.login-footer p{
+    margin: 0;
+}
+
+/* register section */
+/* register button container */
+#register-acc .register {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+
+    /* layout */
+    .login-container {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 40px;
+    }
+
+    /* hide left image panel */
+    .left-container {
+        display: none;
+    }
+
+    /* right side full screen */
+    .right-container {
+        width: 100%;
+        padding: 20px;
+        justify-content: center;
+    }
+
+    /* login cards */
+    #choose-role,
+    #customer-login,
+    #other-login,
+    #register-acc {
+        width: 100%;
+        height: auto;
+        padding: 30px 20px;
+    }
+
+    /* titles */
+    .title h1 {
+        font-size: 28px;
+        text-align: center;
+    }
+
+    /* inputs + selects */
+    input,
+    #role-select {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* buttons */
+    button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* role buttons spacing */
+    .roles {
+        width: 100%;
+    }
+
+    /* back button */
+    .back-btn {
+        top: 16px;
+        left: 16px;
+    }
+
+    /* QR image */
+    .singpass-qr-code img {
+        width: 220px;
+    }
+    
+}
