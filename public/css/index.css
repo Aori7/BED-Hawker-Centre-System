@@ -1,4 +1,9 @@
+/* ===================================================================================== */
+
+
+
 #navigationbar{
+    
     /*font noto serif  */
     /* font-family: 'Noto Serif', serif; */
     position: fixed; 
@@ -121,7 +126,10 @@
 }
 
 
+/* header/navigation section done by ada  */
+/* ===================================================================================== */
 
+/* content of the index page - done by ada*/
 /* hero section */
 #content{
     position: relative;
@@ -135,7 +143,6 @@
     width: 100%;
     height: 100%;
 }
-/* hero section set background */
 #content .hero-bg{
     position: absolute;
     inset: -20px;
@@ -149,7 +156,7 @@
     inset: -40px;
     z-index: -1;
 }
-
+    
 .desc-container{
     position: absolute;
     top: 0;
@@ -213,4 +220,1016 @@
 .desctext-box:hover{
     transform: translateY(-6px);
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+}
+
+/* hero section done by ada */
+
+/* ===================================================================================== */
+
+.title{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black-text-color);
+}
+
+
+/* map section done by ada */
+#hawkerlocationmap-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 100px 20px;
+    gap: 32px;
+
+    /* background-color: white; */
+}   
+
+#map { 
+    height: 750px; 
+    width: 90%;
+    border-radius: 20px;
+}
+
+#hawkerlocationmap-section h1{
+    margin: 0;
+}
+
+/* universal hawker search design */
+#hawkersearch{
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    background-color: var(--beige-color);
+    border: none;
+    width: 600px;
+    height: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+#hawkersearch::placeholder{
+    color: rgba(128, 128, 128, 0.37);
+}
+/* #hawkersearch:focus{
+    box-shadow: inset 0 0 0 1px var(--dark-orange-color);
+} */
+/* hover effect */
+#hawkersearch:hover{
+    transform: translateY(-3px);
+    transition: transform 0.4s ease;
+    filter: brightness(1.05);
+    /* box-shadow: 0 14px 28px rgba(139, 92, 246, 0.45); */
+}
+
+/* ======================================================= */
+/* popular hawker centre section */
+
+#hawker-centre-section{
+    /* testing color */
+    background-color: var(--orange-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.wrapper{
+    max-width: 1500px;
+    padding: 20px 20px;
+    margin: 0 60px 35px;
+    overflow: hidden;
+}
+
+.wrapper .card{
+    display: flex;
+    flex-direction: column;
+    /* width: 700px; */
+    height: auto;
+    background: var(--beige-color);
+    border-radius: 20px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
+    transition: transform 0.3s ease;
+
+    /* margin: 20px; */
+}
+
+.wrapper .card:hover{
+    transform: translateY(-10px);
+}
+.card-image{
+    padding: 10px;
+    position: relative;
+}
+
+.card .card-image img{
+    width: 100%;
+    border-radius: 22px;
+    /* padding: 10px; */
+    /* height: auto; */
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.card .card-image .hawker-rating{
+    position: absolute;
+    left: 30px;
+    top: 5px;
+    background: var(--orange-color);
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
+}
+
+.card .card-content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 25px 25px;
+}
+
+.card .card-content .hawker-name{
+    font-size: 30px;
+    font-weight: 600;   
+    margin: 0px;
+}
+
+.card .card-content .hawker-address{
+    font-size: 18px;
+    margin: 0;
+    color: rgb(80, 80, 80);
+}
+
+.card .card-content .card-footer{
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid black;
+}
+
+
+
+/* overwrite the button design. */
+.card .card-content .card-footer .card-fav{
+    font-size: 40px;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+
+/* ======================================================= */
+/* about us section */
+
+#aboutus-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 30px;
+
+    margin: 0;
+
+    /* background-color: black ; */
+}
+
+.about-us-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin-right: 50px;
+}
+.about-us-content .title h1{
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.aboutus-text p{
+    font-size: 18px;
+    line-height: 1.6;
+    text-align: justify;
+}
+.about-us-image img{
+    width: 500px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+/* register section */
+#be-a-member-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    background-color: var(--lighter-beige);
+    padding: 100px 20px;
+}
+
+
+
+/* ========================================================= */
+/* contact section */
+
+#contactus-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 20px;
+    gap: 32px;
+
+    background-color: var(--orange-color);
+}
+
+.contact-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.contact-header .contact-desc{
+    max-width: 40%;
+}
+
+.contact-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+
+/* design all container same */
+.contact-container .contact-form,
+.contact-container .contact-info .contact-business-hrs,
+.contact-container .contact-info .contact-business-info{
+    border-radius: 20px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
+    background-color: var(--beige-color);
+    padding: 40px;
+
+}
+
+.contact-container .contact-form{
+    width: 800px;
+    height: auto;
+    /* padding: 40px; */
+}
+
+.contact-container .contact-form form{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    /* background-color: #ffffff; */
+}
+.contact-container .contact-form form input,
+.contact-container .contact-form form textarea{
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.25);
+
+    font-size: 16px;
+    outline: none;
+}
+.contact-container .contact-form form input:focus,
+.contact-container .contact-form form textarea:focus{
+    border: 2px solid var(--orange-color);
+}
+/* dropdown styling */
+.contact-container .contact-form form select {
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.25);
+
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black-text-color);
+
+    background-color: white;
+    outline: none;
+    cursor: pointer;
+
+
+
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%23222222' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 18px;
+}
+
+/* focus state */
+.contact-container .contact-form form select:focus {
+    border: 2px solid var(--orange-color);
+}
+
+/* hover effect */
+.contact-container .contact-form form select:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+#submitbtn{
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
+    border-radius: 30px;
+
+    cursor: pointer;
+    color: white;
+    background: var(--orange-color);
+    border: none;
+    padding: 10px 50px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#submitbtn:hover{
+    transform: translateY(-3px);
+    transition: transform 0.4s ease;
+    filter: brightness(1.20);
+}
+.contact-info{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+
+.contact-info .contact-business-info .phone{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.contact-info .contact-business-info .email{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.contact-info .contact-business-info .address{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+/* .contact-info .contact-business-hrs{
+    padding: 40px;
+} */
+.contact-info .contact-business-hrs .days{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    gap: 40px;
+}
+
+
+
+
+
+
+
+
+/* FOOTER */
+#footercontainer{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    height: 350px;
+    background-color: var(--lighter-beige);
+}
+
+
+
+
+
+
+
+
+
+/* ===================================================== */
+/* Order-hawker.html */
+
+/* universal banner design */
+
+.card-fav {
+    cursor: pointer;
+    color: var(--lighter-beige);
+    transition: transform 0.2s ease;
+}
+
+.card-fav:hover {
+    transform: scale(1.15);
+}
+
+.card-fav.active {
+    color: var(--dark-orange-color);
+}
+
+.order-hawker-banner{
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner{
+    position: absolute;
+    inset: 0;
+
+    background-image: url("../images/bg-img.jpg");
+    background-size: cover;
+    background-position: center;
+
+    filter: blur(10px) brightness(0.6);
+    transform: scale(1.1);
+
+    z-index: 1;
+}
+.order-hawker-header{
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+    color: var(--lighter-beige);
+
+    max-width: 700px;
+    padding: 24px;
+}
+
+.search-hawker-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 20px;
+    gap: 32px;
+}
+
+.filter-category-section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    background-color: var(--orange-color);
+    height: 150px;
+    border-radius: 20px;
+    margin: 0 40px 0 40px;
+    /* width: 60%; */
+}
+
+.filter-hawker-location label,
+.filter-by-favourite label{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--lighter-beige);
+    padding: 10px;
+}
+
+.filter-hawker-location select,
+.filter-by-favourite select{
+    padding: 10px 16px;
+    border-radius: 20px;
+    border: none;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: var(--black-text-color);
+}
+
+/* selection of hawker centre section */
+.hawker-available-section,
+.stall-available-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px 20px;
+    gap: 32px;
+    margin: 40px;
+    border-radius: 20px;
+
+    background-color: var(--lighter-beige);
+}
+
+.all-hawker .container .wrapper .card-list .card{
+    width: 350px;
+    height: auto;
+}
+
+.hawker-available-section .all-hawker .container .wrapper .card-list{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+/* order-stall.html */
+/* this page is the page users will be brought to upon choosing a prefered hawker centre to order at */
+
+.all-stalls{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.all-stalls .card-wrapper-stall{
+    display: flex;
+    flex-direction:row;
+    max-width: 100%;
+}
+.all-stalls .card{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    height: auto;
+    background: var(--beige-color);
+    border-radius: 20px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
+    transition: transform 0.3s ease; 
+
+     margin: 20px;
+}
+
+/* order-menuiitems.html */
+.menu-items-section{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+
+    padding: 60px;
+    margin: 40px;
+    border-radius: 20px;
+
+    background-color: var(--lighter-beige);
+}
+.menu-items-container{
+    flex: 3;
+}
+.cart-container{
+    flex: 1;
+
+    background: var(--beige-color);
+    border-radius: 20px;
+    padding: 24px;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+
+    position: sticky;
+    top: 100px; /* stays below navbar */
+
+    min-height: 300px;
+}
+
+.category-btn {
+    padding: 10px 24px;
+    border-radius: 20px;
+    background: var(--beige-color);
+    color: var(--black-text-color);
+    font-size: 16px;
+}
+
+.category-btn.active {
+    background: var(--orange-color);
+    color: white;
+}
+
+.menu-items-section {
+    padding: 80px 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.menu-card {
+    background: var(--beige-color);
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.menu-card:hover {
+    transform: translateY(-6px);
+}
+
+.menu-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.menu-info {
+    padding: 20px;
+}
+
+.menu-info h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.menu-desc {
+    font-size: 14px;
+    color: #555;
+    margin: 8px 0 16px;
+}
+
+.menu-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.add-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+}
+
+/* ========================================================= */
+/* main-hawkers.html */
+/* about-us.html */
+#aboutus-section-main,
+.about-us-more{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* order history side bar */
+/* ===== Order History Overlay ===== */
+#history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+}
+
+/*  Sidebar Container  */
+#order-history-sidebar {
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 420px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  transition: right 0.35s ease;
+  z-index: 999;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#order-history-sidebar.active {
+  right: 0;
+}
+
+#history-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/*  Header  */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+#close-history {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/*  History List  */
+.history-list {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/*  Order Card  */
+.history-card {
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.history-card h4 {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+}
+
+.history-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.history-meta {
+  color: #777;
+  font-size: 13px;
+}
+
+.reorder-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: none;
+  background: var(--orange-color);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.floating-cart-btn{
+  display: none;
+}
+/* responsive web */
+/* mobile viewing */
+#hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 36px;
+  color: var(--orange-color);
+  cursor: pointer;
+}
+
+/* overriding some css styling(test) */
+.hawker-available-section .all-hawker .container .wrapper .card-list{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.hawker-available-section .all-hawker .container .wrapper .card-list .card{
+  width: 100%;
+}
+.filter-wrapper-stall {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  padding: 24px 30px;
+  border-radius: 30px;
+
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* filter buttons */
+.stall-filter {
+  padding: 10px 26px;
+  border-radius: 30px;
+  background: var(--beige-color);
+  color: var(--black-text-color);
+
+  font-size: 16px;
+  font-weight: 600;
+
+  border: none;
+  cursor: pointer;
+
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  transition: all 0.25s ease;
+}
+
+.stall-filter:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+/* active filter */
+.stall-filter.active {
+  background: var(--orange-color);
+  color: white;
+}
+
+/* responsive web */
+@media (max-width: 768px) {
+    /* show hamburger */
+    #hamburger-btn {
+        display: block;
+    }
+
+    /* hide normal nav */
+    .navitems {
+        display: none;          
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(8px);
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        z-index: 999;
+    }
+
+    .navitems.show {
+        display: flex;          
+    }
+
+    /* optional: tighten navbar spacing */
+    #navigationbar {
+        padding: 0 16px;
+    }
+    #hawker-centre-section .container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .wrapper {
+        margin: 0;
+        padding: 0 12px;
+    }
+
+    /* swiper card */
+    .wrapper .card {
+        width: 100%;
+        margin: 0;
+    }
+
+    .card-image img {
+        aspect-ratio: 16 / 9;
+    }
+    #aboutus-section {
+    flex-direction: column;
+    gap: 40px;
+    padding: 60px 20px;
+    }
+
+    .about-us-content {
+        margin-right: 0;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .aboutus-text p {
+        text-align: left;
+        font-size: 16px;
+    }
+
+    .about-us-image img {
+        width: 100%;
+        max-width: 320px;
+    }
+    /* header text */
+    .contact-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .contact-header .contact-desc {
+        max-width: 100%;
+    }
+
+    /* main contact layout */
+    .contact-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* form */
+    .contact-container .contact-form {
+        width: 100%;
+        padding: 24px;
+    }
+
+    /* info cards */
+    .contact-info {
+        width: 100%;
+    }
+
+    .contact-container .contact-info 
+    .contact-business-info,
+    .contact-container .contact-info 
+    .contact-business-hrs {
+        width: 100%;
+        padding: 24px;
+    }
+
+    /* business hours layout */
+    .contact-info .contact-business-hrs .days {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    #hawkersearch {
+        width: 100%;
+        max-width: 420px;
+    }
+    .searchHawker{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+    .search-hawker-section {
+    padding: 60px 20px;}
+    
+    .hawker-available-section{
+        width: 600px;
+    }
+    .container.swiper{
+        width: 600px;
+    }
+    .hawker-available-section .all-hawker .container .wrapper .card-list{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .all-stalls .card-wrapper-stall{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        width: 100%;
+    }
+
+    .all-stalls .card{
+        width: 100%;
+        margin: 0;
+    }
+
+ /* menu section spacing */
+  .menu-items-section {
+    padding: 40px 16px;
+    margin: 0;
+  }
+
+  /* grid: 1 column */
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* card full width */
+  .menu-card {
+    width: 100%;
+  }
+
+  /* image scale nicely */
+  .menu-card img {
+    height: 160px;
+  }
+
+  /* text sizing */
+  .menu-info h3 {
+    font-size: 18px;
+  }
+
+  .menu-desc {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .add-btn {
+    padding: 6px 18px;
+    font-size: 14px;
+  }
 }
