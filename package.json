@@ -17,5 +17,11 @@
   "bugs": {
     "url": "https://github.com/Aori7/BED-Hawker-Centre-System/issues"
   },
-  "homepage": "https://github.com/Aori7/BED-Hawker-Centre-System#readme"
+  "homepage": "https://github.com/Aori7/BED-Hawker-Centre-System#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "joi": "^18.2.3",
+    "mssql": "^12.6.0"
+  }
 }
