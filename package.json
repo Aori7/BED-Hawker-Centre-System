@@ -1,0 +1,21 @@
+{
+  "name": "bed-hawker-centre-system",
+  "version": "1.0.0",
+  "description": "BED/SPM Hawker Centre Management System",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aori7/BED-Hawker-Centre-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Aori7/BED-Hawker-Centre-System/issues"
+  },
+  "homepage": "https://github.com/Aori7/BED-Hawker-Centre-System#readme"
+}
