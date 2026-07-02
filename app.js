@@ -8,6 +8,8 @@ const port = process.env.PORT || 3000; // Use environment variable or default po
 app.use(express.json()); // middleware inbuilt in express to recognize the incoming Request Object as a JSON Object.
 app.use(express.urlencoded()); // middleware inbuilt in express to recognize the incoming Request Object as strings or arrays
 
+app.use(express.static("public"));
+
 app.listen(port, async () => {
   try {
     // Connect to the database
