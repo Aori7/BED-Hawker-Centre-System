@@ -6,15 +6,52 @@
     <!-- link to main css -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/index.css" />
-    <!-- google rounded icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"/>
-
+    <!-- font chosen by ada: Archivo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-    
+
+    <!-- font 2 for nav bar-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- import font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <!-- importing swiper -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
+
+    <!-- leaflet js library for interactive map -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
     <title>BED Hawker Centre Management System</title>
+
 </head>
 <body>
 
@@ -71,6 +108,30 @@
       </div>
     </section>
 
+
+    <!-- the map + hawker location section -->
+    <section id="hawkerlocationmap-section">
+      <div class="title">
+        <h1>Hawker Centres Available</h1>
+      </div>
+
+      <div id="map">
+        <!-- map initialised using leaflet.js library, markers added by using firebase api. refer to js/leaflet.js for map initialisation-->
+      </div>
+
+      <h1>Find Us!</h1>
+
+      <div class="searchHawker">
+        <!-- search bar for hawker centres here -->
+        <input
+          type="text"
+          id="hawkersearch"
+          name="hawkersearch"
+          placeholder="Search for hawker centres..."
+        />
+        <button type="submit" id="searchbtn">Search</button>
+      </div>
+    </section>
 
 </body>
 </html>
