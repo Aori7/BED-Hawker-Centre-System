@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- google rounded icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <!-- import font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/login.css">
+    <!-- <script type="module" src="js/login.js" defer></script> -->
+
+    <title>Log In</title>
+</head>
+<body>
+
+    <section class="login-container">
+        <div class="left-container">
+            <div class="bg-image">
+            </div>
+            <div class="logo">
+                <a href="../index.html">
+                    <!-- image of logo sourced from google icons -->
+                    <span class="material-symbols-rounded">restaurant_menu</span>
+                    <h1 id="logotitle">Hawker<em>SG</em></h1>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="right-container">
+            <!-- default state - choosing the role -->
+            <div class="login-state active" id="choose-role">
+                <div class="title">
+                    <h1>Choose a login method</h1>
+                </div>
+                <div class="roles">
+                    <select name="roleselect" id="role-select">
+                        <option value=""disabled selected>Select your role</option>
+                        <option value="customer">Customer</option>
+                        <option value="vendor">Vendor</option>
+                        <option value="nea-officer">NEA-Officer</option>
+                        <option value="operator">Operator</option>
+                    </select>
+                    <button class="proceed-btn">Proceed</button>
+                </div>
+                <div class="register">
+                    <p>Don't have an account yet?</p>
+                    <button class="sign-up">Sign Up</button>
+                </div>
+            </div>
+
+            <!-- each state turns into active depending on user's click -->
+            <div class="login-state " id="customer-login">
+                <button class="back-btn">← Back</button>
+                <div class="title">
+                    <h1>Login</h1>
+                </div>
+                <form class="login-info">
+                    <p class="email-title"><span class="material-symbols-rounded">mail</span>Email</p>
+                    <input type="email" placeholder="Email" required>
+                    <p class="pass-title"><span class="material-symbols-rounded">password</span>Password</p>
+                    <input type="password" placeholder="Password" required>
+                </form>
+                <div class="forgot-pass">
+                    <a href="">Forgot Password?</a>
+                </div>
+                <div class="login">
+                    <button class="login-btn" id="customer-login-btn">Log In</button>
+                </div>
+                <div class="login-with-google">
+                    <p>OR</p>
+                    <p class="google-title">
+                        <img src="images/google-icon.png" alt="">
+                        <a href="">Login with Google</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- "other-login" id as nea,operator, and vendor shares the same singpass flow of login so they will share states -->
+            <div class="login-state " id="other-login">
+                <button class="back-btn">← Back</button>
+                <div class="title">
+                    <h1>Login with Singpass</h1>
+                </div>
+                <!-- toggle in between password/qr to login by using 2 states -->
+                <div class="choose-login">
+                    <!-- login method by singpass password -->
+                    <button class="singpass-login active" data-method="password">Password Log In</button>
+                    <!-- login method by singpass qr app -->
+                    <button class="singpass-login " data-method="qr">Singpass App</button>
+                </div>
+
+                <!-- changes state depending on the login method -->
+                <div class="login-methods">
+                    <!-- state 1 default login method is password -->
+                    <div class="login-method active" id="login-password">
+                        <div class="singpass-input">
+                        <h2 class="title">
+                            Login with Singpass Password
+                        </h2>
+                        
+                            <form class="singpass-login-info">
+                                <input type="text" placeholder="Singpass ID" required>
+                                <input type="password" placeholder="Password" required>
+                            </form>
+                            <div class="forgot-pass">
+                                <a href="">Forgot Password?</a>
+                            </div>
+                            <div class="login">
+                                <button class="login-btn">Log In</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- state 2: qr login method -->
+                    <div class="login-method" id="login-qr">
+                        <div class="qr-input">
+                            <div class="title">
+                                <h2>Login with Singpass QR App</h2>
+                                <p>Scan with Singpass App to log in</p>
+                            </div>
+                            <!-- mock singpass qr code image -->
+                            <div class="singpass-qr-code">
+                                <img src="images/qr-code.png" alt="">
+                            </div>
+                            <div class="login-footer">
+                                <p>Dont have Singpass App?</p>
+                                <a href="https://play.google.com/store/apps/details?id=sg.ndi.sp&hl=en_SG">Download Now!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="login-state" id="nea-login">
+
+            </div>
+
+            <div class="login-state" id="operator-login">
+
+            </div> -->
+            
+            <div class="login-state " id="register-acc">
+                <button class="back-btn">← Back</button>
+
+                <div class="title">
+                    <h1>Register Patron Account</h1>
+                </div>
+
+                <form class="reg-info">
+                    <p class="email-title">
+                    <span class="material-symbols-rounded">mail</span>Email
+                    </p>
+                    <input type="email" placeholder="Email" id="email" required>
+
+                    <p class="pass-title">
+                    <span class="material-symbols-rounded">password</span>Password
+                    </p>
+                    <input type="password" placeholder="Password" id="password" required>
+
+                    <p class="pass-title">
+                    <span class="material-symbols-rounded">password</span>Password
+                    </p>
+                    <input type="password" placeholder="Input password again" id="confirm-password" required>
+                </form>
+
+                <div class="register">
+                    <button class="reg-btn">Register</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- <script src="js/login.js"></script> -->
+</body>
+</html>
