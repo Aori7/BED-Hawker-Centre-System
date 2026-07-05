@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+
+    <!-- font chosen by ada: Archivo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- font 2 for nav bar-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+    <title>About Us - HawkerSG</title>
+  </head>
+  <body>
+<!-- navigation bar done by ada-->
+    <header id="navigationbar">
+      <div class="logo">
+        <a href="index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
+      <ul class="navitems">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="order-hawker.html">Order</a></li>
+        <li><a href="main-hawkers.html">Hawkers</a></li>
+        <li><a href="about-us.html"  class="active">About Us</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Login</button>
+        </a>
+        <button id="logout-btn" style="display: none">Logout</button>
+      </div>
+      <button id="open-history-btn">Order History</button>
+      <!-- hamburger menu -->
+      <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+    </header>
+
+    <section class="order-hawker-banner">
+      <div class="banner"></div>
+      <div class="order-hawker-header">
+        <h1>About HawkerSG</h1>
+        <p>Preserving culture. Powering convenience.</p>
+      </div>
+    </section>
+
+    <section id="aboutus-section-main">
+      <div class="about-us-content">
+        <div class="title">
+          <h1>Who We Are</h1>
+        </div>
+
+        <div class="aboutus-text">
+          <p>
+            HawkerSG is a digital platform built to celebrate and modernise
+            Singapore’s iconic hawker culture.
+          </p>
+          <p>
+            We connect food lovers, hawker centres, and stall owners through a
+            seamless ordering and discovery experience, without losing the soul
+            of what makes hawkers special.
+          </p>
+        </div>
+      </div>
+
+      <div class="about-us-image">
+        <img src="../images/Hawker_centre.jpg" alt="Hawker culture" />
+      </div>
+    </section>
+
+    <section class="about-us-more">
+        <div class="title">
+            <h1>Our Mission</h1>
+        </div>
+
+        <p >
+            To preserve Singapore’s hawker heritage while empowering stalls with
+            modern tools that make ordering, discovery, and management easier for
+            everyone.
+        </p>
+
+
+    </section>
+
+    <section id="be-a-member-section">
+      <div class="title">
+        <h1>Be Part of HawkerSG</h1>
+      </div>
+
+      <p>
+        Whether you're a foodie, a hawker, or a centre operator, HawkerSG is
+        built for you.
+      </p>
+
+      <a href="login.html">
+        <button>Join Us</button>
+      </a>
+    </section>
+<!-- Order History Overlay , only shows for users who are logged in-->
+    <div id="history-overlay"></div>
+
+    <!-- Order History Sidebar -->
+    <aside id="order-history-sidebar">
+      <div class="sidebar-header">
+        <h2>Order History</h2>
+        <button id="close-history">✕</button>
+      </div>
+
+      <div class="history-list">
+        <!-- SAMPLE ORDER CARD (design only for now),
+         the cards will be overwritten in js. -->
+        <div class="history-card">
+          <h4>Ah Seng Chicken Rice</h4>
+          <p>2 items</p>
+          <p class="history-meta">$12.50 • 12 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+
+        <div class="history-card">
+          <h4>Laksa King</h4>
+          <p>1 item</p>
+          <p class="history-meta">$6.50 • 10 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+      </div>
+    </aside>
+    <footer id="footercontainer">
+      <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/script.js"></script>
+  </body>
+</html>
