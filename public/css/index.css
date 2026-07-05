@@ -611,7 +611,55 @@
 
 
 
+/* universal banner design */
 
+.card-fav {
+    cursor: pointer;
+    color: var(--lighter-beige);
+    transition: transform 0.2s ease;
+}
+
+.card-fav:hover {
+    transform: scale(1.15);
+}
+
+.card-fav.active {
+    color: var(--dark-orange-color);
+}
+
+.order-hawker-banner{
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner{
+    position: absolute;
+    inset: 0;
+
+    background-image: url("../images/bg-img.jpg");
+    background-size: cover;
+    background-position: center;
+
+    filter: blur(10px) brightness(0.6);
+    transform: scale(1.1);
+
+    z-index: 1;
+}
+.order-hawker-header{
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+    color: var(--lighter-beige);
+
+    max-width: 700px;
+    padding: 24px;
+}
 
 
 
