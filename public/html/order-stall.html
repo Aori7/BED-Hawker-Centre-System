@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/order.css" />
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+    <title>Order - pick stall</title>
+  </head>
+  <body>
+    <!-- navigation bar done by ada-->
+    <header id="navigationbar">
+      <div class="logo">
+        <a href="index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
+      <ul class="navitems">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="order-hawker.html" class="active">Order</a></li>
+        <li><a href="main-hawkers.html">Hawkers</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
+      </ul>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Login</button>
+        </a>
+        <button id="logout-btn" style="display: none">Logout</button>
+      </div>
+      <button id="open-history-btn">Order History</button>
+      <!-- hamburger menu -->
+      <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+    </header>
+
+    <section class="order-hawker-banner">
+      <div class="banner"></div>
+      <div class="order-hawker-header">
+        <h1>Pick a Food Stall</h1>
+        <p class="hawker-selected-name">Hawker name</p>
+      </div>
+    </section>
+
+    <section class="back-to-hawker">
+      <a href="order-hawker.html">Back</a>
+    </section>
+
+    <section class="search-hawker-section">
+      <div class="searchHawker">
+        <input
+          type="text"
+          id="hawkersearch"
+          name="hawkersearch"
+          placeholder="Search for food stall..."
+        />
+        <button type="submit" id="searchbtn">Search</button>
+      </div>
+    </section>
+    <section class="filter-category-section">
+      <div class="filter-wrapper-stall">
+        <button class="stall-filter active" data-filter="all">All</button>
+        <button class="stall-filter" data-filter="main">Main Dishes</button>
+        <button class="stall-filter" data-filter="drinks">Drinks</button>
+        <button class="stall-filter" data-filter="halal">Halal</button>
+        <button class="stall-filter" data-filter="budget">Budget</button>
+      </div>
+    </section>
+    <section class="stall-available-section">
+      <div class="all-stalls">
+        <div class="title">
+          <h1>All Stalls</h1>
+        </div>
+        <div class="card-wrapper-stall">
+          <div class="card" id="stall-card">
+            <div class="card-image">
+              <img src="../images/ah-seng-chicken-rice.jpg" alt="stall image" />
+            </div>
+            <div class="card-content">
+              <h1 class="stall-name">Stall Name</h1>
+              <p class="stall-address">Stall number</p>
+              <p class="stall-desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat
+                laborum doloribus sed nulla accusantium. Obcaecati sunt cum
+                rerum enim nihil ex repudiandae sit quibusdam cumque odio
+                ratione, optio culpa aspernatur!
+              </p>
+              <div class="card-footer">
+                <button class="card-fav material-symbols-rounded">
+                  favorite
+                </button>
+                <button class="card-button">Order Here</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="stall-card">
+            <div class="card-image">
+              <img src="images/fatty-ckt.jpg" alt="stall image" />
+            </div>
+            <div class="card-content">
+              <h1 class="stall-name">Stall Name</h1>
+              <p class="stall-address">Stall number</p>
+              <p class="stall-desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat
+                laborum doloribus sed nulla accusantium. Obcaecati sunt cum
+                rerum enim nihil ex repudiandae sit quibusdam cumque odio
+                ratione, optio culpa aspernatur!
+              </p>
+              <div class="card-footer">
+                <button class="card-fav material-symbols-rounded">
+                  favorite
+                </button>
+                <button class="card-button">Order Here</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="stall-card">
+            <div class="card-image">
+              <img src="images/laksa-king.jpg" alt="stall image" />
+            </div>
+            <div class="card-content">
+              <h1 class="stall-name">Stall Name</h1>
+              <p class="stall-address">Stall number</p>
+              <p class="stall-desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat
+                laborum doloribus sed nulla accusantium. Obcaecati sunt cum
+                rerum enim nihil ex repudiandae sit quibusdam cumque odio
+                ratione, optio culpa aspernatur!
+              </p>
+              <div class="card-footer">
+                <button class="card-fav material-symbols-rounded">
+                  favorite
+                </button>
+                <button class="card-button">Order Here</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="stall-card">
+            <div class="card-image">
+              <img src="images/kopi-teh.jpg" alt="stall image" />
+            </div>
+            <div class="card-content">
+              <h1 class="stall-name">Stall Name</h1>
+              <p class="stall-address">Stall number</p>
+              <p class="stall-desc">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat
+                laborum doloribus sed nulla accusantium. Obcaecati sunt cum
+                rerum enim nihil ex repudiandae sit quibusdam cumque odio
+                ratione, optio culpa aspernatur!
+              </p>
+              <div class="card-footer">
+                <button class="card-fav material-symbols-rounded">
+                  favorite
+                </button>
+                <button class="card-button">Order Here</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Order History Overlay , only shows for users who are logged in-->
+    <div id="history-overlay"></div>
+
+    <!-- Order History Sidebar -->
+    <aside id="order-history-sidebar">
+      <div class="sidebar-header">
+        <h2>Order History</h2>
+        <button id="close-history">✕</button>
+      </div>
+
+      <div class="history-list">
+        <!-- SAMPLE ORDER CARD (design only for now),
+         the cards will be overwritten in js. -->
+        <div class="history-card">
+          <h4>Ah Seng Chicken Rice</h4>
+          <p>2 items</p>
+          <p class="history-meta">$12.50 • 12 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+
+        <div class="history-card">
+          <h4>Laksa King</h4>
+          <p>1 item</p>
+          <p class="history-meta">$6.50 • 10 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+      </div>
+    </aside>
+
+    <footer id="footercontainer">
+      <!-- footer contents here -->
+      <!-- content 1: link to lead to credit.html? -->
+      footer
+    </footer>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="../js/script.js"></script>
+  </body>
+</html>
