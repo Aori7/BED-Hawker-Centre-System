@@ -2,129 +2,6 @@
 
 
 
-#navigationbar{
-    
-    /*font noto serif  */
-    /* font-family: 'Noto Serif', serif; */
-    position: fixed; 
-    /* fixed position so that it will stay as u scroll */
-    z-index: 1000;
-    /* z index to make layer stay on top of everything else */
-    top: 0;
-    /* left: 0; */
-
-    display: flex;
-    flex-direction: row;
-
-    /* making the navigation bar background translucent/glass look colour */
-    background-color: rgb(255, 255, 255,0.85);
-    backdrop-filter: blur(6px);
-
-    height: 60px;
-    /* 100% width so that it will take up the whole width */
-    width: 100%;
-
-    justify-content: space-between;
-    align-items: center;
-
-    padding: 0 30px;
-
-    /* padding inside the width of nav bar */
-    box-sizing: border-box;
-    margin-left: auto;
-
-}
-
-/* logo of the page */
-.logo a{
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: none;
-}
-.logo span{
-    /* the logo symbol icon */
-    font-size: 32px;
-    color: #ffffff;
-    background: var(--orange-color);
-    border-radius: 20px;
-    padding: 4px;
-}
-
-#logotitle{
-    font-size: 24px;
-    font-weight: 550;
-    color: var(--orange-color);
-    text-decoration: none;
-}
-
-#logotitle em{
-    font-style: italic;
-    color: var(--black-text-color);
-    font-weight: 750;
-}
-
-.navitems{
-    display: flex;
-    flex-direction: row;
-    /* justify-content: center; */
-
-    /* gap so they r not too close to each other */
-    gap: 32px;
-
-    list-style: none;
-    margin: 0;
-    margin-left: auto;
-    padding: 0px;
-}
-
-.navitems li{
-    font-size: 20px;
-    /* list-style: none; */
-}
-
-/* navigations */
-.navitems a{
-    text-decoration: none;  
-    font-size: 23px;
-    font-weight: bold;
-    color: var(--orange-color);
-    padding: 6px 10px;
-    position: relative;
-    transition: color 0.2s ease;
-}
-
-/* animation for when hovering the nav items */
-.navitems a:hover{
-    color: var(--dark-orange-color);
-    transition: color 0.3s ease;
-    /* text-decoration: underline; */
-}
-
-/* while the navigation is active state */
-.navitems a.active{
-    /* dark orange color for active nav */
-    color: var(--dark-orange-color);
-    font-weight: 600;
-}
-
-/* animation for hovering over nav items */
-.navitems a::after{
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0;
-    height: 2px;
-    background: var(--dark-orange-color);
-    transition: width 0.25s ease;
-}
-
-.navitems a:hover::after,
-.navitems a.active::after{
-    width: 100%;
-}
-
 
 /* header/navigation section done by ada  */
 /* ===================================================================================== */
@@ -147,7 +24,7 @@
     position: absolute;
     inset: -20px;
 
-    background-image: url("../images/bg-img.jpg");
+    background-image: url("../../images/bg-img.jpg");
     background-size: cover;
     background-position: center;
 
@@ -224,6 +101,8 @@
 
 /* hero section done by ada */
 
+
+
 /* ===================================================================================== */
 
 .title{
@@ -255,30 +134,8 @@
     margin: 0;
 }
 
-/* universal hawker search design */
-#hawkersearch{
-    padding: 10px 20px;
-    font-size: 18px;
-    border-radius: 20px;
-    background-color: var(--beige-color);
-    border: none;
-    width: 600px;
-    height: 30px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-#hawkersearch::placeholder{
-    color: rgba(128, 128, 128, 0.37);
-}
-/* #hawkersearch:focus{
-    box-shadow: inset 0 0 0 1px var(--dark-orange-color);
-} */
-/* hover effect */
-#hawkersearch:hover{
-    transform: translateY(-3px);
-    transition: transform 0.4s ease;
-    filter: brightness(1.05);
-    /* box-shadow: 0 14px 28px rgba(139, 92, 246, 0.45); */
-}
+
+
 
 /* ======================================================= */
 /* popular hawker centre section */
@@ -598,68 +455,12 @@
 
 
 
-/* FOOTER */
-#footercontainer{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    height: 350px;
-    background-color: var(--lighter-beige);
-}
 
 
 
 
 
-/* universal banner design */
 
-.card-fav {
-    cursor: pointer;
-    color: var(--lighter-beige);
-    transition: transform 0.2s ease;
-}
-
-.card-fav:hover {
-    transform: scale(1.15);
-}
-
-.card-fav.active {
-    color: var(--dark-orange-color);
-}
-
-.order-hawker-banner{
-    position: relative;
-    height: 300px;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.banner{
-    position: absolute;
-    inset: 0;
-
-    background-image: url("../images/bg-img.jpg");
-    background-size: cover;
-    background-position: center;
-
-    filter: blur(10px) brightness(0.6);
-    transform: scale(1.1);
-
-    z-index: 1;
-}
-.order-hawker-header{
-    position: relative;
-    z-index: 2;
-
-    text-align: center;
-    color: var(--lighter-beige);
-
-    max-width: 700px;
-    padding: 24px;
-}
 
 
 
@@ -840,192 +641,4 @@
 .stall-filter.active {
   background: var(--orange-color);
   color: white;
-}
-
-/* responsive web */
-@media (max-width: 768px) {
-    /* show hamburger */
-    #hamburger-btn {
-        display: block;
-    }
-
-    /* hide normal nav */
-    .navitems {
-        display: none;          
-        position: absolute;
-        top: 60px;
-        right: 0;
-        width: 100%;
-        background: rgba(255,255,255,0.95);
-        backdrop-filter: blur(8px);
-        flex-direction: column;
-        gap: 20px;
-        padding: 24px 0;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        z-index: 999;
-    }
-
-    .navitems.show {
-        display: flex;          
-    }
-
-    /* optional: tighten navbar spacing */
-    #navigationbar {
-        padding: 0 16px;
-    }
-    #hawker-centre-section .container {
-        width: 100%;
-        padding: 0;
-    }
-
-    .wrapper {
-        margin: 0;
-        padding: 0 12px;
-    }
-
-    /* swiper card */
-    .wrapper .card {
-        width: 100%;
-        margin: 0;
-    }
-
-    .card-image img {
-        aspect-ratio: 16 / 9;
-    }
-    #aboutus-section {
-    flex-direction: column;
-    gap: 40px;
-    padding: 60px 20px;
-    }
-
-    .about-us-content {
-        margin-right: 0;
-        max-width: 100%;
-        text-align: center;
-    }
-
-    .aboutus-text p {
-        text-align: left;
-        font-size: 16px;
-    }
-
-    .about-us-image img {
-        width: 100%;
-        max-width: 320px;
-    }
-    /* header text */
-    .contact-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 16px;
-    }
-
-    .contact-header .contact-desc {
-        max-width: 100%;
-    }
-
-    /* main contact layout */
-    .contact-container {
-        flex-direction: column;
-        gap: 30px;
-    }
-
-    /* form */
-    .contact-container .contact-form {
-        width: 100%;
-        padding: 24px;
-    }
-
-    /* info cards */
-    .contact-info {
-        width: 100%;
-    }
-
-    .contact-container .contact-info 
-    .contact-business-info,
-    .contact-container .contact-info 
-    .contact-business-hrs {
-        width: 100%;
-        padding: 24px;
-    }
-
-    /* business hours layout */
-    .contact-info .contact-business-hrs .days {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-    #hawkersearch {
-        width: 100%;
-        max-width: 420px;
-    }
-    .searchHawker{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-    }
-    .search-hawker-section {
-    padding: 60px 20px;}
-    
-    .hawker-available-section{
-        width: 600px;
-    }
-    .container.swiper{
-        width: 600px;
-    }
-    .hawker-available-section .all-hawker .container .wrapper .card-list{
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .all-stalls .card-wrapper-stall{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-        width: 100%;
-    }
-
-    .all-stalls .card{
-        width: 100%;
-        margin: 0;
-    }
-
- /* menu section spacing */
-  .menu-items-section {
-    padding: 40px 16px;
-    margin: 0;
-  }
-
-  /* grid: 1 column */
-  .menu-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  /* card full width */
-  .menu-card {
-    width: 100%;
-  }
-
-  /* image scale nicely */
-  .menu-card img {
-    height: 160px;
-  }
-
-  /* text sizing */
-  .menu-info h3 {
-    font-size: 18px;
-  }
-
-  .menu-desc {
-    font-size: 14px;
-  }
-
-  .price {
-    font-size: 16px;
-  }
-
-  .add-btn {
-    padding: 6px 18px;
-    font-size: 14px;
-  }
 }

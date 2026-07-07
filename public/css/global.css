@@ -1,0 +1,245 @@
+/* global CSS for styles that are reused through out most html files.  */
+/* includes fonts, colors, etc */
+
+/* all files should contain the following links */
+/*
+<link rel="stylesheet" href="css/global.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+*/
+
+
+
+/* common colors */
+:root{
+    --black-text-color: rgb(34, 34, 34);
+    --orange-color: rgb(250, 129, 18);
+    --yellow-color: rgb(255, 218, 98);
+    --dark-orange-color:rgb(196, 12, 12) ;
+    --beige-color:rgb(245, 231, 198);
+    --lighter-beige:rgb(250, 243, 225);
+}
+
+/* fonts */
+*{
+    /* setting the font for the web */
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+}
+
+/* background themes */
+body {
+    margin: 0;
+    /* top margin of 60px so content wont get blocked by the nav bar */
+    margin-top: 60px;
+    /* max-width: 100%; */
+    color: var(--black-text-color);
+    /* using an image as a background, and its fixed */
+    background-image: url('../images/background-img.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: var(--lighter-beige);
+    /* temporary background color in case bg image doesnt load? */
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+
+
+
+/* responsive web */
+@media (max-width: 768px) {
+    /* show hamburger */
+    #hamburger-btn {
+        display: block;
+    }
+
+    /* hide normal nav */
+    .navitems {
+        display: none;          
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 100%;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(8px);
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        z-index: 999;
+    }
+
+    .navitems.show {
+        display: flex;          
+    }
+
+    /* optional: tighten navbar spacing */
+    #navigationbar {
+        padding: 0 16px;
+    }
+    #hawker-centre-section .container {
+        width: 100%;
+        padding: 0;
+    }
+
+    .wrapper {
+        margin: 0;
+        padding: 0 12px;
+    }
+
+    /* swiper card */
+    .wrapper .card {
+        width: 100%;
+        margin: 0;
+    }
+
+    .card-image img {
+        aspect-ratio: 16 / 9;
+    }
+    #aboutus-section {
+    flex-direction: column;
+    gap: 40px;
+    padding: 60px 20px;
+    }
+
+    .about-us-content {
+        margin-right: 0;
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .aboutus-text p {
+        text-align: left;
+        font-size: 16px;
+    }
+
+    .about-us-image img {
+        width: 100%;
+        max-width: 320px;
+    }
+    /* header text */
+    .contact-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+    }
+
+    .contact-header .contact-desc {
+        max-width: 100%;
+    }
+
+    /* main contact layout */
+    .contact-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* form */
+    .contact-container .contact-form {
+        width: 100%;
+        padding: 24px;
+    }
+
+    /* info cards */
+    .contact-info {
+        width: 100%;
+    }
+
+    .contact-container .contact-info 
+    .contact-business-info,
+    .contact-container .contact-info 
+    .contact-business-hrs {
+        width: 100%;
+        padding: 24px;
+    }
+
+    /* business hours layout */
+    .contact-info .contact-business-hrs .days {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    #hawkersearch {
+        width: 100%;
+        max-width: 420px;
+    }
+    .searchHawker{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+    .search-hawker-section {
+    padding: 60px 20px;}
+    
+    .hawker-available-section{
+        width: 600px;
+    }
+    .container.swiper{
+        width: 600px;
+    }
+    .hawker-available-section .all-hawker .container .wrapper .card-list{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .all-stalls .card-wrapper-stall{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        width: 100%;
+    }
+
+    .all-stalls .card{
+        width: 100%;
+        margin: 0;
+    }
+
+ /* menu section spacing */
+  .menu-items-section {
+    padding: 40px 16px;
+    margin: 0;
+  }
+
+  /* grid: 1 column */
+  .menu-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* card full width */
+  .menu-card {
+    width: 100%;
+  }
+
+  /* image scale nicely */
+  .menu-card img {
+    height: 160px;
+  }
+
+  /* text sizing */
+  .menu-info h3 {
+    font-size: 18px;
+  }
+
+  .menu-desc {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .add-btn {
+    padding: 6px 18px;
+    font-size: 14px;
+  }
+}
