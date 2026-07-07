@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- font 2 for nav bar-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"/>
+
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+    <title>Contact Us</title>
+</head>
+<body>
+
+    <!-- navigation bar done by ada-->
+    <header id="navigationbar">
+      <div class="logo">
+        <a href="../index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
+      <ul class="navitems">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../html/order-hawker.html">Order</a></li>
+        <li><a href="../html/main-hawkers.html">Hawkers</a></li>
+        <li><a href="../html/about-us.html">About Us</a></li>
+        <li><a href="../html/contact-us.html" class="active">Contact Us</a></li>
+      </ul>
+
+      <div class="loginbutton">
+        <a href="../html/login.html" id="login-link">
+          <button id="login-btn">Login</button>
+        </a>
+        <button id="logout-btn" style="display: none">Logout</button>
+      </div>
+      <button id="open-history-btn">Order History</button>
+      <!-- hamburger menu -->
+      <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+    </header>
+        <section id="contactus-section">
+      <div class="contact-header">
+        <div class="title">
+          <h1>Contact Us</h1>
+        </div>
+        <div class="contact-desc">
+          <p>
+            Have questions or feedback? We'd love to hear from you! Reach out to
+            our team for assistance or to share your thoughts on how we can
+            improve HawkerSG.
+          </p>
+        </div>
+      </div>
+      <div class="contact-container">
+        <div class="contact-form">
+          <div class="title">
+            <h2>Get In Touch</h2>
+          </div>
+          <form action="">
+            <label for="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Your name.."
+            />
+
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Your email.."
+            />
+
+            <!-- <label for="subject">Subject:</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Subject.."
+            /> -->
+            <label for="subject">Subject:</label>
+            <select id="subject" name="subject">
+              <option value="">Select a subject</option>
+              <option value="Complaint">Complaint</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Suggestion">Suggestion</option>
+              <option value="Others">Others</option>
+            </select>
+
+
+            <label for="message">Message:</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Write your message.."
+              style="height: 200px"
+            ></textarea>
+
+            <input type="submit" value="Submit" id="submitbtn" />
+          </form>
+        </div>
+        <div class="contact-info">
+          <div class="contact-business-info">
+            <div class="title">
+              <h2>Contact Information</h2>
+            </div>
+            <div class="phone">
+              <span class="material-symbols-rounded">phone</span>
+              <h2>Phone</h2>
+              <p>+65 1234 5678</p>
+            </div>
+            <div class="email">
+              <span class="material-symbols-rounded">email</span>
+              <h2>Email</h2>
+              <p>contact@hawker.sg</p>
+            </div>
+            <div class="address">
+              <span class="material-symbols-rounded">location_on</span>
+              <h2>Address</h2>
+              <p>123 Hawker St, Singapore 123456</p>
+            </div>
+          </div>
+          <div class="contact-business-hrs">
+            <div class="title">
+              <h2>Business Hours</h2>
+            </div>
+            <div class="days">
+              <div class="mon-fri">
+                <h2>Monday-Friday</h2>
+                <p>8:00 AM - 8:00 PM</p>
+              </div>
+              <div class="saturday">
+                <h2>Saturday</h2>
+                <p>9:00 AM - 6:00 PM</p>
+              </div>
+              <div class="sunday">
+                <h2>Sunday</h2>
+                <p>Closed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- <script type="module" src="../js/auth.js"></script> -->
+    <script type="module" src="../js/script.js"></script>
+</body>
+</html>

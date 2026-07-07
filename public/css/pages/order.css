@@ -2,55 +2,7 @@
 /* ===================================================== */
 /* Order-hawker.html */
 
-/* universal banner design */
 
-.card-fav {
-    cursor: pointer;
-    color: var(--lighter-beige);
-    transition: transform 0.2s ease;
-}
-
-.card-fav:hover {
-    transform: scale(1.15);
-}
-
-.card-fav.active {
-    color: var(--dark-orange-color);
-}
-
-.order-hawker-banner{
-    position: relative;
-    height: 300px;
-    overflow: hidden;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.banner{
-    position: absolute;
-    inset: 0;
-
-    background-image: url("../images/bg-img.jpg");
-    background-size: cover;
-    background-position: center;
-
-    filter: blur(10px) brightness(0.6);
-    transform: scale(1.1);
-
-    z-index: 1;
-}
-.order-hawker-header{
-    position: relative;
-    z-index: 2;
-
-    text-align: center;
-    color: var(--lighter-beige);
-
-    max-width: 700px;
-    padding: 24px;
-}
 
 .search-hawker-section{
     display: flex;
@@ -250,4 +202,71 @@
 .add-btn {
     padding: 8px 20px;
     font-size: 14px;
+}
+
+
+
+
+
+   /* CART / ORDER PAGE */
+
+
+.floating-cart-btn {
+  display: none;
+}
+
+
+   /* HAWKER GRID OVERRIDE */
+
+
+.hawker-available-section .all-hawker .container .wrapper .card-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.hawker-available-section .all-hawker .container .wrapper .card-list .card {
+  width: 100%;
+}
+
+
+
+   /* STALL FILTER BUTTONS */
+
+.filter-wrapper-stall {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  padding: 24px 30px;
+  border-radius: 30px;
+
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+.stall-filter {
+  padding: 10px 26px;
+  border-radius: 30px;
+  background: var(--beige-color);
+  color: var(--black-text-color);
+
+  font-size: 16px;
+  font-weight: 600;
+
+  border: none;
+  cursor: pointer;
+
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  transition: all 0.25s ease;
+}
+
+.stall-filter:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+.stall-filter.active {
+  background: var(--orange-color);
+  color: white;
 }
