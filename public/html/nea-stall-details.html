@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css"><link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/pages/nea.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"><title>Stall Details - HawkerSG</title></head>
+<body><header id="navigationbar">
+  <div class="logo">
+    <a href="nea-main.html">
+      <span class="material-symbols-rounded">restaurant_menu</span>
+      <div>
+        <h1 id="logotitle">Hawker<em>SG</em></h1>
+        <span class="nea-nav-role">NEA Officer</span>
+      </div>
+    </a>
+  </div>
+
+  <ul class="navitems">
+    <li><a href="nea-main.html">Dashboard</a></li>
+    <li><a href="nea-search-stall.html">Search Stall</a></li>
+    <li><a href="nea-inspection-history.html">Inspection History</a></li>
+    <li><a href="nea-record-inspection.html">Record Inspection</a></li>
+    <li><a href="nea-hygiene-grades.html">Hygiene Grades</a></li>
+  </ul>
+
+  <div class="loginbutton">
+    <a href="login.html"><button id="logout-btn">Logout</button></a>
+  </div>
+  <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+</header>
+<main class="nea-page"><section class="nea-header"><div><h1>Stall Details</h1><p>Review stall information and latest inspection status.</p></div><div class="actions"><a href="nea-record-inspection.html"><button>Record Inspection</button></a><a href="nea-inspection-history.html"><button class="secondary-btn">View History</button></a></div></section>
+<section class="nea-card detail-grid"><img src="../images/ah-seng-chicken-rice.jpg" alt="Ah Seng Chicken Rice"><div><h2>Ah Seng Chicken Rice</h2><div class="info-list"><div class="info-row"><strong>Hawker Centre</strong><span>Maxwell Food Centre</span></div><div class="info-row"><strong>Unit Number</strong><span>#01-12</span></div><div class="info-row"><strong>Cuisine</strong><span>Chinese</span></div><div class="info-row"><strong>Stall Owner</strong><span>Mr Lim Wei Ming</span></div><div class="info-row"><strong>Current Grade</strong><span class="grade-badge grade-a">A</span></div><div class="info-row"><strong>Compliance</strong><span class="status-badge status-completed">Compliant</span></div><div class="info-row"><strong>Last Inspection</strong><span>8 Jul 2026</span></div></div></div></section>
+<section class="nea-section"><div class="nea-card"><h2>Latest Inspection Remarks</h2><p>Food preparation area was clean and properly maintained. Temperature records were complete and staff hygiene practices met requirements.</p></div></section>
+</main><script src="../js/nea.js"></script></body></html>

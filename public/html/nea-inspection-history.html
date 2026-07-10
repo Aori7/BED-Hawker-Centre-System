@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css"><link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/pages/nea.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"><title>Inspection History - HawkerSG</title></head>
+<body><header id="navigationbar">
+  <div class="logo">
+    <a href="nea-main.html">
+      <span class="material-symbols-rounded">restaurant_menu</span>
+      <div>
+        <h1 id="logotitle">Hawker<em>SG</em></h1>
+        <span class="nea-nav-role">NEA Officer</span>
+      </div>
+    </a>
+  </div>
+
+  <ul class="navitems">
+    <li><a href="nea-main.html">Dashboard</a></li>
+    <li><a href="nea-search-stall.html">Search Stall</a></li>
+    <li><a href="nea-inspection-history.html">Inspection History</a></li>
+    <li><a href="nea-record-inspection.html">Record Inspection</a></li>
+    <li><a href="nea-hygiene-grades.html">Hygiene Grades</a></li>
+  </ul>
+
+  <div class="loginbutton">
+    <a href="login.html"><button id="logout-btn">Logout</button></a>
+  </div>
+  <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+</header>
+<main class="nea-page"><section class="nea-header"><div><h1>Inspection History</h1><p>Review previous inspection records and filter by stall or grade.</p></div></section>
+<div class="search-toolbar"><input type="search" placeholder="Search stall"><select><option>All grades</option><option>A</option><option>B</option><option>C</option><option>D</option></select><input type="date"><button>Filter</button></div>
+<section class="nea-table-wrap"><table class="nea-table"><thead><tr><th>Inspection ID</th><th>Stall</th><th>Date</th><th>Score</th><th>Grade</th><th>Status</th><th>Action</th></tr></thead><tbody>
+<tr><td>INS-024</td><td>Ah Seng Chicken Rice</td><td>8 Jul 2026</td><td>92</td><td><span class="grade-badge grade-a">A</span></td><td><span class="status-badge status-completed">Completed</span></td><td><button class="secondary-btn">View</button></td></tr>
+<tr><td>INS-023</td><td>Laksa King</td><td>7 Jul 2026</td><td>67</td><td><span class="grade-badge grade-c">C</span></td><td><span class="status-badge status-non-compliant">Non-Compliant</span></td><td><button class="secondary-btn">Edit</button></td></tr>
+<tr><td>INS-022</td><td>Kopi More</td><td>6 Jul 2026</td><td>81</td><td><span class="grade-badge grade-b">B</span></td><td><span class="status-badge status-completed">Completed</span></td><td><button class="secondary-btn">View</button></td></tr>
+</tbody></table></section></main><script src="../js/nea.js"></script></body></html>

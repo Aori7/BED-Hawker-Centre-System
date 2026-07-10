@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="../css/global.css"><link rel="stylesheet" href="../css/layout.css"><link rel="stylesheet" href="../css/components.css"><link rel="stylesheet" href="../css/pages/nea.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet"><title>Record Inspection - HawkerSG</title></head>
+<body><header id="navigationbar">
+  <div class="logo">
+    <a href="nea-main.html">
+      <span class="material-symbols-rounded">restaurant_menu</span>
+      <div>
+        <h1 id="logotitle">Hawker<em>SG</em></h1>
+        <span class="nea-nav-role">NEA Officer</span>
+      </div>
+    </a>
+  </div>
+
+  <ul class="navitems">
+    <li><a href="nea-main.html">Dashboard</a></li>
+    <li><a href="nea-search-stall.html">Search Stall</a></li>
+    <li><a href="nea-inspection-history.html">Inspection History</a></li>
+    <li><a href="nea-record-inspection.html">Record Inspection</a></li>
+    <li><a href="nea-hygiene-grades.html">Hygiene Grades</a></li>
+  </ul>
+
+  <div class="loginbutton">
+    <a href="login.html"><button id="logout-btn">Logout</button></a>
+  </div>
+  <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+</header>
+<main class="nea-page"><section class="nea-header"><div><h1>Record Inspection Result</h1><p>Enter inspection findings for the selected stall.</p></div></section>
+<section class="nea-card"><form id="inspection-form" class="nea-form"><div class="form-row"><label>Food Stall<select required><option value="">Select stall</option><option>Ah Seng Chicken Rice</option><option>Laksa King</option><option>Kopi More</option></select></label><label>Inspection Date<input type="date" required></label></div><div class="form-row"><label>Inspection Score<input type="number" min="0" max="100" placeholder="0 - 100" required></label><label>Recommended Grade<select required><option value="">Select grade</option><option>A</option><option>B</option><option>C</option><option>D</option></select></label></div><label>Compliance Status<select required><option>Compliant</option><option>Non-Compliant</option><option>Follow-up Required</option></select></label><label>Inspection Remarks<textarea placeholder="Enter findings, observations and corrective actions" required></textarea></label><div class="actions"><button type="submit">Save Inspection</button><button type="reset" class="secondary-btn">Clear Form</button></div></form></section>
+</main><script src="../js/nea.js"></script></body></html>
