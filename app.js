@@ -1,15 +1,33 @@
 const express = require("express");
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
+// // Load environment variables
+// dotenv.config();
 
+// Import 
+const customerController = require("./controllers/customerController");
+const customerRoutes = require("./routes/customerRoutes");
+
+//create express app
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default port
 
+
+//middleware
 app.use(express.json()); // middleware inbuilt in express to recognize the incoming Request Object as a JSON Object.
 app.use(express.urlencoded()); // middleware inbuilt in express to recognize the incoming Request Object as strings or arrays
 
 app.use(express.static("public"));
 
+app.use("/customers", customerRoutes);
+
+
+//routes
+app.get("/customers", customerController.getAllCustomers);
+
+
+
+//start server
 app.listen(port, async () => {
   try {
     // Connect to the database

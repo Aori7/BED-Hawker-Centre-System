@@ -108,56 +108,121 @@ singpassbtn.forEach(btn => {
 
 
 
-//customer login email and password - temporary login without firebase
-const customerLoginBtn = document.getElementById("customer-login-btn");
 
-if (customerLoginBtn) {
-    customerLoginBtn.addEventListener("click", (e) => {
-        e.preventDefault();
+// customer registration form
+const registerForm = document.getElementById("register-form");
 
-        const email = document.querySelector("#customer-login input[type='email']").value;
-        const password = document.querySelector("#customer-login input[type='password']").value;
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-        if (!email || !password) {
-            alert("Please fill in all fields");
+    const email = document
+        .getElementById("register-email")
+        .value
+        .trim();
+
+    const name = document
+        .getElementById("register-name")
+        .value
+        .trim();
+
+    const password = document
+        .getElementById("register-password")
+        .value;
+
+    if (!email || !name || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters");
+        return;
+    }
+
+    try {
+        const response = await fetch("/customers/register", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email: email,
+                name: name,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error);
             return;
         }
 
-        // temporary mock login success
-        sessionStorage.setItem("isLoggedIn", "true");
-        sessionStorage.setItem("userRole", "customer");
-        sessionStorage.setItem("userEmail", email);
-
-        window.location.href = "../index.html";
-    });
-}
-
-//registering customers - temporary register without firebase
-const submit = document.querySelector(".reg-btn");
-
-if (submit) {
-    submit.addEventListener("click", function(event) {
-        event.preventDefault();
-
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirm-password").value;
-
-        if (!email || !password || !confirmPassword) {
-            alert("Please fill in all fields");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
-            return;
-        }
-
-        // temporary mock register
         alert("Account created successfully. Please log in.");
 
-        sessionStorage.setItem("registeredEmail", email);
+        registerForm.reset();
         toggleLoginState("customer-login");
-    });
-}
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        alert("Unable to connect to the server");
+    }
+});
+
+
+// //customer login email and password - temporary login without firebase
+// const customerLoginBtn = document.getElementById("customer-login-btn");
+
+// if (customerLoginBtn) {
+//     customerLoginBtn.addEventListener("click", (e) => {
+//         e.preventDefault();
+
+//         const email = document.querySelector("#customer-login input[type='email']").value;
+//         const password = document.querySelector("#customer-login input[type='password']").value;
+
+//         if (!email || !password) {
+//             alert("Please fill in all fields");
+//             return;
+//         }
+
+//         // temporary mock login success
+//         sessionStorage.setItem("isLoggedIn", "true");
+//         sessionStorage.setItem("userRole", "customer");
+//         sessionStorage.setItem("userEmail", email);
+
+//         window.location.href = "../index.html";
+//     });
+// }
+
+// //registering customers - temporary register without firebase
+// const submit = document.querySelector(".reg-btn");
+
+// if (submit) {
+//     submit.addEventListener("click", function(event) {
+//         event.preventDefault();
+
+//         const email = document.getElementById("email").value;
+//         const password = document.getElementById("password").value;
+//         const confirmPassword = document.getElementById("confirm-password").value;
+
+//         if (!email || !password || !confirmPassword) {
+//             alert("Please fill in all fields");
+//             return;
+//         }
+
+//         if (password !== confirmPassword) {
+//             alert("Passwords do not match");
+//             return;
+//         }
+
+//         // temporary mock register
+//         alert("Account created successfully. Please log in.");
+
+//         sessionStorage.setItem("registeredEmail", email);
+//         toggleLoginState("customer-login");
+//     });
+// }
 
