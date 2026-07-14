@@ -67,7 +67,7 @@
                 <form class="login-info">
                     <p class="email-title"><span class="material-symbols-rounded">mail</span>Email</p>
                     <input type="email" placeholder="Email" required>
-                    <p class="pass-title"><span class="material-symbols-rounded">password</span>Password</p>
+                    <p class="pass-title"><span class="material-symbols-rounded">lock</span>Password</p>
                     <input type="password" placeholder="Password" required>
                 </form>
                 <div class="forgot-pass">
@@ -89,11 +89,11 @@
             <div class="login-state " id="other-login">
                 <button class="back-btn">← Back</button>
                 <div class="title">
-                    <h1>Login with Singpass</h1>
+                    <h1>Login</h1>
                 </div>
                 <!-- toggle in between password/qr to login by using 2 states -->
                 <div class="choose-login">
-                    <!-- login method by singpass password -->
+                    <!-- login method by email  -->
                     <button class="singpass-login active" data-method="password">Password Log In</button>
                     <!-- login method by singpass qr app -->
                     <button class="singpass-login " data-method="qr">Singpass App</button>
@@ -105,11 +105,11 @@
                     <div class="login-method active" id="login-password">
                         <div class="singpass-input">
                         <h2 class="title">
-                            Login with Singpass Password
+                            Login with Email
                         </h2>
                         
                             <form class="singpass-login-info">
-                                <input type="text" placeholder="Singpass ID" required>
+                                <input type="email" placeholder="Email" required>
                                 <input type="password" placeholder="Password" required>
                             </form>
                             <div class="forgot-pass">
@@ -148,33 +148,48 @@
 
             </div> -->
             
-            <div class="login-state " id="register-acc">
-                <button class="back-btn">← Back</button>
+            <div class="login-state" id="register-acc">
+                <button class="back-btn" type="button">← Back</button>
 
                 <div class="title">
                     <h1>Register Patron Account</h1>
                 </div>
 
-                <form class="reg-info">
+                <form class="reg-info" id="register-form">
                     <p class="email-title">
-                    <span class="material-symbols-rounded">mail</span>Email
+                        <span class="material-symbols-rounded">mail</span>Email
                     </p>
-                    <input type="email" placeholder="Email" id="email" required>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        id="register-email"
+                        required
+                    >
+
+                    <p class="name-title">
+                        <span class="material-symbols-rounded">person</span>Name
+                    </p>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        id="register-name"
+                        required
+                    >
 
                     <p class="pass-title">
-                    <span class="material-symbols-rounded">password</span>Password
+                        <span class="material-symbols-rounded">lock</span>Password
                     </p>
-                    <input type="password" placeholder="Password" id="password" required>
+                    <input
+                        type="password"
+                        placeholder="Input password"
+                        id="register-password"
+                        required
+                    >
 
-                    <p class="pass-title">
-                    <span class="material-symbols-rounded">password</span>Password
-                    </p>
-                    <input type="password" placeholder="Input password again" id="confirm-password" required>
+                    <div class="register">
+                        <button class="reg-btn" type="submit">Register</button>
+                    </div>
                 </form>
-
-                <div class="register">
-                    <button class="reg-btn">Register</button>
-                </div>
             </div>
 
         </div>
