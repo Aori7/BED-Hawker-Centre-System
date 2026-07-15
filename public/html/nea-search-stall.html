@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- existing fed styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- existing nea styles -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- search stall styles -->
+    <link rel="stylesheet" href="../css/pages/nea-search-stall.css">
+
+    <!-- noto sans font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- google material symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
+    >
+
+    <title>Search Food Stalls - HawkerSG</title>
+</head>
+
+<body class="nea-page">
+
+    <!-- navigation bar -->
+    <header id="navigationbar">
+
+        <div class="logo">
+            <a href="nea-main.html">
+                <span class="material-symbols-rounded">
+                    restaurant_menu
+                </span>
+
+                <h1 id="logotitle">
+                    Hawker<em>SG</em>
+                </h1>
+            </a>
+        </div>
+
+        <ul class="navitems">
+
+            <li>
+                <a href="nea-main.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-search-stall.html" class="active">
+                    Search Stalls
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-hygiene-grades.html">
+                    Hygiene Grades
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="loginbutton">
+            <a href="login.html">
+                <button id="logout-btn">
+                    Logout
+                </button>
+            </a>
+        </div>
+
+        <button
+            id="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+            aria-label="Open navigation menu"
+        >
+            menu
+        </button>
+
+    </header>
+
+    <!-- page banner -->
+    <section class="order-hawker-banner">
+
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+            <h1>Search Food Stalls</h1>
+
+            <p>
+                Find food stalls and review their latest hygiene
+                and compliance information.
+            </p>
+        </div>
+
+    </section>
+
+    <main class="nea-page-container">
+
+        <section class="stall-search-card">
+
+            <!-- page heading -->
+            <div class="stall-search-header">
+
+                <div>
+                    <p class="nea-section-label">
+                        NEA Officer Portal
+                    </p>
+
+                    <h2>Food Stall Directory</h2>
+
+                    <p>
+                        Search by stall name or hawker centre and
+                        filter the results by grade or compliance status.
+                    </p>
+                </div>
+
+                <a
+                    href="nea-record-inspection.html"
+                    class="stall-record-link"
+                >
+                    <button type="button">
+                        Record Inspection
+                    </button>
+                </a>
+
+            </div>
+
+            <!-- search and filters -->
+            <section class="stall-filter-panel">
+
+                <div class="stall-search-group">
+
+                    <label for="stall-search-input">
+                        Search Food Stall
+                    </label>
+
+                    <div class="stall-search-input-wrapper">
+
+                        <span class="material-symbols-rounded">
+                            search
+                        </span>
+
+                        <input
+                            type="search"
+                            id="stall-search-input"
+                            placeholder="Search by stall or hawker centre..."
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="stall-filter-group">
+
+                    <label for="stall-grade-filter">
+                        Hygiene Grade
+                    </label>
+
+                    <select id="stall-grade-filter">
+                        <option value="all">All Grades</option>
+                        <option value="A">Grade A</option>
+                        <option value="B">Grade B</option>
+                        <option value="C">Grade C</option>
+                        <option value="D">Grade D</option>
+                    </select>
+
+                </div>
+
+                <div class="stall-filter-group">
+
+                    <label for="stall-status-filter">
+                        Compliance Status
+                    </label>
+
+                    <select id="stall-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="Compliant">Compliant</option>
+                        <option value="Non-Compliant">
+                            Non-Compliant
+                        </option>
+                        <option value="Pending">Pending</option>
+                    </select>
+
+                </div>
+
+                <div class="stall-filter-group">
+
+                    <label for="stall-location-filter">
+                        Location
+                    </label>
+
+                    <select id="stall-location-filter">
+                        <option value="all">All Locations</option>
+                        <option value="Central">Central</option>
+                        <option value="East">East</option>
+                        <option value="West">West</option>
+                        <option value="North">North</option>
+                        <option value="South">South</option>
+                    </select>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="clear-stall-filters"
+                    class="stall-clear-btn"
+                >
+                    Clear
+                </button>
+
+            </section>
+
+            <!-- result summary -->
+            <div class="stall-results-header">
+
+                <p>
+                    Showing
+                    <strong id="stall-result-count">6</strong>
+                    food stalls
+                </p>
+
+                <p id="stall-filter-summary">
+                    All food stalls
+                </p>
+
+            </div>
+
+            <!-- stall cards -->
+            <section
+                id="stall-results-grid"
+                class="stall-results-grid"
+            >
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="1"
+                    data-stall="Ah Seng Chicken Rice"
+                    data-centre="Maxwell Food Centre"
+                    data-grade="A"
+                    data-status="Compliant"
+                    data-location="Central"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/ah-seng-chicken-rice.jpg"
+                            alt="Ah Seng Chicken Rice"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-a">
+                            Grade A
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Ah Seng Chicken Rice</h3>
+
+                                <p>
+                                    Maxwell Food Centre
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-compliant"
+                            >
+                                Compliant
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-12 · Central</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    restaurant
+                                </span>
+
+                                <p>Chinese Cuisine</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 15 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=1"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=1"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="2"
+                    data-stall="Fatty Char Kway Teow"
+                    data-centre="Old Airport Road Food Centre"
+                    data-grade="B"
+                    data-status="Compliant"
+                    data-location="East"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/fatty-ckt.jpg"
+                            alt="Fatty Char Kway Teow"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-b">
+                            Grade B
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Fatty Char Kway Teow</h3>
+
+                                <p>
+                                    Old Airport Road Food Centre
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-compliant"
+                            >
+                                Compliant
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-18 · East</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    restaurant
+                                </span>
+
+                                <p>Chinese Cuisine</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 13 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=2"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=2"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="3"
+                    data-stall="Laksa King"
+                    data-centre="Tiong Bahru Market"
+                    data-grade="C"
+                    data-status="Non-Compliant"
+                    data-location="Central"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/laksa-king.jpg"
+                            alt="Laksa King"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-c">
+                            Grade C
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Laksa King</h3>
+
+                                <p>
+                                    Tiong Bahru Market
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-non-compliant"
+                            >
+                                Non-Compliant
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-25 · Central</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    restaurant
+                                </span>
+
+                                <p>Malay Cuisine</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 10 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=3"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=3"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="4"
+                    data-stall="Kopi More"
+                    data-centre="Maxwell Food Centre"
+                    data-grade="D"
+                    data-status="Non-Compliant"
+                    data-location="Central"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/kopi-teh.jpg"
+                            alt="Kopi More"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-d">
+                            Grade D
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Kopi More</h3>
+
+                                <p>
+                                    Maxwell Food Centre
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-non-compliant"
+                            >
+                                Non-Compliant
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-06 · Central</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    local_cafe
+                                </span>
+
+                                <p>Drinks</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 8 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=4"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=4"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="5"
+                    data-stall="Nasi Lemak House"
+                    data-centre="Old Airport Road Food Centre"
+                    data-grade="B"
+                    data-status="Compliant"
+                    data-location="East"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/picture-icon.jpg"
+                            alt="Nasi Lemak House"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-b">
+                            Grade B
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Nasi Lemak House</h3>
+
+                                <p>
+                                    Old Airport Road Food Centre
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-compliant"
+                            >
+                                Compliant
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-31 · East</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    restaurant
+                                </span>
+
+                                <p>Malay Cuisine</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 5 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=5"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=5"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article
+                    class="stall-result-card"
+                    data-stall-id="6"
+                    data-stall="Mee Goreng Corner"
+                    data-centre="Tiong Bahru Market"
+                    data-grade="C"
+                    data-status="Pending"
+                    data-location="Central"
+                >
+
+                    <div class="stall-image-container">
+
+                        <img
+                            src="../images/meeGoreng.png"
+                            alt="Mee Goreng Corner"
+                        >
+
+                        <span class="nea-grade-badge nea-grade-c">
+                            Grade C
+                        </span>
+
+                    </div>
+
+                    <div class="stall-result-content">
+
+                        <div class="stall-result-title">
+
+                            <div>
+                                <h3>Mee Goreng Corner</h3>
+
+                                <p>
+                                    Tiong Bahru Market
+                                </p>
+                            </div>
+
+                            <span
+                                class="nea-status-badge nea-status-pending"
+                            >
+                                Pending
+                            </span>
+
+                        </div>
+
+                        <div class="stall-result-info">
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    location_on
+                                </span>
+
+                                <p>#01-42 · Central</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    restaurant
+                                </span>
+
+                                <p>Indian-Muslim Cuisine</p>
+                            </div>
+
+                            <div>
+                                <span class="material-symbols-rounded">
+                                    event
+                                </span>
+
+                                <p>Last inspected: 2 Jul 2026</p>
+                            </div>
+
+                        </div>
+
+                        <div class="stall-result-actions">
+
+                            <a
+                                href="nea-stall-details.html?stallId=6"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-view-btn"
+                                >
+                                    View Details
+                                </button>
+                            </a>
+
+                            <a
+                                href="nea-record-inspection.html?stallId=6"
+                            >
+                                <button
+                                    type="button"
+                                    class="stall-inspect-btn"
+                                >
+                                    Inspect
+                                </button>
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+            <!-- empty state -->
+            <section
+                id="stall-empty-state"
+                class="stall-empty-state"
+            >
+
+                <span class="material-symbols-rounded">
+                    storefront
+                </span>
+
+                <h3>No food stalls found</h3>
+
+                <p>
+                    Try changing your search keyword or filter selections.
+                </p>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <footer id="footercontainer">
+        <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/nea.js"></script>
+</body>
+</html>

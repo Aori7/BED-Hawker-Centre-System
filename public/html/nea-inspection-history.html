@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- existing fed styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- existing nea styles -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- inspection history styles -->
+    <link rel="stylesheet" href="../css/pages/nea-history.css">
+
+    <!-- noto sans font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- google material symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
+    >
+
+    <title>Inspection History - HawkerSG</title>
+</head>
+
+<body class="nea-page">
+
+    <!-- navigation bar -->
+    <header id="navigationbar">
+
+        <div class="logo">
+            <a href="nea-main.html">
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">Hawker<em>SG</em></h1>
+            </a>
+        </div>
+
+        <ul class="navitems">
+
+            <li>
+                <a href="nea-main.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html" class="active">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-hygiene-grades.html">
+                    Hygiene Grades
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="loginbutton">
+            <a href="login.html">
+                <button id="logout-btn">Logout</button>
+            </a>
+        </div>
+
+        <button
+            id="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+            aria-label="Open navigation menu"
+        >
+            menu
+        </button>
+
+    </header>
+
+    <!-- page banner -->
+    <section class="order-hawker-banner">
+
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+            <h1>Inspection History</h1>
+
+            <p>
+                Search, review and manage previous food stall inspection records.
+            </p>
+        </div>
+
+    </section>
+
+    <main class="nea-page-container">
+
+        <!-- history header -->
+        <section class="history-page-card">
+
+            <div class="history-page-header">
+
+                <div>
+                    <p class="nea-section-label">
+                        NEA Officer Portal
+                    </p>
+
+                    <h2>Inspection Records</h2>
+
+                    <p>
+                        Use the search and filter controls to locate an inspection.
+                    </p>
+                </div>
+
+                <a
+                    href="nea-record-inspection.html"
+                    class="history-record-link"
+                >
+                    <button type="button">
+                        Record Inspection
+                    </button>
+                </a>
+
+            </div>
+
+            <!-- page message -->
+            <div
+                id="history-message"
+                class="history-message"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+            <!-- search and filter controls -->
+            <section class="history-filter-panel">
+
+                <div class="history-search-group">
+
+                    <label for="history-search">
+                        Search Inspection
+                    </label>
+
+                    <div class="history-search-box">
+
+                        <span class="material-symbols-rounded">
+                            search
+                        </span>
+
+                        <input
+                            type="search"
+                            id="history-search"
+                            placeholder="Search by stall or hawker centre..."
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="history-filter-group">
+
+                    <label for="grade-filter">
+                        Hygiene Grade
+                    </label>
+
+                    <select id="grade-filter">
+                        <option value="all">All Grades</option>
+                        <option value="A">Grade A</option>
+                        <option value="B">Grade B</option>
+                        <option value="C">Grade C</option>
+                        <option value="D">Grade D</option>
+                    </select>
+
+                </div>
+
+                <div class="history-filter-group">
+
+                    <label for="status-filter">
+                        Compliance Status
+                    </label>
+
+                    <select id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="Compliant">Compliant</option>
+                        <option value="Non-Compliant">Non-Compliant</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+
+                </div>
+
+                <div class="history-filter-group">
+
+                    <label for="sort-filter">
+                        Sort By
+                    </label>
+
+                    <select id="sort-filter">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="highest-score">Highest Score</option>
+                        <option value="lowest-score">Lowest Score</option>
+                    </select>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="clear-history-filters"
+                    class="history-clear-btn"
+                >
+                    Clear
+                </button>
+
+            </section>
+
+            <!-- result information -->
+            <div class="history-results-header">
+
+                <p>
+                    Showing
+                    <strong id="history-result-count">6</strong>
+                    inspection records
+                </p>
+
+                <p id="history-filter-summary">
+                    All inspection records
+                </p>
+
+            </div>
+
+            <!-- desktop and tablet table -->
+            <div class="history-table-wrapper">
+
+                <table class="history-table">
+
+                    <thead>
+                        <tr>
+                            <th>Inspection ID</th>
+                            <th>Food Stall</th>
+                            <th>Hawker Centre</th>
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="inspection-history-body">
+
+                        <tr
+                            data-inspection-id="INSP-1006"
+                            data-stall="Ah Seng Chicken Rice"
+                            data-centre="Maxwell Food Centre"
+                            data-date="2026-07-15"
+                            data-score="92"
+                            data-grade="A"
+                            data-status="Compliant"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="Food preparation area was clean and organised. Raw and cooked food were stored separately."
+                        >
+                            <td>INSP-1006</td>
+
+                            <td>
+                                <strong>Ah Seng Chicken Rice</strong>
+                            </td>
+
+                            <td>Maxwell Food Centre</td>
+
+                            <td>15 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score high-score">
+                                    92
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-a">
+                                    A
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-compliant">
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-inspection-id="INSP-1005"
+                            data-stall="Fatty Char Kway Teow"
+                            data-centre="Old Airport Road Food Centre"
+                            data-date="2026-07-13"
+                            data-score="82"
+                            data-grade="B"
+                            data-status="Compliant"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="General cleanliness was satisfactory. Stall owner was advised to improve storage labelling."
+                        >
+                            <td>INSP-1005</td>
+
+                            <td>
+                                <strong>Fatty Char Kway Teow</strong>
+                            </td>
+
+                            <td>Old Airport Road Food Centre</td>
+
+                            <td>13 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score medium-score">
+                                    82
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-b">
+                                    B
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-compliant">
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-inspection-id="INSP-1004"
+                            data-stall="Laksa King"
+                            data-centre="Tiong Bahru Market"
+                            data-date="2026-07-10"
+                            data-score="65"
+                            data-grade="C"
+                            data-status="Non-Compliant"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="Temperature records were incomplete. Cleaning schedule was not properly maintained."
+                        >
+                            <td>INSP-1004</td>
+
+                            <td>
+                                <strong>Laksa King</strong>
+                            </td>
+
+                            <td>Tiong Bahru Market</td>
+
+                            <td>10 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score low-score">
+                                    65
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-c">
+                                    C
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-non-compliant">
+                                    Non-Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-inspection-id="INSP-1003"
+                            data-stall="Kopi More"
+                            data-centre="Maxwell Food Centre"
+                            data-date="2026-07-08"
+                            data-score="54"
+                            data-grade="D"
+                            data-status="Non-Compliant"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="Pest control issues were observed. Immediate corrective action and follow-up inspection are required."
+                        >
+                            <td>INSP-1003</td>
+
+                            <td>
+                                <strong>Kopi More</strong>
+                            </td>
+
+                            <td>Maxwell Food Centre</td>
+
+                            <td>8 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score low-score">
+                                    54
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-d">
+                                    D
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-non-compliant">
+                                    Non-Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-inspection-id="INSP-1002"
+                            data-stall="Nasi Lemak House"
+                            data-centre="Old Airport Road Food Centre"
+                            data-date="2026-07-05"
+                            data-score="88"
+                            data-grade="B"
+                            data-status="Compliant"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="Stall was clean and food handling procedures were followed. Minor improvements were recommended."
+                        >
+                            <td>INSP-1002</td>
+
+                            <td>
+                                <strong>Nasi Lemak House</strong>
+                            </td>
+
+                            <td>Old Airport Road Food Centre</td>
+
+                            <td>5 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score medium-score">
+                                    88
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-b">
+                                    B
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-compliant">
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-inspection-id="INSP-1001"
+                            data-stall="Mee Goreng Corner"
+                            data-centre="Tiong Bahru Market"
+                            data-date="2026-07-02"
+                            data-score="74"
+                            data-grade="C"
+                            data-status="Pending"
+                            data-officer="Dayana Sharafeena"
+                            data-remarks="Further review is required before the final compliance status is confirmed."
+                        >
+                            <td>INSP-1001</td>
+
+                            <td>
+                                <strong>Mee Goreng Corner</strong>
+                            </td>
+
+                            <td>Tiong Bahru Market</td>
+
+                            <td>2 Jul 2026</td>
+
+                            <td>
+                                <span class="history-score medium-score">
+                                    74
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-c">
+                                    C
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-status-badge nea-status-pending">
+                                    Pending
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="history-view-btn"
+                                >
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- empty search result -->
+            <div id="history-empty-state" class="history-empty-state">
+
+                <span class="material-symbols-rounded">
+                    search_off
+                </span>
+
+                <h3>No inspection records found</h3>
+
+                <p>
+                    Try changing your search keyword or filter selections.
+                </p>
+
+            </div>
+
+            <!-- pagination -->
+            <nav class="history-pagination" aria-label="Inspection history pages">
+
+                <button
+                    type="button"
+                    id="history-previous-page"
+                    class="history-page-btn"
+                    disabled
+                >
+                    <span class="material-symbols-rounded">
+                        chevron_left
+                    </span>
+
+                    Previous
+                </button>
+
+                <div class="history-page-numbers">
+                    <button type="button" class="history-page-number active">
+                        1
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    id="history-next-page"
+                    class="history-page-btn"
+                    disabled
+                >
+                    Next
+
+                    <span class="material-symbols-rounded">
+                        chevron_right
+                    </span>
+                </button>
+
+            </nav>
+
+        </section>
+
+    </main>
+
+    <!-- inspection details overlay -->
+    <div id="inspection-modal-overlay" class="inspection-modal-overlay"></div>
+
+    <!-- inspection details modal -->
+    <section
+        id="inspection-details-modal"
+        class="inspection-details-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inspection-modal-title"
+    >
+
+        <div class="inspection-modal-header">
+
+            <div>
+                <p class="nea-section-label">
+                    Inspection Details
+                </p>
+
+                <h2 id="inspection-modal-title">
+                    Inspection Record
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                id="close-inspection-modal"
+                class="inspection-modal-close"
+                aria-label="Close inspection details"
+            >
+                <span class="material-symbols-rounded">
+                    close
+                </span>
+            </button>
+
+        </div>
+
+        <div class="inspection-modal-content">
+
+            <div class="inspection-detail-grid">
+
+                <div class="inspection-detail-item">
+                    <span>Inspection ID</span>
+                    <strong id="modal-inspection-id">—</strong>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Inspection Date</span>
+                    <strong id="modal-inspection-date">—</strong>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Food Stall</span>
+                    <strong id="modal-stall-name">—</strong>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Hawker Centre</span>
+                    <strong id="modal-centre-name">—</strong>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Inspection Score</span>
+                    <strong id="modal-inspection-score">—</strong>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Hygiene Grade</span>
+                    <div id="modal-inspection-grade">—</div>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>Compliance Status</span>
+                    <div id="modal-inspection-status">—</div>
+                </div>
+
+                <div class="inspection-detail-item">
+                    <span>NEA Officer</span>
+                    <strong id="modal-officer-name">—</strong>
+                </div>
+
+            </div>
+
+            <div class="inspection-remarks-box">
+                <h3>Inspection Remarks</h3>
+
+                <p id="modal-inspection-remarks">
+                    —
+                </p>
+            </div>
+
+        </div>
+
+        <div class="inspection-modal-actions">
+
+            <button
+                type="button"
+                id="close-inspection-modal-bottom"
+                class="history-secondary-btn"
+            >
+                Close
+            </button>
+
+            <button
+                type="button"
+                id="edit-inspection-btn"
+            >
+                Edit Record
+            </button>
+
+        </div>
+
+    </section>
+
+    <footer id="footercontainer">
+        <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/nea.js"></script>
+</body>
+</html>
