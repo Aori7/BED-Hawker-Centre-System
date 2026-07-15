@@ -29,9 +29,11 @@ const roleselect = document.getElementById("role-select");
 const regbtn = document.querySelector(".sign-up");
 
 //if user click "sign up", show the registeration form
-regbtn.addEventListener("click", () => {
-    toggleLoginState("register-acc")
-})
+if (regbtn) {
+    regbtn.addEventListener("click", () => {
+        toggleLoginState("register-acc");
+    });
+}
 // when the user clicks proceed after choosing their role in login..
 proceedbtn.addEventListener("click", () => {
     const role = roleselect.value;
@@ -41,7 +43,7 @@ proceedbtn.addEventListener("click", () => {
     if (!role) return;
 
     // 1. if role selected is customer, state adds "active" for customer login state.
-    if (role === "customer"){
+    if (role === "Customer"){
         toggleLoginState("customer-login");
     }
     //2. if other role than customer is selected, state changes to active for other-login state
@@ -50,31 +52,70 @@ proceedbtn.addEventListener("click", () => {
     }
 });
 
-//mock login for non-customer login? for nea,operator and vendors
-document.querySelectorAll(".login-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+
+
+const otherLoginForm =
+    document.getElementById("other-login-form");
+
+otherLoginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document
+        .getElementById("other-login-email")
+        .value
+        .trim();
+
+    const password = document
+        .getElementById("other-login-password")
+        .value;
+
     const role = sessionStorage.getItem("selectedRole");
-    //check
-    if (!role) {
-      alert("No role selected");
-      return;
+
+    if (!email || !password || !role) {
+        alert("Please fill in all fields");
+        return;
     }
 
-    // mock login success
-    sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("userRole", role);
+    try {
+        const response = await fetch("/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                password,
+                role
+            })
+        });
 
-    // redirect by role to specific page - aka redirecting to calista's,dayana's and ruimin's pages.
-    if (role === "vendor") {
-      window.location.href = "vendor-home.html";
-    } else if (role === "nea-officer") {
-      window.location.href = "nea-main.html";
-    } else if (role === "operator") {
-      window.location.href = "operator-main.html";
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Login failed");
+            return;
+        }
+
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("userID", data.user.userID);
+        sessionStorage.setItem("userEmail", data.user.email);
+        sessionStorage.setItem("userRole", data.user.role);
+
+        console.log("Login successful:", data.user);
+
+        if (data.user.role === "Stall Owner") {
+            window.location.href = "vendor-home.html";
+        } else if (data.user.role === "NEA Officer") {
+            window.location.href = "nea-main.html";
+        } else if (data.user.role === "Operator") {
+            window.location.href = "operator-main.html";
+        }
+
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("Unable to connect to the server");
     }
-  });
 });
-
 //in other-login state method
 //there are 2 states to choose from
 //either login via singpass manual password OR singpass qr app
@@ -110,11 +151,13 @@ singpassbtn.forEach(btn => {
 
 
 // customer registration form
-const registerForm = document.getElementById("register-form");
+const registerForm = document.getElementById("register-form"); // in login.html, get the form's id
 
+//detects when a user click submmit
 registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
+    //retrieve user input values
     const email = document
         .getElementById("register-email")
         .value
@@ -168,6 +211,75 @@ registerForm.addEventListener("submit", async (event) => {
 
     } catch (error) {
         console.error("Registration error:", error);
+        alert("Unable to connect to the server");
+    }
+});
+
+
+
+// customer login form
+const customerLoginForm =
+    document.getElementById("customer-login-form");
+
+customerLoginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document
+        .getElementById("customer-login-email")
+        .value
+        .trim();
+
+    const password = document
+        .getElementById("customer-login-password")
+        .value;
+
+    if (!email || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    try {
+        const response = await fetch("/customers/login", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                email,
+                password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Login failed");
+            return;
+        }
+
+        // save login details only after backend confirms login
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("userRole", data.user.role);
+        sessionStorage.setItem("userID", data.user.userID);
+        sessionStorage.setItem("customerID", data.user.customerID);
+        sessionStorage.setItem(
+            "customerName",
+            data.user.customerName
+        );
+        sessionStorage.setItem("userEmail", data.user.email);
+
+        //debug
+        console.log("User data:", data.user);
+
+        alert("Login successful");
+
+        // temporarily comment this out if you want to inspect console
+        // window.location.href = "../index.html";
+
+    } catch (error) {
+        console.error("Login error:", error);
         alert("Unable to connect to the server");
     }
 });
