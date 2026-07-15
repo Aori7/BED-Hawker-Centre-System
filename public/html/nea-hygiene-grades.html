@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- existing fed styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- shared nea officer styles -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- hygiene grade page styles -->
+    <link rel="stylesheet" href="../css/pages/nea-hygiene-grades.css">
+
+    <!-- noto sans font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- google material symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
+    >
+
+    <title>Hygiene Grades - HawkerSG</title>
+</head>
+
+<body class="nea-page">
+
+    <!-- navigation bar -->
+    <header id="navigationbar">
+
+        <div class="logo">
+            <a href="nea-main.html">
+                <span class="material-symbols-rounded">
+                    restaurant_menu
+                </span>
+
+                <h1 id="logotitle">
+                    Hawker<em>SG</em>
+                </h1>
+            </a>
+        </div>
+
+        <ul class="navitems">
+
+            <li>
+                <a href="nea-main.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-search-stall.html">
+                    Search Stalls
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="nea-hygiene-grades.html"
+                    class="active"
+                >
+                    Hygiene Grades
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="loginbutton">
+            <a href="login.html">
+                <button id="logout-btn">
+                    Logout
+                </button>
+            </a>
+        </div>
+
+        <button
+            id="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+            aria-label="Open navigation menu"
+        >
+            menu
+        </button>
+
+    </header>
+
+    <!-- page banner -->
+    <section class="order-hawker-banner">
+
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+            <h1>Stall Hygiene Grades</h1>
+
+            <p>
+                Review and update the hygiene grades assigned to
+                inspected food stalls.
+            </p>
+        </div>
+
+    </section>
+
+    <main class="nea-page-container">
+
+        <!-- page heading -->
+        <section class="hygiene-page-card">
+
+            <div class="hygiene-page-header">
+
+                <div>
+                    <p class="nea-section-label">
+                        NEA Officer Portal
+                    </p>
+
+                    <h2>Hygiene Grade Management</h2>
+
+                    <p>
+                        Search for a food stall, review its current grade
+                        and update the grade when required.
+                    </p>
+                </div>
+
+                <a
+                    href="nea-record-inspection.html"
+                    class="hygiene-inspection-link"
+                >
+                    <button type="button">
+                        Record Inspection
+                    </button>
+                </a>
+
+            </div>
+
+            <!-- success and error message -->
+            <div
+                id="hygiene-message"
+                class="hygiene-message"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+            <!-- grade summary -->
+            <section class="hygiene-summary-grid">
+
+                <button
+                    type="button"
+                    class="hygiene-summary-card grade-a-summary"
+                    data-grade-filter="A"
+                >
+                    <span class="hygiene-summary-grade">
+                        A
+                    </span>
+
+                    <div>
+                        <p>Grade A Stalls</p>
+                        <h3 id="grade-a-count">2</h3>
+                        <small>Excellent hygiene standards</small>
+                    </div>
+                </button>
+
+                <button
+                    type="button"
+                    class="hygiene-summary-card grade-b-summary"
+                    data-grade-filter="B"
+                >
+                    <span class="hygiene-summary-grade">
+                        B
+                    </span>
+
+                    <div>
+                        <p>Grade B Stalls</p>
+                        <h3 id="grade-b-count">2</h3>
+                        <small>Good hygiene standards</small>
+                    </div>
+                </button>
+
+                <button
+                    type="button"
+                    class="hygiene-summary-card grade-c-summary"
+                    data-grade-filter="C"
+                >
+                    <span class="hygiene-summary-grade">
+                        C
+                    </span>
+
+                    <div>
+                        <p>Grade C Stalls</p>
+                        <h3 id="grade-c-count">1</h3>
+                        <small>Improvements required</small>
+                    </div>
+                </button>
+
+                <button
+                    type="button"
+                    class="hygiene-summary-card grade-d-summary"
+                    data-grade-filter="D"
+                >
+                    <span class="hygiene-summary-grade">
+                        D
+                    </span>
+
+                    <div>
+                        <p>Grade D Stalls</p>
+                        <h3 id="grade-d-count">1</h3>
+                        <small>Immediate action required</small>
+                    </div>
+                </button>
+
+            </section>
+
+            <!-- search and filter controls -->
+            <section class="hygiene-filter-panel">
+
+                <div class="hygiene-search-group">
+
+                    <label for="hygiene-search">
+                        Search Food Stall
+                    </label>
+
+                    <div class="hygiene-search-box">
+
+                        <span class="material-symbols-rounded">
+                            search
+                        </span>
+
+                        <input
+                            type="search"
+                            id="hygiene-search"
+                            placeholder="Search by stall or hawker centre..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="hygiene-filter-group">
+
+                    <label for="hygiene-centre-filter">
+                        Hawker Centre
+                    </label>
+
+                    <select id="hygiene-centre-filter">
+                        <option value="all">
+                            All Hawker Centres
+                        </option>
+
+                        <option value="Maxwell Food Centre">
+                            Maxwell Food Centre
+                        </option>
+
+                        <option value="Old Airport Road Food Centre">
+                            Old Airport Road Food Centre
+                        </option>
+
+                        <option value="Tiong Bahru Market">
+                            Tiong Bahru Market
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="hygiene-filter-group">
+
+                    <label for="hygiene-grade-filter">
+                        Current Grade
+                    </label>
+
+                    <select id="hygiene-grade-filter">
+                        <option value="all">All Grades</option>
+                        <option value="A">Grade A</option>
+                        <option value="B">Grade B</option>
+                        <option value="C">Grade C</option>
+                        <option value="D">Grade D</option>
+                    </select>
+
+                </div>
+
+                <div class="hygiene-filter-group">
+
+                    <label for="hygiene-status-filter">
+                        Compliance Status
+                    </label>
+
+                    <select id="hygiene-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="Compliant">
+                            Compliant
+                        </option>
+
+                        <option value="Non-Compliant">
+                            Non-Compliant
+                        </option>
+
+                        <option value="Pending">
+                            Pending
+                        </option>
+                    </select>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="clear-hygiene-filters"
+                    class="hygiene-clear-btn"
+                >
+                    Clear
+                </button>
+
+            </section>
+
+            <!-- result summary -->
+            <div class="hygiene-results-header">
+
+                <p>
+                    Showing
+                    <strong id="hygiene-result-count">6</strong>
+                    food stalls
+                </p>
+
+                <p id="hygiene-filter-summary">
+                    All hygiene grades
+                </p>
+
+            </div>
+
+            <!-- hygiene grade table -->
+            <div class="hygiene-table-wrapper">
+
+                <table class="hygiene-table">
+
+                    <thead>
+                        <tr>
+                            <th>Food Stall</th>
+                            <th>Hawker Centre</th>
+                            <th>Latest Inspection</th>
+                            <th>Score</th>
+                            <th>Current Grade</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="hygiene-grade-body">
+
+                        <tr
+                            data-stall-id="1"
+                            data-stall="Ah Seng Chicken Rice"
+                            data-centre="Maxwell Food Centre"
+                            data-date="2026-07-15"
+                            data-score="92"
+                            data-grade="A"
+                            data-status="Compliant"
+                            data-remarks="Food preparation area was clean and organised."
+                        >
+                            <td>
+                                <strong>
+                                    Ah Seng Chicken Rice
+                                </strong>
+                            </td>
+
+                            <td>
+                                Maxwell Food Centre
+                            </td>
+
+                            <td>
+                                15 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-high-score">
+                                    92
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-a">
+                                    Grade A
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-compliant"
+                                >
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-stall-id="2"
+                            data-stall="Fatty Char Kway Teow"
+                            data-centre="Old Airport Road Food Centre"
+                            data-date="2026-07-13"
+                            data-score="82"
+                            data-grade="B"
+                            data-status="Compliant"
+                            data-remarks="General cleanliness was satisfactory."
+                        >
+                            <td>
+                                <strong>
+                                    Fatty Char Kway Teow
+                                </strong>
+                            </td>
+
+                            <td>
+                                Old Airport Road Food Centre
+                            </td>
+
+                            <td>
+                                13 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-medium-score">
+                                    82
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-b">
+                                    Grade B
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-compliant"
+                                >
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-stall-id="3"
+                            data-stall="Laksa King"
+                            data-centre="Tiong Bahru Market"
+                            data-date="2026-07-10"
+                            data-score="65"
+                            data-grade="C"
+                            data-status="Non-Compliant"
+                            data-remarks="Cleaning schedule was not properly maintained."
+                        >
+                            <td>
+                                <strong>
+                                    Laksa King
+                                </strong>
+                            </td>
+
+                            <td>
+                                Tiong Bahru Market
+                            </td>
+
+                            <td>
+                                10 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-low-score">
+                                    65
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-c">
+                                    Grade C
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-non-compliant"
+                                >
+                                    Non-Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-stall-id="4"
+                            data-stall="Kopi More"
+                            data-centre="Maxwell Food Centre"
+                            data-date="2026-07-08"
+                            data-score="54"
+                            data-grade="D"
+                            data-status="Non-Compliant"
+                            data-remarks="Immediate corrective action is required."
+                        >
+                            <td>
+                                <strong>
+                                    Kopi More
+                                </strong>
+                            </td>
+
+                            <td>
+                                Maxwell Food Centre
+                            </td>
+
+                            <td>
+                                8 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-low-score">
+                                    54
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-d">
+                                    Grade D
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-non-compliant"
+                                >
+                                    Non-Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-stall-id="5"
+                            data-stall="Nasi Lemak House"
+                            data-centre="Old Airport Road Food Centre"
+                            data-date="2026-07-05"
+                            data-score="88"
+                            data-grade="B"
+                            data-status="Compliant"
+                            data-remarks="Food handling procedures were followed."
+                        >
+                            <td>
+                                <strong>
+                                    Nasi Lemak House
+                                </strong>
+                            </td>
+
+                            <td>
+                                Old Airport Road Food Centre
+                            </td>
+
+                            <td>
+                                5 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-medium-score">
+                                    88
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-b">
+                                    Grade B
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-compliant"
+                                >
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr
+                            data-stall-id="6"
+                            data-stall="Chicken Rice Express"
+                            data-centre="Tiong Bahru Market"
+                            data-date="2026-07-02"
+                            data-score="95"
+                            data-grade="A"
+                            data-status="Compliant"
+                            data-remarks="Stall maintained excellent hygiene standards."
+                        >
+                            <td>
+                                <strong>
+                                    Chicken Rice Express
+                                </strong>
+                            </td>
+
+                            <td>
+                                Tiong Bahru Market
+                            </td>
+
+                            <td>
+                                2 Jul 2026
+                            </td>
+
+                            <td>
+                                <span class="hygiene-score hygiene-high-score">
+                                    95
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="nea-grade-badge nea-grade-a">
+                                    Grade A
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="nea-status-badge nea-status-compliant"
+                                >
+                                    Compliant
+                                </span>
+                            </td>
+
+                            <td>
+                                <button
+                                    type="button"
+                                    class="hygiene-update-btn"
+                                >
+                                    Update
+                                </button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- empty result -->
+            <section
+                id="hygiene-empty-state"
+                class="hygiene-empty-state"
+            >
+                <span class="material-symbols-rounded">
+                    search_off
+                </span>
+
+                <h3>No food stalls found</h3>
+
+                <p>
+                    Try changing your search keyword or filter selections.
+                </p>
+            </section>
+
+        </section>
+
+    </main>
+
+    <!-- modal overlay -->
+    <div
+        id="hygiene-modal-overlay"
+        class="hygiene-modal-overlay"
+    ></div>
+
+    <!-- update hygiene grade modal -->
+    <section
+        id="hygiene-update-modal"
+        class="hygiene-update-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="hygiene-modal-title"
+    >
+
+        <div class="hygiene-modal-header">
+
+            <div>
+                <p class="nea-section-label">
+                    Update Hygiene Grade
+                </p>
+
+                <h2 id="hygiene-modal-title">
+                    Food Stall Grade
+                </h2>
+            </div>
+
+            <button
+                type="button"
+                id="close-hygiene-modal"
+                class="hygiene-modal-close"
+                aria-label="Close update grade form"
+            >
+                <span class="material-symbols-rounded">
+                    close
+                </span>
+            </button>
+
+        </div>
+
+        <form id="hygiene-update-form" novalidate>
+
+            <input
+                type="hidden"
+                id="hygiene-stall-id"
+            >
+
+            <div class="hygiene-stall-summary">
+
+                <div>
+                    <span>Food Stall</span>
+                    <strong id="hygiene-modal-stall">
+                        —
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Hawker Centre</span>
+                    <strong id="hygiene-modal-centre">
+                        —
+                    </strong>
+                </div>
+
+                <div>
+                    <span>Current Grade</span>
+                    <div id="hygiene-modal-current-grade">
+                        —
+                    </div>
+                </div>
+
+                <div>
+                    <span>Latest Score</span>
+                    <strong id="hygiene-modal-score">
+                        —
+                    </strong>
+                </div>
+
+            </div>
+
+            <fieldset class="hygiene-grade-selection">
+
+                <legend>
+                    Select New Grade
+                    <span class="required">*</span>
+                </legend>
+
+                <div class="hygiene-grade-options">
+
+                    <label class="hygiene-grade-option grade-option-a">
+                        <input
+                            type="radio"
+                            name="updatedHygieneGrade"
+                            value="A"
+                        >
+
+                        <span class="hygiene-grade-letter">
+                            A
+                        </span>
+
+                        <span>Excellent</span>
+                    </label>
+
+                    <label class="hygiene-grade-option grade-option-b">
+                        <input
+                            type="radio"
+                            name="updatedHygieneGrade"
+                            value="B"
+                        >
+
+                        <span class="hygiene-grade-letter">
+                            B
+                        </span>
+
+                        <span>Good</span>
+                    </label>
+
+                    <label class="hygiene-grade-option grade-option-c">
+                        <input
+                            type="radio"
+                            name="updatedHygieneGrade"
+                            value="C"
+                        >
+
+                        <span class="hygiene-grade-letter">
+                            C
+                        </span>
+
+                        <span>Acceptable</span>
+                    </label>
+
+                    <label class="hygiene-grade-option grade-option-d">
+                        <input
+                            type="radio"
+                            name="updatedHygieneGrade"
+                            value="D"
+                        >
+
+                        <span class="hygiene-grade-letter">
+                            D
+                        </span>
+
+                        <span>Requires Improvement</span>
+                    </label>
+
+                </div>
+
+                <small
+                    id="updated-grade-error"
+                    class="field-error"
+                ></small>
+
+            </fieldset>
+
+            <div class="hygiene-form-group">
+
+                <label for="hygiene-update-remarks">
+                    Update Remarks
+                    <span class="required">*</span>
+                </label>
+
+                <textarea
+                    id="hygiene-update-remarks"
+                    rows="5"
+                    maxlength="500"
+                    placeholder="Enter the reason for updating the hygiene grade..."
+                ></textarea>
+
+                <div class="hygiene-textarea-footer">
+
+                    <small
+                        id="updated-remarks-error"
+                        class="field-error"
+                    ></small>
+
+                    <small id="hygiene-remarks-count">
+                        0 / 500
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="hygiene-modal-actions">
+
+                <button
+                    type="button"
+                    id="cancel-hygiene-update"
+                    class="hygiene-secondary-btn"
+                >
+                    Cancel
+                </button>
+
+                <button type="submit">
+                    Save Grade
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+    <footer id="footercontainer">
+        <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/nea.js"></script>
+</body>
+</html>
