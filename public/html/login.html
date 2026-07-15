@@ -64,13 +64,39 @@
                 <div class="title">
                     <h1>Login</h1>
                 </div>
-                <form class="login-info">
-                    <p class="email-title"><span class="material-symbols-rounded">mail</span>Email</p>
-                    <input type="email" placeholder="Email" required>
-                    <p class="pass-title"><span class="material-symbols-rounded">lock</span>Password</p>
-                    <input type="password" placeholder="Password" required>
+                <form class="login-info" id="customer-login-form">
+                    <p class="email-title">
+                        <span class="material-symbols-rounded">mail</span>Email
+                    </p>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        id="customer-login-email"
+                        required
+                    >
+
+                    <p class="pass-title">
+                        <span class="material-symbols-rounded">lock</span>Password
+                    </p>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        id="customer-login-password"
+                        required
+                    >
+
+                    <div class="login">
+                        <button
+                            class="login-btn"
+                            id="customer-login-btn"
+                            type="submit"
+                        >
+                            Log In
+                        </button>
+                    </div>
                 </form>
-                <div class="forgot-pass">
+
+                <!-- <div class="forgot-pass">
                     <a href="">Forgot Password?</a>
                 </div>
                 <div class="login">
@@ -82,7 +108,7 @@
                         <img src="../images/google-icon.png" alt="">
                         <a href="">Login with Google</a>
                     </p>
-                </div>
+                </div> -->
             </div>
 
             <!-- "other-login" id as nea,operator, and vendor shares the same singpass flow of login so they will share states -->
@@ -116,7 +142,7 @@
                                 <a href="">Forgot Password?</a>
                             </div>
                             <div class="login">
-                                <button class="login-btn">Log In</button>
+                                <button class="login-btn" id="other-login-btn">Log In</button>
                             </div>
                         </div>
                     </div>

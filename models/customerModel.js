@@ -77,7 +77,37 @@ async function createCustomer(email, passwordHash, customerName) {
 }
 
 
+// get customer by email, for login purposes
+async function getCustomerByEmail(email) {
+    const connection = await sql.connect(dbConfig);
+
+    const result = await connection
+        .request()
+        .input("Email", sql.VarChar(100), email)
+        .query(`
+            SELECT
+                hu.UserID,
+                hu.Email,
+                hu.PasswordHash,
+                r.RoleName,
+                c.CustomerID,
+                c.CustomerName
+            FROM HawkerUser hu
+            INNER JOIN Role r
+                ON hu.RoleID = r.RoleID
+            INNER JOIN Customer c
+                ON hu.UserID = c.UserID
+            WHERE hu.Email = @Email
+              AND r.RoleName = 'Customer'
+        `);
+
+    return result.recordset[0];
+}
+
+
+
 module.exports = {
     getAllCustomers,
     createCustomer,
+    getCustomerByEmail
 };
