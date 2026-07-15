@@ -43,7 +43,7 @@ proceedbtn.addEventListener("click", () => {
     if (!role) return;
 
     // 1. if role selected is customer, state adds "active" for customer login state.
-    if (role === "customer"){
+    if (role === "Customer"){
         toggleLoginState("customer-login");
     }
     //2. if other role than customer is selected, state changes to active for other-login state
@@ -52,30 +52,70 @@ proceedbtn.addEventListener("click", () => {
     }
 });
 
-// mock login for NEA, operator and vendor
-const otherLoginBtn = document.getElementById("other-login-btn");
 
-if (otherLoginBtn) {
-    otherLoginBtn.addEventListener("click", () => {
-        const role = sessionStorage.getItem("selectedRole");
 
-        if (!role) {
-            alert("No role selected");
+const otherLoginForm =
+    document.getElementById("other-login-form");
+
+otherLoginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document
+        .getElementById("other-login-email")
+        .value
+        .trim();
+
+    const password = document
+        .getElementById("other-login-password")
+        .value;
+
+    const role = sessionStorage.getItem("selectedRole");
+
+    if (!email || !password || !role) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    try {
+        const response = await fetch("/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                password,
+                role
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.error || "Login failed");
             return;
         }
 
         sessionStorage.setItem("isLoggedIn", "true");
-        sessionStorage.setItem("userRole", role);
+        sessionStorage.setItem("userID", data.user.userID);
+        sessionStorage.setItem("userEmail", data.user.email);
+        sessionStorage.setItem("userRole", data.user.role);
 
-        if (role === "vendor") {
+        console.log("Login successful:", data.user);
+
+        if (data.user.role === "Stall Owner") {
             window.location.href = "vendor-home.html";
-        } else if (role === "nea-officer") {
+        } else if (data.user.role === "NEA Officer") {
             window.location.href = "nea-main.html";
-        } else if (role === "operator") {
+        } else if (data.user.role === "Operator") {
             window.location.href = "operator-main.html";
         }
-    });
-}
+
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("Unable to connect to the server");
+    }
+});
 //in other-login state method
 //there are 2 states to choose from
 //either login via singpass manual password OR singpass qr app

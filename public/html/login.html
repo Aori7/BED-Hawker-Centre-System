@@ -44,11 +44,11 @@
                 </div>
                 <div class="roles">
                     <select name="roleselect" id="role-select">
-                        <option value=""disabled selected>Select your role</option>
-                        <option value="customer">Customer</option>
-                        <option value="vendor">Vendor</option>
-                        <option value="nea-officer">NEA-Officer</option>
-                        <option value="operator">Operator</option>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="Customer">Customer</option>
+                        <option value="Stall Owner">Vendor</option>
+                        <option value="NEA Officer">NEA-Officer</option>
+                        <option value="Operator">Operator</option>
                     </select>
                     <button class="proceed-btn">Proceed</button>
                 </div>
@@ -134,16 +134,31 @@
                             Login with Email
                         </h2>
                         
-                            <form class="singpass-login-info">
-                                <input type="email" placeholder="Email" required>
-                                <input type="password" placeholder="Password" required>
+                            <form class="singpass-login-info" id="other-login-form">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    id="other-login-email"
+                                    required
+                                >
+
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    id="other-login-password"
+                                    required
+                                >
+
+                                <div class="login">
+                                    <button
+                                        class="login-btn"
+                                        id="other-login-btn"
+                                        type="submit"
+                                    >
+                                        Log In
+                                    </button>
+                                </div>
                             </form>
-                            <div class="forgot-pass">
-                                <a href="">Forgot Password?</a>
-                            </div>
-                            <div class="login">
-                                <button class="login-btn" id="other-login-btn">Log In</button>
-                            </div>
                         </div>
                     </div>
                     <!-- state 2: qr login method -->
