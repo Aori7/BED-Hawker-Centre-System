@@ -231,7 +231,7 @@ body {
 
 } */
 
-.email-title,.pass-title{
+.email-title,.pass-title,.name-title{
     display: flex;
     justify-content: flex-start;
     align-items: center;

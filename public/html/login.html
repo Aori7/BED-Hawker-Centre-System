@@ -8,10 +8,13 @@
     <!-- import font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">      
 
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/login.css" />
+    
     <!-- <script type="module" src="../js/login.js" defer></script> -->
     <script src="../js/login.js" defer></script>
 
@@ -41,11 +44,11 @@
                 </div>
                 <div class="roles">
                     <select name="roleselect" id="role-select">
-                        <option value=""disabled selected>Select your role</option>
-                        <option value="customer">Customer</option>
-                        <option value="vendor">Vendor</option>
-                        <option value="nea-officer">NEA-Officer</option>
-                        <option value="operator">Operator</option>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="Customer">Customer</option>
+                        <option value="Stall Owner">Vendor</option>
+                        <option value="NEA Officer">NEA-Officer</option>
+                        <option value="Operator">Operator</option>
                     </select>
                     <button class="proceed-btn">Proceed</button>
                 </div>
@@ -61,13 +64,39 @@
                 <div class="title">
                     <h1>Login</h1>
                 </div>
-                <form class="login-info">
-                    <p class="email-title"><span class="material-symbols-rounded">mail</span>Email</p>
-                    <input type="email" placeholder="Email" required>
-                    <p class="pass-title"><span class="material-symbols-rounded">password</span>Password</p>
-                    <input type="password" placeholder="Password" required>
+                <form class="login-info" id="customer-login-form">
+                    <p class="email-title">
+                        <span class="material-symbols-rounded">mail</span>Email
+                    </p>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        id="customer-login-email"
+                        required
+                    >
+
+                    <p class="pass-title">
+                        <span class="material-symbols-rounded">lock</span>Password
+                    </p>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        id="customer-login-password"
+                        required
+                    >
+
+                    <div class="login">
+                        <button
+                            class="login-btn"
+                            id="customer-login-btn"
+                            type="submit"
+                        >
+                            Log In
+                        </button>
+                    </div>
                 </form>
-                <div class="forgot-pass">
+
+                <!-- <div class="forgot-pass">
                     <a href="">Forgot Password?</a>
                 </div>
                 <div class="login">
@@ -79,18 +108,18 @@
                         <img src="../images/google-icon.png" alt="">
                         <a href="">Login with Google</a>
                     </p>
-                </div>
+                </div> -->
             </div>
 
             <!-- "other-login" id as nea,operator, and vendor shares the same singpass flow of login so they will share states -->
             <div class="login-state " id="other-login">
                 <button class="back-btn">← Back</button>
                 <div class="title">
-                    <h1>Login with Singpass</h1>
+                    <h1>Login</h1>
                 </div>
                 <!-- toggle in between password/qr to login by using 2 states -->
                 <div class="choose-login">
-                    <!-- login method by singpass password -->
+                    <!-- login method by email  -->
                     <button class="singpass-login active" data-method="password">Password Log In</button>
                     <!-- login method by singpass qr app -->
                     <button class="singpass-login " data-method="qr">Singpass App</button>
@@ -102,19 +131,34 @@
                     <div class="login-method active" id="login-password">
                         <div class="singpass-input">
                         <h2 class="title">
-                            Login with Singpass Password
+                            Login with Email
                         </h2>
                         
-                            <form class="singpass-login-info">
-                                <input type="text" placeholder="Singpass ID" required>
-                                <input type="password" placeholder="Password" required>
+                            <form class="singpass-login-info" id="other-login-form">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    id="other-login-email"
+                                    required
+                                >
+
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    id="other-login-password"
+                                    required
+                                >
+
+                                <div class="login">
+                                    <button
+                                        class="login-btn"
+                                        id="other-login-btn"
+                                        type="submit"
+                                    >
+                                        Log In
+                                    </button>
+                                </div>
                             </form>
-                            <div class="forgot-pass">
-                                <a href="">Forgot Password?</a>
-                            </div>
-                            <div class="login">
-                                <button class="login-btn">Log In</button>
-                            </div>
                         </div>
                     </div>
                     <!-- state 2: qr login method -->
@@ -145,33 +189,48 @@
 
             </div> -->
             
-            <div class="login-state " id="register-acc">
-                <button class="back-btn">← Back</button>
+            <div class="login-state" id="register-acc">
+                <button class="back-btn" type="button">← Back</button>
 
                 <div class="title">
                     <h1>Register Patron Account</h1>
                 </div>
 
-                <form class="reg-info">
+                <form class="reg-info" id="register-form">
                     <p class="email-title">
-                    <span class="material-symbols-rounded">mail</span>Email
+                        <span class="material-symbols-rounded">mail</span>Email
                     </p>
-                    <input type="email" placeholder="Email" id="email" required>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        id="register-email"
+                        required
+                    >
+
+                    <p class="name-title">
+                        <span class="material-symbols-rounded">person</span>Name
+                    </p>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        id="register-name"
+                        required
+                    >
 
                     <p class="pass-title">
-                    <span class="material-symbols-rounded">password</span>Password
+                        <span class="material-symbols-rounded">lock</span>Password
                     </p>
-                    <input type="password" placeholder="Password" id="password" required>
+                    <input
+                        type="password"
+                        placeholder="Input password"
+                        id="register-password"
+                        required
+                    >
 
-                    <p class="pass-title">
-                    <span class="material-symbols-rounded">password</span>Password
-                    </p>
-                    <input type="password" placeholder="Input password again" id="confirm-password" required>
+                    <div class="register">
+                        <button class="reg-btn" type="submit">Register</button>
+                    </div>
                 </form>
-
-                <div class="register">
-                    <button class="reg-btn">Register</button>
-                </div>
             </div>
 
         </div>

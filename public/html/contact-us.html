@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css" />
-    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/index.css" />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
@@ -54,7 +57,9 @@
       <!-- hamburger menu -->
       <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
     </header>
-        <section id="contactus-section">
+
+
+      <section id="contactus-section">
       <div class="contact-header">
         <div class="title">
           <h1>Contact Us</h1>
@@ -160,6 +165,36 @@
         </div>
       </div>
     </section>
+    
+    <!-- Order History Overlay , only shows for users who are logged in-->
+    <div id="history-overlay"></div>
+
+    <!-- Order History Sidebar -->
+    <aside id="order-history-sidebar">
+      <div class="sidebar-header">
+        <h2>Order History</h2>
+        <button id="close-history">✕</button>
+      </div>
+
+      <div class="history-list">
+        <!-- SAMPLE ORDER CARD (design only for now),
+         the cards will be overwritten in js. -->
+        <div class="history-card">
+          <h4>Ah Seng Chicken Rice</h4>
+          <p>2 items</p>
+          <p class="history-meta">$12.50 • 12 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+
+        <div class="history-card">
+          <h4>Laksa King</h4>
+          <p>1 item</p>
+          <p class="history-meta">$6.50 • 10 Sep 2025</p>
+          <button class="reorder-btn">Reorder</button>
+        </div>
+      </div>
+    </aside>
+
     <!-- <script type="module" src="../js/auth.js"></script> -->
     <script type="module" src="../js/script.js"></script>
 </body>
