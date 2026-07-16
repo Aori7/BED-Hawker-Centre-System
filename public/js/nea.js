@@ -1531,30 +1531,37 @@ async function loadDashboardStatistics() {
 
 /* load today's inspections */
 async function loadTodayInspectionCount() {
+    const todayInspectionElement =
+        document.getElementById(
+            "today-inspections"
+        );
+
+    if (!todayInspectionElement) {
+        return;
+    }
 
     try {
-
         const response = await fetch(
             "/dashboard/today"
         );
 
+        if (!response.ok) {
+            throw new Error(
+                "Unable to retrieve today's inspections"
+            );
+        }
+
         const result = await response.json();
 
-        document.getElementById(
-            "today-inspections"
-        ).textContent =
+        todayInspectionElement.textContent =
             `${result.todayInspections} Completed`;
 
-    }
-    catch (error) {
-
+    } catch (error) {
         console.error(
             "Unable to load today's inspections.",
             error
         );
-
     }
-
 }
 
 /* load recent inspections */
