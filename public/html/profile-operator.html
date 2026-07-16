@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- font chosen by ada: Archivo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+  <link rel="stylesheet" href="css/operator.css">  
+  <title>Operators Profile Page</title>
+</head>
+
+<body class="page-main">
+  <header id="navigationbar">
+    <!-- <nav id="navcontainer"> -->
+        <div class="logo">
+            <a href="index.html">
+
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">HawkerSG</h1>
+            </a>
+        </div>
+
+            <ul class="navitems">
+                <li><a href="main-operator.html">Home</a></li>
+                <li><a href="operator-hawker.html">Hawker</a></li>
+                <li><a href="schedule-operator.html">Schedule</a></li>
+                <li><a href="operator-profile.html">Profile</a></li>
+            </ul>
+
+            <div class="loginbutton">
+                <a href="login.html">
+                    <button id="loginbtn">Operator</button>
+                </a>
+            </div>
+
+    </header>
+    <main class="profile-page">
+        <!-- Top profile header -->
+        <section class="profile-hero">
+            <div class="profile-avatar">
+                <span class="material-symbols-rounded profile-icon">account_circle</span>
+            </div>
+    
+          <div class="profile-hero-text">
+            <h2 id="displayName">Name</h2>
+            <p id="displayRole">Operator</p>
+    
+            <div class="hero-actions">
+                <button id="btnEditProfile" class="btn-primary">Edit Profile</button>
+            </div>
+          </div>
+        </section>
+    
+        <hr class="soft-divider" />
+    
+        <!-- Personal Information -->
+        <section class="profile-card">
+            <h3>Personal Information</h3>
+          
+            <p><strong>Name:</strong> <span id="infoName">XXXX</span></p>
+            <p><strong>Email:</strong> <span id="infoEmail">XXXX@gmail.com</span></p>
+            <p><strong>Phone:</strong> <span id="infoPhone">12345678</span></p>
+            <p><strong>Hawker Centres Managed:</strong> <span id="infoManaged">X</span></p>
+                    
+            <button id="btnEditPersonal" class="btn-primary">Edit Personal Information</button>
+          </section>
+    
+        <!-- Leasing Details -->
+        <section class="profile-card">
+            <h3>Leasing Details</h3>
+          
+            <p><strong>Total Active Leases:</strong> <span id="leaseActive">X</span></p>
+            <p><strong>Upcoming Payments:</strong> <span id="leasePayments">X</span></p>
+            <p><strong>Leases Expiring Soon:</strong> <span id="leaseExpiring">X</span></p>
+          
+            <div class="card-actions">
+                <button id="btnViewLeases" class="btn-primary">View All Leases</button>
+                <button id="btnRequestLease" class="btn-outline">Request New Leases</button>
+            </div>
+          </section>
+      </main>
+    
+      <!-- Modal -->
+      <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <div class="modal-head">
+            <h3 id="modalTitle">Edit</h3>
+            <button class="icon-btn" id="btnCloseModal" aria-label="Close">
+              <span class="material-symbols-rounded">close</span>
+            </button>
+          </div>
+    
+          <form class="modal-body" id="modalForm">
+            <!-- fields injected by JS -->
+          </form>
+    
+          <div class="modal-foot">
+            <button class="btn btn-ghost" id="btnCancelModal" type="button">Cancel</button>
+            <button class="btn btn-primary" id="btnSaveModal" type="submit" form="modalForm">Save</button>
+          </div>
+        </div>
+      </div>
+      <script src="js/operator-profile.js"></script>
+    </body>
+</html>
+    
