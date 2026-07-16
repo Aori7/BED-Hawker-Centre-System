@@ -35,16 +35,28 @@
     <header id="navigationbar">
 
         <div class="logo">
-            <a href="nea-main.html">
-                <span class="material-symbols-rounded">restaurant_menu</span>
-                <h1 id="logotitle">Hawker<em>SG</em></h1>
+            <a href="main-hawkers.html">
+                <span class="material-symbols-rounded">
+                    restaurant_menu
+                </span>
+
+                <h1 id="logotitle">
+                    Hawker<em>SG</em>
+                </h1>
             </a>
         </div>
 
         <ul class="navitems">
+
             <li>
                 <a href="nea-main.html" class="active">
                     Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-search-stall.html">
+                    Search Stalls
                 </a>
             </li>
 
@@ -66,16 +78,13 @@
                 </a>
             </li>
 
-            <li>
-                <a href="nea-search-stall.html">
-                    Search Stalls
-                </a>
-            </li>
         </ul>
 
         <div class="loginbutton">
             <a href="login.html">
-                <button id="logout-btn">Logout</button>
+                <button id="logout-btn" type="button">
+                    Logout
+                </button>
             </a>
         </div>
 
@@ -89,47 +98,6 @@
         </button>
 
     </header>
-
-    <!-- dashboard banner -->
-    <section class="order-hawker-banner">
-        <div class="banner"></div>
-
-        <div class="order-hawker-header">
-            <h1>NEA Officer Dashboard</h1>
-            <p>
-                Monitor inspections, stall hygiene grades and compliance records.
-            </p>
-        </div>
-    </section>
-
-    <main class="nea-page-container">
-
-        <!-- dashboard introduction -->
-        <section class="nea-dashboard-header">
-
-            <div>
-                <p class="nea-section-label">NEA Officer Portal</p>
-                <h2>Welcome Back, Officer</h2>
-                <p id="today-date"></p>
-
-                <p>
-                Review the latest inspection activity and manage food stall
-                compliance.
-                </p>
-
-                <small id="last-updated"></small>
-            </div>
-
-            <a
-                href="nea-record-inspection.html"
-                class="nea-button-link"
-            >
-                <button type="button">
-                    Record Inspection
-                </button>
-            </a>
-
-        </section>
 
         <!-- dashboard tools -->
         <section class="nea-dashboard-toolbar">
