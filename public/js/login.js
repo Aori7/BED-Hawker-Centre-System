@@ -108,7 +108,7 @@ otherLoginForm.addEventListener("submit", async (event) => {
         } else if (data.user.role === "NEA Officer") {
             window.location.href = "nea-main.html";
         } else if (data.user.role === "Operator") {
-            window.location.href = "operator-main.html";
+            window.location.href = "main-operator.html";
         }
 
     } catch (error) {
