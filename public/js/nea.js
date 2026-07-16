@@ -1,11 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     setupDashboard();
+    loadDashboardStatistics();
+    loadTodayInspectionCount();
     setupInspectionForm();
     setupInspectionHistory();
     setupStallSearch();
     setupHygieneGrades();
     setupHamburgerMenu();
 });
+
 
 /* dashboard functions */
 
@@ -1491,4 +1494,64 @@ function setupHamburgerMenu() {
     hamburgerButton.addEventListener("click", () => {
         navigationItems.classList.toggle("show");
     });
+}
+
+    /* load dashboard statistics */
+async function loadDashboardStatistics() {
+
+    try {
+
+        const response = await fetch("/dashboard/statistics");
+
+        const statistics = await response.json();
+
+        document.getElementById("total-inspections").textContent =
+            statistics.totalInspections;
+
+        document.getElementById("compliant-stalls").textContent =
+            statistics.compliantStalls;
+
+        document.getElementById("non-compliant-stalls").textContent =
+            statistics.nonCompliantStalls;
+
+        document.getElementById("grade-a-stalls").textContent =
+            statistics.gradeAStalls;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to load dashboard statistics.",
+            error
+        );
+
+    }
+}
+
+/* load today's inspections */
+async function loadTodayInspectionCount() {
+
+    try {
+
+        const response = await fetch(
+            "/dashboard/today"
+        );
+
+        const result = await response.json();
+
+        document.getElementById(
+            "today-inspections"
+        ).textContent =
+            `${result.todayInspections} Completed`;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to load today's inspections.",
+            error
+        );
+
+    }
+
 }
