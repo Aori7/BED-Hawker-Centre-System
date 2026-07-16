@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- existing fed styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- nea officer styles -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- noto sans font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- google material symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
+    >
+
+    <title>NEA Officer Dashboard - HawkerSG</title>
+</head>
+
+<body class="nea-page">
+
+    <!-- navigation bar -->
+    <header id="navigationbar">
+
+        <div class="logo">
+            <a href="nea-main.html">
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">Hawker<em>SG</em></h1>
+            </a>
+        </div>
+
+        <ul class="navitems">
+            <li>
+                <a href="nea-main.html" class="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-hygiene-grades.html">
+                    Hygiene Grades
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-search-stall.html">
+                    Search Stalls
+                </a>
+            </li>
+        </ul>
+
+        <div class="loginbutton">
+            <a href="login.html">
+                <button id="logout-btn">Logout</button>
+            </a>
+        </div>
+
+        <button
+            id="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+            aria-label="Open navigation menu"
+        >
+            menu
+        </button>
+
+    </header>
+
+    <!-- dashboard banner -->
+    <section class="order-hawker-banner">
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+            <h1>NEA Officer Dashboard</h1>
+            <p>
+                Monitor inspections, stall hygiene grades and compliance records.
+            </p>
+        </div>
+    </section>
+
+    <main class="nea-page-container">
+
+        <!-- dashboard introduction -->
+        <section class="nea-dashboard-header">
+
+            <div>
+                <p class="nea-section-label">NEA Officer Portal</p>
+                <h2>Welcome Back, Officer</h2>
+                <p id="today-date"></p>
+
+                <p>
+                Review the latest inspection activity and manage food stall
+                compliance.
+                </p>
+
+                <small id="last-updated"></small>
+            </div>
+
+            <a
+                href="nea-record-inspection.html"
+                class="nea-button-link"
+            >
+                <button type="button">
+                    Record Inspection
+                </button>
+            </a>
+
+        </section>
+
+        <!-- dashboard tools -->
+        <section class="nea-dashboard-toolbar">
+
+            <div class="nea-toolbar-info">
+                <span class="material-symbols-rounded">calendar_today</span>
+
+                <div>
+                    <p>Today</p>
+                    <strong id="current-dashboard-date">-</strong>
+                </div>
+            </div>
+
+            <div class="nea-toolbar-info">
+                <span class="material-symbols-rounded">schedule</span>
+
+                <div>
+                    <p>Last Updated</p>
+                    <strong id="dashboard-last-updated">-</strong>
+                </div>
+            </div>
+
+            <div class="nea-toolbar-info">
+                <span class="material-symbols-rounded">task_alt</span>
+
+                <div>
+                    <p>Today's Inspections</p>
+                    <strong><span id="today-inspection-count">3</span> Completed</strong>
+                </div>
+            </div>
+
+            <form id="quick-stall-search" class="nea-dashboard-search">
+                <label for="dashboard-stall-search">Quick Stall Search</label>
+
+                <div class="nea-dashboard-search-row">
+                    <input
+                        type="search"
+                        id="dashboard-stall-search"
+                        placeholder="Search stall name..."
+                        autocomplete="off"
+                    >
+
+                    <button type="submit" aria-label="Search food stalls">
+                        <span class="material-symbols-rounded">search</span>
+                        Search
+                    </button>
+                </div>
+            </form>
+
+        </section>
+
+        <!-- dashboard statistics -->
+        <section class="nea-stat-grid">
+
+            <!-- total inspections -->
+            <a href="nea-inspection-history.html" class="nea-stat-card">
+
+                <div class="nea-stat-icon">
+                    <span class="material-symbols-rounded">
+                        fact_check
+                    </span>
+                </div>
+
+                <div class="nea-stat-content">
+
+                    <p>Total Inspections</p>
+
+                    <h3
+                        id="total-inspections"
+                        data-target="24">
+                        0
+                    </h3>
+
+                    <small>3 completed today</small>
+                </div>
+            </a>
+
+            <!-- compliant stalls -->
+            <a href="nea-search-stall.html" class="nea-stat-card">
+
+                <div class="nea-stat-icon">
+                    <span class="material-symbols-rounded">
+                        verified
+                    </span>
+                </div>
+
+                <div class="nea-stat-content">
+
+                    <p>Compliant Stalls</p>
+
+                    <h3
+                        id="compliant-stalls"
+                        data-target="18">
+                        0
+                    </h3>
+
+                    <small>Currently compliant</small>
+                </div>
+            </a>
+
+            <!-- non compliant stalls -->
+            <a
+                href="nea-search-stall.html?status=non-compliant"
+                class="nea-stat-card">
+
+                <div class="nea-stat-icon">
+                    <span class="material-symbols-rounded">
+                        warning
+                    </span>
+                </div>
+
+                <div class="nea-stat-content">
+
+                    <p>Non-Compliant</p>
+
+                    <h3
+                        id="non-compliant-stalls"
+                        data-target="6">
+                        0
+                    </h3>
+
+                    <small class="nea-warning-summary">
+
+                        <span class="nea-notification-badge">
+                            6
+                        </span>
+
+                        Requires follow-up
+
+                    </small>
+                </div>
+            </a>
+
+            <!-- grade a stalls -->
+            <a href="nea-hygiene-grades.html" class="nea-stat-card">
+
+                <div class="nea-stat-icon">
+                    <span class="material-symbols-rounded">
+                        workspace_premium
+                    </span>
+                </div>
+
+                <div class="nea-stat-content">
+
+                    <p>Grade A Stalls</p>
+
+                    <h3
+                        id="grade-a-stalls"
+                        data-target="12">
+                        0
+                    </h3>
+
+                    <small>Highest hygiene grade</small>
+                </div>
+            </a>
+        </section>
+
+        <section class="nea-dashboard-grid">
+
+            <!-- recent inspections -->
+            <article class="nea-dashboard-card nea-recent-card">
+
+                <div class="nea-card-header">
+                    <div>
+                        <h2>Recent Inspections</h2>
+                        <p>Latest food stall inspection activity.</p>
+                    </div>
+
+                    <a href="nea-inspection-history.html">
+                        View All
+                    </a>
+                </div>
+
+                <div class="nea-table-wrapper">
+                    <table class="nea-table">
+
+                        <thead>
+                            <tr>
+                                <th>Food Stall</th>
+                                <th>Hawker Centre</th>
+                                <th>Date</th>
+                                <th>Score</th>
+                                <th>Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="recent-inspection-list">
+
+                            <tr>
+                                <td>Ah Seng Chicken Rice</td>
+                                <td>Maxwell Food Centre</td>
+                                <td>15 Jul 2026</td>
+                                <td>92</td>
+                                <td>
+                                    <span class="nea-grade-badge nea-grade-a">
+                                        A
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="nea-status-badge nea-status-compliant"
+                                    >
+                                        Compliant
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Fatty Char Kway Teow</td>
+                                <td>Old Airport Road Food Centre</td>
+                                <td>13 Jul 2026</td>
+                                <td>82</td>
+                                <td>
+                                    <span class="nea-grade-badge nea-grade-b">
+                                        B
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="nea-status-badge nea-status-compliant"
+                                    >
+                                        Compliant
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Laksa King</td>
+                                <td>Tiong Bahru Market</td>
+                                <td>10 Jul 2026</td>
+                                <td>65</td>
+                                <td>
+                                    <span class="nea-grade-badge nea-grade-c">
+                                        C
+                                    </span>
+                                </td>
+                                <td>
+                                    <span
+                                        class="nea-status-badge nea-status-non-compliant"
+                                    >
+                                        Non-Compliant
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </article>
+
+            <!-- quick actions -->
+            <article class="nea-dashboard-card">
+
+                <div class="nea-quick-actions">
+
+                    <!-- search food stalls -->
+                    <a href="nea-search-stall.html" class="nea-quick-action">
+
+                        <div class="nea-action-icon">
+                            <span class="material-symbols-rounded">
+                                search
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Search Food Stalls</h3>
+                            <p>
+                                Find a stall and review its compliance information.
+                            </p>
+                        </div>
+
+                        <span class="material-symbols-rounded nea-action-arrow">
+                            arrow_forward
+                        </span>
+
+                    </a>
+
+                    <!-- record inspection -->
+                    <a href="nea-record-inspection.html" class="nea-quick-action">
+
+                        <div class="nea-action-icon">
+                            <span class="material-symbols-rounded">
+                                edit_note
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Record Inspection</h3>
+                            <p>
+                                Submit a new inspection score, grade and remarks.
+                            </p>
+                        </div>
+
+                        <span class="material-symbols-rounded nea-action-arrow">
+                            arrow_forward
+                        </span>
+
+                    </a>
+
+                    <!-- inspection history -->
+                    <a href="nea-inspection-history.html" class="nea-quick-action">
+
+                        <div class="nea-action-icon">
+                            <span class="material-symbols-rounded">
+                                history
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Inspection History</h3>
+                            <p>
+                                Review previous inspections and stall records.
+                            </p>
+                        </div>
+
+                        <span class="material-symbols-rounded nea-action-arrow">
+                            arrow_forward
+                        </span>
+
+                    </a>
+
+                    <!-- hygiene grades -->
+                    <a href="nea-hygiene-grades.html" class="nea-quick-action">
+
+                        <div class="nea-action-icon">
+                            <span class="material-symbols-rounded">
+                                workspace_premium
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Hygiene Grades</h3>
+                            <p>
+                                Review and manage food stall hygiene grades.
+                            </p>
+                        </div>
+
+                        <span class="material-symbols-rounded nea-action-arrow">
+                            arrow_forward
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <section class="nea-dashboard-grid nea-dashboard-bottom">
+
+            <!-- hygiene grade distribution -->
+            <article class="nea-dashboard-card">
+
+                <div class="nea-card-header">
+                    <div>
+                        <h2>Hygiene Grade Distribution</h2>
+                        <p>Current distribution across inspected stalls.</p>
+                    </div>
+                </div>
+
+                <div class="nea-grade-distribution">
+
+                    <div class="nea-distribution-row">
+                        <div class="nea-distribution-label">
+                            <span class="nea-grade-badge nea-grade-a">A</span>
+                            <span>Excellent</span>
+                        </div>
+
+                        <div class="nea-progress-track">
+                            <div
+                                class="nea-progress-bar nea-progress-a"
+                                style="width: 50%"
+                            ></div>
+                        </div>
+
+                        <strong>12</strong>
+                    </div>
+
+                    <div class="nea-distribution-row">
+                        <div class="nea-distribution-label">
+                            <span class="nea-grade-badge nea-grade-b">B</span>
+                            <span>Good</span>
+                        </div>
+
+                        <div class="nea-progress-track">
+                            <div
+                                class="nea-progress-bar nea-progress-b"
+                                style="width: 29%"
+                            ></div>
+                        </div>
+
+                        <strong>7</strong>
+                    </div>
+
+                    <div class="nea-distribution-row">
+                        <div class="nea-distribution-label">
+                            <span class="nea-grade-badge nea-grade-c">C</span>
+                            <span>Acceptable</span>
+                        </div>
+
+                        <div class="nea-progress-track">
+                            <div
+                                class="nea-progress-bar nea-progress-c"
+                                style="width: 17%"
+                            ></div>
+                        </div>
+
+                        <strong>4</strong>
+                    </div>
+
+                    <div class="nea-distribution-row">
+                        <div class="nea-distribution-label">
+                            <span class="nea-grade-badge nea-grade-d">D</span>
+                            <span>Requires Improvement</span>
+                        </div>
+
+                        <div class="nea-progress-track">
+                            <div
+                                class="nea-progress-bar nea-progress-d"
+                                style="width: 4%"
+                            ></div>
+                        </div>
+
+                        <strong>1</strong>
+                    </div>
+
+                </div>
+
+            </article>
+
+            <!-- non-compliant stalls -->
+            <article class="nea-dashboard-card">
+
+                <div class="nea-card-header">
+                    <div>
+                        <h2>Non-Compliant Stalls</h2>
+                        <p>Food stalls that require officer attention.</p>
+                    </div>
+                </div>
+
+                <div class="nea-alert-list">
+
+                    <article class="nea-alert-card">
+                        <div class="nea-alert-icon">
+                            <span class="material-symbols-rounded">
+                                warning
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Laksa King</h3>
+                            <p>Tiong Bahru Market · Grade C</p>
+                            <small>
+                                Follow-up inspection recommended.
+                            </small>
+                        </div>
+                    </article>
+
+                    <article class="nea-alert-card">
+                        <div class="nea-alert-icon">
+                            <span class="material-symbols-rounded">
+                                warning
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3>Kopi More</h3>
+                            <p>Maxwell Food Centre · Grade D</p>
+                            <small>
+                                Immediate corrective action required.
+                            </small>
+                        </div>
+                    </article>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+    <footer id="footercontainer">
+        <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/nea.js"></script>
+</body>
+</html>

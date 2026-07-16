@@ -1,0 +1,1224 @@
+/* nea officer pages */
+
+
+/* nea page headings */
+.nea-page .order-hawker-header h1 {
+    margin: 0 0 10px;
+
+    font-size: clamp(30px, 4vw, 42px);
+    line-height: 1.2;
+}
+
+.nea-page .order-hawker-header p {
+    margin: 0;
+
+    font-size: clamp(14px, 1.6vw, 16px);
+    line-height: 1.6;
+}
+
+
+/* nea navigation */
+.nea-page #navigationbar {
+    min-height: 60px;
+}
+
+.nea-page .navitems {
+    align-items: center;
+}
+
+.nea-page .navitems a {
+    display: block;
+    padding: 8px 8px 10px;
+
+    font-size: clamp(15px, 1.25vw, 20px);
+    white-space: nowrap;
+}
+
+.nea-page .navitems a::after {
+    bottom: 0;
+    height: 2px;
+}
+
+.nea-page .navitems a.active::after {
+    width: 100%;
+}
+
+/* nea banner */
+.nea-page .order-hawker-banner {
+    min-height: 210px;
+    height: 210px;
+}
+
+.nea-page .order-hawker-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: min(760px, calc(100% - 32px));
+    min-height: 100%;
+
+    box-sizing: border-box;
+}
+
+/* main page container */
+.nea-page-container {
+    width: min(1400px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 28px 0 60px;
+}
+
+/* common section label */
+.nea-section-label {
+    margin: 0;
+
+    color: var(--orange-color);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* button link */
+.nea-button-link {
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+/* dashboard introduction */
+.nea-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    padding: clamp(24px, 3vw, 40px);
+
+    border-radius: 24px;
+
+    background-color: rgba(250, 243, 225, 0.97);
+
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+.nea-dashboard-header > div {
+    min-width: 0;
+}
+
+.nea-dashboard-header h2 {
+    margin: 5px 0 8px;
+
+    font-size: clamp(24px, 2.5vw, 32px);
+}
+
+.nea-dashboard-header p:not(.nea-section-label) {
+    max-width: 720px;
+    margin: 0;
+
+    color: rgb(95, 95, 95);
+    line-height: 1.6;
+}
+
+
+/* dashboard toolbar */
+.nea-dashboard-toolbar {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(170px, 0.8fr))
+        minmax(300px, 1.5fr);
+    align-items: stretch;
+    gap: 18px;
+
+    margin-top: 22px;
+    padding: 20px;
+
+    border-radius: 22px;
+
+    background-color: rgba(250, 243, 225, 0.97);
+
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.nea-toolbar-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    min-width: 0;
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    background-color: white;
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+}
+
+.nea-toolbar-info > span {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background-color: var(--orange-color);
+    color: white;
+
+    font-size: 23px;
+}
+
+.nea-toolbar-info > div {
+    min-width: 0;
+}
+
+.nea-toolbar-info p {
+    margin: 0 0 3px;
+
+    color: rgb(95, 95, 95);
+    font-size: 12px;
+}
+
+.nea-toolbar-info strong {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--black-text-color);
+
+    font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* dashboard quick search */
+.nea-dashboard-search {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+
+    min-width: 0;
+    padding: 14px 16px;
+
+    border-radius: 16px;
+
+    background-color: white;
+
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+}
+
+.nea-dashboard-search label {
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.nea-dashboard-search-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.nea-dashboard-search-row input {
+    width: 100%;
+    max-width: none;
+    height: 44px;
+
+    box-sizing: border-box;
+
+    padding: 0 14px;
+
+    border: 2px solid transparent;
+    border-radius: 14px;
+
+    background-color: rgb(250, 250, 250);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    outline: none;
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+}
+
+.nea-dashboard-search-row input:focus {
+    border-color: var(--orange-color);
+
+    background-color: white;
+
+    box-shadow:
+        0 0 0 4px rgba(250, 129, 18, 0.14),
+        0 7px 16px rgba(0, 0, 0, 0.08);
+}
+
+.nea-dashboard-search-row button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    height: 44px;
+    padding: 8px 20px;
+
+    font-size: 14px;
+}
+
+.nea-dashboard-search-row button span {
+    font-size: 20px;
+}
+
+/* dashboard statistic cards */
+.nea-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+
+    margin-top: 24px;
+}
+
+.nea-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background-color: white;
+
+    color: inherit;
+    text-decoration: none;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.nea-stat-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.12);
+}
+
+.nea-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    flex: 1;
+}
+
+.nea-stat-content p {
+    margin: 0;
+
+    color: rgb(95, 95, 95);
+
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.nea-stat-content h3 {
+    margin: 0;
+
+    color: var(--black-text-color);
+
+    font-size: 44px;
+    font-weight: 800;
+}
+
+.nea-stat-content small {
+    color: rgb(110, 110, 110);
+
+    font-size: 14px;
+}
+
+.nea-stat-icon {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background-color: var(--orange-color);
+    color: white;
+}
+
+.nea-stat-icon span {
+    font-size: 31px;
+}
+
+.nea-stat-card p {
+    margin: 0;
+
+    color: rgb(90, 90, 90);
+    font-size: 15px;
+}
+
+.nea-stat-card h3 {
+    margin: 2px 0;
+
+    color: var(--black-text-color);
+    font-size: 32px;
+}
+
+.nea-stat-card small {
+    color: rgb(115, 115, 115);
+    font-size: 12px;
+}
+
+/* dashboard grid */
+.nea-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+    gap: 24px;
+
+    margin-top: 24px;
+}
+
+.nea-dashboard-bottom {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* common dashboard card */
+.nea-dashboard-card {
+    min-width: 0;
+    padding: clamp(22px, 2.5vw, 32px);
+
+    border-radius: 24px;
+
+    background-color: rgba(250, 243, 225, 0.97);
+
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* dashboard card header */
+.nea-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    margin-bottom: 22px;
+}
+
+.nea-card-header h2 {
+    margin: 0 0 5px;
+
+    font-size: clamp(20px, 1.8vw, 24px);
+}
+
+.nea-card-header p {
+    margin: 0;
+
+    color: rgb(95, 95, 95);
+    line-height: 1.5;
+}
+
+.nea-card-header a {
+    flex-shrink: 0;
+
+    color: var(--orange-color);
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.nea-card-header a:hover {
+    color: var(--dark-orange-color);
+}
+
+/* dashboard quick actions */
+.nea-quick-action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.nea-quick-action {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 15px;
+
+    padding: 17px;
+
+    border-radius: 18px;
+
+    background-color: white;
+    color: var(--black-text-color);
+    text-decoration: none;
+
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nea-quick-action:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 11px 21px rgba(0, 0, 0, 0.12);
+}
+
+.nea-action-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background-color: var(--orange-color);
+    color: white;
+}
+
+.nea-action-icon span {
+    font-size: 27px;
+}
+
+.nea-quick-action h3 {
+    margin: 0 0 4px;
+
+    font-size: 17px;
+}
+
+.nea-quick-action p {
+    margin: 0;
+
+    color: rgb(95, 95, 95);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.nea-action-arrow {
+    color: var(--orange-color);
+    font-size: 24px;
+}
+
+/* grade distribution */
+.nea-grade-distribution {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.nea-distribution-row {
+    display: grid;
+    grid-template-columns: minmax(170px, auto) minmax(120px, 1fr) 30px;
+    align-items: center;
+    gap: 16px;
+}
+
+.nea-distribution-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nea-progress-track {
+    height: 12px;
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background-color: rgb(230, 230, 230);
+}
+
+.nea-progress-bar {
+    height: 100%;
+
+    border-radius: 30px;
+}
+
+.nea-progress-a {
+    background-color: rgb(65, 166, 92);
+}
+
+.nea-progress-b {
+    background-color: rgb(70, 137, 215);
+}
+
+.nea-progress-c {
+    background-color: rgb(224, 165, 42);
+}
+
+.nea-progress-d {
+    background-color: rgb(209, 70, 70);
+}
+
+/* non-compliant stall cards */
+.nea-alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.nea-alert-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+
+    padding: 18px;
+
+    border: 1px solid rgb(238, 191, 191);
+    border-radius: 18px;
+
+    background-color: rgb(255, 242, 242);
+}
+
+.nea-alert-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background-color: rgb(209, 70, 70);
+    color: white;
+}
+
+.nea-alert-card h3 {
+    margin: 0 0 4px;
+
+    font-size: 17px;
+}
+
+.nea-alert-card p {
+    margin: 0 0 3px;
+
+    color: rgb(95, 95, 95);
+    font-size: 14px;
+}
+
+.nea-alert-card small {
+    color: rgb(163, 25, 25);
+    font-size: 12px;
+}
+
+/* main form card */
+.nea-form-card {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: clamp(24px, 3vw, 42px);
+
+    border-radius: 24px;
+
+    background-color: rgba(250, 243, 225, 0.97);
+
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+/* form section header */
+.nea-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+
+    border-bottom: 1px solid rgba(34, 34, 34, 0.16);
+}
+
+.nea-section-header > div {
+    min-width: 0;
+}
+
+.nea-section-header h2 {
+    margin: 5px 0 8px;
+
+    font-size: clamp(28px, 3vw, 38px);
+}
+
+.nea-section-header p:not(.nea-section-label) {
+    max-width: 680px;
+    margin: 0;
+
+    color: rgb(95, 95, 95);
+    line-height: 1.6;
+}
+
+/* form header icon */
+.nea-header-icon {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background-color: var(--orange-color);
+    color: white;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 10px 20px rgba(250, 129, 18, 0.25);
+
+    font-size: 0;
+}
+
+.nea-header-icon::before {
+    content: "fact_check";
+
+    display: block;
+
+    font-family: "Material Symbols Rounded";
+    font-size: 32px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+
+    direction: ltr;
+
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 32;
+}
+
+/* form layout */
+.nea-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 24px;
+}
+
+.nea-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+
+    min-width: 0;
+}
+
+.nea-form-group label,
+.nea-grade-section legend {
+    color: var(--black-text-color);
+    font-size: 17px;
+    font-weight: 750;
+}
+
+.required {
+    color: var(--dark-orange-color);
+}
+
+/* form controls */
+.nea-form-group input,
+.nea-form-group select,
+.nea-form-group textarea {
+    display: block;
+
+    width: 100%;
+    max-width: none;
+
+    border: 2px solid transparent;
+    border-radius: 16px;
+
+    background-color: white;
+    color: var(--black-text-color);
+
+    box-sizing: border-box;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    outline: none;
+
+    box-shadow: 0 7px 18px rgba(0, 0, 0, 0.08);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nea-form-group input,
+.nea-form-group select {
+    height: 58px;
+    padding: 0 18px;
+}
+
+.nea-form-group textarea {
+    min-height: 150px;
+    padding: 16px 18px;
+
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.nea-form-group input:focus,
+.nea-form-group select:focus,
+.nea-form-group textarea:focus {
+    border-color: var(--orange-color);
+
+    box-shadow:
+        0 0 0 4px rgba(250, 129, 18, 0.18),
+        0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* date input */
+.nea-form-group input[type="date"] {
+    min-width: 100%;
+
+    cursor: pointer;
+}
+
+.nea-form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 22px;
+    height: 22px;
+
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+/* full width form group */
+.nea-full-width {
+    margin-top: 22px;
+}
+
+/* hygiene grade form section */
+.nea-grade-section {
+    padding: 0;
+    margin: 24px 0 0;
+
+    border: none;
+}
+
+.nea-field-description {
+    margin: 6px 0 16px;
+
+    color: rgb(90, 90, 90);
+    line-height: 1.5;
+}
+
+.nea-grade-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.nea-grade-option {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 105px;
+    padding: 14px;
+
+    border: 3px solid transparent;
+    border-radius: 18px;
+
+    background-color: white;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.09);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nea-grade-option:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.12);
+}
+
+.nea-grade-option input {
+    position: absolute;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.nea-grade-option:has(input:checked) {
+    border-color: var(--orange-color);
+
+    box-shadow:
+        0 0 0 4px rgba(250, 129, 18, 0.16),
+        0 12px 22px rgba(0, 0, 0, 0.12);
+}
+
+.grade-letter {
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.grade-description {
+    margin-top: 10px;
+
+    text-align: center;
+    font-size: 14px;
+}
+
+.grade-option-a .grade-letter {
+    background-color: rgb(216, 245, 220);
+    color: rgb(20, 108, 46);
+}
+
+.grade-option-b .grade-letter {
+    background-color: rgb(220, 236, 255);
+    color: rgb(21, 88, 166);
+}
+
+.grade-option-c .grade-letter {
+    background-color: rgb(255, 240, 199);
+    color: rgb(148, 97, 0);
+}
+
+.grade-option-d .grade-letter {
+    background-color: rgb(255, 216, 216);
+    color: rgb(163, 25, 25);
+}
+
+/* form messages */
+.field-error {
+    min-height: 18px;
+
+    color: var(--dark-orange-color);
+    font-size: 13px;
+}
+
+.nea-message {
+    display: none;
+
+    margin-bottom: 24px;
+    padding: 16px 20px;
+
+    border-radius: 14px;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.nea-message.show {
+    display: block;
+}
+
+.nea-message.success {
+    border: 1px solid rgb(143, 206, 160);
+
+    background-color: rgb(216, 245, 220);
+    color: rgb(20, 108, 46);
+}
+
+.nea-message.error {
+    border: 1px solid rgb(227, 161, 161);
+
+    background-color: rgb(255, 216, 216);
+    color: rgb(163, 25, 25);
+}
+
+/* textarea footer */
+.nea-textarea-footer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.nea-textarea-footer small:last-child {
+    margin-left: auto;
+
+    color: rgb(100, 100, 100);
+}
+
+/* form buttons */
+.nea-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+
+    padding-top: 24px;
+    margin-top: 24px;
+
+    border-top: 1px solid rgba(34, 34, 34, 0.16);
+}
+
+.nea-secondary-btn {
+    background-color: rgb(110, 110, 110);
+}
+
+/* table */
+.nea-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    border-radius: 18px;
+
+    background-color: white;
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.nea-table {
+    width: 100%;
+    min-width: 850px;
+
+    border-collapse: collapse;
+}
+
+.nea-table th,
+.nea-table td {
+    padding: 15px 17px;
+
+    text-align: left;
+    border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+.nea-table th {
+    background-color: var(--beige-color);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.nea-table td {
+    background-color: white;
+
+    font-size: 14px;
+}
+
+.nea-table tbody tr:hover td {
+    background-color: rgb(255, 250, 238);
+}
+
+/* grade and status badges */
+.nea-grade-badge,
+.nea-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.nea-grade-a,
+.nea-status-compliant {
+    background-color: rgb(216, 245, 220);
+    color: rgb(20, 108, 46);
+}
+
+.nea-grade-b {
+    background-color: rgb(220, 236, 255);
+    color: rgb(21, 88, 166);
+}
+
+.nea-grade-c {
+    background-color: rgb(255, 240, 199);
+    color: rgb(148, 97, 0);
+}
+
+.nea-grade-d,
+.nea-status-non-compliant {
+    background-color: rgb(255, 216, 216);
+    color: rgb(163, 25, 25);
+}
+
+.nea-status-pending {
+    background-color: rgb(255, 240, 199);
+    color: rgb(148, 97, 0);
+}
+
+/* responsive design */
+
+@media (max-width: 1250px) {
+    .nea-page .navitems {
+        gap: 18px;
+    }
+
+    .nea-dashboard-toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .nea-dashboard-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .nea-toolbar-info strong {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 1150px) {
+    .nea-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .nea-dashboard-grid,
+    .nea-dashboard-bottom {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 850px) {
+    .nea-dashboard-header {
+        align-items: flex-start;
+    }
+
+    .nea-grade-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .nea-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .nea-page-container {
+        width: calc(100% - 24px);
+        padding: 20px 0 40px;
+    }
+
+    .nea-dashboard-header {
+        flex-direction: column;
+    }
+
+    .nea-button-link,
+    .nea-button-link button {
+        width: 100%;
+    }
+
+    .nea-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .nea-dashboard-card,
+    .nea-form-card {
+        padding: 22px 16px;
+
+        border-radius: 18px;
+    }
+
+    .nea-section-header {
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .nea-header-icon {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+    }
+
+    .nea-distribution-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .nea-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .nea-form-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .nea-dashboard-search-row {
+        grid-template-columns: 1fr;
+    }
+
+    .nea-dashboard-search-row button {
+        width: 100%;
+    }
+
+    .nea-page-container {
+        width: calc(100% - 16px);
+    }
+
+    .nea-card-header {
+        flex-direction: column;
+    }
+
+    .nea-grade-options {
+        grid-template-columns: 1fr;
+    }
+
+    .nea-quick-action {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .nea-action-arrow {
+        display: none;
+    }
+
+    .nea-stat-card {
+        padding: 18px;
+    }
+
+    .nea-section-header {
+        flex-direction: column-reverse;
+    }
+
+    .nea-header-icon {
+        align-self: flex-start;
+    }
+
+    .nea-textarea-footer {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .nea-textarea-footer small:last-child {
+        width: 100%;
+        margin-left: 0;
+
+        text-align: right;
+    }
+}

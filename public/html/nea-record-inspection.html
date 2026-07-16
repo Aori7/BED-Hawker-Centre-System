@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- existing styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <!-- NEA style -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Google symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
+    >
+
+    <title>Record Inspection - HawkerSG</title>
+</head>
+
+<body class="nea-page">
+
+    <!-- navigation bar -->
+    <header id="navigationbar">
+
+        <div class="logo">
+            <a href="../index.html">
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">Hawker<em>SG</em></h1>
+            </a>
+        </div>
+
+        <ul class="navitems">
+            <li>
+                <a href="nea-main.html">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html" class="active">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-hygiene-grades.html">
+                    Hygiene Grades
+                </a>
+            </li>
+        </ul>
+
+        <div class="loginbutton">
+            <a href="login.html">
+                <button id="logout-btn">Logout</button>
+            </a>
+        </div>
+
+        <button
+            id="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+        >
+            menu
+        </button>
+
+    </header>
+
+    <!-- banner -->
+    <section class="order-hawker-banner">
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+            <h1>Record Inspection Results</h1>
+            <p>
+                Record a food stall’s inspection score, hygiene grade and remarks.
+            </p>
+        </div>
+    </section>
+
+    <main class="nea-page-container">
+
+        <section class="nea-form-card">
+
+            <div class="nea-section-header">
+                <div>
+                    <p class="nea-section-label">NEA Officer Portal</p>
+                    <h2>Inspection Form</h2>
+                    <p>
+                        Complete all required fields before submitting the inspection.
+                    </p>
+                </div>
+
+                <span class="material-symbols-rounded nea-header-icon">
+                    fact_check
+                </span>
+            </div>
+
+            <!-- validation/success message -->
+            <div
+                id="inspection-message"
+                class="nea-message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+            <form id="inspection-form" novalidate>
+
+                <div class="nea-form-grid">
+
+                    <!-- Hawker centre -->
+                    <div class="nea-form-group">
+                        <label for="hawker-centre">
+                            Hawker Centre
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="hawker-centre" name="hawkerCentre" required>
+                            <option value="">Select a hawker centre</option>
+                            <option value="maxwell">
+                                Maxwell Food Centre
+                            </option>
+                            <option value="old-airport-road">
+                                Old Airport Road Food Centre
+                            </option>
+                            <option value="tiong-bahru">
+                                Tiong Bahru Market
+                            </option>
+                        </select>
+
+                        <small class="field-error" id="hawker-centre-error"></small>
+                    </div>
+
+                    <!-- food stall -->
+                    <div class="nea-form-group">
+                        <label for="food-stall">
+                            Food Stall
+                            <span class="required">*</span>
+                        </label>
+
+                        <select id="food-stall" name="foodStall" required>
+                            <option value="">Select a food stall</option>
+                            <option value="ah-seng">
+                                Ah Seng Chicken Rice
+                            </option>
+                            <option value="fatty-char-kway-teow">
+                                Fatty Char Kway Teow
+                            </option>
+                            <option value="laksa-king">
+                                Laksa King
+                            </option>
+                            <option value="kopi-more">
+                                Kopi More
+                            </option>
+                        </select>
+
+                        <small class="field-error" id="food-stall-error"></small>
+                    </div>
+
+                    <!-- inspection date -->
+                    <div class="nea-form-group">
+                        <label for="inspection-date">
+                            Inspection Date
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            id="inspection-date"
+                            name="inspectionDate"
+                            required
+                        >
+
+                        <small class="field-error" id="inspection-date-error"></small>
+                    </div>
+
+                    <!-- inspection score -->
+                    <div class="nea-form-group">
+                        <label for="inspection-score">
+                            Inspection Score
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="inspection-score"
+                            name="inspectionScore"
+                            min="0"
+                            max="100"
+                            placeholder="Enter a score from 0 to 100"
+                            required
+                        >
+
+                        <small class="field-error" id="inspection-score-error"></small>
+                    </div>
+
+                </div>
+
+                <!-- hygiene grade -->
+                <fieldset class="nea-grade-section">
+                    <legend>
+                        Hygiene Grade
+                        <span class="required">*</span>
+                    </legend>
+
+                    <p class="nea-field-description">
+                        Select the hygiene grade assigned to the stall.
+                    </p>
+
+                    <div class="nea-grade-options">
+
+                        <label class="nea-grade-option grade-option-a">
+                            <input
+                                type="radio"
+                                name="hygieneGrade"
+                                value="A"
+                            >
+
+                            <span class="grade-letter">A</span>
+
+                            <span class="grade-description">
+                                Excellent
+                            </span>
+                        </label>
+
+                        <label class="nea-grade-option grade-option-b">
+                            <input
+                                type="radio"
+                                name="hygieneGrade"
+                                value="B"
+                            >
+
+                            <span class="grade-letter">B</span>
+
+                            <span class="grade-description">
+                                Good
+                            </span>
+                        </label>
+
+                        <label class="nea-grade-option grade-option-c">
+                            <input
+                                type="radio"
+                                name="hygieneGrade"
+                                value="C"
+                            >
+
+                            <span class="grade-letter">C</span>
+
+                            <span class="grade-description">
+                                Acceptable
+                            </span>
+                        </label>
+
+                        <label class="nea-grade-option grade-option-d">
+                            <input
+                                type="radio"
+                                name="hygieneGrade"
+                                value="D"
+                            >
+
+                            <span class="grade-letter">D</span>
+
+                            <span class="grade-description">
+                                Requires Improvement
+                            </span>
+                        </label>
+
+                    </div>
+
+                    <small class="field-error" id="hygiene-grade-error"></small>
+                </fieldset>
+
+                <!-- remarks -->
+                <div class="nea-form-group nea-full-width">
+                    <label for="inspection-remarks">
+                        Inspection Remarks
+                        <span class="required">*</span>
+                    </label>
+
+                    <textarea
+                        id="inspection-remarks"
+                        name="inspectionRemarks"
+                        rows="7"
+                        maxlength="1000"
+                        placeholder="Enter inspection findings and recommendations..."
+                        required
+                    ></textarea>
+
+                    <div class="nea-textarea-footer">
+                        <small
+                            class="field-error"
+                            id="inspection-remarks-error"
+                        ></small>
+
+                        <small id="remarks-count">0 / 1000</small>
+                    </div>
+                </div>
+
+                <!-- buttons -->
+                <div class="nea-form-actions">
+
+                    <button
+                        type="button"
+                        id="cancel-inspection-btn"
+                        class="nea-secondary-btn"
+                    >
+                        Cancel
+                    </button>
+
+                    <button type="submit">
+                        Submit Inspection
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer id="footercontainer">
+        <p>© 2026 HawkerSG. All rights reserved.</p>
+    </footer>
+
+    <script src="../js/nea.js"></script>
+</body>
+</html>
