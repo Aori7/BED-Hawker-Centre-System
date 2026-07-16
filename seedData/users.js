@@ -1,0 +1,124 @@
+const users = [
+  // Stall Owners - RoleID 2
+  {
+    email: "stallowner1@hawkersg.com",
+    password: "stallowner123",
+    roleId: 2,
+    name: "Stall Owner 1",
+    contactNo: "81110001",
+    nric: "S0000001A",
+  },
+  {
+    email: "stallowner2@hawkersg.com",
+    password: "stallowner123",
+    roleId: 2,
+    name: "Stall Owner 2",
+    contactNo: "81110002",
+    nric: "S0000002B",
+  },
+  {
+    email: "stallowner3@hawkersg.com",
+    password: "stallowner123",
+    roleId: 2,
+    name: "Stall Owner 3",
+    contactNo: "81110003",
+    nric: "S0000003C",
+  },
+  {
+    email: "stallowner4@hawkersg.com",
+    password: "stallowner123",
+    roleId: 2,
+    name: "Stall Owner 4",
+    contactNo: "81110004",
+    nric: "S0000004D",
+  },
+  {
+    email: "stallowner5@hawkersg.com",
+    password: "stallowner123",
+    roleId: 2,
+    name: "Stall Owner 5",
+    contactNo: "81110005",
+    nric: "S0000005E",
+  },
+
+  // Operators - RoleID 3
+  {
+    email: "operator1@hawkersg.com",
+    password: "operator123",
+    roleId: 3,
+    name: "Operator 1",
+    contactPerson: "Contact Person 1",
+    contactNo: "82220001",
+  },
+  {
+    email: "operator2@hawkersg.com",
+    password: "operator123",
+    roleId: 3,
+    name: "Operator 2",
+    contactPerson: "Contact Person 2",
+    contactNo: "82220002",
+  },
+  {
+    email: "operator3@hawkersg.com",
+    password: "operator123",
+    roleId: 3,
+    name: "Operator 3",
+    contactPerson: "Contact Person 3",
+    contactNo: "82220003",
+  },
+  {
+    email: "operator4@hawkersg.com",
+    password: "operator123",
+    roleId: 3,
+    name: "Operator 4",
+    contactPerson: "Contact Person 4",
+    contactNo: "82220004",
+  },
+  {
+    email: "operator5@hawkersg.com",
+    password: "operator123",
+    roleId: 3,
+    name: "Operator 5",
+    contactPerson: "Contact Person 5",
+    contactNo: "82220005",
+  },
+
+  // NEA Officers - RoleID 4
+  {
+    email: "nea1@hawkersg.com",
+    password: "neaofficer123",
+    roleId: 4,
+    name: "NEA Officer 1",
+    contactNo: "83330001",
+  },
+  {
+    email: "nea2@hawkersg.com",
+    password: "neaofficer123",
+    roleId: 4,
+    name: "NEA Officer 2",
+    contactNo: "83330002",
+  },
+  {
+    email: "nea3@hawkersg.com",
+    password: "neaofficer123",
+    roleId: 4,
+    name: "NEA Officer 3",
+    contactNo: "83330003",
+  },
+  {
+    email: "nea4@hawkersg.com",
+    password: "neaofficer123",
+    roleId: 4,
+    name: "NEA Officer 4",
+    contactNo: "83330004",
+  },
+  {
+    email: "nea5@hawkersg.com",
+    password: "neaofficer123",
+    roleId: 4,
+    name: "NEA Officer 5",
+    contactNo: "83330005",
+  },
+];
+
+module.exports = users;
