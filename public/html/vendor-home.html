@@ -8,13 +8,12 @@
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <!-- page stylesheet -->
-    <link rel="stylesheet" href="../css/pages/vendor-home.css" />
+    <link rel="stylesheet" href="../css/vendor-home.css" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-
     <!-- font 2 for nav bar-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,12 +21,12 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-
     <!-- google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
+
     <title>Vendor Home Page</title>
   </head>
 
@@ -36,11 +35,9 @@
     <nav class="nav-bar">
       <a class="nav-link active" href="vendor-home.html"> Home </a>
       <a class="nav-link" href="vendor-menu.html"> Menu </a>
-
+      <a class="nav-link" href="vendor-orders.html"> Orders </a>
       <a class="nav-link" href="vendor-promotions.html"> Promotions </a>
-
       <a class="nav-link" href="vendor-feedback.html"> Feedback </a>
-
       <a class="nav-link" href="vendor-profile.html"> Profile </a>
     </nav>
 
@@ -50,11 +47,8 @@
         <!-- display the stall name and info -->
         <div class="stall-details">
           <p class="stall-name">Stall A</p>
-
           <address class="stall-address">@Hawker A, #00-00</address>
-
           <p class="stall-description">Selling the best chicken rice</p>
-
           <p class="stall-rating">4.7/5.0</p>
 
           <img
@@ -74,21 +68,23 @@
 
           <select id="stall-select" name="stall">
             <option value="stall-a">Stall A</option>
-
             <option value="stall-b">Stall B</option>
           </select>
         </div>
       </section>
 
-      <header class="dashboard-header">
-        <!-- header -->
-        <div class="dashboard-heading">
-          <h1 class="dashboard-title">Vendor Dashboard</h1>
+      <!-- dashboard heading and time filter -->
+      <div class="dashboard-controls">
+        <header class="dashboard-header">
+          <!-- header -->
+          <div class="dashboard-heading">
+            <h1 class="dashboard-title">Vendor Dashboard</h1>
 
-          <p class="dashboard-description">
-            View data such as revenue, total orders and more.
-          </p>
-        </div>
+            <p class="dashboard-description">
+              View data such as revenue, total orders and more.
+            </p>
+          </div>
+        </header>
 
         <!-- dashboard time filter -->
         <section
@@ -137,7 +133,7 @@
             </select>
           </div>
         </section>
-      </header>
+      </div>
 
       <div class="summary-grid">
         <!-- revenue -->
@@ -316,19 +312,46 @@
       </div>
     </main>
 
-    <!-- Chart.js must load before our own chart code -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
       /* =====================================================
-         COMPACT STALL HEADER
-         ===================================================== */
+     PAGE ELEMENTS
+     ===================================================== */
 
+      /* Compact stall header elements */
       const stallHeader = document.querySelector(".stall-selector-section");
 
       const dashboardHeader = document.querySelector(".dashboard-header");
 
       const navigationBar = document.querySelector(".nav-bar");
+
+      /* Dashboard time filter elements */
+      const timePeriodSelect = document.getElementById("time-period");
+
+      const previousPeriodButton = document.getElementById(
+        "previous-period-button",
+      );
+
+      const nextPeriodButton = document.getElementById("next-period-button");
+
+      const selectedPeriodText = document.getElementById(
+        "selected-period-text",
+      );
+
+      /* Order Trends elements */
+      const trendDescription = document.getElementById("trend-description");
+
+      const comparisonBox = document.getElementById("order-comparison");
+
+      const comparisonValue = document.getElementById("comparison-value");
+
+      const comparisonDescription = document.getElementById(
+        "comparison-description",
+      );
+
+      /* =====================================================
+     COMPACT STALL HEADER
+     ===================================================== */
 
       function updateStallHeader() {
         const navHeight = navigationBar.offsetHeight;
@@ -338,9 +361,12 @@
         const dashboardPosition = dashboardHeader.getBoundingClientRect().top;
 
         /*
-          When the dashboard header is visible below the compact
-          stall header, expand the stall section.
-        */
+      When the dashboard header is visible underneath the
+      stall selector, show the full stall information.
+
+      Once the dashboard heading moves behind the sticky
+      sections, collapse the stall selector.
+    */
         const dashboardIsVisible =
           dashboardPosition >= navHeight + compactHeaderHeight + 10;
 
@@ -351,48 +377,206 @@
         }
       }
 
-      window.addEventListener("scroll", updateStallHeader);
-
-      window.addEventListener("resize", updateStallHeader);
-
-      updateStallHeader();
-
       /* =====================================================
-         ORDERS DOUGHNUT CHART
-         ===================================================== */
-
-      const orderValues = [18, 20, 12];
-
-      const totalOrders = orderValues.reduce(function (total, value) {
-        return total + value;
-      }, 0);
+     DASHBOARD TIME FILTER
+     ===================================================== */
 
       /*
-        This custom Chart.js plugin displays the total number
-        of orders in the middle of the doughnut chart.
-      */
+    Temporary selected date used by the frontend.
+
+    Later, this date will be included in the request sent
+    to the backend.
+  */
+      let selectedDashboardDate = new Date();
+
+      /*
+    Creates a copy of a Date object so the original date
+    is not accidentally changed.
+  */
+      function copyDate(date) {
+        return new Date(date.getTime());
+      }
+
+      /*
+    Returns the Monday of the week containing the supplied
+    date.
+  */
+      function getStartOfWeek(date) {
+        const startDate = copyDate(date);
+
+        const dayNumber = startDate.getDay();
+
+        const daysSinceMonday = dayNumber === 0 ? 6 : dayNumber - 1;
+
+        startDate.setDate(startDate.getDate() - daysSinceMonday);
+
+        return startDate;
+      }
+
+      /*
+    Formats dates using Singapore-style date labels.
+  */
+      function formatFullDate(date) {
+        return new Intl.DateTimeFormat("en-SG", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }).format(date);
+      }
+
+      /*
+    Updates the date or date range displayed between the
+    previous and next buttons.
+  */
+      function updateSelectedPeriodText() {
+        const selectedPeriod = timePeriodSelect.value;
+
+        if (selectedPeriod === "daily") {
+          selectedPeriodText.textContent = formatFullDate(
+            selectedDashboardDate,
+          );
+        }
+
+        if (selectedPeriod === "weekly") {
+          const weekStart = getStartOfWeek(selectedDashboardDate);
+
+          const weekEnd = copyDate(weekStart);
+
+          weekEnd.setDate(weekEnd.getDate() + 6);
+
+          selectedPeriodText.textContent =
+            formatFullDate(weekStart) + " – " + formatFullDate(weekEnd);
+        }
+
+        if (selectedPeriod === "monthly") {
+          selectedPeriodText.textContent = new Intl.DateTimeFormat("en-SG", {
+            month: "long",
+            year: "numeric",
+          }).format(selectedDashboardDate);
+        }
+
+        if (selectedPeriod === "yearly") {
+          selectedPeriodText.textContent = String(
+            selectedDashboardDate.getFullYear(),
+          );
+        }
+      }
+
+      /*
+    Moves the dashboard backwards or forwards by one
+    selected period.
+  */
+      function changeDashboardPeriod(direction) {
+        const selectedPeriod = timePeriodSelect.value;
+
+        if (selectedPeriod === "daily") {
+          selectedDashboardDate.setDate(
+            selectedDashboardDate.getDate() + direction,
+          );
+        }
+
+        if (selectedPeriod === "weekly") {
+          selectedDashboardDate.setDate(
+            selectedDashboardDate.getDate() + 7 * direction,
+          );
+        }
+
+        if (selectedPeriod === "monthly") {
+          selectedDashboardDate.setMonth(
+            selectedDashboardDate.getMonth() + direction,
+          );
+        }
+
+        if (selectedPeriod === "yearly") {
+          selectedDashboardDate.setFullYear(
+            selectedDashboardDate.getFullYear() + direction,
+          );
+        }
+
+        updateDashboardForSelectedPeriod();
+      }
+
+      /*
+    Updates the filter text.
+
+    Later, this function will also retrieve updated data
+    from the backend.
+  */
+      function updateDashboardForSelectedPeriod() {
+        updateSelectedPeriodText();
+
+        /*
+      Temporary frontend test.
+
+      Later, replace this with something such as:
+
+      loadDashboardData(
+        selectedStallId,
+        timePeriodSelect.value,
+        selectedDashboardDate
+      );
+    */
+        console.log({
+          period: timePeriodSelect.value,
+
+          selectedDate: selectedDashboardDate.toISOString(),
+        });
+      }
+
+      /* =====================================================
+     ORDERS DOUGHNUT CHART
+     ===================================================== */
+
+      /*
+    Temporary sample data.
+
+    Later, these values will come from the backend.
+  */
+      const orderValues = [18, 20, 12];
+
+      /*
+    This custom Chart.js plugin displays the total number
+    of orders in the middle of the doughnut chart.
+  */
       const centreTextPlugin = {
         id: "centreText",
 
         afterDraw(chart) {
           const context = chart.ctx;
+
           const chartArea = chart.chartArea;
 
           const centreX = (chartArea.left + chartArea.right) / 2;
 
           const centreY = (chartArea.top + chartArea.bottom) / 2;
 
+          /*
+        The total is calculated from the chart's current
+        dataset instead of being permanently hard coded.
+      */
+          const currentOrderValues = chart.data.datasets[0].data;
+
+          const totalOrders = currentOrderValues.reduce(function (
+            total,
+            value,
+          ) {
+            return total + value;
+          }, 0);
+
           context.save();
 
           context.textAlign = "center";
+
           context.textBaseline = "middle";
 
           context.fillStyle = "#222222";
+
           context.font = "800 30px Arial";
 
           context.fillText(totalOrders, centreX, centreY - 9);
 
           context.fillStyle = "#777777";
+
           context.font = "600 13px Arial";
 
           context.fillText("Total Orders", centreX, centreY + 19);
@@ -401,9 +585,7 @@
         },
       };
 
-      const ordersChartCanvas = document.getElementById("ordersChart");
-
-      const ordersChart = new Chart(ordersChartCanvas, {
+      const ordersChart = new Chart(document.getElementById("ordersChart"), {
         type: "doughnut",
 
         data: {
@@ -416,12 +598,13 @@
               backgroundColor: ["#f28c28", "#ffc166", "#8f6b4f"],
 
               borderColor: "#ffffff",
+
               borderWidth: 4,
 
               /*
-                  Moves the hovered chart section slightly
-                  outwards.
-                */
+                Moves the hovered chart section slightly
+                outwards.
+              */
               hoverOffset: 10,
             },
           ],
@@ -429,19 +612,20 @@
 
         options: {
           responsive: true,
+
           maintainAspectRatio: false,
 
           /*
-              A larger percentage creates a larger hole
-              in the centre of the chart.
-            */
+            A larger percentage creates a larger hole
+            in the centre of the chart.
+          */
           cutout: "66%",
 
           plugins: {
             /*
-                We are using our own HTML legend, so the
-                default Chart.js legend is hidden.
-              */
+              We are using our own HTML legend, so the
+              default Chart.js legend is hidden.
+            */
             legend: {
               display: false,
             },
@@ -449,13 +633,23 @@
             tooltip: {
               callbacks: {
                 /*
-                    Controls the text displayed when the
-                    vendor hovers over a chart section.
-                  */
+                  Controls the text displayed when the
+                  vendor hovers over a chart section.
+                */
                 label(context) {
                   const value = context.raw;
 
-                  const percentage = Math.round((value / totalOrders) * 100);
+                  const currentValues = context.chart.data.datasets[0].data;
+
+                  const total = currentValues.reduce(function (
+                    sum,
+                    currentValue,
+                  ) {
+                    return sum + currentValue;
+                  }, 0);
+
+                  const percentage =
+                    total === 0 ? 0 : Math.round((value / total) * 100);
 
                   return value + " orders · " + percentage + "%";
                 },
@@ -468,15 +662,15 @@
       });
 
       /* =====================================================
-   ORDER TRENDS BAR CHART
-   ===================================================== */
+     ORDER TRENDS BAR CHART
+     ===================================================== */
 
       /*
-  Temporary sample data.
+    Temporary sample data.
 
-  Later, these values will come from the backend based
-  on the selected stall and time period.
-*/
+    Later, these values will come from the backend based
+    on the selected stall, date and time period.
+  */
       const orderTrendData = {
         daily: {
           labels: [
@@ -536,39 +730,33 @@
         },
       };
 
-      const timePeriodSelect = document.getElementById("time-period");
-
-      const trendDescription = document.getElementById("trend-description");
-
-      const comparisonBox = document.getElementById("order-comparison");
-
-      const comparisonValue = document.getElementById("comparison-value");
-
-      const comparisonDescription = document.getElementById(
-        "comparison-description",
-      );
-
       /*
-  Stores the indexes of the bars selected by the vendor.
+    Stores the indexes of the bars selected by the vendor.
 
-  A maximum of two bars may be selected.
-*/
+    A maximum of two bars may be selected.
+  */
       let selectedBars = [];
 
       /*
-  Returns the colour for each bar.
+    Returns the colour for each bar.
 
-  Selected bars use the darker orange so they remain
-  visually distinguishable.
-*/
+    Selected bars use the darker orange so they remain
+    visually distinguishable.
+  */
       function createBarColours(numberOfBars) {
-        return Array.from({ length: numberOfBars }, function (_, index) {
-          if (selectedBars.includes(index)) {
-            return "#c4480c";
-          }
+        return Array.from(
+          {
+            length: numberOfBars,
+          },
 
-          return "rgba(250, 129, 18, 0.68)";
-        });
+          function (_, index) {
+            if (selectedBars.includes(index)) {
+              return "#c4480c";
+            }
+
+            return "rgba(250, 129, 18, 0.68)";
+          },
+        );
       }
 
       const initialTrendData = orderTrendData[timePeriodSelect.value];
@@ -584,6 +772,7 @@
             datasets: [
               {
                 label: "Orders",
+
                 data: initialTrendData.values,
 
                 backgroundColor: createBarColours(
@@ -591,14 +780,16 @@
                 ),
 
                 borderColor: "#c4480c",
+
                 borderWidth: 1,
 
                 borderRadius: 7,
+
                 borderSkipped: false,
 
                 /*
-            Controls the maximum thickness of each bar.
-          */
+                Controls the maximum thickness of each bar.
+              */
                 maxBarThickness: 48,
               },
             ],
@@ -606,20 +797,21 @@
 
           options: {
             responsive: true,
+
             maintainAspectRatio: false,
 
             /*
-        Makes the mouse pointer change when the vendor
-        hovers over a selectable bar.
-      */
+            Makes the mouse pointer change when the vendor
+            hovers over a selectable bar.
+          */
             onHover(event, chartElements) {
               event.native.target.style.cursor =
                 chartElements.length > 0 ? "pointer" : "default";
             },
 
             /*
-        Runs when a bar is clicked.
-      */
+            Runs when a bar is clicked.
+          */
             onClick(event, chartElements) {
               if (chartElements.length === 0) {
                 return;
@@ -638,12 +830,15 @@
 
                 ticks: {
                   color: "#696969",
+
                   maxRotation: 45,
+
                   minRotation: 0,
                 },
 
                 title: {
                   display: true,
+
                   text: "Period",
                 },
               },
@@ -653,6 +848,7 @@
 
                 ticks: {
                   precision: 0,
+
                   color: "#696969",
                 },
 
@@ -662,6 +858,7 @@
 
                 title: {
                   display: true,
+
                   text: "Number of orders",
                 },
               },
@@ -688,34 +885,39 @@
         },
       );
 
+      /* =====================================================
+     ORDER TRENDS BAR SELECTION
+     ===================================================== */
+
       /*
-  Selects or removes a bar from the comparison.
-*/
+    Selects or removes a bar from the comparison.
+  */
       function selectComparisonBar(clickedIndex) {
         const existingSelection = selectedBars.indexOf(clickedIndex);
 
         /*
-    Clicking an already-selected bar deselects it.
-  */
+      Clicking an already-selected bar deselects it.
+    */
         if (existingSelection !== -1) {
           selectedBars.splice(existingSelection, 1);
         } else if (selectedBars.length < 2) {
           selectedBars.push(clickedIndex);
         } else {
           /*
-      If two bars are already selected, clicking a new
-      bar starts a new comparison.
-    */
+        If two bars are already selected, clicking a new
+        bar starts a new comparison.
+      */
           selectedBars = [clickedIndex];
         }
 
         updateSelectedBarColours();
+
         updateComparisonResult();
       }
 
       /*
-  Refreshes the bar colours after a selection changes.
-*/
+    Refreshes the bar colours after a selection changes.
+  */
       function updateSelectedBarColours() {
         const numberOfBars = orderTrendChart.data.labels.length;
 
@@ -726,9 +928,9 @@
       }
 
       /*
-  Displays the percentage difference between the two
-  selected bars.
-*/
+    Displays the percentage difference between the two
+    selected bars.
+  */
       function updateComparisonResult() {
         comparisonBox.classList.remove("increase", "decrease", "no-change");
 
@@ -754,6 +956,7 @@
         }
 
         const firstIndex = selectedBars[0];
+
         const secondIndex = selectedBars[1];
 
         const firstLabel = orderTrendChart.data.labels[firstIndex];
@@ -765,9 +968,9 @@
         const secondValue = orderTrendChart.data.datasets[0].data[secondIndex];
 
         /*
-    A percentage difference cannot be calculated using
-    zero as the starting value.
-  */
+      A percentage difference cannot be calculated using
+      zero as the starting value.
+    */
         if (firstValue === 0) {
           comparisonValue.textContent = "Comparison unavailable";
 
@@ -807,36 +1010,57 @@
       }
 
       /*
-  Updates the chart when the vendor changes the main
-  dashboard time filter.
-*/
+    Updates the chart when the vendor changes the main
+    dashboard time filter.
+  */
       function updateOrderTrendChart() {
         const selectedPeriod = timePeriodSelect.value;
 
         const selectedData = orderTrendData[selectedPeriod];
 
         /*
-    Previous bar selections are cleared because the
-    chart now represents different periods.
-  */
+      Previous bar selections are cleared because the
+      chart now represents different periods.
+    */
         selectedBars = [];
 
         orderTrendChart.data.labels = selectedData.labels;
-
         orderTrendChart.data.datasets[0].data = selectedData.values;
-
         orderTrendChart.data.datasets[0].backgroundColor = createBarColours(
           selectedData.values.length,
         );
-
         trendDescription.textContent = selectedData.description;
-
         updateComparisonResult();
         orderTrendChart.update();
       }
 
-      timePeriodSelect.addEventListener("change", updateOrderTrendChart);
-  
-  </script>
+      /* =====================================================
+     EVENT LISTENERS
+     ===================================================== */
+
+      window.addEventListener("scroll", updateStallHeader);
+      window.addEventListener("resize", updateStallHeader);
+
+      previousPeriodButton.addEventListener("click", function () {
+        changeDashboardPeriod(-1);
+      });
+
+      nextPeriodButton.addEventListener("click", function () {
+        changeDashboardPeriod(1);
+      });
+
+      timePeriodSelect.addEventListener("change", function () {
+        updateDashboardForSelectedPeriod();
+        updateOrderTrendChart();
+      });
+
+      /* =====================================================
+     INITIAL PAGE SETUP
+     ===================================================== */
+
+      updateStallHeader();
+      updateDashboardForSelectedPeriod();
+      updateOrderTrendChart();
+    </script>
   </body>
 </html>

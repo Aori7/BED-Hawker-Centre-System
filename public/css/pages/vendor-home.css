@@ -154,15 +154,31 @@ input {
   overflow: visible;
 }
 
-.dashboard-header,
-.dashboard-time-filter,
+.dashboard-controls,
 .summary-grid,
 .analytics-grid,
 .top-items-section,
 .management-grid {
   width: min(1180px, calc(100% - 40px));
-  margin-right: auto;
   margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================
+   DASHBOARD CONTROLS
+   ========================= */
+
+.dashboard-controls {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(520px, 650px);
+
+  align-items: end;
+  gap: 28px;
+
+  padding: 18px 8px 0;
+  margin-bottom: 24px;
 }
 
 /* =========================
@@ -358,13 +374,10 @@ input {
    ========================= */
 
 .dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
 
-  padding: 18px 8px 0;
-  margin-bottom: 22px;
   position: relative;
   z-index: 1;
 
@@ -397,13 +410,14 @@ input {
     auto
     minmax(150px, 1fr)
     auto
-    minmax(190px, 260px);
+    minmax(150px, 210px);
 
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 
-  padding: 14px 18px;
-  margin-bottom: 24px;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 0;
 
   background-color: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--border-color);
@@ -1203,5 +1217,15 @@ input {
   .period-navigation-button {
     width: 42px;
     height: 42px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .dashboard-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-time-filter {
+    width: 100%;
   }
 }
