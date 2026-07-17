@@ -3,7 +3,7 @@
     --bg-app: rgba(250, 243, 225, 0.97);
     --bg-card: rgba(255,255,255,.94);
     --bg-subtle: #f1f3f5;
-    --text-main: #0f172a;
+    --text-main: #000000;
     --text-muted: #64748b;  
     --radius-sm: 12px;
     --radius-md: 16px;
@@ -160,6 +160,7 @@
   height: 100%;
   object-fit: cover;
   filter: brightness(0.9) contrast(1.05);
+  color: #000;
 }
 
 #content::before{
@@ -181,7 +182,7 @@
   top: 300px;
   left: 90px;
   z-index: 4;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 /* Announcements container */
@@ -200,11 +201,12 @@
   padding: 18px;
   border-radius: 22px;
 
-  background: rgba(255,255,255,.25);
+  background: rgb(148, 110, 84);
   backdrop-filter: blur(18px) saturate(1.2);
   -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  color: #000;
 
-  border: 1px solid rgba(255,255,255,.3);
+  border: 1px solid rgba(255, 255, 255, 0.089);
   box-shadow: 0 30px 70px rgba(0,0,0,.35);
 }
 
@@ -213,21 +215,21 @@
   margin: 0 0 14px;
   font-size: 22px;
   font-weight: 900;
-  color: #fff;
+  color: rgb(0, 0, 0);
   text-shadow: 0 12px 30px rgba(0,0,0,.5);
 }
 
 /* Individual announcement cards */
 .announcement-item{
-  background: rgba(255,255,255,.95);
+  background: rgb(255, 255, 255);
   border-radius: 16px;
   padding: 14px;
   margin-bottom: 12px;
+  color: #000;
 
   border: 1px solid rgba(15,23,42,.12);
-  box-shadow: 0 16px 32px rgba(15,23,42,.18);
+  box-shadow: 0 16px 32px rgba(12, 18, 34, 0.068);
 }
-
 /* Prevent text overflow */
 .desctext-box,
 .announcement-item{
