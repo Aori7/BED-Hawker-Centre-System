@@ -9,6 +9,8 @@ const customerController = require("./controllers/customerController");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
+const foodStallRoutes = require("./routes/foodStallRoutes");
+const menuItemRoutes = require("./routes/menuItemRoutes");
 
 //create express app
 const app = express();
@@ -21,10 +23,15 @@ app.use(express.urlencoded()); // middleware inbuilt in express to recognize the
 
 app.use(express.static("public"));
 
+//ada's
 app.use("/customers", customerRoutes);
 app.use("/auth", authRoutes);
 app.use("/hawker-centres", hawkerCentreRoutes);
-
+app.use("/food-stalls", foodStallRoutes);
+app.use("/menu-items", menuItemRoutes);
+//calista's
+//rui min's
+//dayana's
 
 
 

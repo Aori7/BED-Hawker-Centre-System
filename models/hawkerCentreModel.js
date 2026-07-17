@@ -29,6 +29,41 @@ async function getAllHawkerCentres() {
   }
 }
 
+async function getHawkerCentreById(hawkerCentreID) {
+    const connection = await sql.connect(dbConfig);
+
+    try {
+        const result = await connection
+            .request()
+            .input(
+                "HawkerCentreID",
+                sql.Int,
+                hawkerCentreID
+            )
+            .query(`
+                SELECT
+                    HawkerCentreID,
+                    HCName,
+                    HCAddress,
+                    Latitude,
+                    Longitude,
+                    Description,
+                    ImageURL,
+                    OpeningHours,
+                    OperatorID,
+                    IsActive
+                FROM HawkerCentre
+                WHERE HawkerCentreID = @HawkerCentreID
+                AND IsActive = 1
+            `);
+
+        return result.recordset[0];
+
+    } finally {
+        await connection.close();
+    }
+}
 module.exports = {
   getAllHawkerCentres,
+  getHawkerCentreById
 };

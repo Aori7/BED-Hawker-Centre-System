@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+
+    <link rel="stylesheet" href="../css/pages/cust-profile.css" />
+
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <title>Customer Profile Management</title>
+</head>
+<body>
+    <!-- navigation bar done by ada-->
+    <header id="navigationbar">
+      <div class="logo">
+        <a href="../index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
+      <ul class="navitems">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../html/order-hawker.html">Order</a></li>
+        <li><a href="../html/main-hawkers.html">Hawkers</a></li>
+        <li><a href="../html/about-us.html">About Us</a></li>
+        <li><a href="../html/contact-us.html">Contact Us</a></li>
+      </ul>
+
+      <div class="loginbutton">
+        <a href="../html/login.html" id="login-link"> 
+          <button id="login-btn">Login</button>
+        </a>
+        <button id="logout-btn" style="display: none">Logout</button>
+      </div>
+      <button id="open-history-btn">Order History</button>
+      <!-- hamburger menu -->
+      <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
+    </header>
+
+    <main class="profile-page">
+
+    <!-- profile page heading -->
+    <section class="profile-heading">
+        <div>
+        <p class="profile-label">CUSTOMER ACCOUNT</p>
+        <h1>Manage Your Profile</h1>
+        <p>
+            View and update your personal information and account details.
+        </p>
+        </div>
+    </section>
+
+    <section class="profile-container">
+
+        <!-- left profile summary -->
+        <aside class="profile-sidebar">
+        <div class="profile-image-wrapper">
+            <img
+            src="../images/userProfile.jpg"
+            alt="Customer profile image"
+            id="profile-preview"
+            >
+
+            <label for="profile-image" class="change-image-btn">
+            <span class="material-symbols-rounded">photo_camera</span>
+            Change Photo
+            </label>
+
+            <input
+            type="file"
+            id="profile-image"
+            name="profileImage"
+            accept="image/*"
+            hidden
+            >
+        </div>
+
+        <h2 id="profile-display-name">Customer Name</h2>
+        <p id="profile-display-email">customer@email.com</p>
+
+        <div class="profile-status">
+            <span class="material-symbols-rounded">verified_user</span>
+            Customer Account
+        </div>
+
+        <nav class="profile-menu">
+            <button type="button" class="profile-menu-item active">
+            <span class="material-symbols-rounded">person</span>
+            Personal Details
+            </button>
+
+            <button type="button" class="profile-menu-item">
+            <span class="material-symbols-rounded">lock</span>
+            Password
+            </button>
+
+            <a href="order-history.html" class="profile-menu-item">
+            <span class="material-symbols-rounded">receipt_long</span>
+            Order History
+            </a>
+        </nav>
+        </aside>
+
+        <!-- right profile form -->
+        <div class="profile-content">
+
+        <form id="profile-form">
+
+            <div class="form-section-header">
+            <div>
+                <h2>Personal Details</h2>
+                <p>Update your personal information below.</p>
+            </div>
+
+            
+            </div>
+
+            <div id="profile-message"></div>
+
+            <div class="profile-form-grid">
+
+            <div class="profile-form-group full-width">
+                <label for="customer-name">Full Name</label>
+
+                <div class="profile-input-wrapper">
+                <span class="material-symbols-rounded">person</span>
+
+                <input
+                    type="text"
+                    id="customer-name"
+                    name="customerName"
+                    placeholder="Enter your full name"
+                    maxlength="100"
+                    required
+                >
+                </div>
+            </div>
+
+            <div class="profile-form-group">
+                <label for="customer-email">Email Address</label>
+
+                <div class="profile-input-wrapper">
+                <span class="material-symbols-rounded">mail</span>
+
+                <input
+                    type="email"
+                    id="customer-email"
+                    name="email"
+                    placeholder="Enter your email"
+                    maxlength="100"
+                    required
+                >
+                </div>
+
+                <small>This email is used to log in to your account.</small>
+            </div>
+
+            <div class="profile-form-group">
+                <label for="contact-no">Contact Number</label>
+
+                <div class="profile-input-wrapper">
+                <span class="material-symbols-rounded">call</span>
+
+                <input
+                    type="tel"
+                    id="contact-no"
+                    name="contactNo"
+                    placeholder="Enter 8-digit contact number"
+                    maxlength="8"
+                    pattern="[0-9]{8}"
+                >
+                </div>
+            </div>
+
+            <div class="profile-form-group full-width">
+                <label for="customer-address">Address</label>
+
+                <div class="profile-input-wrapper address-input">
+                <span class="material-symbols-rounded">location_on</span>
+
+                <textarea
+                    id="customer-address"
+                    name="address"
+                    placeholder="Enter your address"
+                    maxlength="255"
+                    rows="4"
+                ></textarea>
+                </div>
+            </div>
+
+            </div>
+
+            <div class="profile-actions">
+            <button type="button" id="cancel-profile-btn" class="secondary-btn">
+                Cancel
+            </button>
+
+            <button type="submit" id="save-profile-btn">
+                <span class="material-symbols-rounded">save</span>
+                Save Changes
+            </button>
+            </div>
+
+        </form>
+
+        <!-- password section -->
+        <section class="password-section">
+
+            <div class="form-section-header">
+            <div>
+                <h2>Change Password</h2>
+                <p>Update your account password securely.</p>
+            </div>
+
+            
+            </div>
+
+            <form id="password-form">
+
+            <div class="profile-form-grid">
+
+                <div class="profile-form-group full-width">
+                <label for="current-password">Current Password</label>
+
+                <div class="profile-input-wrapper">
+                    <span class="material-symbols-rounded">lock</span>
+
+                    <input
+                    type="password"
+                    id="current-password"
+                    name="currentPassword"
+                    placeholder="Enter your current password"
+                    required
+                    >
+                </div>
+                </div>
+
+                <div class="profile-form-group">
+                <label for="new-password">New Password</label>
+
+                <div class="profile-input-wrapper">
+                    <span class="material-symbols-rounded">key</span>
+
+                    <input
+                    type="password"
+                    id="new-password"
+                    name="newPassword"
+                    placeholder="Enter a new password"
+                    minlength="8"
+                    required
+                    >
+                </div>
+                </div>
+
+                <div class="profile-form-group">
+                <label for="confirm-password">Confirm New Password</label>
+
+                <div class="profile-input-wrapper">
+                    <span class="material-symbols-rounded">key</span>
+
+                    <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirmPassword"
+                    placeholder="Enter the new password again"
+                    minlength="8"
+                    required
+                    >
+                </div>
+                </div>
+
+            </div>
+
+            <div class="profile-actions">
+                <button type="submit">
+                <span class="material-symbols-rounded">lock_reset</span>
+                Update Password
+                </button>
+            </div>
+
+            </form>
+        </section>
+
+        <section class="logout-section">
+            <div>
+                <h2>Log Out</h2>
+                <p>
+                    Log out of your HawkerSG customer account.
+                </p>
+            </div>
+
+            <button type="button" id="profile-logout-btn">
+                <span class="material-symbols-rounded">logout</span>
+                Log Out
+            </button>
+        </section>
+
+        <section class="delete-account-section">
+            <div>
+                <h2>Delete Account</h2>
+                <p>
+                Permanently delete your account and all associated customer data.
+                This action cannot be undone.
+                </p>
+            </div>
+
+            <button type="button" id="open-delete-account-btn">
+                <span class="material-symbols-rounded">delete_forever</span>
+                Delete Account
+            </button>
+        </section>
+
+            <!-- delete account popup -->
+        <div id="delete-account-overlay" class="delete-account-overlay">
+            <div class="delete-account-popup">
+                <span class="material-symbols-rounded delete-warning-icon">
+                warning
+                </span>
+
+                <h2>Delete Your Account?</h2>
+
+                <p>
+                This will permanently remove your profile, cart, orders,
+                likes and favourites. This action cannot be undone.
+                </p>
+
+                <label for="delete-account-password">
+                Enter your current password to continue
+                </label>
+
+                <input
+                type="password"
+                id="delete-account-password"
+                placeholder="Current password"
+                >
+
+                <p id="delete-account-message"></p>
+
+                <div class="delete-account-actions">
+                <button type="button" id="cancel-delete-account-btn">
+                    Cancel
+                </button>
+
+                <button type="button" id="confirm-delete-account-btn">
+                    Permanently Delete
+                </button>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </section>
+    </main>
+    <script src="../js/authUI.js"></script>
+    <script src="../js/cust-profile.js"></script>
+</body>
+</html>
