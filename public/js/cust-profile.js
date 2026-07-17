@@ -292,5 +292,109 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    //deleteing an account
+    const deleteOverlay =document.getElementById("delete-account-overlay");
+
+    const openDeleteButton =document.getElementById("open-delete-account-btn");
+
+    const cancelDeleteButton =document.getElementById("cancel-delete-account-btn");
+
+    const confirmDeleteButton =document.getElementById("confirm-delete-account-btn");
+
+    const deletePasswordInput = document.getElementById("delete-account-password");
+
+    const deleteMessage = document.getElementById("delete-account-message");
+
+    // open delete account popup
+    openDeleteButton.addEventListener("click", () => {
+        deletePasswordInput.value = "";
+        deleteMessage.textContent = "";
+        deleteOverlay.classList.add("active");
+    });
+
+    // close delete account popup
+    cancelDeleteButton.addEventListener("click", () => {
+        deleteOverlay.classList.remove("active");
+        deletePasswordInput.value = "";
+        deleteMessage.textContent = "";
+    });
+
+    // close popup when clicking outside it
+    deleteOverlay.addEventListener("click", (event) => {
+        if (event.target === deleteOverlay) {
+            deleteOverlay.classList.remove("active");
+        }
+    });
+
+    // permanently delete account
+    confirmDeleteButton.addEventListener("click", async () => {
+        const currentPassword =
+            deletePasswordInput.value;
+
+        if (!currentPassword) {
+            deleteMessage.textContent =
+                "Please enter your current password";
+            return;
+        }
+
+        const finalConfirmation = confirm(
+            "This will permanently delete your account. Continue?"
+        );
+
+        if (!finalConfirmation) {
+            return;
+        }
+
+        confirmDeleteButton.disabled = true;
+        confirmDeleteButton.textContent = "Deleting...";
+
+        try {
+            const response = await fetch(
+                `/customers/${customerID}/account`,
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        currentPassword
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                deleteMessage.textContent =
+                    data.error || "Unable to delete account";
+
+                confirmDeleteButton.disabled = false;
+                confirmDeleteButton.textContent =
+                    "Permanently Delete";
+
+                return;
+            }
+
+            alert(data.message);
+
+            // clear the deleted account's browser session
+            sessionStorage.clear();
+
+            window.location.href = "/index.html";
+
+        } catch (error) {
+            console.error("Delete account error:", error);
+
+            deleteMessage.textContent =
+                "Unable to connect to the server";
+
+            confirmDeleteButton.disabled = false;
+            confirmDeleteButton.textContent =
+                "Permanently Delete";
+        }
+    });
+
     loadProfile();
 });

@@ -10,5 +10,6 @@ router.get("/:id/profile",customerController.getCustomerProfile);
 
 router.put("/:id/profile",customerController.updateCustomerProfile);
 router.put("/:userID/password",customerController.changeCustomerPassword);
+router.delete("/:customerID/account",customerController.deleteCustomerAccount);
 
 module.exports = router;

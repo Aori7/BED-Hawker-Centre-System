@@ -312,6 +312,59 @@
             </button>
         </section>
 
+        <section class="delete-account-section">
+            <div>
+                <h2>Delete Account</h2>
+                <p>
+                Permanently delete your account and all associated customer data.
+                This action cannot be undone.
+                </p>
+            </div>
+
+            <button type="button" id="open-delete-account-btn">
+                <span class="material-symbols-rounded">delete_forever</span>
+                Delete Account
+            </button>
+        </section>
+
+            <!-- delete account popup -->
+        <div id="delete-account-overlay" class="delete-account-overlay">
+            <div class="delete-account-popup">
+                <span class="material-symbols-rounded delete-warning-icon">
+                warning
+                </span>
+
+                <h2>Delete Your Account?</h2>
+
+                <p>
+                This will permanently remove your profile, cart, orders,
+                likes and favourites. This action cannot be undone.
+                </p>
+
+                <label for="delete-account-password">
+                Enter your current password to continue
+                </label>
+
+                <input
+                type="password"
+                id="delete-account-password"
+                placeholder="Current password"
+                >
+
+                <p id="delete-account-message"></p>
+
+                <div class="delete-account-actions">
+                <button type="button" id="cancel-delete-account-btn">
+                    Cancel
+                </button>
+
+                <button type="button" id="confirm-delete-account-btn">
+                    Permanently Delete
+                </button>
+                </div>
+            </div>
+        </div>
+
         </div>
     </section>
     </main>

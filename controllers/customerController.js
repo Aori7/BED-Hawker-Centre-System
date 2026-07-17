@@ -333,6 +333,80 @@ async function changeCustomerPassword(req, res) {
     }
 }
 
+// permanently delete customer account
+async function deleteCustomerAccount(req, res) {
+    try {
+        const customerID = parseInt(req.params.customerID);
+        const { currentPassword } = req.body;
+
+        if (isNaN(customerID) || customerID <= 0) {
+            return res.status(400).json({
+                error: "Invalid customer ID"
+            });
+        }
+
+        if (!currentPassword) {
+            return res.status(400).json({
+                error: "Current password is required"
+            });
+        }
+
+        // get customer profile to find the linked UserID
+        const customer =
+            await customerModel.getCustomerProfileById(customerID);
+
+        if (!customer) {
+            return res.status(404).json({
+                error: "Customer not found"
+            });
+        }
+
+        // retrieve stored password hash using UserID
+        const user =
+            await customerModel.getPasswordByUserId(
+                customer.UserID
+            );
+
+        if (!user) {
+            return res.status(404).json({
+                error: "User account not found"
+            });
+        }
+
+        // user enters normal password;
+        // bcrypt compares it with the stored hash
+        const passwordMatches = await bcrypt.compare(
+            currentPassword,
+            user.PasswordHash
+        );
+
+        if (!passwordMatches) {
+            return res.status(401).json({
+                error: "Current password is incorrect"
+            });
+        }
+
+        const deleted =
+            await customerModel.deleteCustomerAccount(customerID);
+
+        if (!deleted) {
+            return res.status(404).json({
+                error: "Customer account not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Account deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Delete customer account error:", error);
+
+        res.status(500).json({
+            error: "Error deleting customer account"
+        });
+    }
+}
 
 module.exports = {
     getAllCustomers,
@@ -340,5 +414,6 @@ module.exports = {
     loginCustomer,
     getCustomerProfile,
     updateCustomerProfile,
-    changeCustomerPassword
+    changeCustomerPassword,
+    deleteCustomerAccount
 };
