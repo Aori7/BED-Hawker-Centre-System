@@ -108,7 +108,7 @@ otherLoginForm.addEventListener("submit", async (event) => {
         } else if (data.user.role === "NEA Officer") {
             window.location.href = "nea-main.html";
         } else if (data.user.role === "Operator") {
-            window.location.href = "main-operator.html";
+            window.location.href = "main-operator .html";
         }
 
     } catch (error) {
@@ -273,10 +273,11 @@ customerLoginForm.addEventListener("submit", async (event) => {
         //debug
         console.log("User data:", data.user);
 
-        alert("Login successful");
 
         // temporarily comment this out if you want to inspect console
-        // window.location.href = "../index.html";
+        alert("Login successful");
+        //direct user to the index page after successful login
+        window.location.href = "../index.html";
 
     } catch (error) {
         console.error("Login error:", error);
