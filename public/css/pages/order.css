@@ -270,3 +270,120 @@
   background: var(--orange-color);
   color: white;
 }
+
+
+/* hawker pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 35px;
+}
+
+.pagination-btn {
+  min-width: 42px;
+  height: 42px;
+
+  padding: 0 14px;
+
+  border-radius: 50%;
+
+  background: var(--beige-color);
+  color: var(--black-text-color);
+
+  font-size: 16px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.pagination-btn.active {
+  background: var(--orange-color);
+  color: white;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-btn:disabled:hover {
+  transform: none;
+  filter: none;
+}
+
+.card-wrapper-stall {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+
+  width: 100%;
+  max-width: 1200px;
+}
+
+.all-stalls .card {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.stall-opening-hours {
+  margin: 10px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.stall-status {
+  display: inline-block;
+
+  width: fit-content;
+
+  margin: 4px 0 14px;
+  padding: 6px 12px;
+
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.stall-status.open {
+  color: #176b36;
+  background: #dff5e5;
+}
+
+.stall-status.closed {
+  color: #991f1f;
+  background: #f8dddd;
+}
+
+.order-stall-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.order-stall-btn:disabled:hover {
+  transform: none;
+  filter: none;
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+
+  width: 100%;
+  padding: 30px;
+
+  text-align: center;
+  color: #777;
+}
+
+@media (max-width: 900px) {
+  .card-wrapper-stall {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .card-wrapper-stall {
+    grid-template-columns: 1fr;
+  }
+}
