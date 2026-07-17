@@ -21,10 +21,13 @@ app.use(express.urlencoded()); // middleware inbuilt in express to recognize the
 
 app.use(express.static("public"));
 
+//ada's
 app.use("/customers", customerRoutes);
 app.use("/auth", authRoutes);
 app.use("/hawker-centres", hawkerCentreRoutes);
-
+//calista's
+//rui min's
+//dayana's
 
 
 
