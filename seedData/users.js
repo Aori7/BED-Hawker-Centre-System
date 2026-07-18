@@ -119,6 +119,53 @@ const users = [
     name: "NEA Officer 5",
     contactNo: "83330005",
   },
+
+  //customer records
+  {
+    email: "customer1@customer.com",
+    password: "customer123",
+    roleId: 1,
+    name: "Customer 1",
+    contactNo: "",
+    profileImage: "",
+    address: "",
+  },
+  {
+    email: "customer2@customer.com",
+    password: "customer123",
+    roleId: 1,
+    name: "Customer 2",
+    contactNo: "",
+    profileImage: "",
+    address: "",
+  },
+  {
+    email: "customer3@customer.com",
+    password: "customer123",
+    roleId: 1,
+    name: "Customer 3",
+    contactNo: "",
+    profileImage: "",
+    address: "",
+  },
+  {
+    email: "customer4@customer.com",
+    password: "customer123",
+    roleId: 1,
+    name: "Customer 4",
+    contactNo: "",
+    profileImage: "",
+    address: "",
+  },
+  {
+    email: "customer5@customer.com",
+    password: "customer123",
+    roleId: 1,
+    name: "Customer 5",
+    contactNo: "",
+    profileImage: "",
+    address: "",
+  },
 ];
 
 module.exports = users;
