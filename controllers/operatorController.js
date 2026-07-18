@@ -56,9 +56,7 @@ exports.getLeaseStats = (req, res) => {
     );
 };
 
-// ====================
 // SCHEDULE & PLANNING
-// ====================
 
 exports.getCleaningSchedules = (req, res) => {
 
