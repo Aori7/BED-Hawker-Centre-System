@@ -4,18 +4,19 @@ const dbConfig = require("./dbConfig");
 // // Load environment variables
 // dotenv.config();
 
-// Import 
+// Import
 const customerController = require("./controllers/customerController");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
 const foodStallRoutes = require("./routes/foodStallRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
+// Improt - vendor
+const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 
 //create express app
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default port
-
 
 //middleware
 app.use(express.json()); // middleware inbuilt in express to recognize the incoming Request Object as a JSON Object.
@@ -31,10 +32,8 @@ app.use("/food-stalls", foodStallRoutes);
 app.use("/menu-items", menuItemRoutes);
 //calista's
 //rui min's
+app.use("/vendor-dashboard", vendorDashboardRoutes);
 //dayana's
-
-
-
 
 //start server
 app.listen(port, async () => {
