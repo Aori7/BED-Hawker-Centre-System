@@ -175,7 +175,7 @@ async function loadRevenue() {
     revenueValue.textContent = `$${Number(data.Revenue).toFixed(2)}`;
   } catch (error) {
     console.error("Error loading revenue:", error);
-    revenueValue.textContent = "Unable to load";
+    revenueValue.textContent = "NA";
   }
 }
 
