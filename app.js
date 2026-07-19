@@ -9,14 +9,13 @@ const customerController = require("./controllers/customerController");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
-<<<<<<< HEAD
 const dashboardRoutes = require("./routes/dashboardRoutes");
-=======
+
 const foodStallRoutes = require("./routes/foodStallRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
 // Improt - vendor
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
->>>>>>> ccd0cdf1f3d5c2a53f4dc6c344903a766993b15d
+
 
 //create express app
 const app = express();
@@ -32,20 +31,14 @@ app.use(express.static("public"));
 app.use("/customers", customerRoutes);
 app.use("/auth", authRoutes);
 app.use("/hawker-centres", hawkerCentreRoutes);
-<<<<<<< HEAD
 app.use("/dashboard", dashboardRoutes);
 
-
-
-
-=======
 app.use("/food-stalls", foodStallRoutes);
 app.use("/menu-items", menuItemRoutes);
 //calista's
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 //dayana's
->>>>>>> ccd0cdf1f3d5c2a53f4dc6c344903a766993b15d
 
 //start server
 app.listen(port, async () => {
