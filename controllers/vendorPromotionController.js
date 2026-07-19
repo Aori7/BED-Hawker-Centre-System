@@ -35,15 +35,9 @@ async function createPromotion(req, res) {
 // test run (need to have 1 promo min.): http://localhost:3000/vendor-promotions/1
 async function deletePromotion(req, res) {
   try {
-    const promotionId = parseInt(
-      req.params.promotionId,
-      10
-    );
+    const promotionId = parseInt(req.params.promotionId, 10);
 
-    const deleted =
-      await vendorPromotionModel.deletePromotion(
-        promotionId
-      );
+    const deleted = await vendorPromotionModel.deletePromotion(promotionId);
 
     if (!deleted) {
       return res.status(404).json({
@@ -51,7 +45,9 @@ async function deletePromotion(req, res) {
       });
     }
 
-    res.status(204).send();
+    res.status(200).json({
+      message: "Promotion deleted successfully",
+    });
   } catch (error) {
     console.error("Controller error:", error);
 
@@ -62,5 +58,5 @@ async function deletePromotion(req, res) {
 }
 module.exports = {
   createPromotion,
-  deletePromotion
+  deletePromotion,
 };
