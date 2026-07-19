@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- font chosen by ada: Archivo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+  <link rel="stylesheet" href="css/operator.css">  
+  <title>Operators Schedule Page</title>
+</head>
+
+<body class="page-main">
+  <header id="navigationbar">
+    <!-- <nav id="navcontainer"> -->
+        <div class="logo">
+            <a href="index.html">
+
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">HawkerSG</h1>
+            </a>
+        </div>
+
+            <ul class="navitems">
+                <li><a href="main-operator.html">Home</a></li>
+                <li><a href="operator-hawker.html">Hawker</a></li>
+                <li><a href="schedule-operator.html">Schedule</a></li>
+                <li><a href="operator-profile.html">Profile</a></li>
+            </ul>
+
+            <div class="loginbutton">
+                <a href="login.html">
+                    <button id="loginbtn">Operator</button>
+                </a>
+            </div>
+
+    </header>
+    <main class="page">
+        <div class="controls">
+          <section class="hawker-select">
+            <label for="hawkerCentreSelect" class="sr-only">Select Hawker Centre</label>
+            <select id="hawkerCentreSelect">
+              <option value="" selected disabled>▼ Select Hawker Centre</option>
+              <option value="laupasat">Lau Pa Sat</option>
+              <option value="maxwell">Maxwell Food Centre</option>
+              <option value="tanjongpagar">Tanjong Pagar Plaza</option>
+            </select>
+          </section>
+        </div>
+    
+        <!-- Cleaning Schedule -->
+        <section class="section">
+          <h3>Cleaning Schedule</h3>
+          <div class="inner">
+            <div class="calendar">
+              <div class="calendar-header">
+                <button id="prevMonth">◀</button>
+                <h4 id="monthYear"></h4>
+                <button id="nextMonth">▶</button>
+              </div>
+        
+              <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
+          </div>
+        </section>
+    
+        <!-- Upcoming Cleaning Events -->
+        <section class="section">
+          <h3>Upcoming Cleaning Events</h3>
+          <div class="inner">
+            <ul class="bullet-list">
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+            </ul>
+          </div>
+        </section>
+    
+        <!-- Maintenance Schedule -->
+        <section class="section">
+          <h3>Maintenance Schedule</h3>
+          <div class="inner">
+            <div class="calendar">
+              <div class="calendar-header">
+                <button id="prevMonthMaintenance">◀</button>
+                <h4 id="monthYearMaintenance"></h4>
+                <button id="nextMonthMaintenance">▶</button>
+              </div>
+        
+              <div class="calendar-grid" id="maintenanceCalendarGrid"></div>
+            </div>
+          </div>
+        </section>
+    
+        <!-- Upcoming Inspection -->
+        <section class="section">
+          <h3>Upcoming Inspection</h3>
+          <div class="inner">
+            <ul class="bullet-list">
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+              <li>Lorem ipsum dolor sit amet - xx/xx/xx</li>
+            </ul>
+          </div>
+        </section>
+      </main>
+      <script src=""></script>
+      <script src=""></script>
+</body>
+</html>

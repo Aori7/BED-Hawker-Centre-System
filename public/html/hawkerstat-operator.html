@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- font chosen by ada: Archivo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+ 
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link rel="stylesheet" href="css/operator.css">  
+    <title>Operators Main Page</title>
+  </head>
+
+  <body class="page-main">
+    <header id="navigationbar">
+    <!-- <nav id="navcontainer"> -->
+        <div class="logo">
+            <a href="index.html">
+
+                <span class="material-symbols-rounded">restaurant_menu</span>
+                <h1 id="logotitle">HawkerSG</h1>
+            </a>
+        </div>
+
+            <ul class="navitems">
+                <li><a href="main-operator.html">Home</a></li>
+                <li><a href="hawkerstat-operator.html">Hawker</a></li>
+                <li><a href="schedule-operator.html">Schedule</a></li>
+                <li><a href="profile-operator.html">Profile</a></li>
+            </ul>
+
+            <div class="loginbutton">
+                <a href="login.html">
+                    <button id="loginbtn">Operator</button>
+                </a>
+            </div>
+
+    </header>
+    <main id="hawker-page" >
+        <h2 class="page-title"style="margin: 20px 0 30px 0;">
+            Your Hawker Centres
+        </h2>
+        <section class="map-section">
+          <div id="map" class="map-placeholder"></div>
+        </section>
+          <section class="hawker-select">
+            <label for="hawkerCentreSelect" class="sr-only">Select Hawker Centre</label>
+            <select id="hawkerCentreSelect">
+              <option value="" selected disabled>▼ Select Hawker Centre</option>
+              <option value="laupasat">Lau Pa Sat</option>
+              <option value="maxwell">Maxwell Food Centre</option>
+              <option value="tanjongpagar">Tanjong Pagar Plaza</option>
+            </select>
+          </section>
+          <section class="hawker-info">
+            <div class="hawker-card">
+          
+              <div class="hawker-img">
+                <img src="images/bg-img2.jpg" alt="Lau Pa Sat">
+              </div>
+          
+              <div class="hawker-details">
+                <h3>Lau Pa Sat</h3>
+                <p class="hawker-desc">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                </p>
+              </div>
+          
+            </div>
+          </section>
+          <br>
+          <section class="stats-section" aria-label="Hawker statistics" style="text-align: center;">
+            <div class="stats-card">
+              <!-- Left: metric selector -->
+              <div class="metric-selector" >
+                <label for="metricSelect" class="sr-only">Select</label>
+                <select id="metricSelect">
+                  <option value="profitLost" selected>Profit &amp; Lost</option>
+                  <option value="reviews">Reviews</option>
+                  <option value="hygiene">Hygiene Grade</option>
+                </select>
+              </div>
+              <!-- Center: pie chart -->
+              <div class="chart-area">
+                <canvas id="pieChart" width="260" height="260" aria-label="Interactive pie chart"></canvas>
+              </div>
+              
+              <div class="chart-summary" id="chartSummary">
+
+                <p><strong>Profit</strong> - <span id="summaryA">xx</span></p>
+                <p><strong>Lost</strong> - <span id="summaryB">xx</span></p>
+              </div>
+      
+            </div>
+      
+            <!-- click output -->
+            <div id="chartClickInfo" style="margin-top:12px;"></div>
+          </section>
+    </main>
+  <script src=""
+  integrity="""></script>
+  <script src=""></script> 
+  <script src="js/leaflet.js"></script>
+  <script src=""></script>
+</body>
+</html>
