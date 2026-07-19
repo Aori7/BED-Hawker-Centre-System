@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 // Validation schema for promotions
 const promotionSchema = Joi.object({
-  StallId: Joi.number().integer().positive().required().messages({
+  StallID: Joi.number().integer().positive().required().messages({
     "number.base": "Stall ID must be a number",
     "number.integer": "Stall ID must be an integer",
     "number.positive": "Stall ID must be a positive number",
@@ -47,7 +47,7 @@ const promotionSchema = Joi.object({
 
   EndDate: Joi.date()
     .iso()
-    .min(Joi.ref("startDate"))
+    .min(Joi.ref("StartDate"))
     .required()
     .messages({
       "date.base": "End date must be a valid date",
