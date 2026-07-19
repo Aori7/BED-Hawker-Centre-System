@@ -24,16 +24,7 @@ async function createPromotion(promotionData) {
   try {
     const connection = await sql.connect(dbConfig);
     const request = connection.request();
-
-    if (duplicateResult.recordset.length > 0) {
-      const error = new Error(
-        "An identical promotion already exists for this stall",
-      );
-      error.statusCode = 409;
-      throw error;
-    }
-
-    const request = connection.request();
+    
     request.input("StallID", sql.Int, promotionData.StallID);
     request.input(
       "PromotionName",
@@ -87,7 +78,7 @@ async function createPromotion(promotionData) {
     const result = await request.query(query);
     const newPromotionId = Number(result.recordset[0].id);
     // return await getPromotionById(newPromotionId);
-    
+
     return {
       PromotionID: newPromotionId,
       StallID: promotionData.StallID,
