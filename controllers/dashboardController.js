@@ -89,8 +89,90 @@ async function getTodayInspectionCount(req, res) {
 }
 
 
+// update inspection status
+async function updateInspectionStatus(req, res) {
+    try {
+        const inspectionID = Number(
+            req.params.id
+        );
+
+        const {
+            inspectionStatus
+        } = req.body;
+
+        const allowedStatuses = [
+            "Scheduled",
+            "Completed",
+            "Cancelled"
+        ];
+
+        if (
+            !Number.isInteger(inspectionID) ||
+            inspectionID <= 0
+        ) {
+            return res.status(400).json({
+                error:
+                    "A valid inspection ID is required"
+            });
+        }
+
+        if (!inspectionStatus) {
+            return res.status(400).json({
+                error:
+                    "Inspection status is required"
+            });
+        }
+
+        if (
+            !allowedStatuses.includes(
+                inspectionStatus
+            )
+        ) {
+            return res.status(400).json({
+                error:
+                    "Inspection status must be Scheduled, Completed or Cancelled"
+            });
+        }
+
+        const updatedInspection =
+            await dashboardModel
+                .updateInspectionStatus(
+                    inspectionID,
+                    inspectionStatus
+                );
+
+        if (!updatedInspection) {
+            return res.status(404).json({
+                error:
+                    "Inspection record not found"
+            });
+        }
+
+        res.status(200).json({
+            message:
+                "Inspection status updated successfully",
+
+            inspection:
+                updatedInspection
+        });
+
+    } catch (error) {
+        console.error(
+            "Update inspection status error:",
+            error
+        );
+
+        res.status(500).json({
+            error:
+                "Error updating inspection status"
+        });
+    }
+}
+
+
 module.exports = {
     getDashboardStatistics,
     getRecentInspections,
-    getTodayInspectionCount
+    getTodayInspectionCount,
+    updateInspectionStatus
 };

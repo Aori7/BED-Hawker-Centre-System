@@ -37,6 +37,7 @@ async function getDashboardStatistics() {
                 ) AS GradeAStalls
 
             FROM Inspection
+
             WHERE InspectionStatus = 'Completed'
         `;
 
@@ -54,6 +55,7 @@ async function getDashboardStatistics() {
         if (connection) {
             try {
                 await connection.close();
+
             } catch (err) {
                 console.error(
                     "Error closing connection:",
@@ -89,7 +91,7 @@ async function getRecentInspections() {
 
             INNER JOIN HawkerCentre hc
                 ON fs.HawkerCentreID =
-                   hc.HawkerCentreID
+                    hc.HawkerCentreID
 
             ORDER BY
                 i.InspectionDate DESC,
@@ -110,6 +112,7 @@ async function getRecentInspections() {
         if (connection) {
             try {
                 await connection.close();
+
             } catch (err) {
                 console.error(
                     "Error closing connection:",
@@ -153,6 +156,72 @@ async function getTodayInspectionCount() {
         if (connection) {
             try {
                 await connection.close();
+
+            } catch (err) {
+                console.error(
+                    "Error closing connection:",
+                    err
+                );
+            }
+        }
+    }
+}
+
+
+// update inspection status
+async function updateInspectionStatus(
+    inspectionID,
+    inspectionStatus
+) {
+    let connection;
+
+    try {
+        connection = await sql.connect(dbConfig);
+
+        const result = await connection
+            .request()
+            .input(
+                "InspectionID",
+                sql.Int,
+                inspectionID
+            )
+            .input(
+                "InspectionStatus",
+                sql.VarChar(20),
+                inspectionStatus
+            )
+            .query(`
+                UPDATE Inspection
+
+                SET InspectionStatus =
+                    @InspectionStatus
+
+                OUTPUT
+                    INSERTED.InspectionID,
+                    INSERTED.StallID,
+                    INSERTED.OfficerID,
+                    INSERTED.InspectionDate,
+                    INSERTED.InspectionScore,
+                    INSERTED.HygieneGrade,
+                    INSERTED.GradeExpiry,
+                    INSERTED.InspectionStatus,
+                    INSERTED.CreatedAt
+
+                WHERE InspectionID =
+                    @InspectionID
+            `);
+
+        return result.recordset[0];
+
+    } catch (error) {
+        console.error("Database error:", error);
+        throw error;
+
+    } finally {
+        if (connection) {
+            try {
+                await connection.close();
+
             } catch (err) {
                 console.error(
                     "Error closing connection:",
@@ -167,5 +236,6 @@ async function getTodayInspectionCount() {
 module.exports = {
     getDashboardStatistics,
     getRecentInspections,
-    getTodayInspectionCount
+    getTodayInspectionCount,
+    updateInspectionStatus
 };

@@ -1,6 +1,7 @@
 // dashboard routes done by dayana
 
 const express = require("express");
+
 const dashboardController = require(
     "../controllers/dashboardController"
 );
@@ -26,6 +27,13 @@ router.get(
 router.get(
     "/today",
     dashboardController.getTodayInspectionCount
+);
+
+
+// update inspection status
+router.put(
+    "/inspection/:id/status",
+    dashboardController.updateInspectionStatus
 );
 
 
