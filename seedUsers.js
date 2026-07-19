@@ -60,7 +60,29 @@ async function seedUsers() {
           `);
 
         const userId = userResult.recordset[0].UserID;
-
+        
+        // RoleID 1 = Customer
+        if (user.roleId === 1) {
+          await new sql.Request(transaction)
+            .input("UserID", sql.Int, userId)
+            .input("CustomerName", sql.VarChar(100), user.name)
+            .input("ContactNo", sql.Char(8), user.contactNo)
+            .input("Address", sql.VarChar(255), user.address)
+            .query(`
+              INSERT INTO Customer (
+                UserID,
+                CustomerName,
+                ContactNo,
+                Address
+              )
+              VALUES (
+                @UserID,
+                @CustomerName,
+                @ContactNo,
+                @Address
+              )
+            `);
+        }
         // RoleID 2 = Stall Owner
         if (user.roleId === 2) {
           await new sql.Request(transaction)

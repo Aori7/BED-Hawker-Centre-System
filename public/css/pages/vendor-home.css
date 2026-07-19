@@ -1,0 +1,1231 @@
+/* =========================================================
+   Vendor Dashboard
+   Based on the visual style of the previous Hawker Centre app
+   ========================================================= */
+
+:root {
+  --black-text-color: rgb(34, 34, 34);
+  --orange-color: rgb(250, 129, 18);
+  --dark-orange-color: rgb(196, 72, 12);
+  --beige-color: rgb(245, 231, 198);
+  --lighter-beige: rgb(250, 243, 225);
+  --white-color: rgb(255, 255, 255);
+  --muted-text-color: rgb(105, 105, 105);
+  --border-color: rgba(34, 34, 34, 0.12);
+  --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
+  --hover-shadow: 0 14px 30px rgba(34, 34, 34, 0.15);
+  --section-radius: 20px;
+  --card-radius: 16px;
+}
+
+/* =========================
+   RESET / GLOBAL
+   ========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  /*
+    global.css uses margin-top: 60px because most pages
+    use a fixed #navigationbar.
+
+    This vendor page uses its own sticky .nav-bar, so the
+    shared top margin must be removed.
+  */
+  margin: 0;
+  min-height: 100vh;
+
+  overflow-x: clip;
+
+  color: var(--black-text-color);
+  background-color: var(--lighter-beige);
+
+  /*
+    Overrides the background image from global.css for
+    this dashboard page.
+  */
+  background-image: none;
+
+  font-family: "Noto Sans", Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+img,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+select,
+button,
+input {
+  font: inherit;
+}
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+
+  min-height: 64px;
+  padding: 10px 24px;
+
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(34, 34, 34, 0.08);
+  box-shadow: 0 4px 16px rgba(34, 34, 34, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.nav-link {
+  position: relative;
+  padding: 8px 6px;
+
+  color: var(--orange-color);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  left: 0;
+
+  height: 3px;
+
+  background-color: var(--dark-orange-color);
+  border-radius: 999px;
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  transition: transform 0.22s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--dark-orange-color);
+}
+
+.nav-link:hover {
+  transform: translateY(-1px);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* =========================
+   PAGE WRAPPER
+   ========================= */
+
+.dashboard-main {
+  width: auto;
+  margin: 0 auto;
+
+  /*
+    Sticky descendants should not be placed inside an
+    overflow-hidden parent.
+  */
+  overflow: visible;
+}
+
+.dashboard-controls,
+.summary-grid,
+.analytics-grid,
+.top-items-section,
+.management-grid {
+  width: min(1180px, calc(100% - 40px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================
+   DASHBOARD CONTROLS
+   ========================= */
+
+.dashboard-controls {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(520px, 650px);
+
+  align-items: end;
+  gap: 28px;
+
+  padding: 18px 8px 0;
+  margin-bottom: 24px;
+}
+
+/* =========================
+   STALL SELECTOR
+   ========================= */
+
+.stall-selector-section {
+  position: sticky;
+  top: 64px;
+  z-index: 900;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 30px;
+
+  min-height: 150px;
+  padding: 24px 30px;
+  margin-bottom: 32px;
+
+  overflow: hidden;
+
+  background-color: var(--beige-color);
+  border-bottom: 1px solid rgba(250, 129, 18, 0.2);
+  box-shadow: var(--card-shadow);
+
+  isolation: isolate;
+
+  transition:
+    min-height 0.25s ease,
+    padding 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.stall-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "name address"
+    "description description"
+    "rating rating";
+
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+
+  padding-right: 210px;
+}
+
+.stall-name {
+  grid-area: name;
+  margin: 0;
+
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+
+  transition: font-size 0.25s ease;
+}
+
+.stall-address {
+  grid-area: address;
+  margin: 5px 0 0;
+
+  color: var(--muted-text-color);
+  font-size: 0.92rem;
+  font-style: normal;
+}
+
+.stall-description {
+  grid-area: description;
+  margin: 8px 0 0;
+  color: var(--black-text-color);
+}
+
+.stall-rating {
+  grid-area: rating;
+  width: fit-content;
+  margin: 8px 0 0;
+  padding: 5px 10px;
+
+  color: var(--dark-orange-color);
+  background-color: rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.stall-hygiene-grade {
+  position: absolute;
+  top: 18px;
+  right: 30px;
+
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+
+  border-radius: 50%;
+  background-color: var(--white-color);
+  box-shadow: 0 7px 18px rgba(34, 34, 34, 0.14);
+
+  transition:
+    opacity 0.18s ease,
+    transform 0.22s ease;
+}
+
+.stall-switcher {
+  align-self: end;
+  justify-self: end;
+  margin-top: 76px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  transition: margin 0.25s ease;
+}
+
+.stall-switcher label {
+  color: var(--muted-text-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stall-switcher select {
+  min-width: 165px;
+  padding: 10px 38px 10px 13px;
+
+  color: var(--black-text-color);
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  outline: none;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stall-switcher select:hover {
+  border-color: var(--orange-color);
+}
+
+.stall-switcher select:focus {
+  border-color: var(--orange-color);
+  box-shadow: 0 0 0 4px rgba(250, 129, 18, 0.14);
+}
+
+/*
+=====================================================================
+*/
+.stall-selector-section.compact {
+  height: 76px;
+  min-height: 76px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  box-shadow: 0 7px 18px rgba(34, 34, 34, 0.14);
+}
+
+.stall-selector-section.compact .stall-details {
+  display: block;
+  padding-right: 0;
+}
+
+.stall-selector-section.compact .stall-name {
+  font-size: 1.4rem;
+}
+
+.stall-selector-section.compact .stall-address,
+.stall-selector-section.compact .stall-description,
+.stall-selector-section.compact .stall-rating,
+.stall-selector-section.compact .stall-hygiene-grade,
+.stall-selector-section.compact .stall-switcher label {
+  display: none;
+}
+
+.stall-selector-section.compact .stall-switcher {
+  align-self: center;
+  margin-top: 0;
+}
+/*
+=====================================================================
+*/
+
+/* =========================
+   DASHBOARD HEADING
+   ========================= */
+
+.dashboard-header {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+
+  position: relative;
+  z-index: 1;
+
+  scroll-margin-top: 230px;
+}
+
+.dashboard-heading {
+  min-width: 0;
+}
+
+.dashboard-title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.dashboard-description {
+  margin: 7px 0 0;
+  color: var(--muted-text-color);
+}
+
+/* =========================
+   DASHBOARD TIME FILTER
+   ========================= */
+
+.dashboard-time-filter {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(150px, 1fr)
+    auto
+    minmax(150px, 210px);
+
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+  padding: 12px 14px;
+  margin: 0;
+
+  background-color: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(8px);
+}
+
+/*
+  These buttons are scoped to the time filter so they
+  are not affected by the project's general button style.
+*/
+.period-navigation-button {
+  display: grid;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+  padding: 0;
+
+  color: var(--orange-color);
+  background-color: var(--lighter-beige);
+  border: 1px solid rgba(250, 129, 18, 0.18);
+  border-radius: 50%;
+  box-shadow: none;
+
+  font-size: 1rem;
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.period-navigation-button:hover {
+  color: var(--white-color);
+  background-color: var(--orange-color);
+  border-color: var(--orange-color);
+
+  filter: none;
+  transform: translateY(-2px);
+}
+
+.period-navigation-button:active {
+  transform: translateY(0);
+}
+
+.period-navigation-button:focus-visible {
+  outline: 3px solid rgba(250, 129, 18, 0.22);
+  outline-offset: 3px;
+}
+
+.selected-period {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 0;
+  min-height: 52px;
+  padding: 6px 18px;
+
+  text-align: center;
+}
+
+.selected-period-label {
+  color: var(--muted-text-color);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.selected-period strong {
+  color: var(--black-text-color);
+
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.period-type-filter {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.period-type-filter label {
+  color: var(--muted-text-color);
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.period-type-filter select {
+  width: 100%;
+  min-height: 46px;
+  padding: 9px 38px 9px 14px;
+
+  color: var(--black-text-color);
+  background-color: var(--lighter-beige);
+  border: 1px solid rgba(250, 129, 18, 0.2);
+  border-radius: 12px;
+  outline: none;
+
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.period-type-filter select:hover {
+  background-color: var(--beige-color);
+  border-color: var(--orange-color);
+}
+
+.period-type-filter select:focus {
+  border-color: var(--orange-color);
+  box-shadow: 0 0 0 4px rgba(250, 129, 18, 0.14);
+}
+
+/* =========================
+   SUMMARY CARDS
+   ========================= */
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.summary-card {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 132px;
+  padding: 22px;
+
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
+
+  background-color: var(--orange-color);
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(250, 129, 18, 0.32);
+  box-shadow: var(--hover-shadow);
+}
+
+.summary-card h3 {
+  margin: 0;
+  color: var(--muted-text-color);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.summary-value {
+  margin: 18px 0 0;
+  color: var(--black-text-color);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* =========================
+   SHARED PANELS
+   ========================= */
+
+.dashboard-panel {
+  padding: 24px;
+
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--section-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.dashboard-panel h2 {
+  margin: 0 0 20px;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.analytics-grid,
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.analytics-grid {
+  margin-bottom: 26px;
+}
+
+.management-grid {
+  margin-top: 26px;
+}
+
+/* =========================
+   ORDERS PIE CHART
+   ========================= */
+
+.orders-panel {
+  min-width: 0;
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+
+  margin-bottom: 24px;
+}
+
+.chart-card-header h2 {
+  margin: 0 0 5px;
+
+  color: var(--black-text-color);
+  font-size: 1.35rem;
+}
+
+.chart-card-header p {
+  margin: 0;
+
+  color: var(--muted-text-color);
+  font-size: 0.9rem;
+}
+
+.orders-chart-content {
+  display: grid;
+  grid-template-columns:
+    minmax(190px, 260px)
+    minmax(190px, 1fr);
+
+  align-items: center;
+  gap: 26px;
+}
+
+.chart-wrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1;
+  margin: auto;
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.orders-chart-summary {
+  display: grid;
+  gap: 18px;
+}
+
+.orders-legend {
+  display: grid;
+  gap: 8px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.orders-legend li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+
+  padding: 11px 12px;
+
+  border-radius: 12px;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.orders-legend li:hover {
+  background-color: var(--lighter-beige);
+  transform: translateX(3px);
+}
+
+.legend-colour {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+}
+
+.dine-in-colour {
+  background-color: #f28c28;
+}
+
+.pickup-colour {
+  background-color: #ffc166;
+}
+
+.delivery-colour {
+  background-color: #8f6b4f;
+}
+
+.legend-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  min-width: 0;
+}
+
+.legend-label span {
+  color: var(--black-text-color);
+  font-weight: 800;
+}
+
+.legend-label small {
+  color: var(--muted-text-color);
+  font-size: 0.78rem;
+}
+
+.orders-legend strong {
+  font-size: 1rem;
+}
+
+.cancelled-orders {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 14px 16px;
+
+  background-color: rgba(190, 55, 55, 0.08);
+  border: 1px solid rgba(190, 55, 55, 0.15);
+  border-radius: 12px;
+}
+
+.cancelled-orders div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.cancelled-orders span {
+  color: #9d2d2d;
+  font-weight: 800;
+}
+
+.cancelled-orders small {
+  color: var(--muted-text-color);
+  font-size: 0.76rem;
+}
+
+.cancelled-orders strong {
+  flex-shrink: 0;
+
+  color: #9d2d2d;
+  font-size: 1.25rem;
+}
+
+/* =========================
+   ORDER TRENDS BAR CHART
+   ========================= */
+
+#order-trends {
+  min-width: 0;
+}
+
+.trend-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.trend-chart-header h2 {
+  margin: 0 0 5px;
+}
+
+.trend-chart-header p {
+  margin: 0;
+
+  color: var(--muted-text-color);
+  font-size: 0.88rem;
+}
+
+/* Percentage comparison box */
+.order-comparison {
+  flex: 0 0 175px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  padding: 12px 14px;
+
+  background-color: var(--lighter-beige);
+  border: 1px solid rgba(250, 129, 18, 0.2);
+  border-radius: 12px;
+}
+
+.comparison-label {
+  color: var(--muted-text-color);
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.order-comparison strong {
+  color: var(--black-text-color);
+
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.order-comparison small {
+  color: var(--muted-text-color);
+  font-size: 0.73rem;
+  line-height: 1.3;
+}
+
+/* Positive comparison result */
+.order-comparison.increase {
+  background-color: rgba(44, 140, 82, 0.09);
+  border-color: rgba(44, 140, 82, 0.2);
+}
+
+.order-comparison.increase strong {
+  color: rgb(35, 118, 68);
+}
+
+/* Negative comparison result */
+.order-comparison.decrease {
+  background-color: rgba(190, 55, 55, 0.08);
+  border-color: rgba(190, 55, 55, 0.18);
+}
+
+.order-comparison.decrease strong {
+  color: rgb(157, 45, 45);
+}
+
+/* No percentage change */
+.order-comparison.no-change strong {
+  color: var(--muted-text-color);
+}
+
+.order-trend-chart-container {
+  position: relative;
+
+  width: 100%;
+  height: 315px;
+}
+
+.order-trend-chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.trend-chart-note {
+  margin: 12px 0 0;
+
+  color: var(--muted-text-color);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+/* =========================
+   TOP THREE ITEMS
+   ========================= */
+
+.top-items-section {
+  margin-top: 0;
+  padding: 28px;
+  background-color: var(--beige-color);
+}
+
+.top-items-section h2 {
+  margin-bottom: 20px;
+}
+
+.menu-item-list,
+.promotion-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.top-items-section .menu-item-list {
+  counter-reset: top-menu-item;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.top-items-section .menu-item-card {
+  counter-increment: top-menu-item;
+  position: relative;
+
+  min-height: 150px;
+  padding: 52px 18px 18px;
+
+  background-color: var(--white-color);
+  border-radius: var(--card-radius);
+  box-shadow: 0 8px 18px rgba(34, 34, 34, 0.1);
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.top-items-section .menu-item-card::before {
+  content: counter(top-menu-item);
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  color: var(--white-color);
+  background-color: var(--orange-color);
+  border-radius: 50%;
+
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.top-items-section .menu-item-card::after {
+  content: "Orders: XX";
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  left: 16px;
+
+  color: var(--muted-text-color);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.top-items-section .menu-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
+}
+
+/* =========================
+   UNAVAILABLE ITEMS / PROMOS
+   ========================= */
+
+#unavailable-items,
+#active-promotions {
+  min-height: 270px;
+}
+
+#unavailable-items {
+  background-color: var(--white-color);
+}
+
+#active-promotions {
+  background-color: var(--beige-color);
+}
+
+#unavailable-items .menu-item-list,
+.promotion-list {
+  display: grid;
+  gap: 12px;
+}
+
+#unavailable-items .menu-item-card,
+.promotion-card {
+  position: relative;
+  padding: 14px 16px 14px 46px;
+
+  background-color: var(--lighter-beige);
+  border: 1px solid rgba(34, 34, 34, 0.08);
+  border-radius: 12px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+
+#unavailable-items .menu-item-card::before,
+.promotion-card::before {
+  position: absolute;
+  top: 50%;
+  left: 17px;
+  transform: translateY(-50%);
+
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+#unavailable-items .menu-item-card::before {
+  content: "";
+  background-color: var(--dark-orange-color);
+  box-shadow: 0 0 0 5px rgba(196, 72, 12, 0.12);
+}
+
+.promotion-card::before {
+  content: "✓";
+  display: grid;
+  place-items: center;
+
+  color: var(--white-color);
+  background-color: var(--orange-color);
+
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+#unavailable-items .menu-item-card:hover,
+.promotion-card:hover {
+  transform: translateX(4px);
+  background-color: var(--white-color);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    width: min(100% - 28px, 760px);
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analytics-grid,
+  .management-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stall-selector-section {
+    grid-template-columns: 1fr;
+  }
+
+  .stall-switcher {
+    width: 100%;
+  }
+
+  .stall-switcher select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 650px) {
+  .nav-bar {
+    justify-content: flex-start;
+    gap: 18px;
+    overflow-x: auto;
+    padding-inline: 18px;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    font-size: 0.95rem;
+  }
+
+  .dashboard-main {
+    width: min(100% - 20px, 560px);
+    padding-top: 18px;
+  }
+
+  .stall-selector-section {
+    padding: 22px 20px;
+  }
+
+  .stall-details {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name grade"
+      "address grade"
+      "description description"
+      "rating rating";
+  }
+
+  .stall-hygiene-grade {
+    width: 68px;
+    height: 68px;
+  }
+
+  .dashboard-header {
+    align-items: stretch;
+    flex-direction: column;
+    padding-inline: 2px;
+  }
+
+  .time-filter select {
+    width: 100%;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-items-section .menu-item-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .stall-details {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "grade"
+      "name"
+      "address"
+      "description"
+      "rating";
+  }
+
+  .stall-hygiene-grade {
+    margin-bottom: 8px;
+  }
+
+  .dashboard-panel,
+  .top-items-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-time-filter {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr)
+      auto;
+
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .period-type-filter {
+    grid-column: 1 / -1;
+  }
+
+  .selected-period {
+    padding-inline: 8px;
+  }
+
+  .selected-period strong {
+    font-size: 1rem;
+  }
+
+  .period-navigation-button {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .dashboard-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-time-filter {
+    width: 100%;
+  }
+}

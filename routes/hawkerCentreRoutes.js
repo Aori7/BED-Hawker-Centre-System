@@ -5,5 +5,6 @@ const hawkerCentreController =
 const router = express.Router();
 
 router.get("/", hawkerCentreController.getAllHawkerCentres);
+router.get("/:id",hawkerCentreController.getHawkerCentreById);
 
 module.exports = router;

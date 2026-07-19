@@ -104,10 +104,327 @@ async function getCustomerByEmail(email) {
     return result.recordset[0];
 }
 
+// get customer profile by CustomerID
+async function getCustomerProfileById(customerID) {
+    const connection = await sql.connect(dbConfig);
 
+    try {
+        const result = await connection
+            .request()
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                SELECT
+                    c.CustomerID,
+                    c.UserID,
+                    c.CustomerName,
+                    c.ContactNo,
+                    c.ProfileImage,
+                    c.Address,
+                    hu.Email
+                FROM Customer c
+                INNER JOIN HawkerUser hu
+                    ON c.UserID = hu.UserID
+                WHERE c.CustomerID = @CustomerID
+            `);
+
+        return result.recordset[0];
+
+    } finally {
+        await connection.close();
+    }
+}
+
+// update customer profile
+async function updateCustomerProfile(
+    customerID,
+    customerName,
+    email,
+    contactNo,
+    address
+) {
+    const connection = await sql.connect(dbConfig);
+    const transaction = new sql.Transaction(connection);
+
+    try {
+        await transaction.begin();
+
+        // retrieve the UserID belonging to this customer
+        const customerResult = await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                SELECT UserID
+                FROM Customer
+                WHERE CustomerID = @CustomerID
+            `);
+
+        if (customerResult.recordset.length === 0) {
+            await transaction.rollback();
+            return null;
+        }
+
+        const userID = customerResult.recordset[0].UserID;
+
+        // update customer table
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .input(
+                "CustomerName",
+                sql.VarChar(100),
+                customerName
+            )
+            .input(
+                "ContactNo",
+                sql.Char(8),
+                contactNo || null
+            )
+            .input(
+                "Address",
+                sql.VarChar(255),
+                address || null
+            )
+            .query(`
+                UPDATE Customer
+                SET
+                    CustomerName = @CustomerName,
+                    ContactNo = @ContactNo,
+                    Address = @Address
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // update email in HawkerUser table
+        await new sql.Request(transaction)
+            .input("UserID", sql.Int, userID)
+            .input("Email", sql.VarChar(100), email)
+            .query(`
+                UPDATE HawkerUser
+                SET
+                    Email = @Email,
+                    UpdatedAt = GETDATE()
+                WHERE UserID = @UserID
+            `);
+
+        await transaction.commit();
+
+        return await getCustomerProfileById(customerID);
+
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+
+    } finally {
+        await connection.close();
+    }
+}
+
+// get password hash for password verification
+async function getPasswordByUserId(userID) {
+    const connection = await sql.connect(dbConfig);
+
+    try {
+        const result = await connection
+            .request()
+            .input("UserID", sql.Int, userID)
+            .query(`
+                SELECT UserID, PasswordHash
+                FROM HawkerUser
+                WHERE UserID = @UserID
+            `);
+
+        return result.recordset[0];
+
+    } finally {
+        await connection.close();
+    }
+}
+
+// update user's password hash
+async function updatePassword(userID, newPasswordHash) {
+    const connection = await sql.connect(dbConfig);
+
+    try {
+        const result = await connection
+            .request()
+            .input("UserID", sql.Int, userID)
+            .input(
+                "PasswordHash",
+                sql.VarChar(255),
+                newPasswordHash
+            )
+            .query(`
+                UPDATE HawkerUser
+                SET
+                    PasswordHash = @PasswordHash,
+                    UpdatedAt = GETDATE()
+                WHERE UserID = @UserID
+            `);
+
+        return result.rowsAffected[0] > 0;
+
+    } finally {
+        await connection.close();
+    }
+}
+
+// delete customer account and all related customer records
+async function deleteCustomerAccount(customerID) {
+    const connection = await sql.connect(dbConfig);
+    const transaction = new sql.Transaction(connection);
+
+    try {
+        await transaction.begin();
+
+        // get the HawkerUser UserID linked to this customer
+        const customerResult = await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                SELECT UserID
+                FROM Customer
+                WHERE CustomerID = @CustomerID
+            `);
+
+        if (customerResult.recordset.length === 0) {
+            await transaction.rollback();
+            return false;
+        }
+
+        const userID = customerResult.recordset[0].UserID;
+
+        // delete complaints linked to the customer's contact submissions
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM Complaint
+                WHERE SubmissionID IN
+                (
+                    SELECT SubmissionID
+                    FROM ContactSubmission
+                    WHERE CustomerID = @CustomerID
+                )
+            `);
+
+        // delete contact submissions
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM ContactSubmission
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // delete payment records belonging to the customer's orders
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM Payment
+                WHERE OrderID IN
+                (
+                    SELECT OrderID
+                    FROM Orders
+                    WHERE CustomerID = @CustomerID
+                )
+            `);
+
+        // delete order item records
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM OrderItem
+                WHERE OrderID IN
+                (
+                    SELECT OrderID
+                    FROM Orders
+                    WHERE CustomerID = @CustomerID
+                )
+            `);
+
+        // delete orders
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM Orders
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // delete cart items
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM CartItem
+                WHERE CartID IN
+                (
+                    SELECT CartID
+                    FROM Cart
+                    WHERE CustomerID = @CustomerID
+                )
+            `);
+
+        // delete cart
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM Cart
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // delete menu item likes
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM MenuItemLike
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // delete favourite hawker centres
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM FavouriteHawkerCentre
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // delete customer profile
+        await new sql.Request(transaction)
+            .input("CustomerID", sql.Int, customerID)
+            .query(`
+                DELETE FROM Customer
+                WHERE CustomerID = @CustomerID
+            `);
+
+        // finally delete the login account
+        await new sql.Request(transaction)
+            .input("UserID", sql.Int, userID)
+            .query(`
+                DELETE FROM HawkerUser
+                WHERE UserID = @UserID
+            `);
+
+        await transaction.commit();
+
+        return true;
+
+    } catch (error) {
+        try {
+            await transaction.rollback();
+        } catch (rollbackError) {
+            console.error(
+                "Delete account rollback error:",
+                rollbackError
+            );
+        }
+
+        throw error;
+
+    } finally {
+        await connection.close();
+    }
+}
 
 module.exports = {
     getAllCustomers,
     createCustomer,
-    getCustomerByEmail
+    getCustomerByEmail,
+    getCustomerProfileById,
+    updateCustomerProfile,
+    getPasswordByUserId,
+    updatePassword,
+    deleteCustomerAccount
 };
