@@ -10,7 +10,6 @@ const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-
 const foodStallRoutes = require("./routes/foodStallRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
 // Improt - vendor
