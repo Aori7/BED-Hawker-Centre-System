@@ -1,7 +1,8 @@
 const sql = require("mssql");
+const dbConfig = require("../dbConfig");
 
 // Get revenue by stall ID
-// test run: GET /api/stalls/1/revenue?period=monthly&date=2026-07-18
+// test run: http://localhost:3000/vendor-dashboard/1/revenue?startDate=2026-07-01&endDate=2026-08-01
 async function getRevenueByStallId(stallId, startDate, endDate) {
   let connection;
   try {
@@ -31,6 +32,7 @@ async function getRevenueByStallId(stallId, startDate, endDate) {
     console.error("Database error:", error);
     throw error;
   } finally {
+    // TODO: remove or not?
     if (connection) {
       try {
         await connection.close();
@@ -85,19 +87,3 @@ async function getTotalOrdersByStallId(stallId, startDate, endDate) {
 module.exports = {
   getRevenueByStallId
 };
-
-// change:
-// getAllBooks → getAllFoods
-// Books → Foods
-// id, title, author → id, name, category, available
-
-// createBook → createFood
-// bookData → foodData
-// title → name
-// author → category
-// add available
-
-// getBookById → getFoodById
-// SELECT id, title, author FROM Books WHERE id = @id
-// ↓
-// SELECT id, name, category, available FROM Foods WHERE id = @id

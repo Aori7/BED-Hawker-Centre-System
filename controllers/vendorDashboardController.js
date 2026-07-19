@@ -1,6 +1,7 @@
 const vendorDashboardModel = require("../models/vendorDashboardModel");
 
 // Get revenue by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/revenue?startDate=2026-07-01&endDate=2026-08-01
 async function getRevenueByStallId(req, res) {
   try {
     const stallId = parseInt(req.params.stallId);
@@ -18,10 +19,10 @@ async function getRevenueByStallId(req, res) {
       startDate,
       endDate,
     );
-    res.json(book);
+    res.json(revenue);
   } catch (error) {
     console.error("Controller error:", error);
-    res.status(500).json({ error: "Error retrieving book" });
+    res.status(500).json({ error: "Error retrieving revenue" });
   }
 }
 
