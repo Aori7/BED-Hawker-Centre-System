@@ -1,0 +1,453 @@
+/* =========================================================
+   Vendor Dashboard
+   Based on the visual style of the previous Hawker Centre app
+   ========================================================= */
+
+:root {
+  --black-text-color: rgb(34, 34, 34);
+  --orange-color: rgb(250, 129, 18);
+  --dark-orange-color: rgb(196, 72, 12);
+  --beige-color: rgb(245, 231, 198);
+  --lighter-beige: rgb(250, 243, 225);
+  --white-color: rgb(255, 255, 255);
+  --muted-text-color: rgb(105, 105, 105);
+  --border-color: rgba(34, 34, 34, 0.12);
+  --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
+  --hover-shadow: 0 14px 30px rgba(34, 34, 34, 0.15);
+  --section-radius: 20px;
+  --card-radius: 16px;
+}
+
+/* =========================
+   RESET / GLOBAL
+   ========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--black-text-color);
+  background-color: var(--lighter-beige);
+  font-family: "Noto Sans", Arial, Helvetica, sans-serif;
+  line-height: 1.5;
+}
+
+img,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+select,
+button,
+input {
+  font: inherit;
+}
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+
+  min-height: 64px;
+  padding: 10px 24px;
+
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(34, 34, 34, 0.08);
+  box-shadow: 0 4px 16px rgba(34, 34, 34, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.nav-link {
+  position: relative;
+  padding: 8px 6px;
+
+  color: var(--orange-color);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  left: 0;
+
+  height: 3px;
+  border-radius: 999px;
+  background-color: var(--dark-orange-color);
+
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.22s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--dark-orange-color);
+}
+
+.nav-link:hover {
+  transform: translateY(-1px);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.promotion-card {
+  overflow: hidden;
+
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.promotion-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--hover-shadow);
+}
+
+/* =========================
+   CARD HEADER
+   ========================= */
+
+.promotion-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+
+  padding: 22px 24px;
+
+  color: var(--white-color);
+  background-color: var(--orange-color);
+}
+
+.promotion-heading {
+  min-width: 0;
+}
+
+.promotion-name {
+  margin: 0;
+
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.promotion-description {
+  margin: 6px 0 0;
+
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.92rem;
+}
+
+/* =========================
+   THREE-DOT MENU
+   ========================= */
+
+.promotion-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.promotion-menu-button {
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+  padding: 0;
+
+  color: var(--white-color);
+  background-color: rgba(255, 255, 255, 0.14);
+  border: none;
+  border-radius: 10px;
+
+  font-size: 1.5rem;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.promotion-menu-button:hover {
+  background-color: rgba(255, 255, 255, 0.24);
+}
+
+.promotion-menu-button:hover,
+.promotion-menu-button:focus {
+  background-color: rgba(255, 255, 255, 0.24);
+  outline: none;
+}
+
+/*
+  Hidden initially.
+  Later JavaScript can add the class "open".
+*/
+.promotion-menu-dropdown {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  z-index: 10;
+
+  display: none;
+  min-width: 140px;
+  padding: 7px;
+
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.promotion-menu-dropdown.open {
+  display: grid;
+  gap: 4px;
+}
+
+.promotion-menu-dropdown button {
+  width: 100%;
+  padding: 10px 12px;
+
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+
+  text-align: left;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.edit-action {
+  color: var(--black-text-color);
+}
+
+.edit-action:hover {
+  background-color: var(--lighter-beige);
+}
+
+.remove-action {
+  color: rgb(173, 42, 42);
+}
+
+.remove-action:hover {
+  background-color: rgba(173, 42, 42, 0.1);
+}
+
+/* =========================
+   CARD BODY
+   ========================= */
+
+.promotion-card-body {
+  padding: 24px;
+  background-color: var(--beige-color);
+}
+
+.promotion-information {
+  display: grid;
+  gap: 14px;
+
+  margin: 0 0 22px;
+}
+
+.promotion-detail {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 14px;
+}
+
+.promotion-detail dt {
+  color: var(--muted-text-color);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.promotion-detail dd {
+  margin: 0;
+
+  color: var(--black-text-color);
+  font-weight: 800;
+}
+
+/* =========================
+   AFFECTED ITEMS
+   ========================= */
+
+.affected-items-section {
+  padding: 18px;
+
+  background-color: var(--white-color);
+  border: 1px solid rgba(34, 34, 34, 0.08);
+  border-radius: 12px;
+}
+
+.affected-items-section h3 {
+  margin: 0 0 12px;
+
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.affected-items-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.affected-items-list li {
+  padding: 7px 10px;
+
+  color: var(--dark-orange-color);
+  background-color: rgba(250, 129, 18, 0.12);
+  border-radius: 999px;
+
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.affected-items-dropdown {
+  overflow: hidden;
+
+  background-color: var(--white-color);
+  border: 1px solid rgba(34, 34, 34, 0.08);
+  border-radius: 12px;
+}
+
+.affected-items-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 16px 18px;
+
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.affected-items-summary::-webkit-details-marker {
+  display: none;
+}
+
+.affected-items-summary::after {
+  content: "⌄";
+
+  color: var(--orange-color);
+  font-size: 1.2rem;
+
+  transition: transform 0.2s ease;
+}
+
+.affected-items-dropdown[open] .affected-items-summary::after {
+  transform: rotate(180deg);
+}
+
+/* .affected-items-summary:hover {
+  background-color: var(--lighter-beige);
+} */
+
+.affected-items-count {
+  margin-left: auto;
+
+  color: var(--muted-text-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.affected-items-list {
+  display: grid;
+  gap: 8px;
+
+  margin: 0;
+  padding: 0 18px 18px;
+
+  list-style: none;
+}
+
+.affected-items-list li {
+  padding: 10px 12px;
+
+  background-color: var(--lighter-beige);
+  border-radius: 9px;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.promotion-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.promotion-status {
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.active-status {
+  color: rgb(34, 112, 69);
+  background-color: rgba(54, 169, 100, 0.18);
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 520px) {
+  .promotion-card-header,
+  .promotion-card-body {
+    padding: 18px;
+  }
+
+  .promotion-detail {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .promotion-name {
+    font-size: 1.3rem;
+  }
+}

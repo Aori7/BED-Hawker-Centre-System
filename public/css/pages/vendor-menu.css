@@ -1,0 +1,481 @@
+/* =========================
+   General page styling
+   ========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-orange: #fa8112;
+  --primary-orange-dark: #d96600;
+
+  --page-background: #faf3e1;
+  --card-background: #f5e7c6;
+  --surface-white: #ffffff;
+
+  --main-text: #222222;
+  --secondary-text: #666666;
+
+  --success-text: #287a3b;
+  --success-background: #e8f7ec;
+
+  --unavailable-text: #666666;
+  --unavailable-background: #eeeeee;
+
+  --danger-text: #c40c0c;
+  --border-colour: #e6dfd2;
+
+  --card-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  --popup-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Sans", Arial, Helvetica, sans-serif;
+  color: var(--main-text);
+  background: var(--page-background);
+}
+
+button,
+summary {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+.menu-page {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 48px 0;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+/* =========================
+   Menu card
+   ========================= */
+
+.menu-card {
+  position: relative;
+  display: flex;
+  min-height: 650px;
+  flex-direction: column;
+  padding: 22px;
+  overflow: visible;
+
+  border: 1px solid var(--border-colour);
+  border-radius: 26px;
+
+  background: var(--card-background);
+  box-shadow: var(--card-shadow);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease,
+    filter 180ms ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 24px rgba(0, 0, 0, 0.13);
+}
+
+/* =========================
+   Image area
+   ========================= */
+
+.menu-image {
+  position: relative;
+  min-height: 300px;
+  overflow: hidden;
+
+  border: 1px solid #eee8dc;
+  border-radius: 20px;
+
+  background: var(--surface-white);
+}
+
+/* Empty image placeholder */
+.menu-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(250, 129, 18, 0.025),
+      rgba(245, 231, 198, 0.18)
+    );
+}
+
+.recommendation-badge {
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  left: 16px;
+
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--primary-orange);
+  color: var(--surface-white);
+
+  font-size: 22px;
+
+  box-shadow: 0 6px 12px rgba(250, 129, 18, 0.3);
+}
+
+/* =========================
+   Name and pricing section
+   ========================= */
+
+.menu-price-box {
+  margin-top: 20px;
+  padding: 17px;
+
+  border: 1px solid #eee8dc;
+  border-radius: 19px;
+
+  background: var(--surface-white);
+}
+
+/*
+Discount layout:
+
+Chicken Rice        $6.00
+17% OFF             $5.00
+*/
+.menu-price-box.discounted-price {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  gap: 12px 16px;
+  align-items: end;
+}
+
+.menu-name {
+  min-width: 0;
+  margin: 0;
+
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.original-price {
+  align-self: start;
+  justify-self: end;
+
+  color: #888888;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: line-through;
+}
+
+.current-price {
+  justify-self: end;
+  align-self: end;
+
+  color: var(--main-text);
+  font-size: 25px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.discount-label {
+  justify-self: start;
+  align-self: end;
+
+  width: fit-content;
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  background: #fff0d8;
+  color: #b75e00;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+/* Regular price layout */
+
+.menu-price-box.single-price {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+}
+
+/* =========================
+   Description
+   ========================= */
+
+.menu-description {
+  margin: 22px 3px 0;
+
+  color: #4f4f4f;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================
+   Footer
+   ========================= */
+
+.menu-card-footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin-top: auto;
+  padding-top: 28px;
+}
+
+/* =========================
+   Status toggle button
+   ========================= */
+
+.status-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  min-height: 42px;
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.07);
+
+  transition:
+    transform 150ms ease,
+    background 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.status-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 14px rgba(0, 0, 0, 0.11);
+}
+
+.status-toggle:active {
+  transform: translateY(0);
+}
+
+.status-toggle:focus-visible,
+.more-menu summary:focus-visible,
+.action-menu button:focus-visible {
+  outline: 3px solid rgba(250, 129, 18, 0.35);
+  outline-offset: 3px;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: currentColor;
+}
+
+.status-available {
+  background: var(--success-background);
+  color: var(--success-text);
+}
+
+.status-unavailable {
+  background: var(--unavailable-background);
+  color: var(--unavailable-text);
+}
+
+/* =========================
+   Three-dot menu
+   ========================= */
+
+.more-menu {
+  position: relative;
+}
+
+.more-menu summary {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+
+  border-radius: 50%;
+
+  background: var(--primary-orange);
+  color: var(--surface-white);
+
+  cursor: pointer;
+
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+
+  list-style: none;
+  user-select: none;
+
+  box-shadow: 0 8px 12px rgba(250, 129, 18, 0.24);
+
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
+}
+
+.more-menu summary:hover {
+  transform: translateY(-2px);
+  background: var(--primary-orange-dark);
+}
+
+.more-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.more-menu[open] summary {
+  background: var(--primary-orange-dark);
+}
+
+.action-menu {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  bottom: 54px;
+
+  width: 185px;
+  overflow: hidden;
+
+  border: 1px solid var(--border-colour);
+  border-radius: 16px;
+
+  background: var(--surface-white);
+  box-shadow: var(--popup-shadow);
+}
+
+.action-menu button {
+  width: 100%;
+  padding: 14px 16px;
+
+  background: var(--surface-white);
+  color: var(--main-text);
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background 150ms ease,
+    color 150ms ease;
+}
+
+.action-menu button + button {
+  border-top: 1px solid #f0ece5;
+}
+
+.action-menu button:hover {
+  background: #fff4e9;
+  color: var(--primary-orange-dark);
+}
+
+.action-menu .delete-action {
+  color: var(--danger-text);
+}
+
+.action-menu .delete-action:hover {
+  background: #fff0ef;
+  color: var(--danger-text);
+}
+
+/* =========================
+   Unavailable card
+   ========================= */
+
+.menu-card-unavailable {
+  opacity: 0.62;
+  filter: grayscale(35%);
+}
+
+.menu-card-unavailable:hover {
+  opacity: 0.78;
+}
+
+.menu-card-unavailable .menu-image {
+  background: #ececec;
+}
+
+.menu-card-unavailable .recommendation-badge {
+  background: #777777;
+  box-shadow: none;
+}
+
+/*
+Keep controls clear enough to click,
+even when the rest of the card is dimmed.
+*/
+.menu-card-unavailable .menu-card-footer {
+  opacity: 1;
+  filter: none;
+}
+
+/* =========================
+   Responsive design
+   ========================= */
+
+@media (max-width: 980px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .menu-page {
+    width: min(100% - 24px, 520px);
+    padding: 24px 0;
+  }
+
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-card {
+    min-height: 610px;
+  }
+
+  .menu-image {
+    min-height: 270px;
+  }
+
+  .menu-price-box.discounted-price {
+    gap: 10px 12px;
+  }
+
+  .menu-name,
+  .current-price {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <!-- page stylesheet -->
+    <link rel="stylesheet" href="../css/pages/vendor-promotions.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- font 2 for nav bar-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <title>Vendor Promotions Page</title>
+  </head>
+  <body>
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+      <a class="nav-link" href="vendor-home.html">Home</a>
+      <a class="nav-link" href="vendor-menu.html">Menu</a>
+      <a class="nav-link active" href="vendor-promotions.html">Promotions</a>
+      <a class="nav-link" href="vendor-feedback.html">Feedback</a>
+      <a class="nav-link" href="vendor-profile.html">Profile</a>
+    </nav>
+
+    <main class="">
+      <article class="promotion-card">
+        <header class="promotion-card-header">
+          <div class="promotion-heading">
+            <div class="promotion-title-row">
+              <h2 class="promotion-name">Lunch Special</h2>
+
+              <span class="promotion-status active-status"> Active </span>
+            </div>
+
+            <p class="promotion-description">
+              Enjoy a discount on selected lunch menu items.
+            </p>
+          </div>
+
+          <div class="promotion-menu">
+            <button
+              class="promotion-menu-button"
+              type="button"
+              aria-label="Open promotion actions"
+              aria-expanded="false"
+            >
+              &#8942;
+            </button>
+
+            <div class="promotion-menu-dropdown">
+              <button class="edit-action" type="button">Edit</button>
+
+              <button class="remove-action" type="button">Remove</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="promotion-card-body">
+          <dl class="promotion-information">
+            <div class="promotion-detail">
+              <dt>Discount</dt>
+              <dd>20% off</dd>
+            </div>
+
+            <div class="promotion-detail">
+              <dt>Start date</dt>
+              <dd>1 July 2026</dd>
+            </div>
+
+            <div class="promotion-detail">
+              <dt>End date</dt>
+              <dd>31 July 2026</dd>
+            </div>
+          </dl>
+
+          <details class="affected-items-dropdown">
+            <summary class="affected-items-summary">
+              <span>Affected items</span>
+              <span class="affected-items-count">3 items</span>
+            </summary>
+
+            <ul class="affected-items-list">
+              <li>Chicken Rice Set</li>
+              <li>Roasted Chicken Rice</li>
+              <li>Lunch Combo Meal</li>
+            </ul>
+          </details>
+        </div>
+      </article>
+    </main>
+  </body>
+  <script>
+    const menuButton = document.querySelector(".promotion-menu-button");
+
+    const menuDropdown = document.querySelector(".promotion-menu-dropdown");
+
+    menuButton.addEventListener("click", function () {
+      const isOpen = menuDropdown.classList.toggle("open");
+
+      menuButton.setAttribute("aria-expanded", isOpen);
+    });
+  </script>
+</html>
+
+<!-- <span class="promotion-status inactive-status">
+  Inactive
+</span> 
+
+.inactive-status {
+  color: rgb(120, 120, 120);
+  background-color: rgba(120, 120, 120, 0.18);
+}
+
+-->

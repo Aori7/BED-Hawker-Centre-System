@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Global stylesheets -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+
+    <!-- Page stylesheet -->
+    <link rel="stylesheet" href="../css/pages/vendor-menu.css" />
+
+    <!-- Archivo font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Noto Serif font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Google rounded icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <title>Vendor Menu Page</title>
+  </head>
+
+  <body>
+    <!-- NAV BAR -->
+    <nav class="nav-bar">
+      <a class="nav-link" href="vendor-home.html">Home</a>
+      <a class="nav-link active" href="vendor-menu.html">Menu</a>
+      <a class="nav-link" href="vendor-promotions.html">Promotions</a>
+      <a class="nav-link" href="vendor-feedback.html">Feedback</a>
+      <a class="nav-link" href="vendor-profile.html">Profile</a>
+    </nav>
+
+    <main class="menu-page">
+      <section class="menu-grid" aria-label="Vendor menu items">
+        <!-- MENU ITEM 1: Discounted item -->
+        <article class="menu-card" data-menu-id="1">
+          <div class="menu-image">
+            <span
+              class="recommendation-badge"
+              title="Vendor's recommendation"
+              aria-label="Vendor's recommendation"
+            >
+              ★
+            </span>
+          </div>
+
+          <div class="menu-price-box discounted-price">
+            <h2 class="menu-name">Chicken Rice</h2>
+
+            <span class="original-price">$6.00</span>
+
+            <span class="discount-label">17% OFF</span>
+
+            <span class="current-price">$5.00</span>
+          </div>
+
+          <p class="menu-description">
+            Fragrant rice served with tender chicken, chilli sauce and soup.
+          </p>
+
+          <div class="menu-card-footer">
+            <button
+              type="button"
+              class="status-toggle status-available"
+              aria-pressed="true"
+              aria-label="Change Chicken Rice availability"
+            >
+              <span class="status-dot"></span>
+              <span class="status-text">Available</span>
+            </button>
+
+            <details class="more-menu">
+              <summary aria-label="Open Chicken Rice actions">
+                <span class="material-symbols-rounded">more_horiz</span>
+              </summary>
+
+              <div class="action-menu">
+                <button type="button" class="change-status-action">
+                  Change status
+                </button>
+
+                <button type="button" class="edit-action">
+                  Edit item
+                </button>
+
+                <button type="button" class="delete-action">
+                  Delete item
+                </button>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <!-- MENU ITEM 2: Regular-price item -->
+        <article class="menu-card" data-menu-id="2">
+          <div class="menu-image">
+            <span
+              class="recommendation-badge"
+              title="Vendor's recommendation"
+              aria-label="Vendor's recommendation"
+            >
+              ★
+            </span>
+          </div>
+
+          <div class="menu-price-box single-price">
+            <h2 class="menu-name">Laksa</h2>
+
+            <span class="current-price">$5.50</span>
+          </div>
+
+          <p class="menu-description">
+            Spicy coconut noodle soup served with fishcake, tofu puff and egg.
+          </p>
+
+          <div class="menu-card-footer">
+            <button
+              type="button"
+              class="status-toggle status-available"
+              aria-pressed="true"
+              aria-label="Change Laksa availability"
+            >
+              <span class="status-dot"></span>
+              <span class="status-text">Available</span>
+            </button>
+
+            <details class="more-menu">
+              <summary aria-label="Open Laksa actions">
+                <span class="material-symbols-rounded">more_horiz</span>
+              </summary>
+
+              <div class="action-menu">
+                <button type="button" class="change-status-action">
+                  Change status
+                </button>
+
+                <button type="button" class="edit-action">
+                  Edit item
+                </button>
+
+                <button type="button" class="delete-action">
+                  Delete item
+                </button>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <!-- MENU ITEM 3: Unavailable item -->
+        <article
+          class="menu-card menu-card-unavailable"
+          data-menu-id="3"
+        >
+          <div class="menu-image"></div>
+
+          <div class="menu-price-box single-price">
+            <h2 class="menu-name">Fried Carrot Cake</h2>
+
+            <span class="current-price">$4.50</span>
+          </div>
+
+          <p class="menu-description">
+            Pan-fried radish cake with egg, preserved radish and spring onions.
+          </p>
+
+          <div class="menu-card-footer">
+            <button
+              type="button"
+              class="status-toggle status-unavailable"
+              aria-pressed="false"
+              aria-label="Change Fried Carrot Cake availability"
+            >
+              <span class="status-dot"></span>
+              <span class="status-text">Unavailable</span>
+            </button>
+
+            <details class="more-menu">
+              <summary aria-label="Open Fried Carrot Cake actions">
+                <span class="material-symbols-rounded">more_horiz</span>
+              </summary>
+
+              <div class="action-menu">
+                <button type="button" class="change-status-action">
+                  Change status
+                </button>
+
+                <button type="button" class="edit-action">
+                  Edit item
+                </button>
+
+                <button type="button" class="delete-action">
+                  Delete item
+                </button>
+              </div>
+            </details>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="../js/vendor-menu.js"></script>
+  </body>
+</html>
