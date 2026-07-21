@@ -1,106 +1,157 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const menuCards = document.querySelectorAll(".menu-card");
-  const moreMenus = document.querySelectorAll(".more-menu");
+  const switchStallButton = document.querySelector(
+    "#switch-stall-button",
+  );
 
-  /**
-   * Updates a card's appearance based on whether
-   * the menu item is available.
-   */
-  function updateAvailability(card, isAvailable) {
-    const statusButton = card.querySelector(".status-toggle");
-    const statusText = card.querySelector(".status-text");
-    const moreMenu = card.querySelector(".more-menu");
+  const stallDropdown = document.querySelector("#stall-dropdown");
+  const stallOptions = document.querySelectorAll(".stall-option");
 
-    if (!statusButton || !statusText) {
+  const selectedStallName = document.querySelector(
+    "#selected-stall-name",
+  );
+
+  const selectedStallAddress = document.querySelector(
+    "#selected-stall-address",
+  );
+
+  const searchInput = document.querySelector("#menu-search-input");
+
+  const availabilityFilter = document.querySelector(
+    "#availability-filter",
+  );
+
+  const menuItems = document.querySelectorAll(
+    ".menu-item-placeholder",
+  );
+
+  const noResultsMessage = document.querySelector(
+    "#no-menu-results",
+  );
+
+  const categoryLinks = document.querySelectorAll(".category-link");
+
+  /* =========================
+     Stall dropdown
+     ========================= */
+
+  function closeStallDropdown() {
+    if (!switchStallButton || !stallDropdown) {
       return;
     }
 
-    if (isAvailable) {
-      statusButton.classList.remove("status-unavailable");
-      statusButton.classList.add("status-available");
-
-      statusText.textContent = "Available";
-      statusButton.setAttribute("aria-pressed", "true");
-
-      card.classList.remove("menu-card-unavailable");
-    } else {
-      statusButton.classList.remove("status-available");
-      statusButton.classList.add("status-unavailable");
-
-      statusText.textContent = "Unavailable";
-      statusButton.setAttribute("aria-pressed", "false");
-
-      card.classList.add("menu-card-unavailable");
-    }
-
-    if (moreMenu) {
-      moreMenu.removeAttribute("open");
-    }
+    switchStallButton.setAttribute("aria-expanded", "false");
+    stallDropdown.hidden = true;
   }
 
-  /**
-   * Switches the item between available and unavailable.
-   *
-   * This only changes the frontend display for now.
-   * Refreshing the page will reset the status.
-   */
-  function toggleAvailability(card) {
-    const statusButton = card.querySelector(".status-toggle");
-
-    if (!statusButton) {
+  function toggleStallDropdown() {
+    if (!switchStallButton || !stallDropdown) {
       return;
     }
 
-    const isCurrentlyAvailable =
-      statusButton.classList.contains("status-available");
+    const isOpen =
+      switchStallButton.getAttribute("aria-expanded") === "true";
 
-    updateAvailability(card, !isCurrentlyAvailable);
-  }
-
-  menuCards.forEach((card) => {
-    const statusButton = card.querySelector(".status-toggle");
-    const changeStatusButton = card.querySelector(
-      ".change-status-action",
+    switchStallButton.setAttribute(
+      "aria-expanded",
+      String(!isOpen),
     );
 
-    if (statusButton) {
-      statusButton.addEventListener("click", () => {
-        toggleAvailability(card);
-      });
-    }
+    stallDropdown.hidden = isOpen;
+  }
 
-    if (changeStatusButton) {
-      changeStatusButton.addEventListener("click", () => {
-        toggleAvailability(card);
-      });
-    }
-  });
+  if (switchStallButton && stallDropdown) {
+    switchStallButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleStallDropdown();
+    });
+  }
 
-  /**
-   * Keeps only one three-dot action menu open at a time.
-   */
-  moreMenus.forEach((menu) => {
-    menu.addEventListener("toggle", () => {
-      if (!menu.open) {
+  stallOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      if (!selectedStallName || !selectedStallAddress) {
         return;
       }
 
-      moreMenus.forEach((otherMenu) => {
-        if (otherMenu !== menu) {
-          otherMenu.removeAttribute("open");
-        }
+      selectedStallName.textContent = option.dataset.stallName;
+      selectedStallAddress.textContent =
+        option.dataset.stallAddress;
+
+      stallOptions.forEach((stallOption) => {
+        stallOption.classList.remove("active");
       });
+
+      option.classList.add("active");
+
+      closeStallDropdown();
     });
   });
 
-  /**
-   * Closes action menus when the user clicks elsewhere.
-   */
   document.addEventListener("click", (event) => {
-    moreMenus.forEach((menu) => {
-      if (!menu.contains(event.target)) {
-        menu.removeAttribute("open");
+    if (!event.target.closest(".stall-switcher")) {
+      closeStallDropdown();
+    }
+  });
+
+  /* =========================
+     Search and status filter
+     ========================= */
+
+  function filterMenuItems() {
+    if (!searchInput || !availabilityFilter) {
+      return;
+    }
+
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const selectedStatus = availabilityFilter.value;
+
+    let visibleItemCount = 0;
+
+    menuItems.forEach((item) => {
+      const itemName = (item.dataset.name || "").toLowerCase();
+      const itemStatus = item.dataset.status || "";
+
+      const matchesSearch = itemName.includes(searchTerm);
+
+      const matchesStatus =
+        selectedStatus === "all" ||
+        itemStatus === selectedStatus;
+
+      const shouldShow = matchesSearch && matchesStatus;
+
+      item.hidden = !shouldShow;
+
+      if (shouldShow) {
+        visibleItemCount += 1;
       }
+    });
+
+    if (noResultsMessage) {
+      noResultsMessage.hidden = visibleItemCount !== 0;
+    }
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", filterMenuItems);
+  }
+
+  if (availabilityFilter) {
+    availabilityFilter.addEventListener(
+      "change",
+      filterMenuItems,
+    );
+  }
+
+  /* =========================
+     Category sidebar
+     ========================= */
+
+  categoryLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+      categoryLinks.forEach((categoryLink) => {
+        categoryLink.classList.remove("active");
+      });
+
+      link.classList.add("active");
     });
   });
 });

@@ -47,174 +47,264 @@
       <a class="nav-link" href="vendor-profile.html">Profile</a>
     </nav>
 
-    <main class="menu-page">
-      <section class="menu-grid" aria-label="Vendor menu items">
-        <!-- MENU ITEM 1: Discounted item -->
-        <article class="menu-card" data-menu-id="1">
-          <div class="menu-image">
-            <span
-              class="recommendation-badge"
-              title="Vendor's recommendation"
-              aria-label="Vendor's recommendation"
-            >
-              ★
-            </span>
-          </div>
+    <!-- =========================
+     Compact stall selector
+     ========================= -->
+    <header class="menu-stall-header">
+      <div class="selected-stall-details">
+        <h1 class="selected-stall-name" id="selected-stall-name">
+          Ah Seng Chicken Rice
+        </h1>
 
-          <div class="menu-price-box discounted-price">
-            <h2 class="menu-name">Chicken Rice</h2>
+        <p class="selected-stall-address" id="selected-stall-address">
+          #01-01 · Maxwell Food Centre
+        </p>
+      </div>
 
-            <span class="original-price">$6.00</span>
-
-            <span class="discount-label">17% OFF</span>
-
-            <span class="current-price">$5.00</span>
-          </div>
-
-          <p class="menu-description">
-            Fragrant rice served with tender chicken, chilli sauce and soup.
-          </p>
-
-          <div class="menu-card-footer">
-            <button
-              type="button"
-              class="status-toggle status-available"
-              aria-pressed="true"
-              aria-label="Change Chicken Rice availability"
-            >
-              <span class="status-dot"></span>
-              <span class="status-text">Available</span>
-            </button>
-
-            <details class="more-menu">
-              <summary aria-label="Open Chicken Rice actions">
-                <span class="material-symbols-rounded">more_horiz</span>
-              </summary>
-
-              <div class="action-menu">
-                <button type="button" class="change-status-action">
-                  Change status
-                </button>
-
-                <button type="button" class="edit-action">
-                  Edit item
-                </button>
-
-                <button type="button" class="delete-action">
-                  Delete item
-                </button>
-              </div>
-            </details>
-          </div>
-        </article>
-
-        <!-- MENU ITEM 2: Regular-price item -->
-        <article class="menu-card" data-menu-id="2">
-          <div class="menu-image">
-            <span
-              class="recommendation-badge"
-              title="Vendor's recommendation"
-              aria-label="Vendor's recommendation"
-            >
-              ★
-            </span>
-          </div>
-
-          <div class="menu-price-box single-price">
-            <h2 class="menu-name">Laksa</h2>
-
-            <span class="current-price">$5.50</span>
-          </div>
-
-          <p class="menu-description">
-            Spicy coconut noodle soup served with fishcake, tofu puff and egg.
-          </p>
-
-          <div class="menu-card-footer">
-            <button
-              type="button"
-              class="status-toggle status-available"
-              aria-pressed="true"
-              aria-label="Change Laksa availability"
-            >
-              <span class="status-dot"></span>
-              <span class="status-text">Available</span>
-            </button>
-
-            <details class="more-menu">
-              <summary aria-label="Open Laksa actions">
-                <span class="material-symbols-rounded">more_horiz</span>
-              </summary>
-
-              <div class="action-menu">
-                <button type="button" class="change-status-action">
-                  Change status
-                </button>
-
-                <button type="button" class="edit-action">
-                  Edit item
-                </button>
-
-                <button type="button" class="delete-action">
-                  Delete item
-                </button>
-              </div>
-            </details>
-          </div>
-        </article>
-
-        <!-- MENU ITEM 3: Unavailable item -->
-        <article
-          class="menu-card menu-card-unavailable"
-          data-menu-id="3"
+      <div class="stall-switcher">
+        <button
+          type="button"
+          class="switch-stall-button"
+          id="switch-stall-button"
+          aria-expanded="false"
+          aria-controls="stall-dropdown"
         >
-          <div class="menu-image"></div>
+          <span class="material-symbols-rounded">storefront</span>
 
-          <div class="menu-price-box single-price">
-            <h2 class="menu-name">Fried Carrot Cake</h2>
+          <span>Switch stalls</span>
 
-            <span class="current-price">$4.50</span>
+          <span class="material-symbols-rounded dropdown-arrow">
+            keyboard_arrow_down
+          </span>
+        </button>
+
+        <div class="stall-dropdown" id="stall-dropdown" hidden>
+          <button
+            type="button"
+            class="stall-option active"
+            data-stall-name="Ah Seng Chicken Rice"
+            data-stall-address="#01-01 · Maxwell Food Centre"
+          >
+            <span class="stall-option-name">Ah Seng Chicken Rice</span>
+            <span class="stall-option-location">
+              #01-01 · Maxwell Food Centre
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="stall-option"
+            data-stall-name="Megan's Laksa"
+            data-stall-address="#02-12 · Old Airport Road Food Centre"
+          >
+            <span class="stall-option-name">Megan's Laksa</span>
+            <span class="stall-option-location">
+              #02-12 · Old Airport Road Food Centre
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="stall-option"
+            data-stall-name="Golden Wok"
+            data-stall-address="#01-08 · Adam Road Food Centre"
+          >
+            <span class="stall-option-name">Golden Wok</span>
+            <span class="stall-option-location">
+              #01-08 · Adam Road Food Centre
+            </span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================
+     Menu page layout
+     ========================= -->
+    <main class="vendor-menu-layout">
+      <!-- LEFT CATEGORY SIDEBAR -->
+      <aside class="menu-sidebar">
+        <nav class="category-navigation" aria-label="Menu categories">
+          <a class="category-link active" href="#noodles"> Noodles </a>
+
+          <a class="category-link" href="#rice"> Rice </a>
+
+          <a class="category-link" href="#drinks"> Drinks </a>
+
+          <button type="button" class="add-category-button">
+            <span class="material-symbols-rounded">add</span>
+            Add category
+          </button>
+        </nav>
+      </aside>
+
+      <!-- RIGHT MENU CONTENT -->
+      <section class="menu-content">
+        <div class="menu-page-heading">
+          <div>
+            <p class="page-eyebrow">Menu management</p>
+            <h2>Menu</h2>
+
+            <p class="menu-page-description">
+              View and manage the items offered by your selected stall.
+            </p>
+          </div>
+        </div>
+
+        <!-- SEARCH AND FILTERS -->
+        <div class="menu-toolbar">
+          <label class="menu-search">
+            <span class="material-symbols-rounded">search</span>
+
+            <input
+              type="search"
+              id="menu-search-input"
+              placeholder="Search menu items"
+              aria-label="Search menu items"
+            />
+          </label>
+
+          <label class="menu-filter">
+            <span class="filter-label">Status</span>
+
+            <select id="availability-filter">
+              <option value="all">All items</option>
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- NOODLES SECTION -->
+        <section class="menu-category-section" id="noodles">
+          <div class="category-heading">
+            <div>
+              <h3>Noodles</h3>
+              <p>5 items</p>
+            </div>
           </div>
 
-          <p class="menu-description">
-            Pan-fried radish cake with egg, preserved radish and spring onions.
-          </p>
-
-          <div class="menu-card-footer">
-            <button
-              type="button"
-              class="status-toggle status-unavailable"
-              aria-pressed="false"
-              aria-label="Change Fried Carrot Cake availability"
+          <div class="menu-grid">
+            <!-- Replace these placeholders with your menu cards -->
+            <article
+              class="menu-item-placeholder"
+              data-name="Laksa"
+              data-status="available"
             >
-              <span class="status-dot"></span>
-              <span class="status-text">Unavailable</span>
-            </button>
+              Menu item card
+            </article>
 
-            <details class="more-menu">
-              <summary aria-label="Open Fried Carrot Cake actions">
-                <span class="material-symbols-rounded">more_horiz</span>
-              </summary>
+            <article
+              class="menu-item-placeholder"
+              data-name="Fishball Noodles"
+              data-status="available"
+            >
+              Menu item card
+            </article>
 
-              <div class="action-menu">
-                <button type="button" class="change-status-action">
-                  Change status
-                </button>
+            <article
+              class="menu-item-placeholder unavailable-placeholder"
+              data-name="Prawn Noodles"
+              data-status="unavailable"
+            >
+              Menu item card
+            </article>
 
-                <button type="button" class="edit-action">
-                  Edit item
-                </button>
+            <article
+              class="menu-item-placeholder"
+              data-name="Mee Pok"
+              data-status="available"
+            >
+              Menu item card
+            </article>
 
-                <button type="button" class="delete-action">
-                  Delete item
-                </button>
-              </div>
-            </details>
+            <article
+              class="menu-item-placeholder"
+              data-name="Ban Mian"
+              data-status="available"
+            >
+              Menu item card
+            </article>
           </div>
-        </article>
+        </section>
+
+        <!-- RICE SECTION -->
+        <section class="menu-category-section" id="rice">
+          <div class="category-heading">
+            <div>
+              <h3>Noodles</h3>
+              <p>5 items</p>
+            </div>
+          </div>
+
+          <div class="menu-grid">
+            <article
+              class="menu-item-placeholder"
+              data-name="Chicken Rice"
+              data-status="available"
+            >
+              Menu item card
+            </article>
+
+            <article
+              class="menu-item-placeholder"
+              data-name="Fried Rice"
+              data-status="available"
+            >
+              Menu item card
+            </article>
+
+            <article
+              class="menu-item-placeholder unavailable-placeholder"
+              data-name="Curry Rice"
+              data-status="unavailable"
+            >
+              Menu item card
+            </article>
+          </div>
+        </section>
+
+        <!-- DRINKS SECTION -->
+        <section class="menu-category-section" id="drinks">
+          <div class="category-heading">
+            <div>
+              <h3>Noodles</h3>
+              <p>5 items</p>
+            </div>
+          </div>
+
+          <div class="menu-grid">
+            <article
+              class="menu-item-placeholder"
+              data-name="Iced Lemon Tea"
+              data-status="available"
+            >
+              Menu item card
+            </article>
+
+            <article
+              class="menu-item-placeholder"
+              data-name="Barley"
+              data-status="available"
+            >
+              Menu item card
+            </article>
+          </div>
+        </section>
+
+        <p class="no-menu-results" id="no-menu-results" hidden>
+          No menu items match your search.
+        </p>
       </section>
     </main>
-
+    <button
+      type="button"
+      class="floating-add-menu-button"
+      aria-label="Add a new menu item"
+    >
+      <span class="material-symbols-rounded">add</span>
+      <span>Add menu item</span>
+    </button>
     <script src="../js/vendor-menu.js"></script>
   </body>
 </html>
