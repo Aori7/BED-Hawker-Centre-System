@@ -35,16 +35,28 @@
     <header id="navigationbar">
 
         <div class="logo">
-            <a href="nea-main.html">
-                <span class="material-symbols-rounded">restaurant_menu</span>
-                <h1 id="logotitle">Hawker<em>SG</em></h1>
+            <a href="main-hawkers.html">
+                <span class="material-symbols-rounded">
+                    restaurant_menu
+                </span>
+
+                <h1 id="logotitle">
+                    Hawker<em>SG</em>
+                </h1>
             </a>
         </div>
 
         <ul class="navitems">
+
             <li>
                 <a href="nea-main.html" class="active">
                     Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-search-stall.html">
+                    Search Stalls
                 </a>
             </li>
 
@@ -66,16 +78,13 @@
                 </a>
             </li>
 
-            <li>
-                <a href="nea-search-stall.html">
-                    Search Stalls
-                </a>
-            </li>
         </ul>
 
         <div class="loginbutton">
             <a href="login.html">
-                <button id="logout-btn">Logout</button>
+                <button id="logout-btn" type="button">
+                    Logout
+                </button>
             </a>
         </div>
 
@@ -92,44 +101,51 @@
 
     <!-- dashboard banner -->
     <section class="order-hawker-banner">
+
         <div class="banner"></div>
 
         <div class="order-hawker-header">
             <h1>NEA Officer Dashboard</h1>
+
             <p>
                 Monitor inspections, stall hygiene grades and compliance records.
             </p>
         </div>
+
     </section>
 
-    <main class="nea-page-container">
+    <!-- dashboard introduction -->
+    <section class="nea-dashboard-header">
 
-        <!-- dashboard introduction -->
-        <section class="nea-dashboard-header">
+        <div>
+            <p class="nea-section-label">
+                NEA Officer Portal
+            </p>
 
-            <div>
-                <p class="nea-section-label">NEA Officer Portal</p>
-                <h2>Welcome Back, Officer</h2>
-                <p id="today-date"></p>
+            <h2>
+                Welcome Back, Officer
+            </h2>
 
-                <p>
+            <p id="today-date"></p>
+
+            <p>
                 Review the latest inspection activity and manage food stall
                 compliance.
-                </p>
+            </p>
 
-                <small id="last-updated"></small>
-            </div>
+            <small id="last-updated"></small>
+        </div>
 
-            <a
-                href="nea-record-inspection.html"
-                class="nea-button-link"
-            >
-                <button type="button">
-                    Record Inspection
-                </button>
-            </a>
+        <a
+            href="nea-record-inspection.html"
+            class="nea-button-link"
+        >
+            <button type="button">
+                Record Inspection
+            </button>
+        </a>
 
-        </section>
+    </section>
 
         <!-- dashboard tools -->
         <section class="nea-dashboard-toolbar">
@@ -153,11 +169,16 @@
             </div>
 
             <div class="nea-toolbar-info">
-                <span class="material-symbols-rounded">task_alt</span>
+                <span class="material-symbols-rounded">
+                    task_alt
+                </span>
 
                 <div>
                     <p>Today's Inspections</p>
-                    <strong><span id="today-inspection-count">3</span> Completed</strong>
+
+                    <strong id="today-inspections">
+                        0 Completed
+                    </strong>
                 </div>
             </div>
 
@@ -198,9 +219,7 @@
                     <p>Total Inspections</p>
 
                     <h3
-                        id="total-inspections"
-                        data-target="24">
-                        0
+                        id="total-inspections">0
                     </h3>
 
                     <small>3 completed today</small>
@@ -221,8 +240,7 @@
                     <p>Compliant Stalls</p>
 
                     <h3
-                        id="compliant-stalls"
-                        data-target="18">
+                        id="compliant-stalls">
                         0
                     </h3>
 
@@ -246,8 +264,7 @@
                     <p>Non-Compliant</p>
 
                     <h3
-                        id="non-compliant-stalls"
-                        data-target="6">
+                        id="non-compliant-stalls">
                         0
                     </h3>
 
@@ -277,8 +294,7 @@
                     <p>Grade A Stalls</p>
 
                     <h3
-                        id="grade-a-stalls"
-                        data-target="12">
+                        id="grade-a-stalls">
                         0
                     </h3>
 
@@ -319,60 +335,17 @@
 
                         <tbody id="recent-inspection-list">
 
-                            <tr>
-                                <td>Ah Seng Chicken Rice</td>
-                                <td>Maxwell Food Centre</td>
-                                <td>15 Jul 2026</td>
-                                <td>92</td>
-                                <td>
-                                    <span class="nea-grade-badge nea-grade-a">
-                                        A
-                                    </span>
-                                </td>
-                                <td>
-                                    <span
-                                        class="nea-status-badge nea-status-compliant"
-                                    >
-                                        Compliant
-                                    </span>
-                                </td>
-                            </tr>
+                            <tr class="nea-empty-state-row">
+                                <td colspan="6">
+                                    <div class="nea-empty-state">
+                                        <span class="material-symbols-rounded">
+                                            fact_check
+                                        </span>
 
-                            <tr>
-                                <td>Fatty Char Kway Teow</td>
-                                <td>Old Airport Road Food Centre</td>
-                                <td>13 Jul 2026</td>
-                                <td>82</td>
-                                <td>
-                                    <span class="nea-grade-badge nea-grade-b">
-                                        B
-                                    </span>
-                                </td>
-                                <td>
-                                    <span
-                                        class="nea-status-badge nea-status-compliant"
-                                    >
-                                        Compliant
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Laksa King</td>
-                                <td>Tiong Bahru Market</td>
-                                <td>10 Jul 2026</td>
-                                <td>65</td>
-                                <td>
-                                    <span class="nea-grade-badge nea-grade-c">
-                                        C
-                                    </span>
-                                </td>
-                                <td>
-                                    <span
-                                        class="nea-status-badge nea-status-non-compliant"
-                                    >
-                                        Non-Compliant
-                                    </span>
+                                        <p>
+                                            No recent inspections found.
+                                        </p>
+                                    </div>
                                 </td>
                             </tr>
 

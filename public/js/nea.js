@@ -1,11 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     setupDashboard();
+    loadDashboardStatistics();
+    loadTodayInspectionCount();
+    loadRecentInspections()
     setupInspectionForm();
     setupInspectionHistory();
     setupStallSearch();
     setupHygieneGrades();
     setupHamburgerMenu();
 });
+
 
 /* dashboard functions */
 
@@ -1491,4 +1495,207 @@ function setupHamburgerMenu() {
     hamburgerButton.addEventListener("click", () => {
         navigationItems.classList.toggle("show");
     });
+}
+
+    /* load dashboard statistics */
+async function loadDashboardStatistics() {
+
+    try {
+
+        const response = await fetch("/dashboard/statistics");
+
+        const statistics = await response.json();
+
+        document.getElementById("total-inspections").textContent =
+            statistics.totalInspections;
+
+        document.getElementById("compliant-stalls").textContent =
+            statistics.compliantStalls;
+
+        document.getElementById("non-compliant-stalls").textContent =
+            statistics.nonCompliantStalls;
+
+        document.getElementById("grade-a-stalls").textContent =
+            statistics.gradeAStalls;
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to load dashboard statistics.",
+            error
+        );
+
+    }
+}
+
+/* load today's inspections */
+async function loadTodayInspectionCount() {
+    const todayInspectionElement =
+        document.getElementById(
+            "today-inspections"
+        );
+
+    if (!todayInspectionElement) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/dashboard/today"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to retrieve today's inspections"
+            );
+        }
+
+        const result = await response.json();
+
+        todayInspectionElement.textContent =
+            `${result.todayInspections} Completed`;
+
+    } catch (error) {
+        console.error(
+            "Unable to load today's inspections.",
+            error
+        );
+    }
+}
+
+/* load recent inspections */
+async function loadRecentInspections() {
+
+    const tableBody = document.getElementById(
+        "recent-inspection-list"
+    );
+
+    if (!tableBody) {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "/dashboard/recent"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to retrieve recent inspections."
+            );
+        }
+
+        const inspections =
+            await response.json();
+
+        tableBody.innerHTML = "";
+
+        if (inspections.length === 0) {
+
+            tableBody.innerHTML = `
+                <tr class="nea-empty-state-row">
+
+                    <td colspan="6">
+
+                        <div class="nea-empty-state">
+
+                            <span class="material-symbols-rounded">
+                                fact_check
+                            </span>
+
+                            <p>
+                                No recent inspections found.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+            return;
+        }
+
+        inspections.forEach((inspection) => {
+
+            const inspectionDate =
+                new Date(
+                    inspection.InspectionDate
+                ).toLocaleDateString(
+                    "en-SG"
+                );
+
+            tableBody.innerHTML += `
+                <tr>
+
+                    <td>
+                        ${inspection.StallName}
+                    </td>
+
+                    <td>
+                        ${inspection.HCName}
+                    </td>
+
+                    <td>
+                        ${inspectionDate}
+                    </td>
+
+                    <td>
+                        ${inspection.InspectionScore}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="nea-grade-badge nea-grade-${inspection.HygieneGrade.toLowerCase()}"
+                        >
+                            ${inspection.HygieneGrade}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${inspection.InspectionStatus}
+                    </td>
+
+                </tr>
+            `;
+
+        });
+
+    }
+    catch (error) {
+
+        console.error(
+            "Unable to load recent inspections.",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr class="nea-empty-state-row">
+
+                <td colspan="6">
+
+                    <div class="nea-empty-state">
+
+                        <span class="material-symbols-rounded">
+                            error
+                        </span>
+
+                        <p>
+                            Failed to load recent inspections.
+                        </p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        `;
+
+    }
+
 }
