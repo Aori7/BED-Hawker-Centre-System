@@ -1,10 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
+  /* =========================
+     Element selectors
+     ========================= */
+
   const switchStallButton = document.querySelector(
     "#switch-stall-button",
   );
 
-  const stallDropdown = document.querySelector("#stall-dropdown");
-  const stallOptions = document.querySelectorAll(".stall-option");
+  const stallDropdown = document.querySelector(
+    "#stall-dropdown",
+  );
+
+  const stallOptions = document.querySelectorAll(
+    ".stall-option",
+  );
 
   const selectedStallName = document.querySelector(
     "#selected-stall-name",
@@ -14,21 +23,29 @@ document.addEventListener("DOMContentLoaded", () => {
     "#selected-stall-address",
   );
 
-  const searchInput = document.querySelector("#menu-search-input");
+  const searchInput = document.querySelector(
+    "#menu-search-input",
+  );
 
   const availabilityFilter = document.querySelector(
     "#availability-filter",
   );
 
-  const menuItems = document.querySelectorAll(
-    ".menu-item-placeholder",
-  );
+  /*
+    The menu items now use .menu-card,
+    not .menu-item-placeholder.
+  */
+  const menuCards = document.querySelectorAll(".menu-card");
 
   const noResultsMessage = document.querySelector(
     "#no-menu-results",
   );
 
-  const categoryLinks = document.querySelectorAll(".category-link");
+  const categoryLinks = document.querySelectorAll(
+    ".category-link",
+  );
+
+  const moreMenus = document.querySelectorAll(".more-menu");
 
   /* =========================
      Stall dropdown
@@ -39,7 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    switchStallButton.setAttribute("aria-expanded", "false");
+    switchStallButton.setAttribute(
+      "aria-expanded",
+      "false",
+    );
+
     stallDropdown.hidden = true;
   }
 
@@ -49,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const isOpen =
-      switchStallButton.getAttribute("aria-expanded") === "true";
+      switchStallButton.getAttribute("aria-expanded") ===
+      "true";
 
     switchStallButton.setAttribute(
       "aria-expanded",
@@ -72,9 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      selectedStallName.textContent = option.dataset.stallName;
+      selectedStallName.textContent =
+        option.dataset.stallName || "";
+
       selectedStallAddress.textContent =
-        option.dataset.stallAddress;
+        option.dataset.stallAddress || "";
 
       stallOptions.forEach((stallOption) => {
         stallOption.classList.remove("active");
@@ -101,24 +125,32 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const searchTerm = searchInput.value.trim().toLowerCase();
+    const searchTerm = searchInput.value
+      .trim()
+      .toLowerCase();
+
     const selectedStatus = availabilityFilter.value;
 
     let visibleItemCount = 0;
 
-    menuItems.forEach((item) => {
-      const itemName = (item.dataset.name || "").toLowerCase();
-      const itemStatus = item.dataset.status || "";
+    menuCards.forEach((card) => {
+      const itemName = (
+        card.dataset.name || ""
+      ).toLowerCase();
 
-      const matchesSearch = itemName.includes(searchTerm);
+      const itemStatus = card.dataset.status || "";
+
+      const matchesSearch =
+        itemName.includes(searchTerm);
 
       const matchesStatus =
         selectedStatus === "all" ||
         itemStatus === selectedStatus;
 
-      const shouldShow = matchesSearch && matchesStatus;
+      const shouldShow =
+        matchesSearch && matchesStatus;
 
-      item.hidden = !shouldShow;
+      card.hidden = !shouldShow;
 
       if (shouldShow) {
         visibleItemCount += 1;
@@ -126,12 +158,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (noResultsMessage) {
-      noResultsMessage.hidden = visibleItemCount !== 0;
+      noResultsMessage.hidden =
+        visibleItemCount !== 0;
     }
   }
 
   if (searchInput) {
-    searchInput.addEventListener("input", filterMenuItems);
+    searchInput.addEventListener(
+      "input",
+      filterMenuItems,
+    );
   }
 
   if (availabilityFilter) {
@@ -154,4 +190,155 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.add("active");
     });
   });
+
+  /* =========================
+     Availability controls
+     ========================= */
+
+  function updateAvailability(card, isAvailable) {
+    const statusButton = card.querySelector(
+      ".status-toggle",
+    );
+
+    const statusText = card.querySelector(
+      ".status-text",
+    );
+
+    const moreMenu = card.querySelector(".more-menu");
+
+    if (!statusButton || !statusText) {
+      return;
+    }
+
+    if (isAvailable) {
+      statusButton.classList.remove(
+        "status-unavailable",
+      );
+
+      statusButton.classList.add(
+        "status-available",
+      );
+
+      statusText.textContent = "Available";
+
+      statusButton.setAttribute(
+        "aria-pressed",
+        "true",
+      );
+
+      card.classList.remove(
+        "menu-card-unavailable",
+      );
+
+      card.dataset.status = "available";
+    } else {
+      statusButton.classList.remove(
+        "status-available",
+      );
+
+      statusButton.classList.add(
+        "status-unavailable",
+      );
+
+      statusText.textContent = "Unavailable";
+
+      statusButton.setAttribute(
+        "aria-pressed",
+        "false",
+      );
+
+      card.classList.add(
+        "menu-card-unavailable",
+      );
+
+      card.dataset.status = "unavailable";
+    }
+
+    if (moreMenu) {
+      moreMenu.removeAttribute("open");
+    }
+
+    /*
+      Reapply the selected filter after
+      changing the card's availability.
+    */
+    filterMenuItems();
+  }
+
+  function toggleAvailability(card) {
+    const statusButton = card.querySelector(
+      ".status-toggle",
+    );
+
+    if (!statusButton) {
+      return;
+    }
+
+    const isCurrentlyAvailable =
+      statusButton.classList.contains(
+        "status-available",
+      );
+
+    updateAvailability(
+      card,
+      !isCurrentlyAvailable,
+    );
+  }
+
+  menuCards.forEach((card) => {
+    const statusButton = card.querySelector(
+      ".status-toggle",
+    );
+
+    const changeStatusButton = card.querySelector(
+      ".change-status-action",
+    );
+
+    if (statusButton) {
+      statusButton.addEventListener("click", () => {
+        toggleAvailability(card);
+      });
+    }
+
+    if (changeStatusButton) {
+      changeStatusButton.addEventListener(
+        "click",
+        () => {
+          toggleAvailability(card);
+        },
+      );
+    }
+  });
+
+  /* =========================
+     Three-dot action menus
+     ========================= */
+
+  moreMenus.forEach((menu) => {
+    menu.addEventListener("toggle", () => {
+      if (!menu.open) {
+        return;
+      }
+
+      moreMenus.forEach((otherMenu) => {
+        if (otherMenu !== menu) {
+          otherMenu.removeAttribute("open");
+        }
+      });
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    moreMenus.forEach((menu) => {
+      if (!menu.contains(event.target)) {
+        menu.removeAttribute("open");
+      }
+    });
+  });
+
+  /* =========================
+     Initial filter
+     ========================= */
+
+  filterMenuItems();
 });
