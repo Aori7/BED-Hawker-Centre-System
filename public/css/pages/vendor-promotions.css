@@ -336,7 +336,7 @@ summary {
 
   padding-left: var(--sidebar-width);
 
-  background-color: var(--lighter-beige);
+  /* background-color: var(--lighter-beige); */
 }
 
 /* =========================
