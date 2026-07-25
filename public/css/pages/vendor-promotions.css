@@ -1,11 +1,5 @@
-/* =========================================================
-   Vendor Promotions Page
-   ========================================================= */
-
-/* =========================
-   VARIABLES
-   ========================= */
-
+/* vendor promotions page */
+/* variables */
 :root {
   --black-text-color: rgb(34, 34, 34);
   --orange-color: rgb(250, 129, 18);
@@ -15,575 +9,381 @@
   --white-color: rgb(255, 255, 255);
   --muted-text-color: rgb(105, 105, 105);
   --border-color: rgba(34, 34, 34, 0.12);
-
   --promotion-sidebar-color: rgb(242, 227, 195);
   --promotion-border: rgb(231, 221, 204);
-
   --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
-
   --hover-shadow: 0 14px 30px rgba(34, 34, 34, 0.15);
-
   --popup-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
-
   --card-radius: 16px;
-
   --nav-height: 64px;
   --stall-selector-height: 76px;
   --sidebar-width: 220px;
 }
-
-/* =========================
-   RESET
-   ========================= */
-
+/* reset */
 * {
   box-sizing: border-box;
 }
-
 html {
   scroll-behavior: smooth;
 }
-
 body {
   min-height: 100vh;
   margin: 0;
-
   background-color: var(--lighter-beige);
   color: var(--black-text-color);
-
   font-family: "Noto Sans", Arial, Helvetica, sans-serif;
-
   line-height: 1.5;
 }
-
 button,
 input,
 select,
 summary {
   font: inherit;
 }
-
-/* =========================
-   NAVIGATION BAR
-   ========================= */
-
+/* navigation bar */
 .nav-bar {
   position: fixed;
   z-index: 1200;
   top: 0;
   right: 0;
   left: 0;
-
   display: flex;
   min-height: var(--nav-height);
   align-items: center;
   justify-content: center;
   gap: 28px;
-
   padding: 10px 24px;
-
   border-bottom: 1px solid rgba(34, 34, 34, 0.08);
-
   background-color: rgba(255, 255, 255, 0.96);
-
   box-shadow: 0 4px 16px rgba(34, 34, 34, 0.06);
-
   backdrop-filter: blur(8px);
 }
-
 .nav-link {
   position: relative;
-
   padding: 8px 6px;
-
   color: var(--orange-color);
-
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
-
   transition:
     color 0.2s ease,
     transform 0.2s ease;
 }
-
 .nav-link::after {
   content: "";
-
   position: absolute;
   right: 0;
   bottom: 1px;
   left: 0;
-
   height: 3px;
-
   border-radius: 999px;
-
   background-color: var(--dark-orange-color);
-
   transform: scaleX(0);
   transform-origin: center;
-
   transition: transform 0.22s ease;
 }
-
 .nav-link:hover,
 .nav-link.active {
   color: var(--dark-orange-color);
 }
-
 .nav-link:hover {
   transform: translateY(-1px);
 }
-
 .nav-link:hover::after,
 .nav-link.active::after {
   transform: scaleX(1);
 }
-
-/* =========================
-   STALL SELECTOR
-   ========================= */
-
+/* stall selector */
 .promotion-stall-selector {
   position: fixed;
   z-index: 1100;
   top: var(--nav-height);
   right: 0;
   left: 0;
-
   display: grid;
   grid-template-columns:
     minmax(0, 1fr)
     auto;
-
   align-items: center;
   gap: 30px;
-
   height: var(--stall-selector-height);
   padding: 10px 30px;
-
   overflow: visible;
-
   border-bottom: 1px solid rgba(250, 129, 18, 0.2);
-
   background-color: var(--beige-color);
-
   box-shadow: 0 7px 18px rgba(34, 34, 34, 0.14);
 }
-
 .stall-details {
   min-width: 0;
 }
-
 .stall-name {
   margin: 0;
-
   overflow: hidden;
-
   color: var(--black-text-color);
-
   font-family: "Archivo", sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
   line-height: 1.1;
-
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .stall-address {
   display: none;
 }
-
-/* =========================
-   STALL SWITCH BUTTON
-   ========================= */
-
+/* stall switch button */
 .stall-switcher {
   position: relative;
-
   justify-self: end;
 }
-
 .switch-stall-button {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 9px;
-
   padding: 10px 15px;
-
   border: 0;
   border-radius: 10px;
-
   background-color: var(--orange-color);
   color: var(--white-color);
-
   font-family: "Archivo", sans-serif;
   font-weight: 700;
-
   cursor: pointer;
-
   box-shadow: 0 6px 12px rgba(196, 72, 12, 0.2);
-
   transition:
     background-color 160ms ease,
     transform 160ms ease,
     box-shadow 160ms ease;
 }
-
 .switch-stall-button:hover {
   transform: translateY(-2px);
-
   background-color: var(--dark-orange-color);
-
   box-shadow: 0 11px 18px rgba(250, 129, 18, 0.28);
 }
-
 .switch-stall-button .material-symbols-rounded {
   font-size: 21px;
 }
-
 .dropdown-arrow {
   transition: transform 180ms ease;
 }
-
 .switch-stall-button[aria-expanded="true"] .dropdown-arrow {
   transform: rotate(180deg);
 }
-
-/* =========================
-   STALL DROPDOWN
-   ========================= */
-
+/* stall dropdown */
 .stall-dropdown {
   position: absolute;
   z-index: 1300;
   top: calc(100% + 10px);
   right: 0;
-
   width: min(330px, calc(100vw - 32px));
-
   overflow: hidden;
-
   border: 1px solid var(--promotion-border);
-
   border-radius: 0;
-
   background-color: var(--white-color);
-
   box-shadow: var(--popup-shadow);
 }
-
 .stall-option {
   display: flex;
   width: 100%;
   flex-direction: column;
   gap: 4px;
-
   padding: 14px 16px;
-
   border: 0;
   border-bottom: 1px solid rgb(241, 236, 227);
-
   border-radius: 0;
-
   background-color: var(--white-color);
   color: var(--black-text-color);
-
   text-align: left;
   cursor: pointer;
-
   transition: background-color 150ms ease;
 }
-
 .stall-option:last-child {
   border-bottom: 0;
 }
-
 .stall-option:hover {
   background-color: rgb(255, 244, 232);
 }
-
 .stall-option.active {
   background-color: rgb(255, 240, 223);
 }
-
 .stall-option-name {
   font-size: 15px;
   font-weight: 750;
 }
-
 .stall-option-location {
   color: var(--muted-text-color);
-
   font-size: 12px;
   line-height: 1.4;
 }
-
-/* =========================
-   PAGE LAYOUT
-   ========================= */
-
+/* page layout */
 .vendor-promotion-layout {
   display: block;
-
   min-height: 100vh;
-
   margin-top: calc(var(--nav-height) + var(--stall-selector-height));
-
   padding-left: var(--sidebar-width);
-
   /* background-color: var(--lighter-beige); */
 }
-
-/* =========================
-   FIXED SIDEBAR
-   ========================= */
-
+/* fixed sidebar */
 .promotion-sidebar {
   position: fixed;
   z-index: 1000;
-
   top: calc(var(--nav-height) + var(--stall-selector-height));
-
   bottom: 0;
   left: 0;
-
   width: var(--sidebar-width);
-
   overflow-y: auto;
-
   border-right: 1px solid var(--promotion-border);
-
   background-color: var(--promotion-sidebar-color);
 }
-
 .status-navigation {
   display: flex;
   min-height: 100%;
   flex-direction: column;
 }
-
 .status-link {
   display: flex;
   width: 100%;
   min-height: 70px;
   align-items: center;
-
   padding: 18px 22px;
-
   border-bottom: 1px solid rgba(122, 93, 47, 0.15);
-
   background-color: transparent;
   color: rgb(96, 75, 43);
-
   font-family: "Archivo", sans-serif;
   font-size: 16px;
   font-weight: 650;
   text-decoration: none;
-
   transition:
     background-color 150ms ease,
     color 150ms ease,
     padding-left 150ms ease;
 }
-
 .status-link:hover {
   padding-left: 27px;
-
   background-color: rgba(255, 255, 255, 0.42);
-
   color: var(--dark-orange-color);
 }
-
 .status-link.active {
   padding-left: 17px;
-
   border-left: 5px solid var(--orange-color);
-
   background-color: var(--white-color);
   color: var(--dark-orange-color);
 }
-
-/* =========================
-   MAIN CONTENT
-   ========================= */
-
+/* main content */
 .promotion-content {
   width: 100%;
   min-width: 0;
-
   padding: 38px clamp(24px, 4vw, 58px) 100px;
 }
-
 .promotion-page-heading {
   margin-bottom: 28px;
 }
-
 .promotion-page-heading h1 {
   margin: 0;
-
   color: var(--black-text-color);
-
   font-family: "Archivo", sans-serif;
   font-size: clamp(38px, 5vw, 56px);
-
   line-height: 1;
 }
-
 .promotion-page-description {
   max-width: 620px;
   margin: 12px 0 0;
-
   color: var(--muted-text-color);
-
   font-size: 15px;
   line-height: 1.6;
 }
-
-/* =========================
-   SEARCH AND FILTER
-   ========================= */
-
+/* search and filter */
 .promotion-toolbar {
   display: flex;
   width: 100%;
   align-items: center;
   gap: 14px;
-
   margin-bottom: 38px;
 }
-
 .promotion-search {
   display: flex;
   min-height: 52px;
   flex: 1;
   align-items: center;
   gap: 11px;
-
   padding: 0 16px;
-
   border: 1px solid var(--promotion-border);
-
   border-radius: 16px;
-
   background-color: var(--white-color);
-
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.04);
 }
-
 .promotion-search .material-symbols-rounded {
   color: rgb(138, 138, 138);
 }
-
 .promotion-search input {
   width: 100%;
   padding: 0;
-
   border: 0;
   outline: 0;
-
   background: transparent;
   color: var(--black-text-color);
-
   font-family: "Archivo", sans-serif;
   font-size: 15px;
-
   box-shadow: none;
   appearance: none;
 }
-
 .promotion-search input:focus {
   border: 0;
   outline: 0;
   box-shadow: none;
 }
-
 .promotion-search input::-webkit-search-cancel-button {
   appearance: none;
 }
-
 .promotion-filter {
   display: flex;
   min-height: 52px;
   flex: 0 0 190px;
   align-items: center;
-
   padding: 0 13px;
-
   border: 1px solid var(--promotion-border);
-
   border-radius: 16px;
-
   background-color: var(--white-color);
 }
-
 .promotion-filter select {
   width: 100%;
-
   border: 0;
   outline: 0;
-
   background-color: transparent;
   color: var(--black-text-color);
-
   font-family: "Archivo", sans-serif;
   font-weight: 650;
-
   cursor: pointer;
 }
-
-/* =========================
-   PROMOTION SECTIONS
-   ========================= */
-
+/* promotion sections */
 .promotion-status-section {
   scroll-margin-top: calc(
     var(--nav-height) + var(--stall-selector-height) + 20px
   );
-
   margin-bottom: 58px;
 }
-
 .promotion-section-heading {
   margin-bottom: 20px;
 }
-
 .promotion-section-heading h2 {
   margin: 0;
-
   color: var(--black-text-color);
-
   font-family: "Archivo", sans-serif;
   font-size: 30px;
 }
-
 .promotion-section-heading p {
   margin: 5px 0 0;
-
   color: var(--muted-text-color);
-
   font-size: 13px;
 }
-
-/* =========================
-   PROMOTION GRID
-   ========================= */
-
+/* promotion grid */
 .promotion-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
   gap: 28px;
 }
-
-/* =========================
-   PROMOTION CARD
-   ========================= */
-
+/* promotion card */
 .promotion-card {
   position: relative;
   min-width: 0;
@@ -600,20 +400,14 @@ summary {
   align-self: start;
   height: fit-content;
 }
-
 .promotion-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--hover-shadow);
 }
-
 .promotion-card[hidden] {
   display: none;
 }
-
-/* =========================
-   CARD HEADER
-   ========================= */
-
+/* card header */
 .promotion-card-header {
   display: flex;
   align-items: flex-start;
@@ -624,18 +418,15 @@ summary {
   background-color: var(--orange-color);
   color: var(--white-color);
 }
-
 .promotion-heading {
   min-width: 0;
 }
-
 .promotion-title-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
 }
-
 .promotion-name {
   margin: 0;
   color: var(--white-color);
@@ -644,18 +435,13 @@ summary {
   font-weight: 800;
   line-height: 1.2;
 }
-
 .promotion-description {
   margin: 6px 0 0;
   color: rgba(255, 255, 255, 0.88);
   font-size: 0.92rem;
   line-height: 1.5;
 }
-
-/* =========================
-   PROMOTION STATUS
-   ========================= */
-
+/* promotion status */
 .promotion-status {
   flex-shrink: 0;
   padding: 5px 10px;
@@ -665,26 +451,19 @@ summary {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-
 .active-status {
   background-color: rgba(125, 236, 155, 0.95);
   color: rgb(17, 124, 65);
 }
-
 .inactive-status {
   background-color: rgba(238, 238, 238, 0.95);
   color: rgb(95, 95, 95);
 }
-
-/* =========================
-   THREE-DOT ACTION MENU
-   ========================= */
-
+/* three-dot action menu */
 .promotion-menu {
   position: relative;
   flex-shrink: 0;
 }
-
 .promotion-menu-button {
   display: grid;
   width: 38px;
@@ -702,7 +481,6 @@ summary {
   transform: none;
   transition: background-color 150ms ease;
 }
-
 .promotion-menu-button:hover,
 .promotion-menu-button:focus-visible,
 .promotion-menu-button[aria-expanded="true"] {
@@ -711,11 +489,9 @@ summary {
   box-shadow: none;
   transform: none;
 }
-
 .promotion-menu-button .material-symbols-rounded {
   font-size: 24px;
 }
-
 .promotion-menu-dropdown {
   position: absolute;
   z-index: 40;
@@ -729,12 +505,10 @@ summary {
   background-color: var(--white-color);
   box-shadow: var(--card-shadow);
 }
-
 .promotion-menu-dropdown.open {
   display: grid;
   gap: 4px;
 }
-
 .promotion-menu-dropdown button {
   display: block;
   width: 100%;
@@ -754,54 +528,41 @@ summary {
   transform: none;
   transition: none;
 }
-
 .promotion-menu-dropdown button:focus,
 .promotion-menu-dropdown button:active {
   box-shadow: none;
   transform: none;
 }
-
 .change-status-action:hover,
 .edit-action:hover {
   background-color: var(--lighter-beige);
   color: var(--black-text-color);
-
   box-shadow: none;
   transform: none;
 }
-
 .remove-action {
   color: rgb(173, 42, 42);
 }
-
 .remove-action:hover {
   background-color: rgba(173, 42, 42, 0.1);
   color: rgb(173, 42, 42);
   box-shadow: none;
   transform: none;
 }
-
 .promotion-menu-dropdown button + button {
   border-top: 0;
 }
-
-/* =========================
-   CARD BODY
-   ========================= */
-
+/* card body */
 .promotion-card-body {
   padding: 24px;
   border-radius: 0 0 var(--card-radius) var(--card-radius);
   background-color: var(--beige-color);
 }
-
 .promotion-information {
   display: grid;
   gap: 14px;
-
   margin: 0 0 22px;
 }
-
 .promotion-detail {
   display: grid;
   grid-template-columns:
@@ -809,23 +570,17 @@ summary {
     minmax(0, 1fr);
   gap: 14px;
 }
-
 .promotion-detail dt {
   color: var(--muted-text-color);
   font-size: 0.88rem;
   font-weight: 700;
 }
-
 .promotion-detail dd {
   margin: 0;
   color: var(--black-text-color);
   font-weight: 800;
 }
-
-/* =========================
-   AFFECTED ITEMS
-   ========================= */
-
+/* affected items */
 .affected-items-dropdown {
   overflow: hidden;
   border: 1px solid rgba(34, 34, 34, 0.08);
@@ -833,7 +588,6 @@ summary {
   background-color: var(--white-color);
   font-family: "Noto Sans", Arial, Helvetica, sans-serif;
 }
-
 .affected-items-summary {
   display: flex;
   align-items: center;
@@ -847,35 +601,29 @@ summary {
   cursor: pointer;
   list-style: none;
 }
-
 .affected-items-summary::-webkit-details-marker {
   display: none;
 }
-
 .affected-items-summary-right {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   margin-left: auto;
 }
-
 .affected-items-count {
   color: var(--muted-text-color);
   font-family: "Noto Sans", Arial, Helvetica, sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
 }
-
 .affected-items-arrow {
   color: var(--orange-color);
   font-size: 22px;
   transition: transform 180ms ease;
 }
-
 .affected-items-dropdown[open] .affected-items-arrow {
   transform: rotate(180deg);
 }
-
 .affected-items-list {
   display: grid;
   gap: 8px;
@@ -883,7 +631,6 @@ summary {
   padding: 0 18px 18px;
   list-style: none;
 }
-
 .affected-items-list li {
   padding: 10px 12px;
   border-radius: 9px;
@@ -893,260 +640,175 @@ summary {
   font-size: 0.9rem;
   font-weight: 700;
 }
-
-/* =========================
-   INACTIVE PROMOTION CARD
-   ========================= */
-
+/* inactive promotion card */
 /* .promotion-card-inactive {
   opacity: 0.65;
   filter: grayscale(30%);
 }
-
 .promotion-card-inactive:hover {
   opacity: 0.82;
 } */
-
-/* =========================
-   NO RESULTS MESSAGE
-   ========================= */
-
+/* no results message */
 .no-promotion-results {
   padding: 30px;
-
   border: 1px dashed rgb(215, 201, 180);
-
   border-radius: 18px;
-
   background-color: rgba(255, 255, 255, 0.55);
-
   color: var(--muted-text-color);
-
   text-align: center;
 }
-
-/* =========================
-   FLOATING ADD BUTTON
-   ========================= */
-
+/* floating add button */
 .floating-add-promotion-button {
   position: fixed;
   z-index: 1300;
   right: 32px;
   bottom: 28px;
-
   display: inline-flex;
   min-height: 54px;
   align-items: center;
   justify-content: center;
   gap: 9px;
-
   padding: 13px 20px;
-
   border: 0;
   border-radius: 999px;
-
   background-color: var(--orange-color);
   color: var(--white-color);
-
   font-family: "Archivo", sans-serif;
   font-size: 15px;
   font-weight: 750;
-
   cursor: pointer;
-
   box-shadow: 0 12px 24px rgba(196, 72, 12, 0.3);
-
   transition:
     background-color 160ms ease,
     transform 160ms ease,
     box-shadow 160ms ease;
 }
-
 .floating-add-promotion-button:hover {
   transform: translateY(-3px);
-
   background-color: var(--dark-orange-color);
-
   box-shadow: 0 16px 28px rgba(196, 72, 12, 0.36);
 }
-
 .floating-add-promotion-button:active {
   transform: translateY(-1px);
 }
-
 .floating-add-promotion-button .material-symbols-rounded {
   font-size: 23px;
 }
-
-/* =========================
-   FOCUS STATES
-   ========================= */
-
+/* focus states */
 .switch-stall-button:focus-visible,
 .status-link:focus-visible,
 .promotion-menu-button:focus-visible,
 .promotion-menu-dropdown button:focus-visible,
 .floating-add-promotion-button:focus-visible {
   outline: 3px solid rgba(250, 129, 18, 0.35);
-
   outline-offset: 3px;
 }
-
-/* =========================
-   TABLET
-   ========================= */
-
+/* tablet */
 @media (max-width: 1050px) {
   :root {
     --sidebar-width: 180px;
   }
-
   .promotion-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* =========================
-   MOBILE
-   ========================= */
-
+/* mobile */
 @media (max-width: 760px) {
   :root {
     --stall-selector-height: 70px;
   }
-
   .promotion-stall-selector {
     gap: 12px;
     padding: 10px 18px;
   }
-
   .stall-name {
     font-size: 1.15rem;
   }
-
   .switch-stall-button > span:nth-child(2) {
     display: none;
   }
-
   .vendor-promotion-layout {
     margin-top: calc(var(--nav-height) + var(--stall-selector-height) + 54px);
-
     padding-left: 0;
   }
-
   .promotion-sidebar {
     position: fixed;
     z-index: 1050;
-
     top: calc(var(--nav-height) + var(--stall-selector-height));
-
     right: 0;
     bottom: auto;
     left: 0;
-
     width: 100%;
     height: 54px;
-
     overflow-x: auto;
     overflow-y: hidden;
-
     border-right: 0;
-
     border-bottom: 1px solid var(--promotion-border);
   }
-
   .status-navigation {
     width: 100%;
     min-height: 54px;
     flex-direction: row;
   }
-
   .status-link {
     min-height: 54px;
     flex: 1;
     justify-content: center;
-
     padding: 12px 18px;
-
     border-right: 1px solid rgba(122, 93, 47, 0.15);
-
     border-bottom: 0;
-
     white-space: nowrap;
   }
-
   .status-link:hover {
     padding-left: 18px;
   }
-
   .status-link.active {
     padding-left: 18px;
-
     border-bottom: 4px solid var(--orange-color);
-
     border-left: 0;
   }
-
   .promotion-content {
     padding: 28px 18px 90px;
   }
-
   .promotion-toolbar {
     flex-direction: column;
     align-items: stretch;
   }
-
   .promotion-filter {
     width: 100%;
     flex-basis: auto;
   }
-
   .promotion-status-section {
     scroll-margin-top: calc(
       var(--nav-height) + var(--stall-selector-height) + 70px
     );
   }
 }
-
-/* =========================
-   SMALL MOBILE
-   ========================= */
-
+/* small mobile */
 @media (max-width: 520px) {
   .promotion-card-header,
   .promotion-card-body {
     padding: 18px;
   }
-
   .promotion-detail {
     grid-template-columns: 1fr;
     gap: 3px;
   }
-
   .promotion-name {
     font-size: 1.3rem;
   }
-
   .floating-add-promotion-button {
     right: 18px;
     bottom: 18px;
-
     width: 54px;
     height: 54px;
-
     padding: 0;
   }
-
   .floating-add-promotion-button span:last-child {
     display: none;
   }
 }
-
-/* =========================
-   SHARP DROPDOWN OVERRIDES
-   ========================= */
-
+/* sharp dropdown overrides */
 .stall-dropdown,
 .stall-dropdown .stall-option {
   border-radius: 0 !important;

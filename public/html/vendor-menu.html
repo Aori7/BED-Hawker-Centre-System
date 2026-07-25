@@ -2,14 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <!-- page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-menu.css" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
@@ -26,37 +24,65 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-
     <title>Vendor Menu Page</title>
   </head>
-
-  <body>
-    <!-- =========================
-         Navigation bar
-         ========================= -->
-    <nav class="nav-bar">
-      <a class="nav-link" href="vendor-home.html"> Home </a>
-      <a class="nav-link active" href="vendor-menu.html" aria-current="page">
+  <body data-page="vendor-menu">
+    <!-- navigation bar -->
+    <nav
+      class="nav-bar"
+      id="vendor-navigation"
+      data-component="vendor-navigation"
+    >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
+      <a
+        class="nav-link active"
+        href="vendor-menu.html"
+        aria-current="page"
+        data-nav-target="menu"
+      >
         Menu
       </a>
-      <a class="nav-link" href="vendor-orders.html"> Orders </a>
-      <a class="nav-link" href="vendor-promotions.html"> Promotions </a>
-      <a class="nav-link" href="vendor-feedback.html"> Feedback </a>
-      <a class="nav-link" href="vendor-profile.html"> Profile </a>
+      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+        Orders
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-promotions.html"
+        data-nav-target="promotions"
+      >
+        Promotions
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-feedback.html"
+        data-nav-target="feedback"
+      >
+        Feedback
+      </a>
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
     </nav>
-
-    <!-- =========================
-         Compact stall selector
-         ========================= -->
-    <header class="menu-stall-selector">
+    <!-- compact stall selector -->
+    <header
+      class="menu-stall-selector"
+      id="vendor-stall-selector"
+      data-component="stall-selector"
+    >
       <div class="stall-details">
-        <p class="stall-name" id="selected-stall-name">Ah Seng Chicken Rice</p>
-
-        <address class="stall-address" id="selected-stall-address">
+        <p class="stall-name" id="selected-stall-name" data-field="stall-name">
+          Ah Seng Chicken Rice
+        </p>
+        <address
+          class="stall-address"
+          id="selected-stall-address"
+          data-field="stall-address"
+        >
           #01-01 · Maxwell Food Centre
         </address>
       </div>
-
       <div class="stall-switcher">
         <button
           type="button"
@@ -64,6 +90,7 @@
           id="switch-stall-button"
           aria-expanded="false"
           aria-controls="stall-dropdown"
+          data-action="toggle-stall-dropdown"
         >
           <span class="material-symbols-rounded"> storefront </span>
           <span>Switch stalls</span>
@@ -71,39 +98,45 @@
             keyboard_arrow_down
           </span>
         </button>
-        <div class="stall-dropdown" id="stall-dropdown" hidden>
+        <div
+          class="stall-dropdown"
+          id="stall-dropdown"
+          hidden
+          data-role="stall-options"
+        >
           <button
             type="button"
             class="stall-option active"
             data-stall-id="1"
             data-stall-name="Ah Seng Chicken Rice"
             data-stall-address="#01-01 · Maxwell Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Ah Seng Chicken Rice </span>
             <span class="stall-option-location">
               #01-01 · Maxwell Food Centre
             </span>
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="2"
             data-stall-name="Megan's Laksa"
             data-stall-address="#02-12 · Old Airport Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Megan's Laksa </span>
             <span class="stall-option-location">
               #02-12 · Old Airport Road Food Centre
             </span>
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="3"
             data-stall-name="Golden Wok"
             data-stall-address="#01-08 · Adam Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Golden Wok </span>
             <span class="stall-option-location">
@@ -113,78 +146,67 @@
         </div>
       </div>
     </header>
-
-    <!-- =========================
-         Main menu page layout
-         ========================= -->
-    <main class="vendor-menu-layout">
-      <!-- =========================
-           Category sidebar
-           ========================= -->
+    <!-- main menu page layout -->
+    <main
+      class="vendor-menu-layout"
+      id="vendor-menu-page"
+      data-page-content="menu"
+    >
+      <!-- category sidebar -->
       <aside class="menu-sidebar">
         <nav class="category-navigation" aria-label="Menu categories">
           <a class="category-link active" href="#noodles"> Noodles </a>
-
           <a class="category-link" href="#rice"> Rice </a>
-
           <a class="category-link" href="#drinks"> Drinks </a>
-
-          <button type="button" class="add-category-button">
+          <button
+            type="button"
+            class="add-category-button"
+            data-action="add-category"
+          >
             <span class="material-symbols-rounded"> add </span>
-
             <span>Add category</span>
           </button>
         </nav>
       </aside>
-
-      <!-- =========================
-           Menu content
-           ========================= -->
+      <!-- menu content -->
       <section class="menu-content">
         <!-- Page heading -->
         <div class="menu-page-heading">
           <div>
             <h2>Menu</h2>
-
             <p class="menu-page-description">
               View and manage the items offered by your selected stall.
             </p>
           </div>
         </div>
-
-        <!-- =========================
-             Search and filter
-             ========================= -->
+        <!-- search and filter -->
         <div class="menu-toolbar">
           <label class="menu-search">
             <span class="material-symbols-rounded"> search </span>
-
             <input
               type="search"
               id="menu-search-input"
               placeholder="Search menu items"
               aria-label="Search menu items"
               autocomplete="off"
+              name="menu-search"
+              data-filter="search"
             />
           </label>
-
           <label class="menu-filter">
             <select
               id="availability-filter"
               aria-label="Filter menu items by availability"
+              name="availability"
+              data-filter="availability"
             >
               <option value="all">All items</option>
-
               <option value="available">Available</option>
-
               <option value="unavailable">Unavailable</option>
             </select>
           </label>
         </div>
-
-        <!-- =========================
-             Noodles category
-             ========================= -->
+        <!-- noodles category -->
         <section class="menu-category-section" id="noodles">
           <div class="category-heading">
             <div>
@@ -192,15 +214,15 @@
               <p>3 items</p>
             </div>
           </div>
-
           <div class="menu-grid">
             <!-- Laksa -->
             <article
               class="menu-card"
-              data-menu-id="1"
+              data-menu-item-id="1"
               data-category="noodles"
-              data-name="Laksa"
-              data-status="available"
+              data-menu-item-name="Laksa"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image">
                 <span
@@ -211,153 +233,170 @@
                   <span class="material-symbols-rounded recommendation-icon">
                     thumb_up
                   </span>
-
                   <span class="recommendation-text"> Recommended </span>
                 </span>
               </div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Laksa</h4>
-
                 <span class="current-price"> $5.50 </span>
               </div>
-
               <p class="menu-description">
                 Spicy coconut noodle soup served with fishcake, tofu puff and
                 egg.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Laksa availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Laksa actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
                 </details>
               </div>
             </article>
-
             <!-- Fishball Noodles -->
             <article
               class="menu-card"
-              data-menu-id="2"
+              data-menu-item-id="2"
               data-category="noodles"
-              data-name="Fishball Noodles"
-              data-status="available"
+              data-menu-item-name="Fishball Noodles"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Fishball Noodles</h4>
-
                 <span class="current-price"> $4.50 </span>
               </div>
-
               <p class="menu-description">
                 Springy noodles served with fishballs, fishcake, vegetables and
                 savoury sauce.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Fishball Noodles availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Fishball Noodles actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
                 </details>
               </div>
             </article>
-
             <!-- Prawn Noodles -->
             <article
               class="menu-card menu-card-unavailable"
-              data-menu-id="3"
+              data-menu-item-id="3"
               data-category="noodles"
-              data-name="Prawn Noodles"
-              data-status="unavailable"
+              data-menu-item-name="Prawn Noodles"
+              data-availability="unavailable"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Prawn Noodles</h4>
-
                 <span class="current-price"> $6.00 </span>
               </div>
-
               <p class="menu-description">
                 Prawn noodles served with prawns, pork slices and a rich seafood
                 broth.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-unavailable"
                   aria-pressed="false"
                   aria-label="Change Prawn Noodles availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Unavailable </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Prawn Noodles actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
@@ -366,10 +405,7 @@
             </article>
           </div>
         </section>
-
-        <!-- =========================
-             Rice category
-             ========================= -->
+        <!-- rice category -->
         <section class="menu-category-section" id="rice">
           <div class="category-heading">
             <div>
@@ -377,15 +413,15 @@
               <p>3 items</p>
             </div>
           </div>
-
           <div class="menu-grid">
             <!-- Chicken Rice -->
             <article
               class="menu-card"
-              data-menu-id="4"
+              data-menu-item-id="4"
               data-category="rice"
-              data-name="Chicken Rice"
-              data-status="available"
+              data-menu-item-name="Chicken Rice"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image">
                 <span
@@ -396,155 +432,170 @@
                   <span class="material-symbols-rounded recommendation-icon">
                     thumb_up
                   </span>
-
                   <span class="recommendation-text"> Recommended </span>
                 </span>
               </div>
-
               <div class="menu-price-box discounted-price">
                 <h4 class="menu-name">Chicken Rice</h4>
-
                 <span class="original-price"> $6.00 </span>
-
                 <span class="discount-label"> 17% OFF </span>
-
                 <span class="current-price"> $5.00 </span>
               </div>
-
               <p class="menu-description">
                 Fragrant rice served with tender chicken, chilli sauce and soup.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Chicken Rice availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Chicken Rice actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
                 </details>
               </div>
             </article>
-
             <!-- Fried Rice -->
             <article
               class="menu-card"
-              data-menu-id="5"
+              data-menu-item-id="5"
               data-category="rice"
-              data-name="Fried Rice"
-              data-status="available"
+              data-menu-item-name="Fried Rice"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Fried Rice</h4>
-
                 <span class="current-price"> $5.00 </span>
               </div>
-
               <p class="menu-description">
                 Wok-fried rice served with egg, vegetables and spring onions.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Fried Rice availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Fried Rice actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
                 </details>
               </div>
             </article>
-
             <!-- Curry Rice -->
             <article
               class="menu-card menu-card-unavailable"
-              data-menu-id="6"
+              data-menu-item-id="6"
               data-category="rice"
-              data-name="Curry Rice"
-              data-status="unavailable"
+              data-menu-item-name="Curry Rice"
+              data-availability="unavailable"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Curry Rice</h4>
-
                 <span class="current-price"> $5.50 </span>
               </div>
-
               <p class="menu-description">
                 Steamed rice served with curry, vegetables and crispy chicken
                 cutlet.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-unavailable"
                   aria-pressed="false"
                   aria-label="Change Curry Rice availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Unavailable </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Curry Rice actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
@@ -553,10 +604,7 @@
             </article>
           </div>
         </section>
-
-        <!-- =========================
-             Drinks category
-             ========================= -->
+        <!-- drinks category -->
         <section class="menu-category-section" id="drinks">
           <div class="category-heading">
             <div>
@@ -564,105 +612,117 @@
               <p>2 items</p>
             </div>
           </div>
-
           <div class="menu-grid">
             <!-- Iced Lemon Tea -->
             <article
               class="menu-card"
-              data-menu-id="7"
+              data-menu-item-id="7"
               data-category="drinks"
-              data-name="Iced Lemon Tea"
-              data-status="available"
+              data-menu-item-name="Iced Lemon Tea"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Iced Lemon Tea</h4>
-
                 <span class="current-price"> $2.20 </span>
               </div>
-
               <p class="menu-description">
                 Refreshing chilled tea served with fresh lemon slices.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Iced Lemon Tea availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Iced Lemon Tea actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
                 </details>
               </div>
             </article>
-
             <!-- Barley -->
             <article
               class="menu-card"
-              data-menu-id="8"
+              data-menu-item-id="8"
               data-category="drinks"
-              data-name="Barley"
-              data-status="available"
+              data-menu-item-name="Barley"
+              data-availability="available"
+              data-resource="menu-item"
             >
               <div class="menu-image"></div>
-
               <div class="menu-price-box single-price">
                 <h4 class="menu-name">Barley</h4>
-
                 <span class="current-price"> $2.00 </span>
               </div>
-
               <p class="menu-description">
                 Light and refreshing homemade barley drink served chilled.
               </p>
-
               <div class="menu-card-footer">
                 <button
                   type="button"
                   class="status-toggle status-available"
                   aria-pressed="true"
                   aria-label="Change Barley availability"
+                  data-action="toggle-availability"
                 >
                   <span class="status-dot"></span>
-
                   <span class="status-text"> Available </span>
                 </button>
-
                 <details class="more-menu">
                   <summary aria-label="Open Barley actions">
                     <span class="material-symbols-rounded"> more_horiz </span>
                   </summary>
-
                   <div class="action-menu">
-                    <button type="button" class="change-status-action">
+                    <button
+                      type="button"
+                      class="change-status-action"
+                      data-action="change-availability"
+                    >
                       Change status
                     </button>
-
-                    <button type="button" class="edit-action">Edit item</button>
-
-                    <button type="button" class="delete-action">
+                    <button
+                      type="button"
+                      class="edit-action"
+                      data-action="edit-menu-item"
+                    >
+                      Edit item
+                    </button>
+                    <button
+                      type="button"
+                      class="delete-action"
+                      data-action="delete-menu-item"
+                    >
                       Delete item
                     </button>
                   </div>
@@ -671,27 +731,22 @@
             </article>
           </div>
         </section>
-
         <!-- Shown when no cards match the filters -->
         <p class="no-menu-results" id="no-menu-results" hidden>
           No menu items match your search or filter.
         </p>
       </section>
     </main>
-
-    <!-- =========================
-         Floating add item button
-         ========================= -->
+    <!-- floating add item button -->
     <button
       type="button"
       class="floating-add-menu-button"
       aria-label="Add a new menu item"
+      data-action="add-menu-item"
     >
       <span class="material-symbols-rounded"> add </span>
-
       <span>Add menu item</span>
     </button>
-
     <!-- Page JavaScript -->
     <script src="../js/vendor-menu.js"></script>
   </body>

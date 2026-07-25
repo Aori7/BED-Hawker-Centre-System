@@ -2,69 +2,80 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- =========================
-         Shared stylesheets
-         ========================= -->
+    <!-- shared stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
-
     <!-- Promotion page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-promotions.css" />
-
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-
     <!-- Google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-
     <title>Vendor Promotions</title>
   </head>
-
-  <body>
-    <!-- =========================
-         Navigation bar
-         ========================= -->
-    <nav class="nav-bar">
-      <a class="nav-link" href="vendor-home.html"> Home </a>
-      <a class="nav-link" href="vendor-menu.html"> Menu </a>
-      <a class="nav-link" href="vendor-orders.html"> Orders </a>
+  <body data-page="vendor-promotions">
+    <!-- navigation bar -->
+    <nav
+      class="nav-bar"
+      id="vendor-navigation"
+      data-component="vendor-navigation"
+    >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
+      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
+        Menu
+      </a>
+      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+        Orders
+      </a>
       <a
         class="nav-link active"
         href="vendor-promotions.html"
         aria-current="page"
+        data-nav-target="promotions"
       >
         Promotions
       </a>
-      <a class="nav-link" href="vendor-feedback.html"> Feedback </a>
-      <a class="nav-link" href="vendor-profile.html"> Profile </a>
+      <a
+        class="nav-link"
+        href="vendor-feedback.html"
+        data-nav-target="feedback"
+      >
+        Feedback
+      </a>
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
     </nav>
-
-    <!-- =========================
-         Stall selector
-         ========================= -->
-    <header class="promotion-stall-selector">
+    <!-- stall selector -->
+    <header
+      class="promotion-stall-selector"
+      id="vendor-stall-selector"
+      data-component="stall-selector"
+    >
       <div class="stall-details">
-        <p class="stall-name" id="selected-stall-name">Ah Seng Chicken Rice</p>
-
-        <address class="stall-address" id="selected-stall-address">
+        <p class="stall-name" id="selected-stall-name" data-field="stall-name">
+          Ah Seng Chicken Rice
+        </p>
+        <address
+          class="stall-address"
+          id="selected-stall-address"
+          data-field="stall-address"
+        >
           #01-01 · Maxwell Food Centre
         </address>
       </div>
-
       <div class="stall-switcher">
         <button
           type="button"
@@ -72,54 +83,55 @@
           id="switch-stall-button"
           aria-expanded="false"
           aria-controls="stall-dropdown"
+          data-action="toggle-stall-dropdown"
         >
           <span class="material-symbols-rounded"> storefront </span>
-
           <span>Switch stalls</span>
-
           <span class="material-symbols-rounded dropdown-arrow">
             keyboard_arrow_down
           </span>
         </button>
-
-        <div class="stall-dropdown" id="stall-dropdown" hidden>
+        <div
+          class="stall-dropdown"
+          id="stall-dropdown"
+          hidden
+          data-role="stall-options"
+        >
           <button
             type="button"
             class="stall-option active"
             data-stall-id="1"
             data-stall-name="Ah Seng Chicken Rice"
             data-stall-address="#01-01 · Maxwell Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Ah Seng Chicken Rice </span>
-
             <span class="stall-option-location">
               #01-01 · Maxwell Food Centre
             </span>
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="2"
             data-stall-name="Megan's Laksa"
             data-stall-address="#02-12 · Old Airport Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Megan's Laksa </span>
-
             <span class="stall-option-location">
               #02-12 · Old Airport Road Food Centre
             </span>
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="3"
             data-stall-name="Golden Wok"
             data-stall-address="#01-08 · Adam Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name"> Golden Wok </span>
-
             <span class="stall-option-location">
               #01-08 · Adam Road Food Centre
             </span>
@@ -127,147 +139,137 @@
         </div>
       </div>
     </header>
-
-    <!-- =========================
-         Main page layout
-         ========================= -->
-    <main class="vendor-promotion-layout">
-      <!-- =========================
-           Promotion status sidebar
-           ========================= -->
+    <!-- main page layout -->
+    <main
+      class="vendor-promotion-layout"
+      id="vendor-promotions-page"
+      data-page-content="promotions"
+    >
+      <!-- promotion status sidebar -->
       <aside class="promotion-sidebar">
         <nav class="status-navigation" aria-label="Promotion status sections">
           <a class="status-link active" href="#active-promotions"> Active </a>
-
           <a class="status-link" href="#inactive-promotions"> Inactive </a>
         </nav>
       </aside>
-
-      <!-- =========================
-           Main promotion content
-           ========================= -->
+      <!-- main promotion content -->
       <section class="promotion-content">
         <!-- Page heading -->
         <div class="promotion-page-heading">
           <h1>Promotions</h1>
-
           <p class="promotion-page-description">
             Create and manage promotions for your selected stall.
           </p>
         </div>
-
-        <!-- =========================
-             Search and filter toolbar
-             ========================= -->
+        <!-- search and filter toolbar -->
         <div class="promotion-toolbar">
           <label class="promotion-search">
             <span class="material-symbols-rounded"> search </span>
-
             <input
               type="search"
               id="promotion-search-input"
               placeholder="Search promotions"
               aria-label="Search promotions"
               autocomplete="off"
+              name="promotion-search"
+              data-filter="search"
             />
           </label>
-
           <!-- <label class="promotion-filter">
             <select
               id="category-filter"
               aria-label="Filter promotions by menu category"
-            >
+             name="promotion-category" data-filter="category">
               <option value="all">All categories</option>
-
               <option value="noodles">Noodles</option>
-
               <option value="rice">Rice</option>
-
               <option value="drinks">Drinks</option>
             </select>
           </label> -->
         </div>
-
-        <!-- =========================
-             Active promotions
-             ========================= -->
+        <!-- active promotions -->
         <section class="promotion-status-section" id="active-promotions">
           <div class="promotion-section-heading">
             <h2>Active promotions</h2>
-
             <p>Promotions that are currently available to customers.</p>
           </div>
-
           <div class="promotion-grid">
-            <!-- =========================
-                 Active promotion 1
-                 ========================= -->
+            <!-- active promotion 1 -->
             <article
               class="promotion-card"
               data-promotion-id="1"
-              data-name="Lunch Special"
-              data-status="active"
+              data-promotion-name="Lunch Special"
+              data-promotion-status="active"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Lunch Special</h3>
-
                     <span class="promotion-status active-status"> Active </span>
                   </div>
-
                   <p class="promotion-description">
                     Enjoy a discount on selected lunch menu items.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>20% off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>1 July 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>31 July 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 3 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Chicken Rice Set</li>
                     <li>Roasted Chicken Rice</li>
@@ -276,76 +278,82 @@
                 </details>
               </div>
             </article>
-
-            <!-- =========================
-                 Active promotion 2
-                 ========================= -->
+            <!-- active promotion 2 -->
             <article
               class="promotion-card"
               data-promotion-id="2"
-              data-name="Laksa Lunch Deal"
-              data-status="active"
+              data-promotion-name="Laksa Lunch Deal"
+              data-promotion-status="active"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Laksa Lunch Deal</h3>
-
                     <span class="promotion-status active-status"> Active </span>
                   </div>
-
                   <p class="promotion-description">
                     Save on selected noodle dishes during weekday lunch hours.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>15% off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>20 July 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>20 August 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 3 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Laksa</li>
                     <li>Fishball Noodles</li>
@@ -354,77 +362,83 @@
                 </details>
               </div>
             </article>
-
-            <!-- =========================
-                 Active promotion 3
-                 ========================= -->
+            <!-- active promotion 3 -->
             <article
               class="promotion-card"
               data-promotion-id="3"
-              data-name="Free Barley Upgrade"
-              data-status="active"
+              data-promotion-name="Free Barley Upgrade"
+              data-promotion-status="active"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Free Barley Upgrade</h3>
-
                     <span class="promotion-status active-status"> Active </span>
                   </div>
-
                   <p class="promotion-description">
                     Receive a complimentary barley drink with selected meal
                     purchases.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>Free drink</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>22 July 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>5 August 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 2 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Barley</li>
                     <li>Chicken Rice Set</li>
@@ -432,77 +446,83 @@
                 </details>
               </div>
             </article>
-
-            <!-- =========================
-                 Active promotion 4
-                 ========================= -->
+            <!-- active promotion 4 -->
             <article
               class="promotion-card"
               data-promotion-id="4"
-              data-name="Rice Combo Discount"
-              data-status="active"
+              data-promotion-name="Rice Combo Discount"
+              data-promotion-status="active"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Rice Combo Discount</h3>
-
                     <span class="promotion-status active-status"> Active </span>
                   </div>
-
                   <p class="promotion-description">
                     Save when ordering selected rice dishes together with a
                     drink.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>$1.00 off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>25 July 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>10 August 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 3 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Chicken Rice</li>
                     <li>Fried Rice</li>
@@ -513,90 +533,92 @@
             </article>
           </div>
         </section>
-
-        <!-- =========================
-             Inactive promotions
-             ========================= -->
+        <!-- inactive promotions -->
         <section class="promotion-status-section" id="inactive-promotions">
           <div class="promotion-section-heading">
             <h2>Inactive promotions</h2>
-
             <p>Promotions that are paused, expired or no longer offered.</p>
           </div>
-
           <div class="promotion-grid">
-            <!-- =========================
-                 Inactive promotion 1
-                 ========================= -->
+            <!-- inactive promotion 1 -->
             <article
               class="promotion-card promotion-card-inactive"
               data-promotion-id="5"
-              data-name="June Rice Promotion"
-              data-status="inactive"
+              data-promotion-name="June Rice Promotion"
+              data-promotion-status="inactive"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">June Rice Promotion</h3>
-
                     <span class="promotion-status inactive-status">
                       Inactive
                     </span>
                   </div>
-
                   <p class="promotion-description">
                     A limited-time discount previously offered on selected rice
                     items.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>10% off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>1 June 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>30 June 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 2 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Chicken Rice</li>
                     <li>Curry Rice</li>
@@ -604,79 +626,85 @@
                 </details>
               </div>
             </article>
-
-            <!-- =========================
-                 Inactive promotion 2
-                 ========================= -->
+            <!-- inactive promotion 2 -->
             <article
               class="promotion-card promotion-card-inactive"
               data-promotion-id="6"
-              data-name="Iced Drink Bundle"
-              data-status="inactive"
+              data-promotion-name="Iced Drink Bundle"
+              data-promotion-status="inactive"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Iced Drink Bundle</h3>
-
                     <span class="promotion-status inactive-status">
                       Inactive
                     </span>
                   </div>
-
                   <p class="promotion-description">
                     Customers received a discount when ordering two selected
                     drinks.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Lunch Special actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark inactive
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>$0.50 off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>1 May 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>31 May 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 2 items </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Iced Lemon Tea</li>
                     <li>Barley</li>
@@ -684,78 +712,84 @@
                 </details>
               </div>
             </article>
-
-            <!-- =========================
-                 Inactive promotion 3
-                 ========================= -->
+            <!-- inactive promotion 3 -->
             <article
               class="promotion-card promotion-card-inactive"
               data-promotion-id="7"
-              data-name="Prawn Noodle Week"
-              data-status="inactive"
+              data-promotion-name="Prawn Noodle Week"
+              data-promotion-status="inactive"
+              data-resource="promotion"
             >
               <header class="promotion-card-header">
                 <div class="promotion-heading">
                   <div class="promotion-title-row">
                     <h3 class="promotion-name">Prawn Noodle Week</h3>
-
                     <span class="promotion-status inactive-status">
                       Inactive
                     </span>
                   </div>
-
                   <p class="promotion-description">
                     A previous promotion for selected prawn noodle dishes.
                   </p>
                 </div>
-
                 <div class="promotion-menu">
                   <button
                     class="promotion-menu-button"
                     type="button"
                     aria-label="Open Prawn Noodle Week actions"
                     aria-expanded="false"
+                    data-action="toggle-promotion-menu"
                   >
                     &#8942;
                   </button>
-
                   <div class="promotion-menu-dropdown">
-                    <button class="change-status-action" type="button">
+                    <button
+                      class="change-status-action"
+                      type="button"
+                      data-action="change-promotion-status"
+                    >
                       Mark active
                     </button>
-
-                    <button class="edit-action" type="button">Edit</button>
-
-                    <button class="remove-action" type="button">Remove</button>
+                    <button
+                      class="edit-action"
+                      type="button"
+                      data-action="edit-promotion"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="remove-action"
+                      type="button"
+                      data-action="remove-promotion"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
               </header>
-
               <div class="promotion-card-body">
                 <dl class="promotion-information">
                   <div class="promotion-detail">
                     <dt>Discount</dt>
                     <dd>12% off</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>Start date</dt>
                     <dd>10 April 2026</dd>
                   </div>
-
                   <div class="promotion-detail">
                     <dt>End date</dt>
                     <dd>17 April 2026</dd>
                   </div>
                 </dl>
-
                 <details class="affected-items-dropdown">
-                  <summary class="affected-items-summary">
+                  <summary
+                    class="affected-items-summary"
+                    data-action="toggle-affected-items"
+                  >
                     <span>Affected items</span>
-
                     <span class="affected-items-count"> 1 item </span>
                   </summary>
-
                   <ul class="affected-items-list">
                     <li>Prawn Noodles</li>
                   </ul>
@@ -764,28 +798,23 @@
             </article>
           </div>
         </section>
-
         <!-- No results message -->
         <p class="no-promotion-results" id="no-promotion-results" hidden>
           No promotions match your search and filter.
         </p>
       </section>
     </main>
-
-    <!-- =========================
-         Floating add promotion button
-         ========================= -->
+    <!-- floating add promotion button -->
     <button
       type="button"
       class="floating-add-promotion-button"
       id="add-promotion-button"
       aria-label="Add a new promotion"
+      data-action="add-promotion"
     >
       <span class="material-symbols-rounded"> add </span>
-
       <span>Add promotion</span>
     </button>
-
     <!-- Promotion page JavaScript -->
     <script src="../js/vendor-promotions.js"></script>
   </body>

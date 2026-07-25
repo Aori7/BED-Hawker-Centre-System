@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* =========================
-     Element selectors
-     ========================= */
-
+  /* element selectors */
   const switchStallButton = document.querySelector("#switch-stall-button");
   const stallDropdown = document.querySelector("#stall-dropdown");
   const stallOptions = document.querySelectorAll(".stall-option");
@@ -20,66 +17,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const promotionMenuButtons = document.querySelectorAll(
     ".promotion-menu-button",
   );
-
-  /* =========================
-     Stall selector dropdown
-     ========================= */
-
+  /* stall selector dropdown */
   function closeStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
     }
-
     switchStallButton.setAttribute("aria-expanded", "false");
     stallDropdown.hidden = true;
   }
-
   function toggleStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
     }
-
     const isOpen = switchStallButton.getAttribute("aria-expanded") === "true";
     switchStallButton.setAttribute("aria-expanded", String(!isOpen));
     stallDropdown.hidden = isOpen;
   }
-
   if (switchStallButton && stallDropdown) {
     switchStallButton.addEventListener("click", (event) => {
       event.stopPropagation();
       toggleStallDropdown();
     });
   }
-
   stallOptions.forEach((option) => {
     option.addEventListener("click", () => {
       if (!selectedStallName || !selectedStallAddress) {
         return;
       }
-
       selectedStallName.textContent = option.dataset.stallName || "";
       selectedStallAddress.textContent = option.dataset.stallAddress || "";
       stallOptions.forEach((stallOption) => {
         stallOption.classList.remove("active");
       });
-
       option.classList.add("active");
       closeStallDropdown();
     });
   });
-
-  /* =========================
-     Promotion helper
-     ========================= */
-
+  /* promotion helper */
   function getPromotionCards() {
     return document.querySelectorAll(".promotion-card");
   }
-
-  /* =========================
-     Search and category filter
-     ========================= */
-
+  /* search and category filter */
   function filterPromotions() {
     const searchTerm = searchInput
       ? searchInput.value.trim().toLowerCase()
@@ -87,21 +65,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedCategory = categoryFilter ? categoryFilter.value : "all";
     const promotionCards = getPromotionCards();
     let visiblePromotionCount = 0;
-
     promotionCards.forEach((card) => {
-      const promotionName = (card.dataset.name || "").toLowerCase();
+      const promotionName = (card.dataset.promotionName || "").toLowerCase();
       const promotionCategory = card.dataset.category || "";
       const matchesSearch = promotionName.includes(searchTerm);
       const matchesCategory =
         selectedCategory === "all" || promotionCategory === selectedCategory;
       const shouldShow = matchesSearch && matchesCategory;
       card.hidden = !shouldShow;
-
       if (shouldShow) {
         visiblePromotionCount += 1;
       }
     });
-
     if (noResultsMessage) {
       noResultsMessage.hidden = visiblePromotionCount !== 0;
     }
@@ -112,12 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (categoryFilter) {
     categoryFilter.addEventListener("change", filterPromotions);
   }
-
-  /* =========================
-     Sidebar navigation
-     Same behaviour as menu page
-     ========================= */
-
+  /* sidebar navigation same behaviour as menu page */
   statusLinks.forEach((link) => {
     link.addEventListener("click", () => {
       statusLinks.forEach((statusLink) => {
@@ -126,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
       link.classList.add("active");
     });
   });
-
   /*
     Updates the active sidebar link while the
     user scrolls between promotion sections.
@@ -140,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const matchingLink = document.querySelector(
           `.status-link[href="#${entry.target.id}"]`,
         );
-
         if (!matchingLink) {
           return;
         }
@@ -156,27 +124,20 @@ document.addEventListener("DOMContentLoaded", () => {
       threshold: 0,
     },
   );
-
   promotionSections.forEach((section) => {
     sectionObserver.observe(section);
   });
-
-  /* =========================
-     Promotion dropdown menus
-     ========================= */
-
+  /* promotion dropdown menus */
   function closeAllPromotionMenus(excludedDropdown = null) {
     const openDropdowns = document.querySelectorAll(
       ".promotion-menu-dropdown.open",
     );
-
     openDropdowns.forEach((dropdown) => {
       if (dropdown === excludedDropdown) {
         return;
       }
       dropdown.classList.remove("open");
       const relatedButton = dropdown.previousElementSibling;
-
       if (
         relatedButton &&
         relatedButton.classList.contains("promotion-menu-button")
@@ -185,12 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
   promotionMenuButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
       const dropdown = button.nextElementSibling;
-
       if (
         !dropdown ||
         !dropdown.classList.contains("promotion-menu-dropdown")
@@ -203,11 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
       button.setAttribute("aria-expanded", String(!wasOpen));
     });
   });
-
-  /* =========================
-     Update promotion status
-     ========================= */
-
+  /* update promotion status */
   function updatePromotionStatus(card, newStatus) {
     const statusBadge = card.querySelector(".promotion-status");
     const changeStatusButton = card.querySelector(".change-status-action");
@@ -216,11 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetGrid = document.querySelector(
       `${targetSectionId} .promotion-grid`,
     );
-    card.dataset.status = newStatus;
-
+    card.dataset.promotionStatus = newStatus;
     if (newStatus === "active") {
       card.classList.remove("promotion-card-inactive");
-
       if (statusBadge) {
         statusBadge.classList.remove("inactive-status");
         statusBadge.classList.add("active-status");
@@ -231,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       card.classList.add("promotion-card-inactive");
-
       if (statusBadge) {
         statusBadge.classList.remove("active-status");
         statusBadge.classList.add("inactive-status");
@@ -244,28 +196,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (targetGrid) {
       targetGrid.appendChild(card);
     }
-
     closeAllPromotionMenus();
     filterPromotions();
   }
-
-  /* =========================
-     Card actions
-     ========================= */
-
+  /* card actions */
   function initialisePromotionCard(card) {
     const changeStatusButton = card.querySelector(".change-status-action");
     const editButton = card.querySelector(".edit-action");
     const removeButton = card.querySelector(".remove-action");
-
     if (changeStatusButton) {
       changeStatusButton.addEventListener("click", () => {
-        const currentStatus = card.dataset.status;
+        const currentStatus = card.dataset.promotionStatus;
         const newStatus = currentStatus === "active" ? "inactive" : "active";
         updatePromotionStatus(card, newStatus);
       });
     }
-
     /*
       Frontend placeholder for the future
       edit promotion popup.
@@ -273,11 +218,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (editButton) {
       editButton.addEventListener("click", () => {
         closeAllPromotionMenus();
-        const promotionName = card.dataset.name || "Promotion";
+        const promotionName = card.dataset.promotionName || "Promotion";
         window.alert(`Edit form for "${promotionName}" will be added later.`);
       });
     }
-
     /*
       Frontend-only removal for now.
       Replace this with the backend DELETE
@@ -285,42 +229,30 @@ document.addEventListener("DOMContentLoaded", () => {
     */
     if (removeButton) {
       removeButton.addEventListener("click", () => {
-        const promotionName = card.dataset.name || "this promotion";
+        const promotionName = card.dataset.promotionName || "this promotion";
         const shouldRemove = window.confirm(`Remove "${promotionName}"?`);
         if (!shouldRemove) {
           return;
         }
-
         card.remove();
         closeAllPromotionMenus();
         filterPromotions();
       });
     }
   }
-
   getPromotionCards().forEach((card) => {
     initialisePromotionCard(card);
   });
-
-  /* =========================
-     Close dropdowns when
-     clicking elsewhere
-     ========================= */
-
+  /* close dropdowns when clicking elsewhere */
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".stall-switcher")) {
       closeStallDropdown();
     }
-
     if (!event.target.closest(".promotion-menu")) {
       closeAllPromotionMenus();
     }
   });
-
-  /* =========================
-     Escape key support
-     ========================= */
-
+  /* escape key support */
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
       return;
@@ -328,10 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
     closeStallDropdown();
     closeAllPromotionMenus();
   });
-
-  /* =========================
-     Initial page setup
-     ========================= */
-
+  /* initial page setup */
   filterPromotions();
 });

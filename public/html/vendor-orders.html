@@ -19,29 +19,57 @@
     />
     <title>Vendor Orders</title>
   </head>
-
-  <body>
+  <body data-page="vendor-orders">
     <!-- Navigation bar -->
-    <nav class="nav-bar">
-      <a class="nav-link" href="vendor-home.html">Home</a>
-      <a class="nav-link" href="vendor-menu.html">Menu</a>
-      <a class="nav-link active" href="vendor-orders.html" aria-current="page"
+    <nav
+      class="nav-bar"
+      id="vendor-navigation"
+      data-component="vendor-navigation"
+    >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home"
+        >Home</a
+      >
+      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu"
+        >Menu</a
+      >
+      <a
+        class="nav-link active"
+        href="vendor-orders.html"
+        aria-current="page"
+        data-nav-target="orders"
         >Orders</a
       >
-      <a class="nav-link" href="vendor-promotions.html">Promotions</a>
-      <a class="nav-link" href="vendor-feedback.html">Feedback</a>
-      <a class="nav-link" href="vendor-profile.html">Profile</a>
+      <a
+        class="nav-link"
+        href="vendor-promotions.html"
+        data-nav-target="promotions"
+        >Promotions</a
+      >
+      <a class="nav-link" href="vendor-feedback.html" data-nav-target="feedback"
+        >Feedback</a
+      >
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile"
+        >Profile</a
+      >
     </nav>
-
     <!-- Stall selector -->
-    <header class="orders-stall-selector">
+    <header
+      class="orders-stall-selector"
+      id="vendor-stall-selector"
+      data-component="stall-selector"
+    >
       <div class="stall-details">
-        <p class="stall-name" id="selected-stall-name">Ah Seng Chicken Rice</p>
-        <address class="stall-address" id="selected-stall-address">
+        <p class="stall-name" id="selected-stall-name" data-field="stall-name">
+          Ah Seng Chicken Rice
+        </p>
+        <address
+          class="stall-address"
+          id="selected-stall-address"
+          data-field="stall-address"
+        >
           #01-01 · Maxwell Food Centre
         </address>
       </div>
-
       <div class="stall-switcher">
         <button
           type="button"
@@ -49,6 +77,7 @@
           id="switch-stall-button"
           aria-expanded="false"
           aria-controls="stall-dropdown"
+          data-action="toggle-stall-dropdown"
         >
           <span class="material-symbols-rounded">storefront</span>
           <span>Switch stalls</span>
@@ -56,40 +85,45 @@
             >keyboard_arrow_down</span
           >
         </button>
-
-        <div class="stall-dropdown" id="stall-dropdown" hidden>
+        <div
+          class="stall-dropdown"
+          id="stall-dropdown"
+          hidden
+          data-role="stall-options"
+        >
           <button
             type="button"
             class="stall-option active"
             data-stall-id="1"
             data-stall-name="Ah Seng Chicken Rice"
             data-stall-address="#01-01 · Maxwell Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name">Ah Seng Chicken Rice</span>
             <span class="stall-option-location"
               >#01-01 · Maxwell Food Centre</span
             >
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="2"
             data-stall-name="Megan's Laksa"
             data-stall-address="#02-12 · Old Airport Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name">Megan's Laksa</span>
             <span class="stall-option-location"
               >#02-12 · Old Airport Road Food Centre</span
             >
           </button>
-
           <button
             type="button"
             class="stall-option"
             data-stall-id="3"
             data-stall-name="Golden Wok"
             data-stall-address="#01-08 · Adam Road Food Centre"
+            data-action="select-stall"
           >
             <span class="stall-option-name">Golden Wok</span>
             <span class="stall-option-location"
@@ -99,13 +133,15 @@
         </div>
       </div>
     </header>
-
-    <main class="orders-page">
-      <header class="orders-page-heading">
+    <main
+      class="orders-page"
+      id="vendor-orders-page"
+      data-page-content="orders"
+    >
+      <header class="orders-page-heading" data-component="page-heading">
         <h1>Orders</h1>
         <p>View and manage orders received by your selected stall.</p>
       </header>
-
       <!-- Search -->
       <section class="orders-toolbar" aria-label="Order search">
         <label class="orders-search">
@@ -116,15 +152,16 @@
             placeholder="Search order ID, customer ID or date"
             aria-label="Search orders"
             autocomplete="off"
+            name="order-search"
+            data-filter="search"
           />
         </label>
       </section>
-
       <!-- Filters -->
       <section class="filters" id="filters" aria-label="Order filters">
         <label class="orders-filter">
           <span>Order status</span>
-          <select id="status-filter">
+          <select id="status-filter" name="order-status" data-filter="status">
             <option value="all">All statuses</option>
             <option value="Preparing">Preparing</option>
             <option value="Ready for Collection">Ready for Collection</option>
@@ -132,41 +169,46 @@
             <option value="Cancelled">Cancelled</option>
           </select>
         </label>
-
         <label class="orders-filter">
           <span>Payment type</span>
-          <select id="payment-filter">
+          <select
+            id="payment-filter"
+            name="payment-method"
+            data-filter="payment-method"
+          >
             <option value="all">All payment types</option>
             <option value="PayNow">PayNow</option>
             <option value="Credit Card">Credit Card</option>
             <option value="Cash">Cash</option>
           </select>
         </label>
-
         <label class="orders-filter">
           <span>Order type</span>
-          <select id="type-filter">
+          <select id="type-filter" name="order-type" data-filter="order-type">
             <option value="all">All order types</option>
             <option value="Dine-in">Dine-in</option>
             <option value="Pickup">Pickup</option>
             <option value="Delivery">Delivery</option>
           </select>
         </label>
-
         <label class="orders-filter">
           <span>Order date</span>
-          <input type="date" id="date-filter" />
+          <input
+            type="date"
+            id="date-filter"
+            name="order-date"
+            data-filter="date"
+          />
         </label>
-
         <button
           type="button"
           class="clear-filter-button"
           id="clear-filter-button"
+          data-action="clear-filters"
         >
           Clear filters
         </button>
       </section>
-
       <!-- Orders table -->
       <section class="orders-table-section" aria-label="Orders list">
         <div class="table-scroll">
@@ -183,16 +225,16 @@
                 <th><span class="visually-hidden">Actions</span></th>
               </tr>
             </thead>
-
             <tbody id="orders-table-body">
               <tr
                 class="order-row"
                 data-order-id="ORD1001"
                 data-customer-id="CUS023"
                 data-date="2026-07-24"
-                data-payment="PayNow"
-                data-type="Pickup"
-                data-status="Preparing"
+                data-payment-method="PayNow"
+                data-order-type="Pickup"
+                data-order-status="Preparing"
+                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1001</strong></td>
                 <td data-label="Customer ID">CUS023</td>
@@ -209,21 +251,22 @@
                   <button
                     type="button"
                     class="view-details-button"
-                    data-order="ORD1001"
+                    data-order-id="ORD1001"
+                    data-action="view-order-details"
                   >
                     See details
                   </button>
                 </td>
               </tr>
-
               <tr
                 class="order-row"
                 data-order-id="ORD1002"
                 data-customer-id="CUS041"
                 data-date="2026-07-24"
-                data-payment="Credit Card"
-                data-type="Pickup"
-                data-status="Ready for Collection"
+                data-payment-method="Credit Card"
+                data-order-type="Pickup"
+                data-order-status="Ready for Collection"
+                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1002</strong></td>
                 <td data-label="Customer ID">CUS041</td>
@@ -242,21 +285,22 @@
                   <button
                     type="button"
                     class="view-details-button"
-                    data-order="ORD1002"
+                    data-order-id="ORD1002"
+                    data-action="view-order-details"
                   >
                     See details
                   </button>
                 </td>
               </tr>
-
               <tr
                 class="order-row"
                 data-order-id="ORD1003"
                 data-customer-id="CUS052"
                 data-date="2026-07-24"
-                data-payment="Cash"
-                data-type="Dine-in"
-                data-status="Completed"
+                data-payment-method="Cash"
+                data-order-type="Dine-in"
+                data-order-status="Completed"
+                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1003</strong></td>
                 <td data-label="Customer ID">CUS052</td>
@@ -273,21 +317,22 @@
                   <button
                     type="button"
                     class="view-details-button"
-                    data-order="ORD1003"
+                    data-order-id="ORD1003"
+                    data-action="view-order-details"
                   >
                     See details
                   </button>
                 </td>
               </tr>
-
               <tr
                 class="order-row"
                 data-order-id="ORD1004"
                 data-customer-id="CUS016"
                 data-date="2026-07-23"
-                data-payment="PayNow"
-                data-type="Delivery"
-                data-status="Cancelled"
+                data-payment-method="PayNow"
+                data-order-type="Delivery"
+                data-order-status="Cancelled"
+                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1004</strong></td>
                 <td data-label="Customer ID">CUS016</td>
@@ -304,7 +349,8 @@
                   <button
                     type="button"
                     class="view-details-button"
-                    data-order="ORD1004"
+                    data-order-id="ORD1004"
+                    data-action="view-order-details"
                   >
                     See details
                   </button>
@@ -313,45 +359,43 @@
             </tbody>
           </table>
         </div>
-
         <p class="no-orders-message" id="no-orders-message" hidden>
           No orders match the selected search and filters.
         </p>
       </section>
     </main>
-
     <!-- Order details dialog -->
-    <dialog class="order-dialog" id="order-dialog">
+    <dialog class="order-dialog" id="order-dialog" data-dialog="order-details">
       <div class="dialog-header">
         <div>
           <p class="dialog-eyebrow">Order details</p>
           <h2 id="dialog-order-id">ORD1001</h2>
         </div>
-
         <button
           type="button"
           class="dialog-close-button"
           id="dialog-close-button"
           aria-label="Close order details"
+          data-action="close-order-dialog"
         >
           <span class="material-symbols-rounded">close</span>
         </button>
       </div>
-
       <div class="dialog-body" id="dialog-body"></div>
-
       <div class="dialog-footer">
         <button
           type="button"
           class="secondary-button"
           id="dialog-secondary-close"
+          data-action="close-order-dialog"
         >
           Close
         </button>
-        <button type="button" class="primary-button">Update order</button>
+        <button type="button" class="primary-button" data-action="update-order">
+          Update order
+        </button>
       </div>
     </dialog>
-
     <script src="../js/vendor-orders.js"></script>
   </body>
 </html>

@@ -12,15 +12,12 @@
   --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
   --popup-shadow: 0 18px 35px rgba(34, 34, 34, 0.16);
 }
-
 * {
   box-sizing: border-box;
 }
-
 html {
   scroll-behavior: smooth;
 }
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -28,17 +25,14 @@ body {
   background-color: var(--lighter-beige);
   font-family: "Archivo", Arial, sans-serif;
 }
-
 button,
 input,
 select {
   font: inherit;
 }
-
 button {
   cursor: pointer;
 }
-
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -49,7 +43,6 @@ button {
   white-space: nowrap;
   border: 0;
 }
-
 /* Navigation */
 .nav-bar {
   position: fixed;
@@ -68,7 +61,6 @@ button {
   box-shadow: 0 4px 16px rgba(34, 34, 34, 0.06);
   backdrop-filter: blur(8px);
 }
-
 .nav-link {
   position: relative;
   padding: 8px 6px;
@@ -76,9 +68,10 @@ button {
   font-size: 1rem;
   font-weight: 700;
   text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
-
 .nav-link::after {
   content: "";
   position: absolute;
@@ -92,21 +85,17 @@ button {
   transform-origin: center;
   transition: transform 0.22s ease;
 }
-
 .nav-link:hover,
 .nav-link.active {
   color: var(--dark-orange-color);
 }
-
 .nav-link:hover {
   transform: translateY(-1px);
 }
-
 .nav-link:hover::after,
 .nav-link.active::after {
   transform: scaleX(1);
 }
-
 /* Stall selector */
 .orders-stall-selector {
   position: fixed;
@@ -125,11 +114,9 @@ button {
   border-bottom: 1px solid rgba(250, 129, 18, 0.2);
   box-shadow: 0 7px 18px rgba(34, 34, 34, 0.14);
 }
-
 .orders-stall-selector .stall-details {
   min-width: 0;
 }
-
 .orders-stall-selector .stall-name {
   margin: 0;
   overflow: hidden;
@@ -140,16 +127,13 @@ button {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .orders-stall-selector .stall-address {
   display: none;
 }
-
 .stall-switcher {
   position: relative;
   justify-self: end;
 }
-
 .switch-stall-button,
 .primary-button,
 .view-details-button {
@@ -165,9 +149,11 @@ button {
   border-radius: 10px;
   font-weight: 700;
   box-shadow: 0 6px 12px rgba(196, 72, 12, 0.2);
-  transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
-
 .switch-stall-button:hover,
 .primary-button:hover,
 .view-details-button:hover {
@@ -175,19 +161,15 @@ button {
   background-color: var(--dark-orange-color);
   box-shadow: 0 11px 18px rgba(250, 129, 18, 0.28);
 }
-
 .switch-stall-button .material-symbols-rounded {
   font-size: 21px;
 }
-
 .dropdown-arrow {
   transition: transform 180ms ease;
 }
-
 .switch-stall-button[aria-expanded="true"] .dropdown-arrow {
   transform: rotate(180deg);
 }
-
 .stall-dropdown {
   position: absolute;
   z-index: 1300;
@@ -199,7 +181,6 @@ button {
   border: 1px solid var(--border-color);
   box-shadow: var(--popup-shadow);
 }
-
 .stall-option {
   display: flex;
   width: 100%;
@@ -213,30 +194,24 @@ button {
   text-align: left;
   transition: background-color 150ms ease;
 }
-
 .stall-option:last-child {
   border-bottom: 0;
 }
-
 .stall-option:hover {
   background-color: #fff4e8;
 }
-
 .stall-option.active {
   background-color: #fff0df;
 }
-
 .stall-option-name {
   font-size: 15px;
   font-weight: 750;
 }
-
 .stall-option-location {
   color: var(--muted-text-color);
   font-size: 12px;
   line-height: 1.4;
 }
-
 /* Page content */
 .orders-page {
   --orders-page-padding: clamp(24px, 5vw, 72px);
@@ -244,17 +219,14 @@ button {
   margin: calc(var(--nav-height) + var(--stall-selector-height)) auto 0;
   padding: 42px var(--orders-page-padding) 90px;
 }
-
 .orders-page-heading {
   margin-bottom: 28px;
 }
-
 .orders-page-heading h1 {
   margin: 0;
   font-size: clamp(38px, 5vw, 56px);
   line-height: 1;
 }
-
 .orders-page-heading p {
   max-width: 620px;
   margin: 12px 0 0;
@@ -262,14 +234,12 @@ button {
   font-size: 15px;
   line-height: 1.6;
 }
-
 /* Search */
 .orders-toolbar {
   display: flex;
   width: 100%;
   margin-bottom: 16px;
 }
-
 .orders-search {
   display: flex;
   min-height: 56px;
@@ -282,11 +252,9 @@ button {
   border-radius: 16px;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.04);
 }
-
 .orders-search .material-symbols-rounded {
   color: #8a8a8a;
 }
-
 .orders-search input {
   width: 100%;
   padding: 0;
@@ -297,7 +265,6 @@ button {
   font-size: 15px;
   appearance: none;
 }
-
 /* Filters */
 .filters {
   display: flex;
@@ -310,7 +277,6 @@ button {
   border-radius: 18px;
   box-shadow: var(--card-shadow);
 }
-
 .orders-filter {
   display: flex;
   min-height: 58px;
@@ -323,14 +289,12 @@ button {
   border: 1px solid rgba(34, 34, 34, 0.1);
   border-radius: 14px;
 }
-
 .orders-filter > span {
   color: var(--muted-text-color);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
 }
-
 .orders-filter select,
 .orders-filter input {
   width: 100%;
@@ -342,7 +306,6 @@ button {
   font-weight: 650;
   cursor: pointer;
 }
-
 .clear-filter-button,
 .secondary-button {
   min-height: 58px;
@@ -352,15 +315,15 @@ button {
   border: 1px solid rgba(196, 72, 12, 0.25);
   border-radius: 12px;
   font-weight: 700;
-  transition: background-color 160ms ease, transform 160ms ease;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
 }
-
 .clear-filter-button:hover,
 .secondary-button:hover {
   transform: translateY(-1px);
   background-color: #fff4e8;
 }
-
 /* Orders table */
 .orders-table-section {
   width: 100vw;
@@ -371,18 +334,15 @@ button {
   border-bottom: 1px solid var(--border-color);
   box-shadow: var(--card-shadow);
 }
-
 .table-scroll {
   width: 100%;
   overflow-x: auto;
 }
-
 .orders-table {
   width: 100%;
   min-width: 1050px;
   border-collapse: collapse;
 }
-
 .orders-table th {
   padding: 18px 20px;
   color: var(--white-color);
@@ -392,7 +352,6 @@ button {
   text-align: left;
   white-space: nowrap;
 }
-
 .orders-table td {
   height: 82px;
   padding: 18px 20px;
@@ -400,24 +359,19 @@ button {
   font-size: 14px;
   vertical-align: middle;
 }
-
 .orders-table tbody tr {
   background-color: var(--white-color);
   transition: background-color 150ms ease;
 }
-
 .orders-table tbody tr:nth-child(even) {
   background-color: rgba(245, 231, 198, 0.58);
 }
-
 .orders-table tbody tr:hover {
   background-color: #fff1df;
 }
-
 .orders-table tbody tr:last-child td {
   border-bottom: 0;
 }
-
 .order-status {
   display: inline-flex;
   min-height: 30px;
@@ -429,40 +383,33 @@ button {
   font-weight: 800;
   white-space: nowrap;
 }
-
 .status-preparing,
 .status-ready {
   color: rgb(126, 82, 0);
   background-color: rgb(255, 231, 143);
 }
-
 .status-completed {
   color: rgb(34, 112, 69);
   background-color: rgba(54, 169, 100, 0.18);
 }
-
 .status-cancelled {
   color: rgb(173, 42, 42);
   background-color: rgba(173, 42, 42, 0.14);
 }
-
 .order-actions {
   text-align: right;
 }
-
 .view-details-button {
   min-height: 38px;
   padding: 8px 14px;
   white-space: nowrap;
 }
-
 .no-orders-message {
   margin: 0;
   padding: 48px 24px;
   color: var(--muted-text-color);
   text-align: center;
 }
-
 /* Order dialog */
 .order-dialog {
   width: min(560px, calc(100vw - 32px));
@@ -473,12 +420,10 @@ button {
   border-radius: 18px;
   box-shadow: 0 24px 60px rgba(34, 34, 34, 0.28);
 }
-
 .order-dialog::backdrop {
   background-color: rgba(34, 34, 34, 0.5);
   backdrop-filter: blur(3px);
 }
-
 .dialog-header {
   display: flex;
   align-items: flex-start;
@@ -488,7 +433,6 @@ button {
   color: var(--white-color);
   background-color: var(--orange-color);
 }
-
 .dialog-eyebrow {
   margin: 0 0 4px;
   color: rgba(255, 255, 255, 0.78);
@@ -496,11 +440,9 @@ button {
   font-weight: 700;
   text-transform: uppercase;
 }
-
 .dialog-header h2 {
   margin: 0;
 }
-
 .dialog-close-button {
   display: grid;
   width: 40px;
@@ -511,96 +453,77 @@ button {
   border: 0;
   border-radius: 50%;
 }
-
 .dialog-close-button:hover {
   background-color: rgba(255, 255, 255, 0.28);
 }
-
 .dialog-body {
   display: grid;
   gap: 14px;
   padding: 24px;
   background-color: var(--lighter-beige);
 }
-
 .dialog-detail {
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr);
   gap: 16px;
 }
-
 .dialog-detail span:first-child {
   color: var(--muted-text-color);
   font-weight: 650;
 }
-
 .dialog-detail span:last-child {
   font-weight: 750;
 }
-
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   padding: 18px 24px;
 }
-
 @media (max-width: 850px) {
   .nav-bar {
     justify-content: flex-start;
     overflow-x: auto;
   }
-
   .orders-filter {
     flex: 1 1 calc(50% - 14px);
   }
-
   .clear-filter-button {
     flex: 1 1 100%;
   }
 }
-
 @media (max-width: 620px) {
   :root {
     --stall-selector-height: 70px;
   }
-
   .orders-stall-selector {
     gap: 14px;
     padding: 10px 16px;
   }
-
   .orders-stall-selector .stall-name {
     font-size: 1.05rem;
   }
-
   .switch-stall-button > span:nth-child(2) {
     display: none;
   }
-
   .orders-page {
     padding: 32px 16px 70px;
   }
-
   .orders-page-heading h1 {
     font-size: 38px;
   }
-
   .orders-filter {
     flex-basis: 100%;
   }
-
   .clear-filter-button {
     width: 100%;
   }
-
   .orders-table-section {
     width: auto;
     margin-left: 0;
     border: 1px solid var(--border-color);
     border-radius: 18px;
   }
-
   .dialog-detail {
     grid-template-columns: 1fr;
     gap: 3px;
