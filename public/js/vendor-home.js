@@ -5,6 +5,7 @@ hard coded/ temporary data
     orderTrendsData
     selectedStallId
 */
+
 /* page elements */
 /* Compact stall header elements */
 const stallHeader = document.querySelector(".stall-selector-section");
@@ -521,17 +522,13 @@ function updateComparisonResult() {
       firstLabel + " and " + secondLabel + " had the same order total.";
   }
 }
-/*
-    Updates the chart when the vendor changes the main
-    dashboard time filter.
-  */
+
+/* Updates the chart when the vendor changes the main dashboard time filter. */
 function updateOrderTrendChart() {
   const selectedPeriod = timePeriodSelect.value;
   const selectedData = orderTrendData[selectedPeriod];
-  /*
-      Previous bar selections are cleared because the
-      chart now represents different periods.
-    */
+
+  /* Previous bar selections are cleared because the chart now represents different periods. */
   selectedBars = [];
   orderTrendChart.data.labels = selectedData.labels;
   orderTrendChart.data.datasets[0].data = selectedData.values;
