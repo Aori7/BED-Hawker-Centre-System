@@ -13,6 +13,7 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 const foodStallRoutes = require("./routes/foodStallRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
@@ -38,6 +39,8 @@ app.use("/food-stalls", foodStallRoutes);
 app.use("/menu-items", menuItemRoutes);
 
 app.use("/orders", orderRoutes);
+
+app.use("/contact-submissions", contactSubmissionRoutes);
 //calista's
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
