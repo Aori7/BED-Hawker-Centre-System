@@ -13,6 +13,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let menuItems = [];
 
+    const cartItemsContainer =
+    document.querySelector(".cart-items");
+
+    const cartTotalDisplay =
+        document.querySelector(".cart-footer p");
+
+    const checkoutButton =
+        document.querySelector(".checkout-btn");
+
+    const checkoutSection =
+        document.querySelector(".checkout-section");
+
+    const checkoutSummary =
+        document.querySelector(".checkout-summary");
+
+    const cancelCheckoutButton =
+        document.querySelector(".cancel-btn");
+
+    let cart =
+        JSON.parse(sessionStorage.getItem("hawkerCart")) || [];
+        
     function escapeHTML(value) {
         return String(value ?? "")
             .replaceAll("&", "&amp;")
@@ -244,6 +265,195 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
+    cartItemsContainer.addEventListener(
+        "click",
+        (event) => {
+            const menuItemID =
+                event.target.dataset.menuItemId;
+
+            if (!menuItemID) {
+                return;
+            }
+
+            if (
+                event.target.classList.contains(
+                    "cart-increase-btn"
+                )
+            ) {
+                updateCartQuantity(menuItemID, 1);
+            }
+
+            if (
+                event.target.classList.contains(
+                    "cart-decrease-btn"
+                )
+            ) {
+                updateCartQuantity(menuItemID, -1);
+            }
+
+            if (
+                event.target.classList.contains(
+                    "cart-remove-btn"
+                )
+            ) {
+                removeFromCart(menuItemID);
+            }
+        }
+    );
+    checkoutButton.addEventListener(
+        "click",
+        () => {
+            if (cart.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
+
+            checkoutSummary.innerHTML = `
+                ${cart.length} different item(s)<br>
+                Total: $${calculateCartTotal().toFixed(2)}
+            `;
+
+            checkoutSection.style.display = "block";
+        }
+    );
+
+    cancelCheckoutButton.addEventListener(
+        "click",
+        () => {
+            checkoutSection.style.display = "none";
+        }
+    );
+    function saveCart() {
+        sessionStorage.setItem(
+            "hawkerCart",
+            JSON.stringify(cart)
+        );
+    }
+
+    function calculateCartTotal() {
+        return cart.reduce(
+            (total, item) => {
+                return total +
+                    Number(item.ItemPrice) *
+                    item.Quantity;
+            },
+            0
+        );
+    }
+
+    function displayCart() {
+        cartItemsContainer.innerHTML = "";
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <p>No items added yet</p>
+            `;
+
+            cartTotalDisplay.textContent =
+                "Total: $0.00";
+
+            checkoutSection.style.display = "none";
+
+            return;
+        }
+
+    cart.forEach((item) => {
+        const cartItem =
+            document.createElement("div");
+
+        cartItem.classList.add("cart-item");
+
+        cartItem.innerHTML = `
+            <div class="cart-item-details">
+                <h4>${escapeHTML(item.ItemName)}</h4>
+
+                <p>
+                    $${Number(item.ItemPrice).toFixed(2)}
+                    each
+                </p>
+            </div>
+
+            <div class="cart-item-actions">
+                <button
+                    type="button"
+                    class="cart-decrease-btn"
+                    data-menu-item-id="${item.MenuItemID}"
+                >
+                    −
+                </button>
+
+                <span class="cart-quantity">
+                    ${item.Quantity}
+                </span>
+
+                <button
+                    type="button"
+                    class="cart-increase-btn"
+                    data-menu-item-id="${item.MenuItemID}"
+                >
+                    +
+                </button>
+
+                <button
+                    type="button"
+                    class="cart-remove-btn"
+                    data-menu-item-id="${item.MenuItemID}"
+                >
+                    Remove
+                </button>
+            </div>
+
+            <p class="cart-item-subtotal">
+                $${(
+                    Number(item.ItemPrice) *
+                    item.Quantity
+                ).toFixed(2)}
+            </p>
+        `;
+
+        cartItemsContainer.appendChild(cartItem);
+    });
+
+    cartTotalDisplay.textContent =
+        `Total: $${calculateCartTotal().toFixed(2)}`;
+}
+
+    function updateCartQuantity(menuItemID, change) {
+        const cartItem =
+            cart.find(
+                (item) =>
+                    item.MenuItemID ===
+                    parseInt(menuItemID)
+            );
+
+        if (!cartItem) {
+            return;
+        }
+
+        cartItem.Quantity += change;
+
+        if (cartItem.Quantity <= 0) {
+            cart = cart.filter(
+                (item) =>
+                    item.MenuItemID !==
+                    parseInt(menuItemID)
+            );
+        }
+
+        saveCart();
+        displayCart();
+    }
+
+    function removeFromCart(menuItemID) {
+        cart = cart.filter(
+            (item) =>
+                item.MenuItemID !==
+                parseInt(menuItemID)
+        );
+
+        saveCart();
+        displayCart();
+    }
     function addToCart(menuItemID, quantity) {
         const selectedItem =
             menuItems.find(
@@ -256,17 +466,46 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        console.log(
-            "Add to cart:",
-            selectedItem,
-            quantity
-        );
+        const existingCartItem =
+            cart.find(
+                (item) =>
+                    item.MenuItemID ===
+                    selectedItem.MenuItemID
+            );
+
+        if (existingCartItem) {
+            existingCartItem.Quantity += quantity;
+        } else {
+            cart.push({
+                MenuItemID:
+                    selectedItem.MenuItemID,
+
+                StallID:
+                    parseInt(stallID),
+
+                ItemName:
+                    selectedItem.ItemName,
+
+                ItemPrice:
+                    Number(selectedItem.ItemPrice),
+
+                ImageURL:
+                    selectedItem.ImageURL,
+
+                Quantity:
+                    quantity
+            });
+        }
+
+        saveCart();
+        displayCart();
 
         alert(
             `${quantity} × ${selectedItem.ItemName} added to cart`
         );
     }
 
+    displayCart();
     loadStallDetails();
     loadMenuItems();
 });
