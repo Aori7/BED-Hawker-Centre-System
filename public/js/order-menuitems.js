@@ -30,6 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const cancelCheckoutButton =
         document.querySelector(".cancel-btn");
+        
+    const confirmOrderButton =
+        document.querySelector(".confirm-btn");
+
+    const cancelButton =
+        document.querySelector(".cancel-btn");
 
     let cart =
         JSON.parse(sessionStorage.getItem("hawkerCart")) || [];
@@ -215,6 +221,55 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    checkoutButton.addEventListener("click", () => {
+        if (cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        displayCheckoutSummary();
+
+        checkoutSection.style.display = "block";
+    });
+
+    cancelButton.addEventListener("click", () => {
+        checkoutSection.style.display = "none";
+    });
+
+    confirmOrderButton.addEventListener("click", () => {
+        if (cart.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        const selectedPayment =
+            document.querySelector(
+                'input[name="payment"]:checked'
+            );
+
+        if (!selectedPayment) {
+            alert("Please select a payment method.");
+            return;
+        }
+
+        const checkoutData = {
+            stallID: parseInt(stallID),
+            paymentMethod: selectedPayment.value,
+            totalAmount: calculateCartTotal(),
+            items: cart
+        };
+
+        sessionStorage.setItem(
+            "checkoutData",
+            JSON.stringify(checkoutData)
+        );
+
+        console.log("Checkout data:", checkoutData);
+
+        alert(
+            `Payment method selected: ${selectedPayment.value}`
+        );
+    });
     menuItemList.addEventListener(
         "click",
         (event) => {
@@ -503,6 +558,39 @@ document.addEventListener("DOMContentLoaded", () => {
         alert(
             `${quantity} × ${selectedItem.ItemName} added to cart`
         );
+    }
+
+    function displayCheckoutSummary() {
+        checkoutSummary.innerHTML = "";
+
+        cart.forEach((item) => {
+            const itemSubtotal =
+                Number(item.ItemPrice) * item.Quantity;
+
+            checkoutSummary.innerHTML += `
+                <div class="checkout-item">
+                    <p>
+                        ${escapeHTML(item.ItemName)}
+                        × ${item.Quantity}
+                    </p>
+
+                    <p>
+                        $${itemSubtotal.toFixed(2)}
+                    </p>
+                </div>
+            `;
+        });
+
+        checkoutSummary.innerHTML += `
+            <hr>
+
+            <p class="checkout-total">
+                <strong>
+                    Total:
+                    $${calculateCartTotal().toFixed(2)}
+                </strong>
+            </p>
+        `;
     }
 
     displayCart();
