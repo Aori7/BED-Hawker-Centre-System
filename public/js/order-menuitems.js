@@ -27,15 +27,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const checkoutSummary =
         document.querySelector(".checkout-summary");
-
-    const cancelCheckoutButton =
-        document.querySelector(".cancel-btn");
         
     const confirmOrderButton =
         document.querySelector(".confirm-btn");
 
     const cancelButton =
         document.querySelector(".cancel-btn");
+
+    const specialRequestInput =
+        document.getElementById("special-request");
+
+    const requestCharacterCount =
+        document.getElementById(
+            "request-character-count"
+        );
 
     let cart =
         JSON.parse(sessionStorage.getItem("hawkerCart")) || [];
@@ -221,6 +226,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    specialRequestInput.addEventListener(
+        "input",
+        () => {
+            requestCharacterCount.textContent =
+                specialRequestInput.value.length;
+        }
+    );
+
     checkoutButton.addEventListener("click", () => {
         if (cart.length === 0) {
             alert("Your cart is empty.");
@@ -236,40 +249,133 @@ document.addEventListener("DOMContentLoaded", () => {
         checkoutSection.style.display = "none";
     });
 
-    confirmOrderButton.addEventListener("click", () => {
-        if (cart.length === 0) {
-            alert("Your cart is empty.");
-            return;
+    confirmOrderButton.addEventListener(
+        "click",
+        async () => {
+            if (cart.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
+
+            const selectedPayment =
+                document.querySelector(
+                    'input[name="payment"]:checked'
+                );
+
+            if (!selectedPayment) {
+                alert("Please select a payment method.");
+                return;
+            }
+            const selectedOrderType =
+                document.querySelector(
+                    'input[name="orderType"]:checked'
+                );
+
+            if (!selectedOrderType) {
+                alert("Please select an order type.");
+                return;
+            }
+
+            const customerID =
+                sessionStorage.getItem("customerID");
+
+            if (!customerID) {
+                alert("Please log in before placing an order.");
+                return;
+            }
+
+            const orderData = {
+                customerID:
+                    parseInt(customerID),
+
+                stallID:
+                    parseInt(stallID),
+
+                orderType:
+                    selectedOrderType.value,
+
+                paymentMethod:
+                    selectedPayment.value,
+
+                specialRequest:
+                    specialRequestInput.value.trim() || null,
+
+                items:
+                    cart.map((item) => ({
+                        menuItemID:
+                            item.MenuItemID,
+
+                        quantity:
+                            item.Quantity
+                    }))
+            };
+
+            try {
+                confirmOrderButton.disabled = true;
+                confirmOrderButton.textContent =
+                    "Placing Order...";
+
+                const response =
+                    await fetch("/orders", {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(orderData)
+                    });
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error ||
+                        "Unable to place order"
+                    );
+                }
+
+                sessionStorage.removeItem(
+                    "hawkerCart"
+                );
+
+                sessionStorage.removeItem(
+                    "checkoutData"
+                );
+
+                cart = [];
+                displayCart();
+
+                specialRequestInput.value = "";
+                requestCharacterCount.textContent = "0";
+
+                checkoutSection.style.display = "none";
+
+                alert(
+                    `Order placed successfully! Order ID: ${data.orderID}`
+                );
+
+                window.location.href =
+                    "main-hawkers.html";
+
+            } catch (error) {
+                console.error(
+                    "Place order error:",
+                    error
+                );
+
+                alert(error.message);
+
+            } finally {
+                confirmOrderButton.disabled = false;
+                confirmOrderButton.textContent =
+                    "Confirm Order";
+            }
         }
-
-        const selectedPayment =
-            document.querySelector(
-                'input[name="payment"]:checked'
-            );
-
-        if (!selectedPayment) {
-            alert("Please select a payment method.");
-            return;
-        }
-
-        const checkoutData = {
-            stallID: parseInt(stallID),
-            paymentMethod: selectedPayment.value,
-            totalAmount: calculateCartTotal(),
-            items: cart
-        };
-
-        sessionStorage.setItem(
-            "checkoutData",
-            JSON.stringify(checkoutData)
-        );
-
-        console.log("Checkout data:", checkoutData);
-
-        alert(
-            `Payment method selected: ${selectedPayment.value}`
-        );
-    });
+    );
     menuItemList.addEventListener(
         "click",
         (event) => {
@@ -355,35 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     );
-    checkoutButton.addEventListener(
-        "click",
-        () => {
-            if (cart.length === 0) {
-                alert("Your cart is empty.");
-                return;
-            }
 
-            checkoutSummary.innerHTML = `
-                ${cart.length} different item(s)<br>
-                Total: $${calculateCartTotal().toFixed(2)}
-            `;
-
-            checkoutSection.style.display = "block";
-        }
-    );
-
-    cancelCheckoutButton.addEventListener(
-        "click",
-        () => {
-            checkoutSection.style.display = "none";
-        }
-    );
-    function saveCart() {
-        sessionStorage.setItem(
-            "hawkerCart",
-            JSON.stringify(cart)
-        );
-    }
 
     function calculateCartTotal() {
         return cart.reduce(
@@ -473,6 +551,12 @@ document.addEventListener("DOMContentLoaded", () => {
         `Total: $${calculateCartTotal().toFixed(2)}`;
 }
 
+    function saveCart() {
+        sessionStorage.setItem(
+            "hawkerCart",
+            JSON.stringify(cart)
+        );
+    }
     function updateCartQuantity(menuItemID, change) {
         const cartItem =
             cart.find(
