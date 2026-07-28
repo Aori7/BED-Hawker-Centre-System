@@ -4,7 +4,7 @@ const dbConfig = require("./dbConfig");
 // // Load environment variables
 // dotenv.config();
 
-// Import
+// Import - ada's
 const customerController = require("./controllers/customerController");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
@@ -12,8 +12,11 @@ const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const foodStallRoutes = require("./routes/foodStallRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
-// Improt - vendor
+const orderRoutes = require("./routes/orderRoutes");
+const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
+// Improt - vendor (rm's)
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
+const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 
 
 //create express app
@@ -34,9 +37,14 @@ app.use("/dashboard", dashboardRoutes);
 
 app.use("/food-stalls", foodStallRoutes);
 app.use("/menu-items", menuItemRoutes);
+
+app.use("/orders", orderRoutes);
+
+app.use("/contact-submissions", contactSubmissionRoutes);
 //calista's
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
+app.use("/vendor-promotions", vendorPromotionRoutes);
 //dayana's
 
 //start server

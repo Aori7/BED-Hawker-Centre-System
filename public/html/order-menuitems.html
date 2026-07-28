@@ -51,7 +51,7 @@
     <section class="order-hawker-banner">
     <div class="banner"></div>
     <div class="order-hawker-header">
-        <h1>Ah Seng Chicken Rice</h1>
+        <h1 id="selected-stall-name">Stall Menu</h1>
         <p>Famous Hainanese Chicken Rice • Stall #12</p>
     </div>
 
@@ -93,19 +93,80 @@
                 <h2>Checkout</h2>
 
                 <p class="checkout-summary"></p>
-                <div class="payment-methods">   
-                    <h3>Select Payment Method</h3>
+                <div class="special-request-section">
+                    <label for="special-request">
+                        Special Request (Optional)
+                    </label>
+
+                    <textarea
+                        id="special-request"
+                        maxlength="255"
+                        placeholder="E.g. no chilli, less rice"
+                    ></textarea>
+
+                    <p>
+                        <span id="request-character-count">0</span>/255
+                    </p>
+                </div>
+                <div class="order-type-section">
+                    <h3>Order Type</h3>
+
                     <label>
-                        <input type="radio" name="payment" value="PayNow" checked>
+                        <input
+                            type="radio"
+                            name="orderType"
+                            value="Dine-in"
+                        >
+                        Dine-in
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="orderType"
+                            value="Pickup"
+                        >
+                        Pickup
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="orderType"
+                            value="Delivery"
+                        >
+                        Delivery
+                    </label>
+                </div>
+                <div class="payment-methods">
+                    <h3>Select Payment Method</h3>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="PayNow"
+                            checked
+                        >
                         PayNow
                     </label>
+
                     <label>
-                        <input type="radio" name="payment" value="NETS">
-                        NETS
-                    </label>
-                    <label>
-                        <input type="radio" name="payment" value="Card">
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="Credit Card"
+                        >
                         Credit / Debit Card
+                    </label>
+
+                    <label>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="Cash"
+                        >
+                        Cash
                     </label>
                 </div>
                 <button class="confirm-btn">Confirm Order</button>

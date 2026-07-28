@@ -52,7 +52,8 @@ function updateStallHeader() {
    ===================================================== */
 
 // Temporary stall ID until the stall selector is connected to the backend.
-const selectedStallId = 1;
+// const selectedStallId = 1;
+const stallSelect = document.getElementById("stall-select");
 
 let selectedDashboardDate = new Date();
 
@@ -158,6 +159,7 @@ function updateSelectedPeriodText() {
 
 async function loadRevenue() {
   try {
+    const selectedStallId = stallSelect.value;
     const dateRange = getDashboardDateRange();
 
     const response = await fetch(
@@ -181,34 +183,70 @@ async function loadRevenue() {
 
 function changeDashboardPeriod(direction) {
   const selectedPeriod = timePeriodSelect.value;
+  const proposedDate = copyDate(selectedDashboardDate);
 
   if (selectedPeriod === "daily") {
-    selectedDashboardDate.setDate(selectedDashboardDate.getDate() + direction);
+    proposedDate.setDate(proposedDate.getDate() + direction);
   }
 
   if (selectedPeriod === "weekly") {
-    selectedDashboardDate.setDate(
-      selectedDashboardDate.getDate() + 7 * direction,
-    );
+    proposedDate.setDate(proposedDate.getDate() + 7 * direction);
   }
 
   if (selectedPeriod === "monthly") {
-    selectedDashboardDate.setMonth(
-      selectedDashboardDate.getMonth() + direction,
-    );
+    proposedDate.setMonth(proposedDate.getMonth() + direction);
   }
 
   if (selectedPeriod === "yearly") {
-    selectedDashboardDate.setFullYear(
-      selectedDashboardDate.getFullYear() + direction,
-    );
+    proposedDate.setFullYear(proposedDate.getFullYear() + direction);
   }
 
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+  proposedDate.setHours(0, 0, 0, 0);
+
+  // Do not allow navigation into a future date.
+  if (proposedDate > today) {
+    return;
+  }
+
+  selectedDashboardDate = proposedDate;
   updateDashboardForSelectedPeriod();
+}
+
+function updateNextPeriodButton() {
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  const nextDate = copyDate(selectedDashboardDate);
+  const selectedPeriod = timePeriodSelect.value;
+
+  if (selectedPeriod === "daily") {
+    nextDate.setDate(nextDate.getDate() + 1);
+  }
+
+  if (selectedPeriod === "weekly") {
+    nextDate.setDate(nextDate.getDate() + 7);
+  }
+
+  if (selectedPeriod === "monthly") {
+    nextDate.setMonth(nextDate.getMonth() + 1);
+  }
+
+  if (selectedPeriod === "yearly") {
+    nextDate.setFullYear(nextDate.getFullYear() + 1);
+  }
+
+  nextDate.setHours(0, 0, 0, 0);
+
+  nextPeriodButton.disabled = nextDate > today;
 }
 
 function updateDashboardForSelectedPeriod() {
   updateSelectedPeriodText();
+  updateNextPeriodButton();
   loadRevenue();
 
   console.log({
@@ -699,6 +737,9 @@ timePeriodSelect.addEventListener("change", function () {
   updateOrderTrendChart();
 });
 
+stallSelect.addEventListener("change", function () {
+  loadRevenue();
+});
 /* =====================================================
      INITIAL PAGE SETUP
      ===================================================== */
