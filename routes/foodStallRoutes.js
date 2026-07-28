@@ -13,4 +13,4 @@ router.get(
 router.get("/hawker-centre/:hawkerCentreID",foodStallController.getStallsByHawkerCentre);
 router.get("/:stallID",foodStallController.getFoodStallById);
 
-module.exports = router;s
+module.exports = router;
