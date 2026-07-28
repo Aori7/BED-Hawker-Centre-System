@@ -138,21 +138,40 @@ function setupInspectionForm() {
         return;
     }
 
-    const inspectionDate = document.getElementById(
-        "inspection-date"
-    );
+    const hawkerCentreSelect =
+        document.getElementById(
+            "hawker-centre"
+        );
 
-    const remarks = document.getElementById(
-        "inspection-remarks"
-    );
+    const foodStallSelect =
+        document.getElementById(
+            "food-stall"
+        );
 
-    const remarksCount = document.getElementById(
-        "remarks-count"
-    );
+    const inspectionDate =
+        document.getElementById(
+            "inspection-date"
+        );
 
-    const cancelButton = document.getElementById(
-        "cancel-inspection-btn"
-    );
+    const inspectionScore =
+        document.getElementById(
+            "inspection-score"
+        );
+
+    const remarks =
+        document.getElementById(
+            "inspection-remarks"
+        );
+
+    const remarksCount =
+        document.getElementById(
+            "remarks-count"
+        );
+
+    const cancelButton =
+        document.getElementById(
+            "cancel-inspection-btn"
+        );
 
     const today = new Date()
         .toISOString()
@@ -164,53 +183,274 @@ function setupInspectionForm() {
     }
 
     if (remarks && remarksCount) {
-        remarks.addEventListener("input", () => {
-            remarksCount.textContent =
-                `${remarks.value.length} / 1000`;
-        });
+        remarks.addEventListener(
+            "input",
+            () => {
+                remarksCount.textContent =
+                    `${remarks.value.length} / 1000`;
+            }
+        );
     }
 
     if (cancelButton) {
-        cancelButton.addEventListener("click", () => {
-            window.location.href =
-                "nea-inspection-history.html";
-        });
+        cancelButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-inspection-history.html";
+            }
+        );
     }
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
+    loadInspectionHawkerCentres(
+        hawkerCentreSelect,
+        foodStallSelect
+    );
 
-        clearInspectionErrors();
+    if (
+        hawkerCentreSelect &&
+        foodStallSelect
+    ) {
+        hawkerCentreSelect.addEventListener(
+            "change",
+            async () => {
+                const hawkerCentreID =
+                    hawkerCentreSelect.value;
 
-        if (!validateInspectionForm()) {
-            showInspectionMessage(
-                "Please correct the highlighted fields before submitting.",
-                "error"
-            );
+                foodStallSelect.innerHTML =
+                    `<option value="">
+                        Select a food stall
+                    </option>`;
 
-            return;
+                foodStallSelect.disabled = true;
+
+                if (!hawkerCentreID) {
+                    return;
+                }
+
+                await loadInspectionFoodStalls(
+                    hawkerCentreID,
+                    foodStallSelect
+                );
+            }
+        );
+    }
+
+    form.addEventListener(
+        "submit",
+        async (event) => {
+            event.preventDefault();
+
+            clearInspectionErrors();
+
+            if (!validateInspectionForm()) {
+                showInspectionMessage(
+                    "Please correct the highlighted fields before submitting.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const selectedGrade =
+                document.querySelector(
+                    `input[name="hygieneGrade"]:checked`
+                );
+
+            const inspectionData = {
+                officerID: 1,
+                stallID: parseInt(
+                    foodStallSelect.value
+                ),
+                inspectionDate:
+                    inspectionDate.value,
+                inspectionScore:
+                    parseInt(
+                        inspectionScore.value
+                    ),
+                hygieneGrade:
+                    selectedGrade.value,
+                remark:
+                    remarks.value.trim()
+            };
+
+            try {
+                const response = await fetch(
+                    "/inspections",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify(
+                            inspectionData
+                        )
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        "Unable to record inspection"
+                    );
+                }
+
+                showInspectionMessage(
+                    result.message,
+                    "success"
+                );
+
+                form.reset();
+
+                inspectionDate.value = today;
+
+                remarksCount.textContent =
+                    "0 / 1000";
+
+                foodStallSelect.innerHTML =
+                    `<option value="">
+                        Select a food stall
+                    </option>`;
+
+                foodStallSelect.disabled = true;
+
+                window.scrollTo({
+                    top: 250,
+                    behavior: "smooth"
+                });
+
+            } catch (error) {
+                console.error(
+                    "Submit inspection error:",
+                    error
+                );
+
+                showInspectionMessage(
+                    error.message,
+                    "error"
+                );
+            }
         }
+    );
+}
 
-        showInspectionMessage(
-            "Inspection results recorded successfully.",
-            "success"
+async function loadInspectionHawkerCentres(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    if (
+        !hawkerCentreSelect ||
+        !foodStallSelect
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/hawker-centres"
         );
 
-        form.reset();
+        const hawkerCentres =
+            await response.json();
 
-        if (inspectionDate) {
-            inspectionDate.value = today;
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load hawker centres"
+            );
         }
 
-        if (remarksCount) {
-            remarksCount.textContent = "0 / 1000";
+        hawkerCentreSelect.innerHTML =
+            `<option value="">
+                Select a hawker centre
+            </option>`;
+
+        hawkerCentres.forEach(
+            (hawkerCentre) => {
+                hawkerCentreSelect.innerHTML += `
+                    <option
+                        value="${hawkerCentre.HawkerCentreID}"
+                    >
+                        ${hawkerCentre.HCName}
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = true;
+
+    } catch (error) {
+        console.error(
+            "Load hawker centres error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to load hawker centres.",
+            "error"
+        );
+    }
+}
+
+async function loadInspectionFoodStalls(
+    hawkerCentreID,
+    foodStallSelect
+) {
+    try {
+        const response = await fetch(
+            `/food-stalls/hawker-centre/${hawkerCentreID}`
+        );
+
+        const foodStalls =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load food stalls"
+            );
         }
 
-        window.scrollTo({
-            top: 250,
-            behavior: "smooth"
-        });
-    });
+        foodStallSelect.innerHTML =
+            `<option value="">
+                Select a food stall
+            </option>`;
+
+        foodStalls.forEach(
+            (foodStall) => {
+                foodStallSelect.innerHTML += `
+                    <option
+                        value="${foodStall.StallID}"
+                    >
+                        ${foodStall.StallName}
+                        (${foodStall.StallUnitNo})
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = false;
+
+    } catch (error) {
+        console.error(
+            "Load food stalls error:",
+            error
+        );
+
+        foodStallSelect.innerHTML =
+            `<option value="">
+                Unable to load food stalls
+            </option>`;
+
+        foodStallSelect.disabled = true;
+
+        showInspectionMessage(
+            "Unable to load food stalls.",
+            "error"
+        );
+    }
 }
 
 function validateInspectionForm() {
