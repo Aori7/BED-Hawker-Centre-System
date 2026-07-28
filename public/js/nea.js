@@ -807,49 +807,127 @@ function setupStallSearch() {
                 const status =
                     stall.InspectionStatus ??
                     "Not Inspected";
+                
+                const imageSource =
+                    stall.ImageURL?.startsWith("http")
+                        ? stall.ImageURL
+                        : stall.ImageURL
+                            ? `../${stall.ImageURL}`
+                            : "../images/picture-icon.jpg";
+
+                const statusClass =
+                        status === "Completed"
+                            ? "nea-status-compliant"
+                        : status === "Cancelled"
+                            ? "nea-status-non-compliant"
+                            : "nea-status-pending";
+
+                const gradeClass =
+                    stall.HygieneGrade
+                        ? `nea-grade-${stall.HygieneGrade.toLowerCase()}`
+                        : "nea-grade-none";
 
                 resultsGrid.innerHTML += `
                     <article
                         class="stall-result-card"
+                        data-stall-id="${stall.StallID}"
                         data-stall="${stall.StallName}"
                         data-centre="${stall.HCName}"
                         data-grade="${grade}"
                         data-status="${status}"
                     >
 
-                        <img
-                            src="${stall.ImageURL}"
-                            alt="${stall.StallName}"
-                        >
+                        <div class="stall-image-container">
+
+                            <img
+                                src="${imageSource}"
+                                alt="${stall.StallName}"
+                                onerror="this.src='../images/picture-icon.jpg'"
+                            >
+
+                            ${
+                                stall.HygieneGrade
+                                    ? `
+                                        <span class="nea-grade-badge ${gradeClass}">
+                                            Grade ${stall.HygieneGrade}
+                                        </span>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
 
                         <div class="stall-result-content">
 
-                            <h3>
-                                ${stall.StallName}
-                            </h3>
+                            <div class="stall-result-title">
 
-                            <p>
-                                ${stall.HCName}
-                            </p>
+                                <div>
+                                    <h3>${stall.StallName}</h3>
+                                    <p>${stall.HCName}</p>
+                                </div>
 
-                            <p>
-                                Unit ${stall.StallUnitNo}
-                            </p>
+                                <span class="nea-status-badge ${statusClass}">
+                                    ${status}
+                                </span>
 
-                            <p>
-                                Last inspected:
-                                ${inspectionDate}
-                            </p>
+                            </div>
 
-                            <p>
-                                Grade:
-                                ${grade}
-                            </p>
+                            <div class="stall-result-info">
 
-                            <p>
-                                Status:
-                                ${status}
-                            </p>
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        location_on
+                                    </span>
+
+                                    <p>Unit ${stall.StallUnitNo}</p>
+                                </div>
+
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        fact_check
+                                    </span>
+
+                                    <p>
+                                        Score:
+                                        ${
+                                            stall.InspectionScore !== null
+                                                ? `${stall.InspectionScore} / 100`
+                                                : "Not available"
+                                        }
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        event
+                                    </span>
+
+                                    <p>Last inspected: ${inspectionDate}</p>
+                                </div>
+
+                            </div>
+
+                            <div class="stall-result-actions">
+
+                                <a href="nea-stall-details.html?stallId=${stall.StallID}">
+                                    <button
+                                        type="button"
+                                        class="stall-view-btn"
+                                    >
+                                        View Details
+                                    </button>
+                                </a>
+
+                                <a href="nea-record-inspection.html?stallId=${stall.StallID}">
+                                    <button
+                                        type="button"
+                                        class="stall-inspect-btn"
+                                    >
+                                        Inspect
+                                    </button>
+                                </a>
+
+                            </div>
 
                         </div>
 
