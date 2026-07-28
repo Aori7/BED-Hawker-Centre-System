@@ -129,7 +129,7 @@ function setupQuickStallSearch() {
 
 /* inspection form functions */
 
-function setupInspectionForm() {
+async function setupInspectionForm() {
     const form = document.getElementById(
         "inspection-form"
     );
@@ -202,7 +202,13 @@ function setupInspectionForm() {
         );
     }
 
-    loadInspectionHawkerCentres(
+    await loadInspectionHawkerCentres(
+        hawkerCentreSelect,
+        foodStallSelect
+    );
+
+    await prefillInspectionStall(
+        console.log("Prefill running..."),
         hawkerCentreSelect,
         foodStallSelect
     );
@@ -338,63 +344,6 @@ function setupInspectionForm() {
     );
 }
 
-async function loadInspectionHawkerCentres(
-    hawkerCentreSelect,
-    foodStallSelect
-) {
-    if (
-        !hawkerCentreSelect ||
-        !foodStallSelect
-    ) {
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            "/hawker-centres"
-        );
-
-        const hawkerCentres =
-            await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to load hawker centres"
-            );
-        }
-
-        hawkerCentreSelect.innerHTML =
-            `<option value="">
-                Select a hawker centre
-            </option>`;
-
-        hawkerCentres.forEach(
-            (hawkerCentre) => {
-                hawkerCentreSelect.innerHTML += `
-                    <option
-                        value="${hawkerCentre.HawkerCentreID}"
-                    >
-                        ${hawkerCentre.HCName}
-                    </option>
-                `;
-            }
-        );
-
-        foodStallSelect.disabled = true;
-
-    } catch (error) {
-        console.error(
-            "Load hawker centres error:",
-            error
-        );
-
-        showInspectionMessage(
-            "Unable to load hawker centres.",
-            "error"
-        );
-    }
-}
-
 async function loadInspectionFoodStalls(
     hawkerCentreID,
     foodStallSelect
@@ -448,6 +397,68 @@ async function loadInspectionFoodStalls(
 
         showInspectionMessage(
             "Unable to load food stalls.",
+            "error"
+        );
+    }
+}
+
+async function prefillInspectionStall(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    const urlParameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const stallID =
+        parseInt(
+            urlParameters.get("stallId")
+        );
+    
+    console.log(stallID);
+
+    if (
+        isNaN(stallID) ||
+        stallID <= 0
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/food-stalls/${stallID}`
+        );
+
+        const foodStall =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                foodStall.error ||
+                "Unable to retrieve food stall"
+            );
+        }
+
+        hawkerCentreSelect.value =
+            foodStall.HawkerCentreID;
+
+        await loadInspectionFoodStalls(
+            foodStall.HawkerCentreID,
+            foodStallSelect
+        );
+
+        foodStallSelect.value =
+            foodStall.StallID;
+
+    } catch (error) {
+        console.error(
+            "Prefill inspection stall error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to automatically select the food stall.",
             "error"
         );
     }
