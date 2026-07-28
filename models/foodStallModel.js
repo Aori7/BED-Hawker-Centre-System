@@ -71,7 +71,58 @@ async function getFoodStallById(stallID) {
     }
 }
 
+// get all food stalls with latest inspection details
+async function getFoodStallsForNEASearch() {
+    const connection = await sql.connect(dbConfig);
+
+    try {
+
+        const result = await connection
+            .request()
+            .query(`
+                SELECT
+                    fs.StallID,
+                    fs.StallName,
+                    fs.StallUnitNo,
+                    fs.ImageURL,
+
+                    hc.HCName,
+
+                    i.InspectionDate,
+                    i.InspectionScore,
+                    i.HygieneGrade,
+                    i.InspectionStatus
+
+                FROM FoodStall fs
+
+                INNER JOIN HawkerCentre hc
+                    ON fs.HawkerCentreID = hc.HawkerCentreID
+
+                LEFT JOIN Inspection i
+                    ON i.InspectionID = (
+                        SELECT TOP 1 InspectionID
+                        FROM Inspection
+                        WHERE StallID = fs.StallID
+                        ORDER BY InspectionDate DESC
+                    )
+
+                WHERE fs.IsActive = 1
+
+                ORDER BY fs.StallName;
+            `);
+
+        return result.recordset;
+
+    }
+    finally {
+
+        await connection.close();
+
+    }
+}
+
 module.exports = {
+    getFoodStallsForNEASearch,
     getStallsByHawkerCentre,
     getFoodStallById
 };
