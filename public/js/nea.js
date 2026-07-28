@@ -1583,13 +1583,19 @@ function setupHamburgerMenu() {
 async function loadDashboardStatistics() {
 
     try {
+        const totalInspectionsElement =
+            document.getElementById("total-inspections");
+
+        if (!totalInspectionsElement) {
+            return;
+        }
 
         const response = await fetch("/dashboard/statistics");
 
         const statistics = await response.json();
 
-        document.getElementById("total-inspections").textContent =
-            statistics.totalInspections;
+        totalInspectionsElement.textContent =
+        statistics.totalInspections;
 
         document.getElementById("compliant-stalls").textContent =
             statistics.compliantStalls;
