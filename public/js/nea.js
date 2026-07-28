@@ -202,10 +202,180 @@ async function setupInspectionForm() {
         );
     }
 
-    await loadInspectionHawkerCentres(
-        hawkerCentreSelect,
-        foodStallSelect
-    );
+    async function loadInspectionHawkerCentres(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    if (
+        !hawkerCentreSelect ||
+        !foodStallSelect
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/hawker-centres"
+        );
+
+        const hawkerCentres =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load hawker centres"
+            );
+        }
+
+        hawkerCentreSelect.innerHTML =
+            `<option value="">
+                Select a hawker centre
+            </option>`;
+
+        hawkerCentres.forEach(
+            (hawkerCentre) => {
+                hawkerCentreSelect.innerHTML += `
+                    <option
+                        value="${hawkerCentre.HawkerCentreID}"
+                    >
+                        ${hawkerCentre.HCName}
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = true;
+
+    } catch (error) {
+        console.error(
+            "Load hawker centres error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to load hawker centres.",
+            "error"
+        );
+    }
+}
+
+async function loadInspectionFoodStalls(
+    hawkerCentreID,
+    foodStallSelect
+) {
+    try {
+        const response = await fetch(
+            `/food-stalls/hawker-centre/${hawkerCentreID}`
+        );
+
+        const foodStalls =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load food stalls"
+            );
+        }
+
+        foodStallSelect.innerHTML =
+            `<option value="">
+                Select a food stall
+            </option>`;
+
+        foodStalls.forEach(
+            (foodStall) => {
+                foodStallSelect.innerHTML += `
+                    <option
+                        value="${foodStall.StallID}"
+                    >
+                        ${foodStall.StallName}
+                        (${foodStall.StallUnitNo})
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = false;
+
+    } catch (error) {
+        console.error(
+            "Load food stalls error:",
+            error
+        );
+
+        foodStallSelect.innerHTML =
+            `<option value="">
+                Unable to load food stalls
+            </option>`;
+
+        foodStallSelect.disabled = true;
+
+        showInspectionMessage(
+            "Unable to load food stalls.",
+            "error"
+        );
+    }
+}
+
+async function prefillInspectionStall(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    const urlParameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const stallID =
+        parseInt(
+            urlParameters.get("stallId")
+        );
+
+    if (
+        isNaN(stallID) ||
+        stallID <= 0
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/food-stalls/${stallID}`
+        );
+
+        const foodStall =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                foodStall.error ||
+                "Unable to retrieve food stall"
+            );
+        }
+
+        hawkerCentreSelect.value =
+            foodStall.HawkerCentreID;
+
+        await loadInspectionFoodStalls(
+            foodStall.HawkerCentreID,
+            foodStallSelect
+        );
+
+        foodStallSelect.value =
+            foodStall.StallID;
+
+    } catch (error) {
+        console.error(
+            "Prefill inspection stall error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to automatically select the food stall.",
+            "error"
+        );
+    }
+}
 
     await prefillInspectionStall(
         console.log("Prefill running..."),
@@ -609,7 +779,7 @@ function showInspectionMessage(message, type) {
 
 /* inspection history functions */
 
-function setupInspectionHistory() {
+async function setupInspectionHistory() {
     const tableBody = document.getElementById(
         "inspection-history-body"
     );
@@ -658,7 +828,7 @@ function setupInspectionHistory() {
         tableBody.querySelectorAll("tr")
     );
 
-    function updateInspectionHistory() {
+    async function updateInspectionHistory() {
         const keyword =
             searchInput.value.trim().toLowerCase();
 
