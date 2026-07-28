@@ -752,10 +752,6 @@ function setupStallSearch() {
         "stall-status-filter"
     );
 
-    const locationFilter = document.getElementById(
-        "stall-location-filter"
-    );
-
     const clearButton = document.getElementById(
         "clear-stall-filters"
     );
@@ -772,11 +768,115 @@ function setupStallSearch() {
         "stall-empty-state"
     );
 
-    const stallCards = Array.from(
-        resultsGrid.querySelectorAll(
-            ".stall-result-card"
-        )
-    );
+    let stallCards = [];
+
+    async function loadFoodStalls() {
+
+        try {
+
+            const response = await fetch(
+                "/food-stalls/search/nea"
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Unable to retrieve food stalls."
+                );
+            }
+
+            const stalls =
+                await response.json();
+
+            resultsGrid.innerHTML = "";
+
+            stalls.forEach((stall) => {
+
+                const inspectionDate =
+                    stall.InspectionDate
+                        ? new Date(
+                            stall.InspectionDate
+                        ).toLocaleDateString(
+                            "en-SG"
+                        )
+                        : "Not inspected";
+
+                const grade =
+                    stall.HygieneGrade ??
+                    "-";
+
+                const status =
+                    stall.InspectionStatus ??
+                    "Not Inspected";
+
+                resultsGrid.innerHTML += `
+                    <article
+                        class="stall-result-card"
+                        data-stall="${stall.StallName}"
+                        data-centre="${stall.HCName}"
+                        data-grade="${grade}"
+                        data-status="${status}"
+                    >
+
+                        <img
+                            src="${stall.ImageURL}"
+                            alt="${stall.StallName}"
+                        >
+
+                        <div class="stall-result-content">
+
+                            <h3>
+                                ${stall.StallName}
+                            </h3>
+
+                            <p>
+                                ${stall.HCName}
+                            </p>
+
+                            <p>
+                                Unit ${stall.StallUnitNo}
+                            </p>
+
+                            <p>
+                                Last inspected:
+                                ${inspectionDate}
+                            </p>
+
+                            <p>
+                                Grade:
+                                ${grade}
+                            </p>
+
+                            <p>
+                                Status:
+                                ${status}
+                            </p>
+
+                        </div>
+
+                    </article>
+                `;
+
+            });
+
+            stallCards = Array.from(
+                resultsGrid.querySelectorAll(
+                    ".stall-result-card"
+                )
+            );
+
+            updateStallResults();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Unable to load food stalls.",
+                error
+            );
+
+        }
+
+    }
 
     function updateStallResults() {
         const keyword =
@@ -784,8 +884,6 @@ function setupStallSearch() {
 
         const selectedGrade = gradeFilter.value;
         const selectedStatus = statusFilter.value;
-        const selectedLocation =
-            locationFilter.value;
 
         const matchingCards = stallCards.filter(
             (card) => {
@@ -809,16 +907,10 @@ function setupStallSearch() {
                     card.dataset.status ===
                         selectedStatus;
 
-                const matchesLocation =
-                    selectedLocation === "all" ||
-                    card.dataset.location ===
-                        selectedLocation;
-
                 return (
                     matchesSearch &&
                     matchesGrade &&
-                    matchesStatus &&
-                    matchesLocation
+                    matchesStatus
                 );
             }
         );
@@ -846,10 +938,6 @@ function setupStallSearch() {
 
         if (selectedStatus !== "all") {
             filters.push(selectedStatus);
-        }
-
-        if (selectedLocation !== "all") {
-            filters.push(selectedLocation);
         }
 
         filterSummary.textContent =
@@ -881,16 +969,10 @@ function setupStallSearch() {
         updateStallResults
     );
 
-    locationFilter.addEventListener(
-        "change",
-        updateStallResults
-    );
-
     clearButton.addEventListener("click", () => {
         searchInput.value = "";
         gradeFilter.value = "all";
         statusFilter.value = "all";
-        locationFilter.value = "all";
 
         updateStallResults();
     });
@@ -900,7 +982,7 @@ function setupStallSearch() {
         statusFilter
     );
 
-    updateStallResults();
+    loadFoodStalls();
 }
 
 function applyStallQueryParameters(
