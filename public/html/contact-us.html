@@ -77,51 +77,85 @@
           <div class="title">
             <h2>Get In Touch</h2>
           </div>
-          <form action="">
+          <form id="contact-form">
             <label for="name">Name:</label>
             <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Your name.."
+                type="text"
+                id="name"
+                name="name"
+                maxlength="100"
+                placeholder="Your name.."
+                required
             />
 
-            <label for="email">Email:</label>
+            <label for="name">Email:</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Your email.."
+                type="email"
+                id="email"
+                name="email"
+                maxlength="100"
+                placeholder="Your email.."
+                required
             />
 
-            <!-- <label for="subject">Subject:</label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              placeholder="Subject.."
-            /> -->
-            <label for="subject">Subject:</label>
-            <select id="subject" name="subject">
-              <option value="">Select a subject</option>
-              <option value="Complaint">Complaint</option>
-              <option value="Feedback">Feedback</option>
-              <option value="Suggestion">Suggestion</option>
-              <option value="Others">Others</option>
+            
+            <label for="submission-type">
+                Submission Type:
+            </label>
+
+            <select
+                id="submission-type"
+                name="submissionType"
+                required
+            >
+                <option value="">
+                    Select a type
+                </option>
+
+                <option value="Complaint">
+                    Complaint
+                </option>
+
+                <option value="Feedback">
+                    Feedback
+                </option>
+
+                <option value="Suggestion">
+                    Suggestion
+                </option>
+
+                <option value="Others">
+                    Others
+                </option>
             </select>
+            <label for="subject">
+                Subject:
+            </label>
+
+            <input
+                type="text"
+                id="subject"
+                name="subject"
+                maxlength="150"
+                placeholder="Enter the subject"
+                required
+            />
 
 
             <label for="message">Message:</label>
             <textarea
-              id="message"
-              name="message"
-              placeholder="Write your message.."
-              style="height: 200px"
+                id="message"
+                name="message"
+                maxlength="1000"
+                placeholder="Write your message.."
+                style="height: 200px"
+                required
             ></textarea>
 
             <input type="submit" value="Submit" id="submitbtn" />
           </form>
         </div>
+
         <div class="contact-info">
           <div class="contact-business-info">
             <div class="title">
@@ -195,7 +229,7 @@
       </div>
     </aside>
 
-   
+    <script src="../js/contact-us.js"></script>
     <script type="module" src="../js/script.js"></script>
     <script src="/js/authUI.js"></script>
 </body>
