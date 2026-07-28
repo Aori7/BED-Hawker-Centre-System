@@ -2,7 +2,8 @@ const express = require("express");
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
 // // Load environment variables
-// dotenv.config();
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Import
 const customerController = require("./controllers/customerController");
@@ -39,6 +40,7 @@ app.use("/menu-items", menuItemRoutes);
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
+app.use()
 //dayana's
 
 //start server
