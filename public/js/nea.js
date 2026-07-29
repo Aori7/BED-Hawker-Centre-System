@@ -2673,7 +2673,8 @@ function displayStallDetails(stall) {
 
     setTextContent(
         "stall-details-score",
-        stall.InspectionScore !== null
+        stall.InspectionScore !== null &&
+        stall.InspectionScore !== undefined
             ? `${stall.InspectionScore} / 100`
             : "Not inspected"
     );
@@ -2698,14 +2699,14 @@ function displayStallDetails(stall) {
 
     setTextContent(
         "stall-details-address",
-        stall.Address ||
-            "Address not available"
+        "Address not available"
     );
 
     setTextContent(
         "stall-details-remarks",
-        stall.Remark ||
-            "No inspection remarks available."
+        stall.Remark
+            ? stall.Remark
+            : "No inspection remarks available."
     );
 
     const stallImage =
