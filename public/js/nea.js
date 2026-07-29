@@ -1651,7 +1651,7 @@ function applyStallQueryParameters(
 
 /* hygiene grade functions */
 
-function setupHygieneGrades() {
+async function setupHygieneGrades() {
     const tableBody = document.getElementById(
         "hygiene-grade-body"
     );
@@ -1696,17 +1696,59 @@ function setupHygieneGrades() {
         "hygiene-empty-state"
     );
 
-    const rows = Array.from(
-        tableBody.querySelectorAll("tr")
-    );
+    const summaryCards =
+        document.querySelectorAll(
+            ".hygiene-summary-card"
+        );
 
-    const summaryCards = document.querySelectorAll(
-        ".hygiene-summary-card"
-    );
+    let hygieneRecords = [];
+
+    async function loadHygieneGrades() {
+        try {
+            const response = await fetch(
+                "/hygiene-grades"
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to retrieve hygiene grades"
+                );
+            }
+
+            hygieneRecords = result;
+
+            populateHygieneCentreFilter(
+                hygieneRecords,
+                centreFilter
+            );
+
+            updateHygieneResults();
+
+        } catch (error) {
+            console.error(
+                "Load hygiene grades error:",
+                error
+            );
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8">
+                        Unable to load hygiene grades.
+                    </td>
+                </tr>
+            `;
+        }
+    }
 
     function updateHygieneResults() {
         const keyword =
-            searchInput.value.trim().toLowerCase();
+            searchInput.value
+                .trim()
+                .toLowerCase();
 
         const selectedCentre =
             centreFilter.value;
@@ -1717,73 +1759,98 @@ function setupHygieneGrades() {
         const selectedStatus =
             statusFilter.value;
 
-        const matchingRows = rows.filter((row) => {
-            const stallName =
-                row.dataset.stall.toLowerCase();
+        const matchingRecords =
+            hygieneRecords.filter(
+                (record) => {
+                    const stallName =
+                        record.StallName
+                            .toLowerCase();
 
-            const centreName =
-                row.dataset.centre.toLowerCase();
+                    const centreName =
+                        record.HCName
+                            .toLowerCase();
 
-            const matchesSearch =
-                stallName.includes(keyword) ||
-                centreName.includes(keyword);
+                    const matchesSearch =
+                        stallName.includes(
+                            keyword
+                        ) ||
+                        centreName.includes(
+                            keyword
+                        );
 
-            const matchesCentre =
-                selectedCentre === "all" ||
-                row.dataset.centre ===
-                    selectedCentre;
+                    const matchesCentre =
+                        selectedCentre === "all" ||
+                        String(
+                            record.HawkerCentreID
+                        ) === selectedCentre;
 
-            const matchesGrade =
-                selectedGrade === "all" ||
-                row.dataset.grade ===
-                    selectedGrade;
+                    const matchesGrade =
+                        selectedGrade === "all" ||
+                        record.HygieneGrade ===
+                            selectedGrade;
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                row.dataset.status ===
-                    selectedStatus;
+                    const matchesStatus =
+                        selectedStatus === "all" ||
+                        record.ComplianceStatus ===
+                            selectedStatus;
 
-            return (
-                matchesSearch &&
-                matchesCentre &&
-                matchesGrade &&
-                matchesStatus
+                    return (
+                        matchesSearch &&
+                        matchesCentre &&
+                        matchesGrade &&
+                        matchesStatus
+                    );
+                }
             );
-        });
 
-        rows.forEach((row) => {
-            row.style.display = "none";
-        });
+        renderHygieneGrades(
+            matchingRecords,
+            tableBody,
+            loadHygieneGrades
+        );
 
-        matchingRows.forEach((row) => {
-            row.style.display = "";
-        });
-
-        resultCount.textContent =
-            matchingRows.length;
+        if (resultCount) {
+            resultCount.textContent =
+                matchingRecords.length;
+        }
 
         const filters = [];
 
         if (keyword) {
-            filters.push(`Search: "${keyword}"`);
+            filters.push(
+                `Search: "${keyword}"`
+            );
         }
 
         if (selectedCentre !== "all") {
-            filters.push(selectedCentre);
+            const selectedOption =
+                centreFilter.options[
+                    centreFilter.selectedIndex
+                ];
+
+            filters.push(
+                selectedOption.textContent
+            );
         }
 
         if (selectedGrade !== "all") {
-            filters.push(`Grade ${selectedGrade}`);
+            filters.push(
+                `Grade ${selectedGrade}`
+            );
         }
 
         if (selectedStatus !== "all") {
-            filters.push(selectedStatus);
+            filters.push(
+                selectedStatus
+            );
         }
 
-        filterSummary.textContent =
-            filters.length === 0
-                ? "All hygiene grades"
-                : filters.join(" · ");
+        if (filterSummary) {
+            filterSummary.textContent =
+                filters.length === 0
+                    ? "All hygiene grades"
+                    : filters.join(" · ");
+        }
 
         summaryCards.forEach((card) => {
             card.classList.toggle(
@@ -1793,13 +1860,35 @@ function setupHygieneGrades() {
             );
         });
 
-        if (matchingRows.length === 0) {
-            tableWrapper.style.display = "none";
-            emptyState.classList.add("show");
+        if (
+            matchingRecords.length === 0
+        ) {
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "none";
+            }
+
+            if (emptyState) {
+                emptyState.classList.add(
+                    "show"
+                );
+            }
         } else {
-            tableWrapper.style.display = "";
-            emptyState.classList.remove("show");
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "";
+            }
+
+            if (emptyState) {
+                emptyState.classList.remove(
+                    "show"
+                );
+            }
         }
+
+        updateHygieneSummaryCounts(
+            hygieneRecords
+        );
     }
 
     searchInput.addEventListener(
@@ -1822,40 +1911,217 @@ function setupHygieneGrades() {
         updateHygieneResults
     );
 
-    clearButton.addEventListener("click", () => {
-        searchInput.value = "";
-        centreFilter.value = "all";
-        gradeFilter.value = "all";
-        statusFilter.value = "all";
-
-        updateHygieneResults();
-    });
-
-    summaryCards.forEach((card) => {
-        card.addEventListener("click", () => {
-            const selectedGrade =
-                card.dataset.gradeFilter;
-
-            gradeFilter.value =
-                gradeFilter.value === selectedGrade
-                    ? "all"
-                    : selectedGrade;
+    clearButton.addEventListener(
+        "click",
+        () => {
+            searchInput.value = "";
+            centreFilter.value = "all";
+            gradeFilter.value = "all";
+            statusFilter.value = "all";
 
             updateHygieneResults();
-        });
+        }
+    );
+
+    summaryCards.forEach((card) => {
+        card.addEventListener(
+            "click",
+            () => {
+                const selectedGrade =
+                    card.dataset.gradeFilter;
+
+                gradeFilter.value =
+                    gradeFilter.value ===
+                    selectedGrade
+                        ? "all"
+                        : selectedGrade;
+
+                updateHygieneResults();
+            }
+        );
+    });
+
+    await loadHygieneGrades();
+}
+
+function populateHygieneCentreFilter(
+    hygieneRecords,
+    centreFilter
+) {
+    if (!centreFilter) {
+        return;
+    }
+
+    const centres = new Map();
+
+    hygieneRecords.forEach((record) => {
+        centres.set(
+            String(record.HawkerCentreID),
+            record.HCName
+        );
+    });
+
+    centreFilter.innerHTML = `
+        <option value="all">
+            All hawker centres
+        </option>
+    `;
+
+    Array.from(centres.entries())
+        .sort(
+            (
+                firstCentre,
+                secondCentre
+            ) =>
+                firstCentre[1].localeCompare(
+                    secondCentre[1]
+                )
+        )
+        .forEach(
+            (
+                [
+                    hawkerCentreID,
+                    hawkerCentreName
+                ]
+            ) => {
+                centreFilter.innerHTML += `
+                    <option
+                        value="${hawkerCentreID}"
+                    >
+                        ${hawkerCentreName}
+                    </option>
+                `;
+            }
+        );
+}
+
+function renderHygieneGrades(
+    hygieneRecords,
+    tableBody,
+    reloadHygieneGrades
+) {
+    tableBody.innerHTML = "";
+
+    hygieneRecords.forEach((record) => {
+        const inspectionDate =
+            formatHygieneDate(
+                record.InspectionDate
+            );
+
+        const gradeExpiry =
+            record.GradeExpiry
+                ? formatHygieneDate(
+                    record.GradeExpiry
+                )
+                : "Not available";
+
+        const statusClass =
+            record.ComplianceStatus
+                .toLowerCase()
+                .replaceAll(" ", "-");
+
+        const row =
+            document.createElement("tr");
+
+        row.dataset.inspectionId =
+            record.InspectionID;
+
+        row.dataset.stallId =
+            record.StallID;
+
+        row.dataset.stall =
+            record.StallName;
+
+        row.dataset.centre =
+            record.HCName;
+
+        row.dataset.centreId =
+            record.HawkerCentreID;
+
+        row.dataset.score =
+            record.InspectionScore;
+
+        row.dataset.grade =
+            record.HygieneGrade;
+
+        row.dataset.status =
+            record.ComplianceStatus;
+
+        row.dataset.remarks =
+            record.Remark || "";
+
+        row.innerHTML = `
+            <td>
+                ${record.StallID}
+            </td>
+
+            <td>
+                <strong>
+                    ${record.StallName}
+                </strong>
+
+                <small>
+                    Unit ${record.StallUnitNo}
+                </small>
+            </td>
+
+            <td>
+                ${record.HCName}
+            </td>
+
+            <td>
+                ${inspectionDate}
+            </td>
+
+            <td>
+                ${record.InspectionScore}
+                / 100
+            </td>
+
+            <td>
+                <span
+                    class="nea-grade-badge nea-grade-${record.HygieneGrade.toLowerCase()}"
+                >
+                    Grade ${record.HygieneGrade}
+                </span>
+            </td>
+
+            <td>
+                <span
+                    class="nea-status-badge nea-status-${statusClass}"
+                >
+                    ${record.ComplianceStatus}
+                </span>
+
+                <small>
+                    Expires ${gradeExpiry}
+                </small>
+            </td>
+
+            <td>
+                <button
+                    type="button"
+                    class="hygiene-update-btn"
+                >
+                    Update
+                </button>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
     });
 
     setupHygieneUpdateModal(
-        rows,
-        updateHygieneResults
+        Array.from(
+            tableBody.querySelectorAll("tr")
+        ),
+        reloadHygieneGrades
     );
-
-    updateHygieneResults();
 }
 
 function setupHygieneUpdateModal(
     rows,
-    updateHygieneResults
+    reloadHygieneGrades
 ) {
     const overlay = document.getElementById(
         "hygiene-modal-overlay"
@@ -1881,9 +2147,10 @@ function setupHygieneUpdateModal(
         "hygiene-update-remarks"
     );
 
-    const remarksCount = document.getElementById(
-        "hygiene-remarks-count"
-    );
+    const remarksCount =
+        document.getElementById(
+            "hygiene-remarks-count"
+        );
 
     if (!overlay || !modal || !form) {
         return;
@@ -1892,31 +2159,43 @@ function setupHygieneUpdateModal(
     let selectedRow = null;
 
     rows.forEach((row) => {
-        const updateButton = row.querySelector(
-            ".hygiene-update-btn"
-        );
+        const updateButton =
+            row.querySelector(
+                ".hygiene-update-btn"
+            );
 
         if (!updateButton) {
             return;
         }
 
-        updateButton.addEventListener("click", () => {
-            selectedRow = row;
+        updateButton.addEventListener(
+            "click",
+            () => {
+                selectedRow = row;
 
-            openHygieneUpdateModal(row);
+                openHygieneUpdateModal(
+                    row
+                );
 
-            overlay.classList.add("show");
-            modal.classList.add("show");
+                overlay.classList.add(
+                    "show"
+                );
 
-            document.body.style.overflow = "hidden";
-        });
+                modal.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+            }
+        );
     });
 
     if (remarks && remarksCount) {
-        remarks.addEventListener("input", () => {
+        remarks.oninput = () => {
             remarksCount.textContent =
-                `${remarks.value.length} / 500`;
-        });
+                `${remarks.value.length} / 1000`;
+        };
     }
 
     function closeModal() {
@@ -1930,29 +2209,28 @@ function setupHygieneUpdateModal(
         clearHygieneFormErrors();
 
         if (remarksCount) {
-            remarksCount.textContent = "0 / 500";
+            remarksCount.textContent =
+                "0 / 1000";
         }
 
         selectedRow = null;
     }
 
-    overlay.addEventListener("click", closeModal);
+    overlay.onclick = closeModal;
+
+    modal.onclick = (event) => {
+        event.stopPropagation();
+    };
 
     if (closeButton) {
-        closeButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeButton.onclick = closeModal;
     }
 
     if (cancelButton) {
-        cancelButton.addEventListener(
-            "click",
-            closeModal
-        );
+        cancelButton.onclick = closeModal;
     }
 
-    form.addEventListener("submit", (event) => {
+    form.onsubmit = async (event) => {
         event.preventDefault();
 
         clearHygieneFormErrors();
@@ -1985,40 +2263,108 @@ function setupHygieneUpdateModal(
             isValid = false;
         }
 
+        if (
+            updateRemarks.length > 1000
+        ) {
+            setFieldError(
+                "updated-remarks-error",
+                "The remarks cannot exceed 1000 characters."
+            );
+
+            isValid = false;
+        }
+
         if (!isValid || !selectedRow) {
             return;
         }
 
-        updateHygieneRow(
-            selectedRow,
-            selectedGrade.value,
-            updateRemarks
-        );
+        const submitButton =
+            form.querySelector(
+                'button[type="submit"]'
+            );
 
-        updateHygieneSummaryCounts();
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent =
+                "Updating...";
+        }
 
-        showHygieneMessage(
-            `${selectedRow.dataset.stall}'s hygiene grade was updated successfully.`,
-            "success"
-        );
+        try {
+            const inspectionID =
+                selectedRow.dataset
+                    .inspectionId;
 
-        closeModal();
-        updateHygieneResults();
+            const response = await fetch(
+                `/hygiene-grades/${inspectionID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        hygieneGrade:
+                            selectedGrade.value,
+                        remark:
+                            updateRemarks
+                    })
+                }
+            );
 
-        window.scrollTo({
-            top: 300,
-            behavior: "smooth"
-        });
-    });
+            const result =
+                await response.json();
 
-    document.addEventListener("keydown", (event) => {
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to update hygiene grade"
+                );
+            }
+
+            const stallName =
+                selectedRow.dataset.stall;
+
+            closeModal();
+
+            showHygieneMessage(
+                `${stallName}'s hygiene grade was updated successfully.`,
+                "success"
+            );
+
+            await reloadHygieneGrades();
+
+        } catch (error) {
+            console.error(
+                "Update hygiene grade error:",
+                error
+            );
+
+            setFieldError(
+                "updated-remarks-error",
+                error.message
+            );
+
+        } finally {
+            if (submitButton) {
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Update Grade";
+            }
+        }
+    };
+
+    document.onkeydown = (event) => {
         if (
             event.key === "Escape" &&
-            modal.classList.contains("show")
+            modal.classList.contains(
+                "show"
+            )
         ) {
             closeModal();
         }
-    });
+    };
 }
 
 function openHygieneUpdateModal(row) {
@@ -2049,7 +2395,9 @@ function openHygieneUpdateModal(row) {
 
     if (currentGradeContainer) {
         currentGradeContainer.innerHTML = `
-            <span class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}">
+            <span
+                class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}"
+            >
                 Grade ${row.dataset.grade}
             </span>
         `;
@@ -2068,62 +2416,25 @@ function openHygieneUpdateModal(row) {
         "hygiene-update-remarks"
     );
 
-    const remarksCount = document.getElementById(
-        "hygiene-remarks-count"
-    );
+    const remarksCount =
+        document.getElementById(
+            "hygiene-remarks-count"
+        );
 
     if (remarks) {
-        remarks.value = row.dataset.remarks || "";
+        remarks.value =
+            row.dataset.remarks || "";
     }
 
     if (remarks && remarksCount) {
         remarksCount.textContent =
-            `${remarks.value.length} / 500`;
+            `${remarks.value.length} / 1000`;
     }
 }
 
-function updateHygieneRow(
-    row,
-    newGrade,
-    updateRemarks
+function updateHygieneSummaryCounts(
+    hygieneRecords
 ) {
-    row.dataset.grade = newGrade;
-    row.dataset.remarks = updateRemarks;
-
-    const gradeCell = row.children[4];
-
-    gradeCell.innerHTML = `
-        <span class="nea-grade-badge nea-grade-${newGrade.toLowerCase()}">
-            Grade ${newGrade}
-        </span>
-    `;
-
-    const newStatus =
-        newGrade === "A" || newGrade === "B"
-            ? "Compliant"
-            : "Non-Compliant";
-
-    row.dataset.status = newStatus;
-
-    const statusClass =
-        newStatus
-            .toLowerCase()
-            .replaceAll(" ", "-");
-
-    const statusCell = row.children[5];
-
-    statusCell.innerHTML = `
-        <span class="nea-status-badge nea-status-${statusClass}">
-            ${newStatus}
-        </span>
-    `;
-}
-
-function updateHygieneSummaryCounts() {
-    const rows = document.querySelectorAll(
-        "#hygiene-grade-body tr"
-    );
-
     const counts = {
         A: 0,
         B: 0,
@@ -2131,8 +2442,9 @@ function updateHygieneSummaryCounts() {
         D: 0
     };
 
-    rows.forEach((row) => {
-        const grade = row.dataset.grade;
+    hygieneRecords.forEach((record) => {
+        const grade =
+            record.HygieneGrade;
 
         if (counts[grade] !== undefined) {
             counts[grade]++;
@@ -2161,13 +2473,15 @@ function updateHygieneSummaryCounts() {
 }
 
 function clearHygieneFormErrors() {
-    const gradeError = document.getElementById(
-        "updated-grade-error"
-    );
+    const gradeError =
+        document.getElementById(
+            "updated-grade-error"
+        );
 
-    const remarksError = document.getElementById(
-        "updated-remarks-error"
-    );
+    const remarksError =
+        document.getElementById(
+            "updated-remarks-error"
+        );
 
     if (gradeError) {
         gradeError.textContent = "";
@@ -2178,16 +2492,21 @@ function clearHygieneFormErrors() {
     }
 }
 
-function showHygieneMessage(message, type) {
-    const messageElement = document.getElementById(
-        "hygiene-message"
-    );
+function showHygieneMessage(
+    message,
+    type
+) {
+    const messageElement =
+        document.getElementById(
+            "hygiene-message"
+        );
 
     if (!messageElement) {
         return;
     }
 
     messageElement.textContent = message;
+
     messageElement.className =
         `hygiene-message ${type} show`;
 
@@ -2195,6 +2514,23 @@ function showHygieneMessage(message, type) {
         messageElement.className =
             "hygiene-message";
     }, 5000);
+}
+
+function formatHygieneDate(dateValue) {
+    if (!dateValue) {
+        return "Not available";
+    }
+
+    const date = new Date(dateValue);
+
+    return date.toLocaleDateString(
+        "en-SG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
 
 /* mobile navigation menu */
