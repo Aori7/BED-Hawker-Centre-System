@@ -2,50 +2,139 @@
 // leaflet.js created for leaflet map functionality
 // leaflet map initialization
 // resource/ref: https://leafletjs.com/examples/quick-start/
-var map = L.map('map').setView([1.3521, 103.8198], 12);
-//singapore coordinates
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+// Initialise the map and centre it on Singapore
+const map = L.map("map").setView(
+    [1.3521, 103.8198],
+    12
+);
 
-// adding marker objects into the map, to pin point all the hawker centres available in singapore.
-// loading the hawker centre json thru firebase api call
-//note: i put the geojson sample file in the file js/hawker-centre.json.
-fetch("https://hawker-centre-a7461-default-rtdb.asia-southeast1.firebasedatabase.app/.json")
-    .then(res => res.json()) // converting the response into json object first for easy process
-    // once json ready, process the data
-    .then(data => {
-        //the data was stored in geojson format and the hawker centres were stored inside an array called "features"
-        //for each data inside features array, loop:
-        data.features.forEach(feature => {
-        //first, get the value of each coordinates thru the index
-        const lng = feature.geometry.coordinates[0];
-        const lat = feature.geometry.coordinates[1];
-        
-        //get info on each hawker centre: name, addr, the status and also the url of the image of hawker centre which is included in the json
-        const name = feature.properties.NAME;
-        const address = feature.properties.ADDRESS_MYENV || "Address not available"; //if image not existing, reuturn string instead
-        const status = feature.properties.STATUS;
-        const photo = feature.properties.PHOTOURL;
-        
-        //design the image for the pop up
-        const imageHTML = photo
-            ? `<img src="${photo}" style="width:100%; border-radius:12px; margin-bottom:8px;" />`
-            : `<div style="font-size:14px; color:#777; margin-bottom:8px;">No image available</div>`;
-        
-        //for every hawkercentre, create a marker using the var created earlier of the coords
-        //L.marker is a leaflet.js function that creates marker objects
-        L.marker([lat, lng])
-            .addTo(map) //put the marker into the map
-            .bindPopup(`
-            <div style="max-width:220px">
-                ${imageHTML}
-                <strong>${name}</strong><br>
-                ${address}<br>
-                <em>Status: ${status}</em>
-            </div>
-            `);
-        });
-    })
-    .catch(err => console.error(err));
+// Add the OpenStreetMap layer
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }
+).addTo(map);
+
+// Load hawker centres from Express API
+async function loadHawkerCentreMarkers() {
+    try {
+        const response = await fetch(
+            "/hawker-centres"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Failed to retrieve hawker centres"
+            );
+        }
+
+        const hawkerCentres =
+            await response.json();
+
+        hawkerCentres.forEach(
+            (hawkerCentre) => {
+
+                const latitude =
+                    Number(hawkerCentre.Latitude);
+
+                const longitude =
+                    Number(hawkerCentre.Longitude);
+
+                // Skip records with missing or invalid coordinates
+                if (
+                    !Number.isFinite(latitude) ||
+                    !Number.isFinite(longitude)
+                ) {
+                    return;
+                }
+
+                // Only display active hawker centres
+                if (!hawkerCentre.IsActive) {
+                    return;
+                }
+
+                const imageHTML =
+                    hawkerCentre.ImageURL
+                        ? `
+                            <img
+                                src="${hawkerCentre.ImageURL}"
+                                alt="${hawkerCentre.HCName}"
+                                style="
+                                    width: 100%;
+                                    height: 120px;
+                                    object-fit: cover;
+                                    border-radius: 8px;
+                                    margin-bottom: 10px;
+                                "
+                                onerror="this.style.display='none'"
+                            >
+                        `
+                        : "";
+
+                const openingHours =
+                    hawkerCentre.OpeningHours ||
+                    "Opening hours unavailable";
+
+                const marker = L.marker([
+                    latitude,
+                    longitude
+                ]).addTo(map);
+
+                marker.bindPopup(`
+                    <div style="
+                        width: 230px;
+                        font-family: inherit;
+                    ">
+                        ${imageHTML}
+
+                        <h3 style="
+                            margin: 0 0 8px;
+                            font-size: 17px;
+                        ">
+                            ${hawkerCentre.HCName}
+                        </h3>
+
+                        <p style="
+                            margin: 0 0 8px;
+                            line-height: 1.4;
+                        ">
+                            ${hawkerCentre.HCAddress}
+                        </p>
+
+                        <p style="
+                            margin: 0 0 12px;
+                            color: #666;
+                        ">
+                            ${openingHours}
+                        </p>
+
+                        <a
+                            href="/html/order-stall.html?hawkerCentreID=${hawkerCentre.HawkerCentreID}"
+                            style="
+                                display: block;
+                                padding: 9px 12px;
+                                border-radius: 18px;
+                                background-color: #ff7a00;
+                                color: white;
+                                font-weight: 700;
+                                text-align: center;
+                                text-decoration: none;
+                            "
+                        >
+                            View Stalls
+                        </a>
+                    </div>
+                `);
+            }
+        );
+    } catch (error) {
+        console.error(
+            "Error loading hawker centre markers:",
+            error
+        );
+    }
+}
+
+loadHawkerCentreMarkers();

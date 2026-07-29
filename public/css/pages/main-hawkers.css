@@ -1,0 +1,311 @@
+.title{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black-text-color);
+}
+
+/* map section done by ada */
+#hawkerlocationmap-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 100px 20px;
+    gap: 32px;
+
+    /* background-color: white; */
+}   
+
+#map { 
+    height: 750px; 
+    width: 90%;
+    border-radius: 20px;
+}
+
+#hawkerlocationmap-section h1{
+    margin: 0;
+}
+/* ======================================================= */
+/* shared section layout */
+
+#available-ordering-section,
+#location-section {
+    padding: 80px 7%;
+}
+
+#available-ordering-section {
+    background-color: var(--orange-color);
+}
+
+#location-section {
+    background-color: var(--lighter-beige);
+}
+
+.hawker-section-header {
+    max-width: 1300px;
+    margin: 0 auto 40px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+}
+
+.hawker-section-header h1 {
+    margin: 0;
+    font-size: 42px;
+}
+
+.hawker-section-header > p {
+    max-width: 420px;
+    margin: 0;
+
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.section-label {
+    margin: 0 0 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+/* ======================================================= */
+/* hawker card grid */
+
+.hawker-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.hawker-grid .hawker-card {
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--beige-color);
+    border-radius: 20px;
+    overflow: hidden;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.hawker-grid .hawker-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.18);
+}
+
+.hawker-card-image {
+    position: relative;
+    height: 230px;
+}
+
+.hawker-card-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.hawker-region-label {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+
+    padding: 8px 15px;
+
+    background-color: var(--orange-color);
+    color: white;
+
+    border-radius: 30px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.hawker-card-content {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 24px;
+}
+
+.hawker-card-content h2 {
+    margin: 0 0 10px;
+
+    font-size: 24px;
+    line-height: 1.15;
+}
+
+.hawker-card-address {
+    margin: 0 0 15px;
+
+    color: #555;
+
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.hawker-card-description {
+    flex: 1;
+
+    margin: 0 0 22px;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.hawker-card-footer {
+    padding-top: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.stall-count {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.view-stalls-btn {
+    padding: 11px 25px;
+
+    border: none;
+    border-radius: 30px;
+
+    background-color: var(--orange-color);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.view-stalls-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+
+/* ======================================================= */
+/* location filters */
+
+.location-filter-container {
+    max-width: 1300px;
+    margin: 0 auto 25px;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.location-filter {
+    padding: 11px 28px;
+
+    border: none;
+    border-radius: 30px;
+
+    background-color: white;
+    color: var(--black-text-color);
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.location-filter:hover {
+    transform: translateY(-3px);
+}
+
+.location-filter.active {
+    background-color: var(--orange-color);
+    color: white;
+}
+
+#location-result-count {
+    max-width: 1300px;
+    margin: 0 auto 25px;
+
+    color: #666;
+
+    font-size: 15px;
+}
+
+
+/* ======================================================= */
+/* no result message */
+
+.no-hawkers-message {
+    grid-column: 1 / -1;
+
+    padding: 50px;
+
+    text-align: center;
+
+    background-color: white;
+    border-radius: 20px;
+}
+
+
+/* ======================================================= */
+/* responsive */
+
+@media screen and (max-width: 1000px) {
+    .hawker-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hawker-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    #available-ordering-section,
+    #location-section {
+        padding: 60px 20px;
+    }
+
+    .hawker-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hawker-section-header h1 {
+        font-size: 34px;
+    }
+
+    .location-filter {
+        padding: 10px 20px;
+    }
+}

@@ -16,4 +16,4 @@ router.get(
     stallDetailsController.getStallDetails
 );
 
-module.exports = router;s
+module.exports = router;

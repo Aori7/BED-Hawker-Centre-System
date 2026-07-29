@@ -136,7 +136,48 @@
 
 
 
+/* ===================================================== */
+/* homepage hawker centres */
 
+#homepage-hawker-section {
+    padding: 80px 7%;
+
+    background-color: var(--orange-color);
+}
+
+.homepage-hawker-footer {
+    display: flex;
+    justify-content: center;
+
+    max-width: 1300px;
+    margin: 40px auto 0;
+}
+
+.view-all-hawkers-btn {
+    padding: 13px 30px;
+
+    border: none;
+    border-radius: 30px;
+
+    background-color: white;
+    color: var(--orange-color);
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.view-all-hawkers-btn:hover {
+    transform: translateY(-3px);
+    filter: brightness(0.96);
+}
 
 /* ======================================================= */
 /* about us section */
