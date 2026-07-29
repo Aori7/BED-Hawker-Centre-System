@@ -372,7 +372,7 @@ button {
 .orders-table tbody tr:last-child td {
   border-bottom: 0;
 }
-.order-status {
+/* .order-status {
   display: inline-flex;
   min-height: 30px;
   align-items: center;
@@ -395,7 +395,82 @@ button {
 .status-cancelled {
   color: rgb(173, 42, 42);
   background-color: rgba(173, 42, 42, 0.14);
+} */
+.order-status-select {
+  padding: 0.45rem 0.75rem;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 190px;
+  transition: all 0.2s ease;
 }
+
+.status-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-preparing {
+  background-color: #fde68a;
+  color: #854d0e;
+}
+
+.status-ready {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-completed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.order-status-select:hover {
+  border-color: var(--primary-color);
+}
+
+.order-status-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.payment-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.payment-paid {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.payment-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.payment-refunded {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.special-request {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 .order-actions {
   text-align: right;
 }

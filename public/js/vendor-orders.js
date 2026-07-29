@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const typeFilter = document.querySelector("#type-filter");
   const dateFilter = document.querySelector("#date-filter");
   const clearFilterButton = document.querySelector("#clear-filter-button");
+  const paymentStatusFilter = document.querySelector("#payment-status-filter");
   const ordersTableBody = document.querySelector("#orders-table-body");
   const noOrdersMessage = document.querySelector("#no-orders-message");
   const orderDialog = document.querySelector("#order-dialog");
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const dialogSecondaryClose = document.querySelector(
     "#dialog-secondary-close",
   );
+  const statusDropdowns = document.querySelectorAll(".order-status-select");
   /* stall selector */
   function closeStallDropdown() {
     if (!switchStallButton || !stallDropdown) return;
@@ -74,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedPayment = paymentFilter?.value || "all";
     const selectedType = typeFilter?.value || "all";
     const selectedDate = dateFilter?.value || "";
+    const selectedPaymentStatus = paymentStatusFilter?.value || "all";
     const rows = ordersTableBody?.querySelectorAll(".order-row") || [];
     let visibleCount = 0;
     rows.forEach((row) => {
@@ -88,10 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const matchesType =
         selectedType === "all" || row.dataset.orderType === selectedType;
       const matchesDate = !selectedDate || row.dataset.date === selectedDate;
+      const matchesPaymentStatus =
+        selectedPaymentStatus === "all" ||
+        row.dataset.paymentStatus === selectedPaymentStatus;
       const shouldShow =
         matchesSearch &&
         matchesStatus &&
         matchesPayment &&
+        matchesPaymentStatus &&
         matchesType &&
         matchesDate;
       row.hidden = !shouldShow;
@@ -118,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="dialog-detail"><span>Date and time</span><span>${cells[2]?.textContent.trim() || "-"}</span></div>
       <div class="dialog-detail"><span>Payment type</span><span>${row.dataset.paymentMethod || "-"}</span></div>
       <div class="dialog-detail"><span>Order type</span><span>${row.dataset.orderType || "-"}</span></div>
-      <div class="dialog-detail"><span>Total amount</span><span>${cells[5]?.textContent.trim() || "-"}</span></div>
+      <div class="dialog-detail"><span>Total amount</span><span>${row.dataset.total || "-"}</span></div>
       <div class="dialog-detail"><span>Status</span><span>${statusText}</span></div>
     `;
     orderDialog.showModal();
@@ -162,6 +169,45 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   orderDialog?.addEventListener("click", (event) => {
     if (event.target === orderDialog) orderDialog.close();
+  });
+  statusDropdowns.forEach((dropdown) => {
+    dropdown.addEventListener("change", () => {
+      const row = dropdown.closest(".order-row");
+
+      row.dataset.orderStatus = dropdown.value;
+
+      dropdown.classList.remove(
+        "status-pending",
+        "status-preparing",
+        "status-ready",
+        "status-completed",
+        "status-cancelled",
+      );
+
+      switch (dropdown.value) {
+        case "Pending":
+          dropdown.classList.add("status-pending");
+          break;
+
+        case "Preparing":
+          dropdown.classList.add("status-preparing");
+          break;
+
+        case "Ready for Collection":
+          dropdown.classList.add("status-ready");
+          break;
+
+        case "Completed":
+          dropdown.classList.add("status-completed");
+          break;
+
+        case "Cancelled":
+          dropdown.classList.add("status-cancelled");
+          break;
+      }
+
+      console.log(`${row.dataset.orderId} → ${dropdown.value}`);
+    });
   });
   /* initialisation */
   restoreSelectedStall();

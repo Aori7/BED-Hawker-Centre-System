@@ -160,17 +160,17 @@
       <!-- Filters -->
       <section class="filters" id="filters" aria-label="Order filters">
         <label class="orders-filter">
-          <span>Order status</span>
-          <select id="status-filter" name="order-status" data-filter="status">
-            <option value="all">All statuses</option>
-            <option value="Preparing">Preparing</option>
-            <option value="Ready for Collection">Ready for Collection</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
+          <span>Date &amp; Time</span>
+          <input
+            type="date"
+            id="date-filter"
+            name="order-date"
+            data-filter="date"
+          />
         </label>
+
         <label class="orders-filter">
-          <span>Payment type</span>
+          <span>Payment Type</span>
           <select
             id="payment-filter"
             name="payment-method"
@@ -179,11 +179,27 @@
             <option value="all">All payment types</option>
             <option value="PayNow">PayNow</option>
             <option value="Credit Card">Credit Card</option>
+            <option value="NETS">NETS</option>
             <option value="Cash">Cash</option>
           </select>
         </label>
+
         <label class="orders-filter">
-          <span>Order type</span>
+          <span>Payment Status</span>
+          <select
+            id="payment-status-filter"
+            name="payment-status"
+            data-filter="payment-status"
+          >
+            <option value="all">All payment statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Refunded">Refunded</option>
+          </select>
+        </label>
+
+        <label class="orders-filter">
+          <span>Order Type</span>
           <select id="type-filter" name="order-type" data-filter="order-type">
             <option value="all">All order types</option>
             <option value="Dine-in">Dine-in</option>
@@ -191,15 +207,19 @@
             <option value="Delivery">Delivery</option>
           </select>
         </label>
+
         <label class="orders-filter">
-          <span>Order date</span>
-          <input
-            type="date"
-            id="date-filter"
-            name="order-date"
-            data-filter="date"
-          />
+          <span>Order Status</span>
+          <select id="status-filter" name="order-status" data-filter="status">
+            <option value="all">All statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Ready for Collection">Ready for Collection</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
         </label>
+
         <button
           type="button"
           class="clear-filter-button"
@@ -217,11 +237,13 @@
               <tr>
                 <th>Order ID</th>
                 <th>Customer ID</th>
-                <th>Date &amp; time</th>
-                <th>Payment type</th>
-                <th>Order type</th>
+                <th>Date &amp; Time</th>
                 <th>Total</th>
-                <th>Status</th>
+                <th>Payment Type</th>
+                <th>Payment Status</th>
+                <th>Order Type</th>
+                <th>Special Request</th>
+                <th>Order Status</th>
                 <th><span class="visually-hidden">Actions</span></th>
               </tr>
             </thead>
@@ -230,22 +252,36 @@
                 class="order-row"
                 data-order-id="ORD1001"
                 data-customer-id="CUS023"
-                data-date="2026-07-24"
+                data-date="2026-07-24T12:35"
+                data-total="18.50"
                 data-payment-method="PayNow"
+                data-payment-status="Paid"
                 data-order-type="Pickup"
+                data-special-request="Less chilli, extra cucumber"
                 data-order-status="Preparing"
-                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1001</strong></td>
                 <td data-label="Customer ID">CUS023</td>
-                <td data-label="Date & time">
+                <td data-label="Date &amp; Time">
                   <time datetime="2026-07-24T12:35">24 Jul 2026, 12:35 PM</time>
                 </td>
-                <td data-label="Payment type">PayNow</td>
-                <td data-label="Order type">Pickup</td>
                 <td data-label="Total">$18.50</td>
-                <td data-label="Status">
-                  <span class="order-status status-preparing">Preparing</span>
+                <td data-label="Payment Type">PayNow</td>
+                <td data-label="Payment Status">
+                  <span class="payment-status payment-paid">Paid</span>
+                </td>
+                <td data-label="Order Type">Pickup</td>
+                <td class="special-request" data-label="Special Request">✓</td>
+                <td data-label="Order Status">
+                  <select class="order-status-select status-ready">
+                    <option value="Pending">Pending</option>
+                    <option value="Preparing" selected>Preparing</option>
+                    <option value="Ready for Collection">
+                      Ready for Collection
+                    </option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
                 </td>
                 <td class="order-actions">
                   <button
@@ -258,28 +294,41 @@
                   </button>
                 </td>
               </tr>
+
               <tr
                 class="order-row"
                 data-order-id="ORD1002"
                 data-customer-id="CUS041"
-                data-date="2026-07-24"
+                data-date="2026-07-24T12:18"
+                data-total="12.00"
                 data-payment-method="Credit Card"
+                data-payment-status="Paid"
                 data-order-type="Pickup"
+                data-special-request=""
                 data-order-status="Ready for Collection"
-                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1002</strong></td>
                 <td data-label="Customer ID">CUS041</td>
-                <td data-label="Date & time">
+                <td data-label="Date &amp; Time">
                   <time datetime="2026-07-24T12:18">24 Jul 2026, 12:18 PM</time>
                 </td>
-                <td data-label="Payment type">Credit Card</td>
-                <td data-label="Order type">Pickup</td>
                 <td data-label="Total">$12.00</td>
-                <td data-label="Status">
-                  <span class="order-status status-ready"
-                    >Ready for Collection</span
-                  >
+                <td data-label="Payment Type">Credit Card</td>
+                <td data-label="Payment Status">
+                  <span class="payment-status payment-paid">Paid</span>
+                </td>
+                <td data-label="Order Type">Pickup</td>
+                <td class="special-request" data-label="Special Request">-</td>
+                <td data-label="Order Status">
+                  <select class="order-status-select status-ready">
+                    <option value="Pending">Pending</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready for Collection" selected>
+                      Ready for Collection
+                    </option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
                 </td>
                 <td class="order-actions">
                   <button
@@ -292,26 +341,41 @@
                   </button>
                 </td>
               </tr>
+
               <tr
                 class="order-row"
                 data-order-id="ORD1003"
                 data-customer-id="CUS052"
-                data-date="2026-07-24"
+                data-date="2026-07-24T11:50"
+                data-total="7.50"
                 data-payment-method="Cash"
+                data-payment-status="Paid"
                 data-order-type="Dine-in"
+                data-special-request="No spring onions"
                 data-order-status="Completed"
-                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1003</strong></td>
                 <td data-label="Customer ID">CUS052</td>
-                <td data-label="Date & time">
+                <td data-label="Date &amp; Time">
                   <time datetime="2026-07-24T11:50">24 Jul 2026, 11:50 AM</time>
                 </td>
-                <td data-label="Payment type">Cash</td>
-                <td data-label="Order type">Dine-in</td>
                 <td data-label="Total">$7.50</td>
-                <td data-label="Status">
-                  <span class="order-status status-completed">Completed</span>
+                <td data-label="Payment Type">Cash</td>
+                <td data-label="Payment Status">
+                  <span class="payment-status payment-paid">Paid</span>
+                </td>
+                <td data-label="Order Type">Dine-in</td>
+                <td class="special-request" data-label="Special Request">✓</td>
+                <td data-label="Order Status">
+                  <select class="order-status-select status-completed">
+                    <option value="Pending">Pending</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready for Collection">
+                      Ready for Collection
+                    </option>
+                    <option value="Completed" selected>Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
                 </td>
                 <td class="order-actions">
                   <button
@@ -324,32 +388,94 @@
                   </button>
                 </td>
               </tr>
+
               <tr
                 class="order-row"
                 data-order-id="ORD1004"
                 data-customer-id="CUS016"
-                data-date="2026-07-23"
+                data-date="2026-07-23T19:20"
+                data-total="22.00"
                 data-payment-method="PayNow"
+                data-payment-status="Refunded"
                 data-order-type="Delivery"
+                data-special-request=""
                 data-order-status="Cancelled"
-                data-resource="order"
               >
                 <td data-label="Order ID"><strong>ORD1004</strong></td>
                 <td data-label="Customer ID">CUS016</td>
-                <td data-label="Date & time">
+                <td data-label="Date &amp; Time">
                   <time datetime="2026-07-23T19:20">23 Jul 2026, 7:20 PM</time>
                 </td>
-                <td data-label="Payment type">PayNow</td>
-                <td data-label="Order type">Delivery</td>
                 <td data-label="Total">$22.00</td>
-                <td data-label="Status">
-                  <span class="order-status status-cancelled">Cancelled</span>
+                <td data-label="Payment Type">PayNow</td>
+                <td data-label="Payment Status">
+                  <span class="payment-status payment-refunded">Refunded</span>
+                </td>
+                <td data-label="Order Type">Delivery</td>
+                <td class="special-request" data-label="Special Request">-</td>
+                <td data-label="Order Status">
+                  <select class="order-status-select status-cancelled">
+                    <option value="Pending">Pending</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready for Collection">
+                      Ready for Collection
+                    </option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled" selected>Cancelled</option>
+                  </select>
                 </td>
                 <td class="order-actions">
                   <button
                     type="button"
                     class="view-details-button"
                     data-order-id="ORD1004"
+                    data-action="view-order-details"
+                  >
+                    See details
+                  </button>
+                </td>
+              </tr>
+
+              <tr
+                class="order-row"
+                data-order-id="ORD1005"
+                data-customer-id="CUS075"
+                data-date="2026-07-24T13:10"
+                data-total="15.80"
+                data-payment-method="NETS"
+                data-payment-status="Pending"
+                data-order-type="Delivery"
+                data-special-request="Extra gravy"
+                data-order-status="Pending"
+              >
+                <td data-label="Order ID"><strong>ORD1005</strong></td>
+                <td data-label="Customer ID">CUS075</td>
+                <td data-label="Date &amp; Time">
+                  <time datetime="2026-07-24T13:10">24 Jul 2026, 1:10 PM</time>
+                </td>
+                <td data-label="Total">$15.80</td>
+                <td data-label="Payment Type">NETS</td>
+                <td data-label="Payment Status">
+                  <span class="payment-status payment-pending">Pending</span>
+                </td>
+                <td data-label="Order Type">Delivery</td>
+                <td class="special-request" data-label="Special Request">✓</td>
+                <td data-label="Order Status">
+                  <select class="order-status-select status-pending">
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Preparing">Preparing</option>
+                    <option value="Ready for Collection">
+                      Ready for Collection
+                    </option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </td>
+                <td class="order-actions">
+                  <button
+                    type="button"
+                    class="view-details-button"
+                    data-order-id="ORD1005"
                     data-action="view-order-details"
                   >
                     See details
