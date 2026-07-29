@@ -1,171 +1,91 @@
-// stall details controller done by dayana
+const stallDetailsModel =
+    require("../models/stallDetailsModel");
 
-const sql = require("mssql");
-const dbConfig = require("../dbConfig");
-
-// get one food stall and its latest inspection
-async function getStallDetails(stallID) {
-    const connection = await sql.connect(
-        dbConfig
-    );
-
+// get one food stall's details
+async function getStallDetails(req, res) {
     try {
-        const result = await connection
-            .request()
-            .input(
-                "StallID",
-                sql.Int,
-                stallID
-            )
-            .query(`
-                SELECT
-                    fs.StallID,
-                    fs.HawkerCentreID,
-                    fs.OwnerID,
-                    fs.StallName,
-                    fs.StallUnitNo,
-                    fs.ImageURL,
+        const stallID = Number(
+            req.params.stallID
+        );
 
-                    hc.HCName,
-                    hc.Address,
-
-                    latestInspection.InspectionID,
-                    latestInspection.OfficerID,
-                    latestInspection.InspectionDate,
-                    latestInspection.InspectionScore,
-                    latestInspection.HygieneGrade,
-                    latestInspection.GradeExpiry,
-                    latestInspection.InspectionStatus,
-
-                    latestRemark.Remark,
-
-                    CASE
-                        WHEN latestInspection.HygieneGrade
-                            IN ('A', 'B')
-                            THEN 'Compliant'
-
-                        WHEN latestInspection.HygieneGrade
-                            IN ('C', 'D')
-                            THEN 'Non-Compliant'
-
-                        ELSE 'Not Inspected'
-                    END AS ComplianceStatus
-
-                FROM FoodStall fs
-
-                INNER JOIN HawkerCentre hc
-                    ON fs.HawkerCentreID =
-                        hc.HawkerCentreID
-
-                OUTER APPLY (
-                    SELECT TOP 1
-                        i.InspectionID,
-                        i.OfficerID,
-                        i.InspectionDate,
-                        i.InspectionScore,
-                        i.HygieneGrade,
-                        i.GradeExpiry,
-                        i.InspectionStatus
-
-                    FROM Inspection i
-
-                    WHERE
-                        i.StallID = fs.StallID
-
-                    ORDER BY
-                        i.InspectionDate DESC,
-                        i.InspectionID DESC
-                ) latestInspection
-
-                OUTER APPLY (
-                    SELECT TOP 1
-                        ir.Remark
-
-                    FROM InspectionRemark ir
-
-                    WHERE
-                        ir.InspectionID =
-                            latestInspection.InspectionID
-
-                    ORDER BY
-                        ir.CreatedAt DESC,
-                        ir.RemarkID DESC
-                ) latestRemark
-
-                WHERE
-                    fs.StallID = @StallID;
-            `);
-
-        if (result.recordset.length === 0) {
-            return null;
+        if (
+            !Number.isInteger(stallID) ||
+            stallID <= 0
+        ) {
+            return res.status(400).json({
+                error:
+                    "Invalid food stall ID"
+            });
         }
 
-        return result.recordset[0];
+        const stallDetails =
+            await stallDetailsModel
+                .getStallDetails(stallID);
 
-    } finally {
-        await connection.close();
+        if (!stallDetails) {
+            return res.status(404).json({
+                error:
+                    "Food stall not found"
+            });
+        }
+
+        res.status(200).json(
+            stallDetails
+        );
+
+    } catch (error) {
+        console.error(
+            "Get stall details error:",
+            error
+        );
+
+        res.status(500).json({
+            error:
+                "Error retrieving food stall details"
+        });
     }
 }
 
-// get all inspections for one food stall
+// get one food stall's inspection history
 async function getStallInspectionHistory(
-    stallID
+    req,
+    res
 ) {
-    const connection = await sql.connect(
-        dbConfig
-    );
-
     try {
-        const result = await connection
-            .request()
-            .input(
-                "StallID",
-                sql.Int,
-                stallID
-            )
-            .query(`
-                SELECT
-                    i.InspectionID,
-                    i.OfficerID,
-                    i.StallID,
-                    i.InspectionDate,
-                    i.InspectionScore,
-                    i.HygieneGrade,
-                    i.GradeExpiry,
-                    i.InspectionStatus,
-                    i.CreatedAt,
+        const stallID = Number(
+            req.params.stallID
+        );
 
-                    latestRemark.Remark
+        if (
+            !Number.isInteger(stallID) ||
+            stallID <= 0
+        ) {
+            return res.status(400).json({
+                error:
+                    "Invalid food stall ID"
+            });
+        }
 
-                FROM Inspection i
+        const inspectionHistory =
+            await stallDetailsModel
+                .getStallInspectionHistory(
+                    stallID
+                );
 
-                OUTER APPLY (
-                    SELECT TOP 1
-                        ir.Remark
+        res.status(200).json(
+            inspectionHistory
+        );
 
-                    FROM InspectionRemark ir
+    } catch (error) {
+        console.error(
+            "Get stall inspection history error:",
+            error
+        );
 
-                    WHERE
-                        ir.InspectionID =
-                            i.InspectionID
-
-                    ORDER BY
-                        ir.CreatedAt DESC,
-                        ir.RemarkID DESC
-                ) latestRemark
-
-                WHERE
-                    i.StallID = @StallID
-
-                ORDER BY
-                    i.InspectionDate DESC,
-                    i.InspectionID DESC;
-            `);
-
-        return result.recordset;
-
-    } finally {
-        await connection.close();
+        res.status(500).json({
+            error:
+                "Error retrieving stall inspection history"
+        });
     }
 }
 
