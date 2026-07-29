@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const orderDialog = document.querySelector("#order-dialog");
   const dialogOrderId = document.querySelector("#dialog-order-id");
   const dialogBody = document.querySelector("#dialog-body");
-  const dialogCloseButton = document.querySelector("#dialog-close-button");
   const dialogSecondaryClose = document.querySelector(
     "#dialog-secondary-close",
   );
@@ -115,19 +114,70 @@ document.addEventListener("DOMContentLoaded", () => {
     if (paymentStatusFilter) paymentStatusFilter.value = "all";
     filterOrders();
   }
+
+  /* order dialog */
+  function formatDateTime(dateString) {
+    if (!dateString) return "-";
+
+    const date = new Date(dateString);
+
+    return date.toLocaleString("en-SG", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  function formatDeliveryFee(fee) {
+    const amount = Number(fee);
+    return amount > 0 ? `$${amount.toFixed(2)}` : "-";
+  }
+
   function openOrderDetails(row) {
     if (!orderDialog || !dialogOrderId || !dialogBody) return;
-    const cells = row.querySelectorAll("td");
-    const statusText = row.querySelector(".order-status-select")?.value || "-";
-    dialogOrderId.textContent = row.dataset.orderId || "Order";
-    dialogBody.innerHTML = `
-      <div class="dialog-detail"><span>Customer ID</span><span>${row.dataset.customerId || "-"}</span></div>
-      <div class="dialog-detail"><span>Date and time</span><span>${row.dataset.date || "-"}</span></div>
-      <div class="dialog-detail"><span>Payment type</span><span>${row.dataset.paymentMethod || "-"}</span></div>
-      <div class="dialog-detail"><span>Order type</span><span>${row.dataset.orderType || "-"}</span></div>
-      <div class="dialog-detail"><span>Total amount</span><span>$${row.dataset.total || "-"}</span></div>
-      <div class="dialog-detail"><span>Status</span><span>${statusText}</span></div>
+
+    const statusText =
+      row.querySelector(".order-status-select")?.value ||
+      row.dataset.orderStatus ||
+      "-";
+    const menuItems = JSON.parse(row.dataset.menuItems || "[]");
+    const menuItemsHtml = menuItems
+      .map((item) => {
+        const lineTotal = (item.quantity * item.price).toFixed(2);
+
+        return `
+      <div class="dialog-menu-item">
+        <span>${item.menuItemName}</span>
+        <span>x${item.quantity}</span>
+        <span>$${lineTotal}</span>
+      </div>
     `;
+      })
+      .join("");
+
+    dialogOrderId.textContent = row.dataset.orderId || "Order";
+
+    dialogBody.innerHTML = `
+    <div class="dialog-detail"><span>Order ID</span><span>${row.dataset.orderId || "-"}</span></div>
+    <div class="dialog-detail"><span>Customer ID</span><span>${row.dataset.customerId || "-"}</span></div>
+    <div class="dialog-detail"><span>Order Type</span><span>${row.dataset.orderType || "-"}</span></div>
+    <div class="dialog-detail"><span>Order Date & Time</span><span>${formatDateTime(row.dataset.date)}</span></div>
+    <div class="dialog-detail"><span>Order Status</span><span>${statusText}</span></div>
+    <div class="dialog-detail"><span>Subtotal</span><span>$${Number(row.dataset.subtotal).toFixed(2)}</span></div>
+    <div class="dialog-detail"><span>Delivery Fee</span><span>${formatDeliveryFee(row.dataset.deliveryFee)}</span></div>
+    <div class="dialog-detail"><span>Total Amount</span><span>$${Number(row.dataset.total).toFixed(2)}</span></div>
+    <div class="dialog-detail"><span>Payment Method</span><span>${row.dataset.paymentMethod || "-"}</span></div>
+    <div class="dialog-detail"><span>Payment Status</span><span>${row.dataset.paymentStatus || "-"}</span></div>
+    <div class="dialog-detail"><span>Special Request</span><span>${row.dataset.specialRequest || "-"}</span></div>
+
+    <div class="dialog-menu">
+      <h3>Menu Items</h3>
+      ${menuItemsHtml}
+    </div>
+  `;
     orderDialog.showModal();
   }
   /* event listeners */
@@ -166,14 +216,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = detailsButton.closest(".order-row");
     if (row) openOrderDetails(row);
   });
-  dialogCloseButton?.addEventListener("click", () => {
-    orderDialog?.close();
-  });
   dialogSecondaryClose?.addEventListener("click", () => {
-    orderDialog?.close();
+    if (orderDialog.open) {
+      orderDialog.close();
+    }
   });
-  orderDialog?.addEventListener("click", (event) => {
-    if (event.target === orderDialog) orderDialog.close();
+  orderDialog?.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    if (orderDialog.open) {
+      orderDialog.close();
+    }
   });
   statusDropdowns.forEach((dropdown) => {
     dropdown.addEventListener("change", () => {
