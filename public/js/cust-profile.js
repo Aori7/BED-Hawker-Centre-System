@@ -1,44 +1,38 @@
 //reads the customer details saved during login
 document.addEventListener("DOMContentLoaded", () => {
-    const isLoggedIn =
-        sessionStorage.getItem("isLoggedIn") === "true";
-
-    const userRole =
-        sessionStorage.getItem("userRole");
-
-    const customerID =
-        sessionStorage.getItem("customerID");
-
-    const userID =
-        sessionStorage.getItem("userID");
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+    const userRole = sessionStorage.getItem("userRole");
+    const customerID = sessionStorage.getItem("customerID");
+    const userID = sessionStorage.getItem("userID");
+    const accessToken = sessionStorage.getItem("accessToken");
 
     if (
         !isLoggedIn ||
-        userRole !== "Customer" ||
-        !customerID ||
-        !userID
+        !userID ||
+        !accessToken
     ) {
         alert("Please log in to view your profile");
         window.location.href = "/html/login.html";
         return;
     }
-
+    if (userRole !== "Customer") {
+        alert("You do not have permission to view this page");
+        window.location.href = "/index.html";
+        return;
+    }
+    if (!customerID) {
+        alert("Customer account details could not be found");
+        window.location.href = "/html/login.html";
+        return;
+    }
     const profileForm =document.getElementById("profile-form");
-
     const passwordForm =document.getElementById("password-form");
-
     const profileMessage = document.getElementById("profile-message");
-
     const customerNameInput = document.getElementById("customer-name");
-
     const customerEmailInput =document.getElementById("customer-email");
-
     const contactNoInput = document.getElementById("contact-no");
-
     const addressInput =document.getElementById("customer-address");
-
     const displayName = document.getElementById("profile-display-name");
-
     const displayEmail =document.getElementById("profile-display-email");
 
     let originalProfile = null;
@@ -76,7 +70,12 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadProfile() {
         try {
             const response = await fetch(
-                `/customers/${customerID}/profile`
+                `/customers/${customerID}/profile`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                }
             );
 
             const data = await response.json();
@@ -148,7 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "PUT",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
                     },
 
                     body: JSON.stringify({
@@ -246,7 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "PUT",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
                     },
 
                     body: JSON.stringify({
@@ -294,15 +295,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //deleteing an account
     const deleteOverlay =document.getElementById("delete-account-overlay");
-
     const openDeleteButton =document.getElementById("open-delete-account-btn");
-
     const cancelDeleteButton =document.getElementById("cancel-delete-account-btn");
-
     const confirmDeleteButton =document.getElementById("confirm-delete-account-btn");
-
     const deletePasswordInput = document.getElementById("delete-account-password");
-
     const deleteMessage = document.getElementById("delete-account-message");
 
     // open delete account popup
@@ -355,7 +351,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "DELETE",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`
                     },
 
                     body: JSON.stringify({
