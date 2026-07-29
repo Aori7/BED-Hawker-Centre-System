@@ -17,6 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const noResultsMessage = document.querySelector("#no-menu-results");
   const categoryLinks = document.querySelectorAll(".category-link");
   const moreMenus = document.querySelectorAll(".more-menu");
+  /* dialogs */
+  const addMenuDialog = document.querySelector("#add-menu-dialog");
+  const editMenuDialog = document.querySelector("#edit-menu-dialog");
+  const addCategoryDialog = document.querySelector("#add-category-dialog");
+
+  const addMenuButton = document.querySelector(".floating-add-menu-button");
+  const addCategoryButton = document.querySelector(".add-category-button");
+
+  // const editButtons = document.querySelectorAll(".edit-action");
+  const closeDialogButtons = document.querySelectorAll(".close-dialog-button");
+
+  const addCategoryForm = document.querySelector("#add-category-form");
+  const categoryNavigation = document.querySelector(".category-navigation");
   /* stall dropdown */
   function closeStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
@@ -32,6 +45,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const isOpen = switchStallButton.getAttribute("aria-expanded") === "true";
     switchStallButton.setAttribute("aria-expanded", String(!isOpen));
     stallDropdown.hidden = isOpen;
+  }
+
+  /* open dialog */
+  function openDialog(dialog) {
+    if (!dialog) {
+      return;
+    }
+
+    dialog.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  /* close dialog */
+  function closeDialog(dialog) {
+    if (!dialog) {
+      return;
+    }
+
+    dialog.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  /* close all dialogs */
+  function closeAllDialogs() {
+    closeDialog(addMenuDialog);
+    closeDialog(editMenuDialog);
+    closeDialog(addCategoryDialog);
   }
   if (switchStallButton && stallDropdown) {
     switchStallButton.addEventListener("click", (event) => {
@@ -57,6 +97,82 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!event.target.closest(".stall-switcher")) {
       closeStallDropdown();
     }
+  });
+
+  /* add menu button */
+  addMenuButton?.addEventListener("click", () => {
+    openDialog(addMenuDialog);
+  });
+
+  /* add category button */
+  addCategoryButton?.addEventListener("click", () => {
+    openDialog(addCategoryDialog);
+  });
+
+  /* close buttons */
+  closeDialogButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      closeAllDialogs();
+    });
+  });
+
+  /* click outside dialog */
+  document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("menu-dialog")) {
+      closeAllDialogs();
+    }
+  });
+
+  /* edit menu item */
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest(".edit-action");
+
+    if (!button) {
+      return;
+    }
+
+    const card = button.closest(".menu-card");
+
+    if (!card) {
+      return;
+    }
+
+    document.querySelector("#edit-menu-item-id").value =
+      card.dataset.menuItemId;
+    document.querySelector("#edit-item-name").value = card.dataset.menuItemName;
+    document.querySelector("#edit-item-category").value = card.dataset.category;
+    document.querySelector("#edit-item-status").value =
+      card.dataset.availability;
+    document.querySelector("#edit-item-description").value =
+      card.dataset.description;
+    document.querySelector("#edit-item-price").value =
+      card.dataset.currentPrice;
+    document.querySelector("#edit-item-recommended").checked =
+      card.dataset.recommended === "true";
+
+    openDialog(editMenuDialog);
+  });
+
+  /* category */
+  /* add category */
+  addCategoryForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = document.querySelector("#category-name");
+    const value = input.value.trim();
+
+    if (!value) {
+      return;
+    }
+
+    const id = value.toLowerCase().replaceAll(" ", "-");
+    const link = document.createElement("a");
+    link.href = "#" + id;
+    link.className = "category-link";
+    link.textContent = value;
+    categoryNavigation.insertBefore(link, addCategoryButton);
+    input.value = "";
+
+    closeDialog(addCategoryDialog);
   });
   /* search and status filter */
   function filterMenuItems() {

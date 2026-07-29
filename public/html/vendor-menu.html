@@ -221,6 +221,12 @@
               data-menu-item-id="1"
               data-category="noodles"
               data-menu-item-name="Laksa"
+              data-original-price=""
+              data-current-price="5.50"
+              data-discount="0"
+              data-description="Spicy coconut noodle soup served with fishcake, tofu puff and egg."
+              data-recommended="true"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -291,6 +297,12 @@
               data-menu-item-id="2"
               data-category="noodles"
               data-menu-item-name="Fishball Noodles"
+              data-original-price=""
+              data-current-price="4.50"
+              data-discount="0"
+              data-description="Springy noodles served with fishballs, fishcake, vegetables and savoury sauce."
+              data-recommended="false"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -350,6 +362,12 @@
               data-menu-item-id="3"
               data-category="noodles"
               data-menu-item-name="Prawn Noodles"
+              data-original-price=""
+              data-current-price="6.00"
+              data-discount="0"
+              data-description="Prawn noodles served with prawns, pork slices and a rich seafood broth."
+              data-recommended="false"
+              data-image=""
               data-availability="unavailable"
               data-resource="menu-item"
             >
@@ -420,6 +438,12 @@
               data-menu-item-id="4"
               data-category="rice"
               data-menu-item-name="Chicken Rice"
+              data-original-price="6.00"
+              data-current-price="5.00"
+              data-discount="17"
+              data-description="Fragrant rice served with tender chicken, chilli sauce and soup."
+              data-recommended="true"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -491,6 +515,12 @@
               data-menu-item-id="5"
               data-category="rice"
               data-menu-item-name="Fried Rice"
+              data-original-price=""
+              data-current-price="5.00"
+              data-discount="0"
+              data-description="Wok-fried rice served with egg, vegetables and spring onions."
+              data-recommended="false"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -549,6 +579,12 @@
               data-menu-item-id="6"
               data-category="rice"
               data-menu-item-name="Curry Rice"
+              data-original-price=""
+              data-current-price="5.50"
+              data-discount="0"
+              data-description="Steamed rice served with curry, vegetables and crispy chicken cutlet."
+              data-recommended="false"
+              data-image=""
               data-availability="unavailable"
               data-resource="menu-item"
             >
@@ -619,6 +655,12 @@
               data-menu-item-id="7"
               data-category="drinks"
               data-menu-item-name="Iced Lemon Tea"
+              data-original-price=""
+              data-current-price="2.20"
+              data-discount="0"
+              data-description="Refreshing chilled tea served with fresh lemon slices."
+              data-recommended="false"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -677,6 +719,12 @@
               data-menu-item-id="8"
               data-category="drinks"
               data-menu-item-name="Barley"
+              data-original-price=""
+              data-current-price="2.00"
+              data-discount="0"
+              data-description="Light and refreshing homemade barley drink served chilled."
+              data-recommended="false"
+              data-image=""
               data-availability="available"
               data-resource="menu-item"
             >
@@ -747,7 +795,262 @@
       <span class="material-symbols-rounded"> add </span>
       <span>Add menu item</span>
     </button>
-    <!-- Page JavaScript -->
+    <!-- add menu item dialog -->
+    <div class="menu-dialog" id="add-menu-dialog" hidden>
+      <div class="menu-dialog-card">
+        <div class="menu-dialog-header">
+          <h3>Add Menu Item</h3>
+        </div>
+        <form id="add-menu-form">
+          <input type="hidden" id="add-stall-id" name="stallId" value="1" />
+          <div class="menu-dialog-body">
+            <label class="dialog-field">
+              <span>Item name</span>
+              <input type="text" id="add-item-name" name="itemName" required />
+            </label>
+
+            <label class="dialog-field">
+              <span>Category</span>
+              <select id="add-item-category" name="category" required>
+                <option value="">Select category</option>
+                <option value="noodles">Noodles</option>
+                <option value="rice">Rice</option>
+                <option value="drinks">Drinks</option>
+              </select>
+            </label>
+
+            <label class="dialog-field">
+              <span>Price</span>
+              <input
+                type="number"
+                id="add-item-price"
+                name="price"
+                step="0.01"
+                inputmode="decimal"
+                min="0"
+                required
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>Description</span>
+              <textarea
+                id="add-item-description"
+                name="description"
+                rows="4"
+                maxlength="250"
+              ></textarea>
+            </label>
+
+            <label class="dialog-field">
+              <span>Availability</span>
+
+              <select id="add-item-status" name="availability">
+                <option value="available">Available</option>
+                <option value="unavailable">Unavailable</option>
+              </select>
+            </label>
+
+            <label class="dialog-checkbox">
+              <input
+                type="checkbox"
+                id="add-item-recommended"
+                name="recommended"
+                value="true"
+              />
+
+              <span>Recommended item</span>
+            </label>
+
+            <label class="dialog-field">
+              <span>Image</span>
+
+              <input
+                type="file"
+                id="add-item-image"
+                name="image"
+                accept=".jpg,.jpeg,.png,.webp"
+              />
+            </label>
+          </div>
+
+          <div class="menu-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Close
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Add Item
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- edit menu item dialog -->
+    <div class="menu-dialog" id="edit-menu-dialog" hidden>
+      <div class="menu-dialog-card">
+        <div class="menu-dialog-header">
+          <h3>Edit Menu Item</h3>
+        </div>
+
+        <form id="edit-menu-form">
+          <input type="hidden" id="edit-menu-item-id" name="menuItemId" />
+
+          <div class="menu-dialog-body">
+            <label class="dialog-field">
+              <span>Item name</span>
+              <input type="text" id="edit-item-name" name="itemName" required />
+            </label>
+
+            <label class="dialog-field">
+              <span>Category</span>
+
+              <select id="edit-item-category" name="categoryId" required>
+                <option value="noodles">Noodles</option>
+                <option value="rice">Rice</option>
+                <option value="drinks">Drinks</option>
+              </select>
+            </label>
+
+            <label class="dialog-field">
+              <span>Price</span>
+
+              <input
+                type="number"
+                id="edit-item-price"
+                name="price"
+                step="0.01"
+                inputmode="decimal"
+                min="0"
+                required
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>Description</span>
+
+              <textarea
+                id="edit-item-description"
+                name="description"
+                rows="4"
+                maxlength="250"
+              ></textarea>
+            </label>
+
+            <label class="dialog-field">
+              <span>Availability</span>
+
+              <select id="edit-item-status" name="availability">
+                <option value="available">Available</option>
+                <option value="unavailable">Unavailable</option>
+              </select>
+            </label>
+
+            <label class="dialog-checkbox">
+              <input
+                type="checkbox"
+                id="edit-item-recommended"
+                name="recommended"
+                value="true"
+              />
+
+              <span>Recommended item</span>
+            </label>
+          </div>
+
+          <div class="menu-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Close
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- add category dialog -->
+    <div class="menu-dialog" id="add-category-dialog" hidden>
+      <div class="menu-dialog-card menu-dialog-small">
+        <div class="menu-dialog-header">
+          <h3>Add Category</h3>
+        </div>
+
+        <form id="add-category-form">
+          <div class="menu-dialog-body">
+            <label class="dialog-field">
+              <span>Category name</span>
+
+              <input
+                type="text"
+                id="category-name"
+                name="categoryName"
+                required
+              />
+            </label>
+          </div>
+
+          <div class="menu-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Close
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Add Category
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- delete menu item dialog -->
+    <div class="menu-dialog" id="delete-menu-dialog" hidden>
+      <div class="menu-dialog-card menu-dialog-small">
+        <div class="menu-dialog-header">
+          <h3>Delete Menu Item</h3>
+        </div>
+
+        <form id="delete-menu-form">
+          <input type="hidden" id="delete-menu-item-id" name="menuItemId" />
+
+          <div class="menu-dialog-body">
+            <p>
+              Are you sure you want to delete
+              <strong id="delete-item-name">this menu item</strong>?
+            </p>
+
+            <p>This action cannot be undone.</p>
+          </div>
+
+          <div class="menu-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Cancel
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Delete Item
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- page javascript -->
     <script src="../js/vendor-menu.js"></script>
   </body>
 </html>
