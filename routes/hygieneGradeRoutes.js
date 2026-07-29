@@ -118,3 +118,5 @@ module.exports = {
     getHygieneGrades,
     updateHygieneGrade
 };
+
+module.exports = router;
