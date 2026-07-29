@@ -826,6 +826,154 @@
   margin-top: 22px;
 }
 
+
+
+/* ===================================================== */
+/* ordering progress steps */
+
+.order-progress-section {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 0 20px;
+
+    /*
+        Pulls the progress box slightly over
+        the bottom of the banner.
+    */
+    transform: translateY(-35px);
+
+    margin-bottom: -35px;
+}
+
+.order-progress {
+    width: 100%;
+    max-width: 950px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px 35px;
+
+    background-color: white;
+    border-radius: 22px;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.14);
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: #8b8178;
+}
+
+.progress-number {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background-color: #eee8df;
+    color: #746a61;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.progress-text strong,
+.progress-text small {
+    display: block;
+}
+
+.progress-text strong {
+    margin-bottom: 3px;
+
+    color: #4c423a;
+
+    font-size: 16px;
+}
+
+.progress-text small {
+    color: #8b8178;
+
+    font-size: 13px;
+}
+
+/* active/current step */
+.progress-step.active .progress-number {
+    background-color: var(--orange-color);
+    color: white;
+
+    box-shadow: 0 8px 18px rgba(255, 122, 0, 0.3);
+}
+
+.progress-step.active .progress-text strong {
+    color: var(--orange-color);
+}
+
+/* line connecting each step */
+.progress-line {
+    width: 100px;
+    height: 2px;
+
+    margin: 0 25px;
+
+    background-color: #e4ddd5;
+}
+
+
+/* tablet/mobile */
+
+@media screen and (max-width: 750px) {
+    .order-progress {
+        padding: 20px;
+    }
+
+    .progress-text {
+        display: none;
+    }
+
+    .progress-line {
+        flex: 1;
+        width: auto;
+
+        margin: 0 15px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .order-progress-section {
+        padding: 0 12px;
+    }
+
+    .order-progress {
+        padding: 17px 15px;
+        border-radius: 18px;
+    }
+
+    .progress-number {
+        width: 40px;
+        height: 40px;
+    }
+
+    .progress-line {
+        margin: 0 8px;
+    }
+}
+
+
 /* responsive layout */
 @media (max-width: 1000px) {
   .menu-items-section {
