@@ -8,10 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStallSearch();
     setupHygieneGrades();
     setupStallDetails();
-    loadStallDetailsHistory();
-    renderStallDetailsHistory();
-    formatStallDetailsDate();
-    showStallDetailsError();
     setupHamburgerMenu();
 });
 
@@ -2699,11 +2695,6 @@ function displayStallDetails(stall) {
                 stall.GradeExpiry
             )
             : "Not available"
-    );
-
-    setTextContent(
-        "stall-details-address",
-        "Address not available"
     );
 
     setTextContent(

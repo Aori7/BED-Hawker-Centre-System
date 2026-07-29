@@ -1070,6 +1070,57 @@
     color: rgb(148, 97, 0);
 }
 
+/* stall details */
+
+.stall-overview-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.overview-item span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #666;
+}
+
+.overview-item strong {
+    font-size: 2rem;
+    color: #222;
+}
+
+.stall-remarks-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.stall-remarks-card p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.nea-grade-badge,
+.nea-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
 /* responsive design */
 
 @media (max-width: 1250px) {
