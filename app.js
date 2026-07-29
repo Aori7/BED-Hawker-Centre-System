@@ -2,8 +2,8 @@ const express = require("express");
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
 // // Load environment variables
-const dotenv = require("dotenv");
-dotenv.config();
+const dotenv = require("dotenv"); // ruimin
+dotenv.config();  // ruimin
 
 // Import - ada's
 const customerController = require("./controllers/customerController");
