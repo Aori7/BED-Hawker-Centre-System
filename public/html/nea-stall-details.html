@@ -4,164 +4,248 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"s>
 
-    <title>Food Stall Details</title>
+    <!-- existing fed styles -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
 
+    <!-- shared nea officer styles -->
+    <link rel="stylesheet" href="../css/pages/nea.css">
+
+    <!-- reuse existing nea page styles -->
     <link
         rel="stylesheet"
-        href="../css/style.css"
+        href="../css/pages/nea-hygiene-grades.css"
+    >
+
+    <!-- noto sans font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
     >
 
     <link
-        rel="stylesheet"
-        href="../css/nea.css"
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
     >
 
     <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet"
+    >
+
+    <!-- google material symbols -->
+    <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+        rel="stylesheet"
     >
+
+    <title>Food Stall Details - HawkerSG</title>
 </head>
 
-<body>
+<body class="nea-page">
 
-    <header class="navbar">
+    <!-- navigation bar -->
+    <header id="navigationbar">
 
-        <a
-            href="index.html"
-            class="logo-link"
-        >
-            <img
-                src="../images/logo.png"
-                alt="HawkerSG logo"
-                class="logo"
-            >
-        </a>
+        <div class="logo">
+
+            <a href="main-hawkers.html">
+
+                <span class="material-symbols-rounded">
+                    restaurant_menu
+                </span>
+
+                <h1 id="logotitle">
+                    Hawker<em>SG</em>
+                </h1>
+
+            </a>
+
+        </div>
+
+        <ul class="navitems">
+
+            <li>
+                <a href="nea-main.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a
+                    href="nea-search-stall.html"
+                    class="active"
+                >
+                    Search Stalls
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-record-inspection.html">
+                    Record Inspection
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-inspection-history.html">
+                    Inspection History
+                </a>
+            </li>
+
+            <li>
+                <a href="nea-hygiene-grades.html">
+                    Hygiene Grades
+                </a>
+            </li>
+
+        </ul>
+
+        <div class="loginbutton">
+
+            <a href="login.html">
+
+                <button
+                    id="logout-btn"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </a>
+
+        </div>
 
         <button
-            type="button"
             id="hamburger-btn"
-            class="hamburger-btn"
+            class="material-symbols-rounded"
+            type="button"
+            aria-label="Open navigation menu"
         >
-            <span class="material-symbols-rounded">
-                menu
-            </span>
+            menu
         </button>
-
-        <nav class="navitems">
-
-            <a href="nea-main.html">
-                Dashboard
-            </a>
-
-            <a href="nea-search-stall.html">
-                Search Stalls
-            </a>
-
-            <a href="nea-record-inspection.html">
-                Record Inspection
-            </a>
-
-            <a href="nea-inspection-history.html">
-                Inspection History
-            </a>
-
-            <a href="nea-hygiene-grades.html">
-                Hygiene Grades
-            </a>
-
-            <a
-                href="index.html"
-                class="logout-btn"
-            >
-                Logout
-            </a>
-
-        </nav>
 
     </header>
 
+    <!-- page banner -->
+    <section class="order-hawker-banner">
+
+        <div class="banner"></div>
+
+        <div class="order-hawker-header">
+
+            <h1>Food Stall Details</h1>
+
+            <p>
+                Review the food stall's hygiene information and
+                previous inspection records.
+            </p>
+
+        </div>
+
+    </section>
+
     <main
         id="stall-details-page"
-        class="nea-main"
+        class="nea-page-container"
     >
 
-        <section class="nea-page-header">
-
-            <div>
-
-                <p class="nea-page-label">
-                    NEA Officer Portal
-                </p>
-
-                <h1>
-                    Food Stall Details
-                </h1>
-
-                <p>
-                    Review the latest hygiene information and
-                    inspection history for this food stall.
-                </p>
-
-            </div>
-
-            <button
-                type="button"
-                id="stall-details-back-btn"
-                class="nea-secondary-btn"
-            >
-                Back to Search
-            </button>
-
-        </section>
-
+        <!-- error message -->
         <div
             id="stall-details-error"
-            class="nea-message error"
-        >
-        </div>
+            class="hygiene-message"
+            role="alert"
+            aria-live="polite"
+        ></div>
 
         <div id="stall-details-content">
 
-            <section class="stall-details-overview">
+            <!-- stall heading -->
+            <section class="hygiene-page-card">
 
-                <div class="stall-details-image">
-
-                    <img
-                        id="stall-details-image"
-                        src="../images/picture-icon.jpg"
-                        alt="Food stall"
-                    >
-
-                </div>
-
-                <div class="stall-details-heading">
+                <div class="hygiene-page-header">
 
                     <div>
 
-                        <p id="stall-details-centre">
-                            Hawker Centre
+                        <p class="nea-section-label">
+                            NEA Officer Portal
                         </p>
 
                         <h2 id="stall-details-name">
                             Food Stall
                         </h2>
 
-                        <p id="stall-details-unit">
-                            Unit
+                        <p>
+                            <span id="stall-details-centre">
+                                Hawker Centre
+                            </span>
+
+                            ·
+
+                            <span id="stall-details-unit">
+                                Unit
+                            </span>
                         </p>
 
                     </div>
 
-                    <div class="stall-details-badges">
+                    <div>
+
+                        <button
+                            type="button"
+                            id="stall-details-back-btn"
+                            class="hygiene-secondary-btn"
+                        >
+                            Back to Search
+                        </button>
+
+                        <button
+                            type="button"
+                            id="stall-details-inspect-btn"
+                        >
+                            Record Inspection
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- stall overview -->
+                <section class="hygiene-stall-summary">
+
+                    <div>
+
+                        <img
+                            id="stall-details-image"
+                            src="../images/picture-icon.jpg"
+                            alt="Food stall"
+                            style="
+                                width: 100%;
+                                max-width: 320px;
+                                height: 220px;
+                                object-fit: cover;
+                                border-radius: 16px;
+                            "
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <span>Current Grade</span>
 
                         <div id="stall-details-grade">
                             Not inspected
                         </div>
+
+                    </div>
+
+                    <div>
+
+                        <span>Compliance Status</span>
 
                         <div id="stall-details-status">
                             Not inspected
@@ -169,223 +253,241 @@
 
                     </div>
 
-                </div>
-
-                <button
-                    type="button"
-                    id="stall-details-inspect-btn"
-                    class="nea-primary-btn"
-                >
-                    Record Inspection
-                </button>
-
-            </section>
-
-            <section class="stall-details-grid">
-
-                <article class="stall-details-card">
-
-                    <span class="material-symbols-rounded">
-                        tag
-                    </span>
-
                     <div>
 
-                        <p>
-                            Stall ID
-                        </p>
+                        <span>Latest Score</span>
 
-                        <h3 id="stall-details-id">
+                        <strong id="stall-details-score">
                             -
-                        </h3>
+                        </strong>
 
                     </div>
 
-                </article>
+                </section>
 
-                <article class="stall-details-card">
+                <!-- stall information cards -->
+                <section class="hygiene-summary-grid">
 
-                    <span class="material-symbols-rounded">
-                        person
-                    </span>
+                    <article class="hygiene-summary-card">
 
-                    <div>
-
-                        <p>
-                            Owner ID
-                        </p>
-
-                        <h3 id="stall-details-owner-id">
-                            -
-                        </h3>
-
-                    </div>
-
-                </article>
-
-                <article class="stall-details-card">
-
-                    <span class="material-symbols-rounded">
-                        fact_check
-                    </span>
-
-                    <div>
-
-                        <p>
-                            Latest Score
-                        </p>
-
-                        <h3 id="stall-details-score">
-                            -
-                        </h3>
-
-                    </div>
-
-                </article>
-
-                <article class="stall-details-card">
-
-                    <span class="material-symbols-rounded">
-                        event
-                    </span>
-
-                    <div>
-
-                        <p>
-                            Last Inspection
-                        </p>
-
-                        <h3 id="stall-details-date">
-                            -
-                        </h3>
-
-                    </div>
-
-                </article>
-
-                <article class="stall-details-card">
-
-                    <span class="material-symbols-rounded">
-                        event_available
-                    </span>
-
-                    <div>
-
-                        <p>
-                            Grade Expiry
-                        </p>
-
-                        <h3 id="stall-details-expiry">
-                            -
-                        </h3>
-
-                    </div>
-
-                </article>
-
-                <article class="stall-details-card">
-
-                    <span class="material-symbols-rounded">
-                        location_on
-                    </span>
-
-                    <div>
-
-                        <p>
-                            Address
-                        </p>
-
-                        <h3 id="stall-details-address">
-                            -
-                        </h3>
-
-                    </div>
-
-                </article>
-
-            </section>
-
-            <section class="stall-details-section">
-
-                <div class="stall-details-section-header">
-
-                    <div>
-
-                        <p class="nea-page-label">
-                            Latest Inspection
-                        </p>
-
-                        <h2>
-                            Inspection Remarks
-                        </h2>
-
-                    </div>
-
-                </div>
-
-                <div class="stall-details-remarks">
-
-                    <span class="material-symbols-rounded">
-                        notes
-                    </span>
-
-                    <p id="stall-details-remarks">
-                        No inspection remarks available.
-                    </p>
-
-                </div>
-
-            </section>
-
-            <section class="stall-details-section">
-
-                <div class="stall-details-section-header">
-
-                    <div>
-
-                        <p class="nea-page-label">
-                            Previous Records
-                        </p>
-
-                        <h2>
-                            Inspection History
-                        </h2>
-
-                    </div>
-
-                </div>
-
-                <div class="history-table-wrapper">
-
-                    <table class="nea-table">
-
-                        <thead>
-
-                            <tr>
-                                <th>Inspection ID</th>
-                                <th>Date</th>
-                                <th>Score</th>
-                                <th>Grade</th>
-                                <th>Status</th>
-                                <th>Remarks</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody
-                            id="stall-details-history-body"
+                        <span
+                            class="material-symbols-rounded hygiene-summary-grade"
                         >
-                        </tbody>
+                            tag
+                        </span>
 
-                    </table>
+                        <div>
 
-                </div>
+                            <p>Stall ID</p>
+
+                            <h3 id="stall-details-id">
+                                -
+                            </h3>
+
+                            <small>
+                                Food stall record number
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                    <article class="hygiene-summary-card">
+
+                        <span
+                            class="material-symbols-rounded hygiene-summary-grade"
+                        >
+                            person
+                        </span>
+
+                        <div>
+
+                            <p>Owner ID</p>
+
+                            <h3 id="stall-details-owner-id">
+                                -
+                            </h3>
+
+                            <small>
+                                Registered stall owner
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                    <article class="hygiene-summary-card">
+
+                        <span
+                            class="material-symbols-rounded hygiene-summary-grade"
+                        >
+                            event
+                        </span>
+
+                        <div>
+
+                            <p>Last Inspection</p>
+
+                            <h3 id="stall-details-date">
+                                -
+                            </h3>
+
+                            <small>
+                                Most recent inspection date
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                    <article class="hygiene-summary-card">
+
+                        <span
+                            class="material-symbols-rounded hygiene-summary-grade"
+                        >
+                            event_available
+                        </span>
+
+                        <div>
+
+                            <p>Grade Expiry</p>
+
+                            <h3 id="stall-details-expiry">
+                                -
+                            </h3>
+
+                            <small>
+                                Current hygiene grade expiry
+                            </small>
+
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <!-- location -->
+                <section class="hygiene-filter-panel">
+
+                    <div class="hygiene-search-group">
+
+                        <label>
+                            Hawker Centre Address
+                        </label>
+
+                        <div class="hygiene-search-box">
+
+                            <span class="material-symbols-rounded">
+                                location_on
+                            </span>
+
+                            <p id="stall-details-address">
+                                Address not available
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- latest remarks -->
+                <section>
+
+                    <div class="hygiene-results-header">
+
+                        <div>
+
+                            <p class="nea-section-label">
+                                Latest Inspection
+                            </p>
+
+                            <h2>
+                                Inspection Remarks
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="hygiene-stall-summary">
+
+                        <div>
+
+                            <span class="material-symbols-rounded">
+                                notes
+                            </span>
+
+                            <p id="stall-details-remarks">
+                                No inspection remarks available.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- inspection history -->
+                <section>
+
+                    <div class="hygiene-results-header">
+
+                        <div>
+
+                            <p class="nea-section-label">
+                                Previous Records
+                            </p>
+
+                            <h2>
+                                Inspection History
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <div class="hygiene-table-wrapper">
+
+                        <table class="hygiene-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Inspection ID</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody
+                                id="stall-details-history-body"
+                            >
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
 
             </section>
 
         </div>
 
     </main>
+
+    <footer id="footercontainer">
+
+        <p>
+            © 2026 HawkerSG. All rights reserved.
+        </p>
+
+    </footer>
 
     <script src="../js/nea.js"></script>
 
