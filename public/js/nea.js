@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStallSearch();
     setupHygieneGrades();
     setupHamburgerMenu();
+    setupStallDetails();
 });
 
 
