@@ -433,12 +433,12 @@ button {
 }
 
 .order-status-select:hover {
-  border-color: var(--primary-color);
+  border-color: var(--orange-color);
 }
 
 .order-status-select:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--orange-color);
 }
 
 .payment-status {

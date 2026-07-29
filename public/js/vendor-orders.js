@@ -112,20 +112,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (paymentFilter) paymentFilter.value = "all";
     if (typeFilter) typeFilter.value = "all";
     if (dateFilter) dateFilter.value = "";
+    if (paymentStatusFilter) paymentStatusFilter.value = "all";
     filterOrders();
   }
   function openOrderDetails(row) {
     if (!orderDialog || !dialogOrderId || !dialogBody) return;
     const cells = row.querySelectorAll("td");
-    const statusText =
-      row.querySelector(".order-status")?.textContent.trim() || "-";
+    const statusText = row.querySelector(".order-status-select")?.value || "-";
     dialogOrderId.textContent = row.dataset.orderId || "Order";
     dialogBody.innerHTML = `
       <div class="dialog-detail"><span>Customer ID</span><span>${row.dataset.customerId || "-"}</span></div>
-      <div class="dialog-detail"><span>Date and time</span><span>${cells[2]?.textContent.trim() || "-"}</span></div>
+      <div class="dialog-detail"><span>Date and time</span><span>${row.dataset.date || "-"}</span></div>
       <div class="dialog-detail"><span>Payment type</span><span>${row.dataset.paymentMethod || "-"}</span></div>
       <div class="dialog-detail"><span>Order type</span><span>${row.dataset.orderType || "-"}</span></div>
-      <div class="dialog-detail"><span>Total amount</span><span>${row.dataset.total || "-"}</span></div>
+      <div class="dialog-detail"><span>Total amount</span><span>$${row.dataset.total || "-"}</span></div>
       <div class="dialog-detail"><span>Status</span><span>${statusText}</span></div>
     `;
     orderDialog.showModal();
@@ -145,15 +145,20 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".stall-switcher")) closeStallDropdown();
   });
-  [searchInput, statusFilter, paymentFilter, typeFilter, dateFilter].forEach(
-    (control) => {
-      const eventName =
-        control?.tagName === "INPUT" && control.type === "search"
-          ? "input"
-          : "change";
-      control?.addEventListener(eventName, filterOrders);
-    },
-  );
+  [
+    searchInput,
+    statusFilter,
+    paymentFilter,
+    paymentStatusFilter,
+    typeFilter,
+    dateFilter,
+  ].forEach((control) => {
+    const eventName =
+      control?.tagName === "INPUT" && control.type === "search"
+        ? "input"
+        : "change";
+    control?.addEventListener(eventName, filterOrders);
+  });
   clearFilterButton?.addEventListener("click", clearFilters);
   ordersTableBody?.addEventListener("click", (event) => {
     const detailsButton = event.target.closest(".view-details-button");
