@@ -381,7 +381,7 @@
   gap: 30px;
 
   width: 100%;
-  max-width: 1300px;
+  max-width: 2000px;
 
   margin: 0 auto;
   padding: 30px 40px;
@@ -546,28 +546,122 @@
   position: sticky;
   top: 100px;
 
-  width: 320px;
-  min-width: 320px;
+  width: 420px;
+  min-width: 420px;
 
-  padding: 24px;
+  padding: 0;
   box-sizing: border-box;
 
   background-color: white;
-  border-radius: 18px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  border-radius: 20px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+
+  overflow: hidden;
+}
+
+/* cart title */
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 24px;
+
+  background-color: #fff7e3;
+  border-bottom: 1px solid #f0dfcc;
 }
 
 .cart-header h3 {
-  margin-top: 0;
+  margin: 0;
+
+  font-size: 22px;
+  color: #1f1f1f;
 }
 
+/* cart item area */
 .cart-items {
   min-height: 120px;
+
+  padding: 20px 24px;
 }
 
+/* message shown when cart is empty */
+.cart-items > p {
+  margin: 35px 0;
+
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* each generated cart item */
+.cart-items > div {
+  padding: 16px 0;
+
+  border-bottom: 1px solid #eee;
+}
+
+.cart-items > div:last-child {
+  border-bottom: none;
+}
+
+/* buttons generated inside each cart item */
+.cart-items button {
+  min-width: 40px;
+  height: 36px;
+
+  padding: 0 14px;
+  margin: 8px 5px 0 0;
+
+  border: none;
+  border-radius: 18px;
+
+  background-color: #fff0df;
+  color: #e96b00;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.cart-items button:hover {
+  background-color: #ff7a00;
+  color: white;
+}
+
+/* remove button */
+.cart-items button:last-child {
+  padding: 0 18px;
+
+  background-color: #fff1ef;
+  color: #c84736;
+}
+
+.cart-items button:last-child:hover {
+  background-color: #c84736;
+  color: white;
+}
+
+/* total and checkout button */
 .cart-footer {
-  padding-top: 15px;
-  border-top: 1px solid #ddd;
+  padding: 20px 24px 24px;
+
+  background-color: #fffaf3;
+  border-top: 1px solid #f0dfcc;
+}
+
+.cart-footer p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 0 0 16px;
+
+  font-size: 18px;
+  font-weight: 800;
+  color: #222;
 }
 
 .checkout-btn,
@@ -575,14 +669,17 @@
 .cancel-btn {
   width: 100%;
 
-  margin-top: 10px;
-  padding: 12px;
+  padding: 13px 18px;
 
   border: none;
-  border-radius: 22px;
+  border-radius: 12px;
 
+  font-size: 15px;
   font-weight: 700;
+
   cursor: pointer;
+
+  transition: all 0.2s ease;
 }
 
 .checkout-btn,
@@ -591,9 +688,142 @@
   color: white;
 }
 
+.checkout-btn:hover,
+.confirm-btn:hover {
+  background-color: #e96b00;
+
+  transform: translateY(-1px);
+}
+
 .cancel-btn {
-  background-color: #ddd;
+  margin-top: 10px;
+
+  background-color: transparent;
+  color: #777;
+
+  border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* checkout section inside cart */
+.checkout-section {
+  margin: 0;
+  padding: 24px;
+
+  background-color: white;
+  border-top: 8px solid #f7efe5;
+}
+
+.checkout-section h2 {
+  margin: 0 0 18px;
+
+  font-size: 21px;
   color: #222;
+}
+
+.checkout-summary {
+  margin-bottom: 20px;
+
+  padding: 14px;
+
+  background-color: #fff7e3;
+  border-radius: 12px;
+
+  line-height: 1.6;
+}
+
+/* special request */
+.special-request-section {
+  margin-top: 20px;
+}
+
+.special-request-section label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.special-request-section textarea {
+  width: 100%;
+  min-height: 80px;
+
+  padding: 12px;
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  resize: vertical;
+}
+
+.special-request-section textarea:focus {
+  outline: none;
+
+  border-color: #ff7a00;
+
+  box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.12);
+}
+
+.special-request-section p {
+  margin: 5px 0 0;
+
+  color: #888;
+  font-size: 12px;
+  text-align: right;
+}
+
+/* order and payment sections */
+.order-type-section,
+.payment-methods {
+  margin-top: 22px;
+}
+
+.order-type-section h3,
+.payment-methods h3 {
+  margin: 0 0 12px;
+
+  font-size: 16px;
+}
+
+.order-type-section label,
+.payment-methods label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 10px 0;
+  padding: 11px 12px;
+
+  border: 1px solid #eee;
+  border-radius: 10px;
+
+  cursor: pointer;
+}
+
+.order-type-section label:hover,
+.payment-methods label:hover {
+  background-color: #fff7e3;
+
+  border-color: #ffc58f;
+}
+
+.order-type-section input,
+.payment-methods input {
+  accent-color: #ff7a00;
+}
+
+.confirm-btn {
+  margin-top: 22px;
 }
 
 /* responsive layout */
