@@ -178,7 +178,8 @@ document.addEventListener("DOMContentLoaded", () => {
       ${menuItemsHtml}
     </div>
   `;
-    orderDialog.showModal();
+    orderDialog.hidden = false;
+    document.body.style.overflow = "hidden";
   }
   /* event listeners */
   if (switchStallButton) {
@@ -217,15 +218,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (row) openOrderDetails(row);
   });
   dialogSecondaryClose?.addEventListener("click", () => {
-    if (orderDialog.open) {
-      orderDialog.close();
-    }
-  });
-  orderDialog?.addEventListener("cancel", (event) => {
-    event.preventDefault();
-    if (orderDialog.open) {
-      orderDialog.close();
-    }
+    orderDialog.hidden = true;
+    document.body.style.overflow = "";
   });
   statusDropdowns.forEach((dropdown) => {
     dropdown.addEventListener("change", () => {
