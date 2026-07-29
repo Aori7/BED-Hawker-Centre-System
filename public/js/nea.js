@@ -2534,6 +2534,244 @@ function formatHygieneDate(dateValue) {
     );
 }
 
+/* stall details functions */
+
+async function setupStallDetails() {
+    const pageContainer =
+        document.getElementById(
+            "stall-details-page"
+        );
+
+    if (!pageContainer) {
+        return;
+    }
+
+    const queryParameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const stallID =
+        Number(
+            queryParameters.get("stallId")
+        );
+
+    console.log(
+        "stall details page loaded:",
+        stallID
+    );
+
+    if (
+        !Number.isInteger(stallID) ||
+        stallID <= 0
+    ) {
+        showStallDetailsError(
+            "Invalid food stall selected."
+        );
+
+        return;
+    }
+
+    const inspectButton =
+        document.getElementById(
+            "stall-details-inspect-btn"
+        );
+
+    const backButton =
+        document.getElementById(
+            "stall-details-back-btn"
+        );
+
+    if (inspectButton) {
+        inspectButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-record-inspection.html" +
+                    `?stallId=${stallID}`;
+            }
+        );
+    }
+
+    if (backButton) {
+        backButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-search-stall.html";
+            }
+        );
+    }
+
+    await loadStallDetails(stallID);
+
+    await loadStallDetailsHistory(
+        stallID
+    );
+}
+
+async function loadStallDetails(stallID) {
+    try {
+        const response = await fetch(
+            `/stall-details/${stallID}`
+        );
+
+        const stall =
+            await response.json();
+
+        console.log(
+            "stall details response:",
+            stall
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                stall.error ||
+                "Unable to retrieve food stall details"
+            );
+        }
+
+        displayStallDetails(stall);
+
+    } catch (error) {
+        console.error(
+            "Load stall details error:",
+            error
+        );
+
+        showStallDetailsError(
+            error.message
+        );
+    }
+}
+
+function displayStallDetails(stall) {
+    setTextContent(
+        "stall-details-name",
+        stall.StallName
+    );
+
+    setTextContent(
+        "stall-details-centre",
+        stall.HCName
+    );
+
+    setTextContent(
+        "stall-details-unit",
+        `Unit ${stall.StallUnitNo}`
+    );
+
+    setTextContent(
+        "stall-details-id",
+        stall.StallID
+    );
+
+    setTextContent(
+        "stall-details-owner-id",
+        stall.OwnerID
+    );
+
+    setTextContent(
+        "stall-details-score",
+        stall.InspectionScore !== null
+            ? `${stall.InspectionScore} / 100`
+            : "Not inspected"
+    );
+
+    setTextContent(
+        "stall-details-date",
+        stall.InspectionDate
+            ? formatStallDetailsDate(
+                stall.InspectionDate
+            )
+            : "Not inspected"
+    );
+
+    setTextContent(
+        "stall-details-expiry",
+        stall.GradeExpiry
+            ? formatStallDetailsDate(
+                stall.GradeExpiry
+            )
+            : "Not available"
+    );
+
+    setTextContent(
+        "stall-details-address",
+        stall.Address ||
+            "Address not available"
+    );
+
+    setTextContent(
+        "stall-details-remarks",
+        stall.Remark ||
+            "No inspection remarks available."
+    );
+
+    const stallImage =
+        document.getElementById(
+            "stall-details-image"
+        );
+
+    if (stallImage) {
+        stallImage.src =
+            stall.ImageURL ||
+            "../images/picture-icon.jpg";
+
+        stallImage.alt =
+            stall.StallName;
+
+        stallImage.onerror = () => {
+            stallImage.src =
+                "../images/picture-icon.jpg";
+        };
+    }
+
+    const gradeContainer =
+        document.getElementById(
+            "stall-details-grade"
+        );
+
+    if (gradeContainer) {
+        if (stall.HygieneGrade) {
+            gradeContainer.innerHTML = `
+                <span
+                    class="nea-grade-badge nea-grade-${stall.HygieneGrade.toLowerCase()}"
+                >
+                    Grade ${stall.HygieneGrade}
+                </span>
+            `;
+        } else {
+            gradeContainer.textContent =
+                "Not inspected";
+        }
+    }
+
+    const statusContainer =
+        document.getElementById(
+            "stall-details-status"
+        );
+
+    if (statusContainer) {
+        const complianceStatus =
+            stall.ComplianceStatus ||
+            "Not Inspected";
+
+        const statusClass =
+            complianceStatus
+                .toLowerCase()
+                .replaceAll(" ", "-");
+
+        statusContainer.innerHTML = `
+            <span
+                class="nea-status-badge nea-status-${statusClass}"
+            >
+                ${complianceStatus}
+            </span>
+        `;
+    }
+}
+
 /* mobile navigation menu */
 
 function setupHamburgerMenu() {
