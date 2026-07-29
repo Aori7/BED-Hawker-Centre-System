@@ -7,12 +7,9 @@
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
-    <!-- index css to link the map style -->
-    <link rel="stylesheet" href="../css/pages/index.css" />
-
-
-
     
+    <link rel="stylesheet" href="../css/pages/main-hawkers.css" />
+
     <!-- font chosen by ada: Archivo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,32 +96,95 @@
 
     </section>
 
-    
-    <!-- ALL HAWKERS (API injected) -->
-<section id="hawker-centre-section">
-
-    <div class="title">
-        <h1>Highly-Rated Hawker Centres</h1>
-    </div>
-
-    <div class="container swiper">
-        <div class="wrapper">
-
-            <!-- Hawker cards will be injected here using hawker.js -->
-            <div class="card-list swiper-wrapper" id="hawker-list">
-                <p>Loading hawker centres...</p>
+      
+    <!-- Hawker centres that currently have stalls -->
+    <section id="available-ordering-section">
+        <div class="hawker-section-header">
+            <div>
+                <p class="section-label">Order now</p>
+                <h1>Available for Ordering</h1>
             </div>
 
-            <div class="swiper-pagination"></div>
-
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-
+            <p>
+                Browse hawker centres that currently have registered stalls
+                and menu items.
+            </p>
         </div>
-    </div>
 
-</section>
+        <div
+            id="available-hawker-list"
+            class="hawker-grid"
+        >
+            <p>Loading available hawker centres...</p>
+        </div>
+    </section>
 
+
+  <!-- Browse available hawker centres by location -->
+  <section id="location-section">
+      <div class="hawker-section-header">
+          <div>
+              <p class="section-label">Explore Singapore</p>
+              <h1>Browse by Location</h1>
+          </div>
+
+          <p>
+              Find available hawker centres from different parts of Singapore.
+          </p>
+      </div>
+
+      <div class="location-filter-container">
+          <button
+              class="location-filter active"
+              data-region="All"
+          >
+              All
+          </button>
+
+          <button
+              class="location-filter"
+              data-region="Central"
+          >
+              Central
+          </button>
+
+          <button
+              class="location-filter"
+              data-region="North"
+          >
+              North
+          </button>
+
+          <button
+              class="location-filter"
+              data-region="South"
+          >
+              South
+          </button>
+
+          <button
+              class="location-filter"
+              data-region="East"
+          >
+              East
+          </button>
+
+          <button
+              class="location-filter"
+              data-region="West"
+          >
+              West
+          </button>
+      </div>
+
+      <p id="location-result-count"></p>
+
+      <div
+          id="location-hawker-list"
+          class="hawker-grid"
+      >
+      </div>
+  </section>
 <!-- Order History Overlay , only shows for users who are logged in-->
     <div id="history-overlay"></div>
 
@@ -161,11 +221,10 @@
     
 
     
-    <script type="module" src="../js/script.js"></script>
+
     <script src="../js/leaflet.js"></script>
-    <script src="../js/swiper.js"></script>
-    <script src="../js/hawker.js"></script>
-    <script type="module" src="../js/swiper.js"></script>
-    <script src="/js/authUI.js"></script>
+    <script src="../js/main-hawkers.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/authUI.js"></script>
 </body>
 </html>
