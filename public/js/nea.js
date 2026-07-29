@@ -710,83 +710,164 @@ async function setupInspectionHistory() {
         "history-empty-state"
     );
 
-    const rows = Array.from(
-        tableBody.querySelectorAll("tr")
-    );
+    let inspections = [];
 
-    async function updateInspectionHistory() {
+    try {
+        const response = await fetch(
+            "/inspections"
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to retrieve inspection history"
+            );
+        }
+
+        inspections = result;
+
+        renderInspectionHistory(
+            inspections,
+            tableBody
+        );
+
+    } catch (error) {
+        console.error(
+            "Load inspection history error:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    Unable to load inspection history.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    function updateInspectionHistory() {
         const keyword =
-            searchInput.value.trim().toLowerCase();
+            searchInput.value
+                .trim()
+                .toLowerCase();
 
-        const selectedGrade = gradeFilter.value;
-        const selectedStatus = statusFilter.value;
-        const selectedSort = sortFilter.value;
+        const selectedGrade =
+            gradeFilter.value;
 
-        const matchingRows = rows.filter((row) => {
-            const stallName =
-                row.dataset.stall.toLowerCase();
+        const selectedStatus =
+            statusFilter.value;
 
-            const centreName =
-                row.dataset.centre.toLowerCase();
+        const selectedSort =
+            sortFilter.value;
 
-            const matchesSearch =
-                stallName.includes(keyword) ||
-                centreName.includes(keyword);
+        const matchingInspections =
+            inspections.filter(
+                (inspection) => {
+                    const stallName =
+                        inspection.StallName
+                            .toLowerCase();
 
-            const matchesGrade =
-                selectedGrade === "all" ||
-                row.dataset.grade === selectedGrade;
+                    const centreName =
+                        inspection.HCName
+                            .toLowerCase();
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                row.dataset.status === selectedStatus;
+                    const matchesSearch =
+                        stallName.includes(
+                            keyword
+                        ) ||
+                        centreName.includes(
+                            keyword
+                        );
 
-            return (
-                matchesSearch &&
-                matchesGrade &&
-                matchesStatus
+                    const matchesGrade =
+                        selectedGrade === "all" ||
+                        inspection.HygieneGrade ===
+                            selectedGrade;
+
+                    const matchesStatus =
+                        selectedStatus === "all" ||
+                        inspection.InspectionStatus ===
+                            selectedStatus;
+
+                    return (
+                        matchesSearch &&
+                        matchesGrade &&
+                        matchesStatus
+                    );
+                }
             );
-        });
 
-        matchingRows.sort((firstRow, secondRow) => {
-            if (selectedSort === "oldest") {
+        matchingInspections.sort(
+            (
+                firstInspection,
+                secondInspection
+            ) => {
+                if (
+                    selectedSort === "oldest"
+                ) {
+                    return (
+                        new Date(
+                            firstInspection
+                                .InspectionDate
+                        ) -
+                        new Date(
+                            secondInspection
+                                .InspectionDate
+                        )
+                    );
+                }
+
+                if (
+                    selectedSort ===
+                    "highest-score"
+                ) {
+                    return (
+                        secondInspection
+                            .InspectionScore -
+                        firstInspection
+                            .InspectionScore
+                    );
+                }
+
+                if (
+                    selectedSort ===
+                    "lowest-score"
+                ) {
+                    return (
+                        firstInspection
+                            .InspectionScore -
+                        secondInspection
+                            .InspectionScore
+                    );
+                }
+
                 return (
-                    new Date(firstRow.dataset.date) -
-                    new Date(secondRow.dataset.date)
+                    new Date(
+                        secondInspection
+                            .InspectionDate
+                    ) -
+                    new Date(
+                        firstInspection
+                            .InspectionDate
+                    )
                 );
             }
+        );
 
-            if (selectedSort === "highest-score") {
-                return (
-                    Number(secondRow.dataset.score) -
-                    Number(firstRow.dataset.score)
-                );
-            }
+        renderInspectionHistory(
+            matchingInspections,
+            tableBody
+        );
 
-            if (selectedSort === "lowest-score") {
-                return (
-                    Number(firstRow.dataset.score) -
-                    Number(secondRow.dataset.score)
-                );
-            }
-
-            return (
-                new Date(secondRow.dataset.date) -
-                new Date(firstRow.dataset.date)
-            );
-        });
-
-        rows.forEach((row) => {
-            row.style.display = "none";
-        });
-
-        matchingRows.forEach((row) => {
-            tableBody.appendChild(row);
-            row.style.display = "";
-        });
-
-        resultCount.textContent =
-            matchingRows.length;
+        if (resultCount) {
+            resultCount.textContent =
+                matchingInspections.length;
+        }
 
         const summaryParts = [];
 
@@ -803,20 +884,42 @@ async function setupInspectionHistory() {
         }
 
         if (selectedStatus !== "all") {
-            summaryParts.push(selectedStatus);
+            summaryParts.push(
+                selectedStatus
+            );
         }
 
-        filterSummary.textContent =
-            summaryParts.length === 0
-                ? "All inspection records"
-                : summaryParts.join(" · ");
+        if (filterSummary) {
+            filterSummary.textContent =
+                summaryParts.length === 0
+                    ? "All inspection records"
+                    : summaryParts.join(" · ");
+        }
 
-        if (matchingRows.length === 0) {
-            tableWrapper.style.display = "none";
-            emptyState.classList.add("show");
+        if (
+            matchingInspections.length === 0
+        ) {
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "none";
+            }
+
+            if (emptyState) {
+                emptyState.classList.add(
+                    "show"
+                );
+            }
         } else {
-            tableWrapper.style.display = "";
-            emptyState.classList.remove("show");
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "";
+            }
+
+            if (emptyState) {
+                emptyState.classList.remove(
+                    "show"
+                );
+            }
         }
     }
 
@@ -840,17 +943,138 @@ async function setupInspectionHistory() {
         updateInspectionHistory
     );
 
-    clearButton.addEventListener("click", () => {
-        searchInput.value = "";
-        gradeFilter.value = "all";
-        statusFilter.value = "all";
-        sortFilter.value = "newest";
+    clearButton.addEventListener(
+        "click",
+        () => {
+            searchInput.value = "";
+            gradeFilter.value = "all";
+            statusFilter.value = "all";
+            sortFilter.value = "newest";
 
-        updateInspectionHistory();
-    });
+            updateInspectionHistory();
+        }
+    );
 
-    setupInspectionDetailsModal(rows);
     updateInspectionHistory();
+}
+
+function renderInspectionHistory(
+    inspections,
+    tableBody
+) {
+    tableBody.innerHTML = "";
+
+    inspections.forEach(
+        (inspection) => {
+            const inspectionDate =
+                new Date(
+                    inspection.InspectionDate
+                ).toLocaleDateString(
+                    "en-SG"
+                );
+
+            const statusClass =
+                inspection.InspectionStatus
+                    .toLowerCase()
+                    .replaceAll(" ", "-");
+
+            const safeRemark =
+                inspection.Remark ||
+                "No remarks recorded.";
+
+            const row =
+                document.createElement("tr");
+
+            row.dataset.inspectionId =
+                inspection.InspectionID;
+
+            row.dataset.date =
+                inspection.InspectionDate;
+
+            row.dataset.stall =
+                inspection.StallName;
+
+            row.dataset.centre =
+                inspection.HCName;
+
+            row.dataset.score =
+                inspection.InspectionScore;
+
+            row.dataset.grade =
+                inspection.HygieneGrade;
+
+            row.dataset.status =
+                inspection.InspectionStatus;
+
+            row.dataset.officer =
+                `Officer ${inspection.OfficerID}`;
+
+            row.dataset.remarks =
+                safeRemark;
+
+            row.innerHTML = `
+                <td>
+                    ${inspection.InspectionID}
+                </td>
+
+                <td>
+                    ${inspectionDate}
+                </td>
+
+                <td>
+                    <strong>
+                        ${inspection.StallName}
+                    </strong>
+
+                    <small>
+                        Unit ${inspection.StallUnitNo}
+                    </small>
+                </td>
+
+                <td>
+                    ${inspection.HCName}
+                </td>
+
+                <td>
+                    ${inspection.InspectionScore}
+                    / 100
+                </td>
+
+                <td>
+                    <span
+                        class="nea-grade-badge nea-grade-${inspection.HygieneGrade.toLowerCase()}"
+                    >
+                        ${inspection.HygieneGrade}
+                    </span>
+                </td>
+
+                <td>
+                    <span
+                        class="nea-status-badge nea-status-${statusClass}"
+                    >
+                        ${inspection.InspectionStatus}
+                    </span>
+                </td>
+
+                <td>
+                    <button
+                        type="button"
+                        class="history-view-btn"
+                    >
+                        View
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        }
+    );
+
+    setupInspectionDetailsModal(
+        Array.from(
+            tableBody.querySelectorAll("tr")
+        )
+    );
 }
 
 function setupInspectionDetailsModal(rows) {
@@ -862,44 +1086,59 @@ function setupInspectionDetailsModal(rows) {
         "inspection-details-modal"
     );
 
-    const closeTopButton = document.getElementById(
-        "close-inspection-modal"
-    );
+    const closeTopButton =
+        document.getElementById(
+            "close-inspection-modal"
+        );
 
-    const closeBottomButton = document.getElementById(
-        "close-inspection-modal-bottom"
-    );
+    const closeBottomButton =
+        document.getElementById(
+            "close-inspection-modal-bottom"
+        );
 
-    const editButton = document.getElementById(
-        "edit-inspection-btn"
-    );
+    const editButton =
+        document.getElementById(
+            "edit-inspection-btn"
+        );
 
     if (!overlay || !modal) {
         return;
     }
 
-    let selectedInspectionId = "";
+    let selectedInspectionID = "";
 
     rows.forEach((row) => {
-        const viewButton = row.querySelector(
-            ".history-view-btn"
-        );
+        const viewButton =
+            row.querySelector(
+                ".history-view-btn"
+            );
 
         if (!viewButton) {
             return;
         }
 
-        viewButton.addEventListener("click", () => {
-            selectedInspectionId =
-                row.dataset.inspectionId;
+        viewButton.addEventListener(
+            "click",
+            () => {
+                selectedInspectionID =
+                    row.dataset.inspectionId;
 
-            displayInspectionDetails(row);
+                displayInspectionDetails(
+                    row
+                );
 
-            overlay.classList.add("show");
-            modal.classList.add("show");
+                overlay.classList.add(
+                    "show"
+                );
 
-            document.body.style.overflow = "hidden";
-        });
+                modal.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+            }
+        );
     });
 
     function closeModal() {
@@ -910,39 +1149,45 @@ function setupInspectionDetailsModal(rows) {
     }
 
     if (closeTopButton) {
-        closeTopButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeTopButton.onclick =
+            closeModal;
     }
 
     if (closeBottomButton) {
-        closeBottomButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeBottomButton.onclick =
+            closeModal;
     }
 
-    overlay.addEventListener("click", closeModal);
+    overlay.onclick = closeModal;
+
+    modal.onclick = (event) => {
+        event.stopPropagation();
+    };
 
     if (editButton) {
-        editButton.addEventListener("click", () => {
+        editButton.onclick = () => {
             window.location.href =
-                "nea-record-inspection.html?inspectionId=" +
+                "nea-record-inspection.html" +
+                "?inspectionId=" +
                 encodeURIComponent(
-                    selectedInspectionId
+                    selectedInspectionID
                 );
-        });
+        };
     }
 
-    document.addEventListener("keydown", (event) => {
-        if (
-            event.key === "Escape" &&
-            modal.classList.contains("show")
-        ) {
-            closeModal();
+    document.addEventListener(
+        "keydown",
+        (event) => {
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains(
+                    "show"
+                )
+            ) {
+                closeModal();
+            }
         }
-    });
+    );
 }
 
 function displayInspectionDetails(row) {
@@ -953,7 +1198,9 @@ function displayInspectionDetails(row) {
 
     setTextContent(
         "modal-inspection-date",
-        formatInspectionDate(row.dataset.date)
+        formatInspectionDate(
+            row.dataset.date
+        )
     );
 
     setTextContent(
@@ -981,18 +1228,22 @@ function displayInspectionDetails(row) {
         row.dataset.remarks
     );
 
-    const gradeContainer = document.getElementById(
-        "modal-inspection-grade"
-    );
+    const gradeContainer =
+        document.getElementById(
+            "modal-inspection-grade"
+        );
 
-    const statusContainer = document.getElementById(
-        "modal-inspection-status"
-    );
+    const statusContainer =
+        document.getElementById(
+            "modal-inspection-status"
+        );
 
     if (gradeContainer) {
         gradeContainer.innerHTML = `
-            <span class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}">
-                ${row.dataset.grade}
+            <span
+                class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}"
+            >
+                Grade ${row.dataset.grade}
             </span>
         `;
     }
@@ -1004,7 +1255,9 @@ function displayInspectionDetails(row) {
                 .replaceAll(" ", "-");
 
         statusContainer.innerHTML = `
-            <span class="nea-status-badge nea-status-${statusClass}">
+            <span
+                class="nea-status-badge nea-status-${statusClass}"
+            >
                 ${row.dataset.status}
             </span>
         `;

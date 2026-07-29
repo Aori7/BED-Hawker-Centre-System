@@ -1,6 +1,26 @@
-// inspection controller done by dayana
 const inspectionModel =
     require("../models/inspectionModel");
+
+// get all inspection records
+async function getAllInspections(req, res) {
+    try {
+        const inspections =
+            await inspectionModel.getAllInspections();
+
+        res.status(200).json(inspections);
+
+    } catch (error) {
+        console.error(
+            "Get inspection history error:",
+            error
+        );
+
+        res.status(500).json({
+            error:
+                "Error retrieving inspection history"
+        });
+    }
+}
 
 // create a new completed inspection
 async function createInspection(req, res) {
@@ -45,12 +65,15 @@ async function createInspection(req, res) {
 
         if (!inspectionDate) {
             return res.status(400).json({
-                error: "Inspection date is required"
+                error:
+                    "Inspection date is required"
             });
         }
 
         const selectedDate =
-            new Date(`${inspectionDate}T00:00:00`);
+            new Date(
+                `${inspectionDate}T00:00:00`
+            );
 
         if (isNaN(selectedDate.getTime())) {
             return res.status(400).json({
@@ -64,7 +87,8 @@ async function createInspection(req, res) {
 
         if (selectedDate > today) {
             return res.status(400).json({
-                error: "Inspection date cannot be in the future"
+                error:
+                    "Inspection date cannot be in the future"
             });
         }
 
@@ -92,7 +116,8 @@ async function createInspection(req, res) {
 
         if (!remark) {
             return res.status(400).json({
-                error: "Inspection remark is required"
+                error:
+                    "Inspection remark is required"
             });
         }
 
@@ -136,11 +161,13 @@ async function createInspection(req, res) {
         }
 
         res.status(500).json({
-            error: "Error recording inspection"
+            error:
+                "Error recording inspection"
         });
     }
 }
 
 module.exports = {
+    getAllInspections,
     createInspection
 };

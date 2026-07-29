@@ -1,6 +1,62 @@
-// inspection model done by dayana
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+
+// get all inspection records
+async function getAllInspections() {
+    const connection = await sql.connect(dbConfig);
+
+    try {
+        const result = await connection
+            .request()
+            .query(`
+                SELECT
+                    i.InspectionID,
+                    i.OfficerID,
+                    i.StallID,
+                    i.InspectionDate,
+                    i.InspectionScore,
+                    i.HygieneGrade,
+                    i.GradeExpiry,
+                    i.InspectionStatus,
+                    i.CreatedAt,
+
+                    fs.StallName,
+                    fs.StallUnitNo,
+
+                    hc.HawkerCentreID,
+                    hc.HCName,
+
+                    ir.Remark
+
+                FROM Inspection i
+
+                INNER JOIN FoodStall fs
+                    ON i.StallID = fs.StallID
+
+                INNER JOIN HawkerCentre hc
+                    ON fs.HawkerCentreID =
+                        hc.HawkerCentreID
+
+                LEFT JOIN InspectionRemark ir
+                    ON ir.RemarkID = (
+                        SELECT TOP 1 RemarkID
+                        FROM InspectionRemark
+                        WHERE InspectionID =
+                            i.InspectionID
+                        ORDER BY CreatedAt DESC
+                    )
+
+                ORDER BY
+                    i.InspectionDate DESC,
+                    i.InspectionID DESC;
+            `);
+
+        return result.recordset;
+
+    } finally {
+        await connection.close();
+    }
+}
 
 // create a completed inspection and its remark
 async function createInspection(inspectionData) {
@@ -66,7 +122,11 @@ async function createInspection(inspectionData) {
                         @InspectionDate,
                         @InspectionScore,
                         @HygieneGrade,
-                        DATEADD(YEAR, 1, @InspectionDate),
+                        DATEADD(
+                            YEAR,
+                            1,
+                            @InspectionDate
+                        ),
                         'Completed',
                         GETDATE()
                     );
@@ -113,8 +173,13 @@ async function createInspection(inspectionData) {
         };
 
     } catch (error) {
-        if (transaction._aborted !== true) {
+        try {
             await transaction.rollback();
+        } catch (rollbackError) {
+            console.error(
+                "Inspection rollback error:",
+                rollbackError
+            );
         }
 
         throw error;
@@ -125,5 +190,6 @@ async function createInspection(inspectionData) {
 }
 
 module.exports = {
+    getAllInspections,
     createInspection
 };
