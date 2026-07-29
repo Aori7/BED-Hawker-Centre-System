@@ -12,38 +12,99 @@
     gap: 32px;
 }
 
-.filter-category-section{
+/* ===================================================== */
+/* hawker filter bar */
+
+.filter-category-section {
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+
+    padding: 25px 20px 45px;
+
+    background-color: transparent;
+}
+
+.filter-bar {
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 22px;
 
-    background-color: var(--orange-color);
-    height: 150px;
-    border-radius: 20px;
-    margin: 0 40px 0 40px;
-    /* width: 60%; */
+    width: fit-content;
+
+    padding: 14px 20px;
+
+    background-color: white;
+    border-radius: 50px;
+
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
-.filter-hawker-location label,
-.filter-by-favourite label{
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--lighter-beige);
-    padding: 10px;
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.filter-hawker-location select,
-.filter-by-favourite select{
-    padding: 10px 16px;
-    border-radius: 20px;
+.filter-group > span {
+    color: var(--orange-color);
+
+    font-size: 22px;
+}
+
+.filter-group select {
+    min-width: 155px;
+
+    padding: 10px 34px 10px 12px;
+
     border: none;
-    font-size: 18px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    outline: none;
+
+    background-color: var(--lighter-beige);
     color: var(--black-text-color);
+
+    border-radius: 25px;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
 }
 
+.filter-divider {
+    width: 1px;
+    height: 30px;
+
+    background-color: #ddd;
+}
+
+/* mobile */
+
+@media screen and (max-width: 600px) {
+    .filter-bar {
+        width: 100%;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+
+        border-radius: 20px;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .filter-group select {
+        width: 100%;
+    }
+
+    .filter-divider {
+        width: 100%;
+        height: 1px;
+    }
+}
 /* selection of hawker centre section */
 .hawker-available-section,
 .stall-available-section{
@@ -826,7 +887,39 @@
   margin-top: 22px;
 }
 
+.hawker-favourite-btn {
+    width: 45px;
+    height: 45px;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid var(--orange-color);
+    border-radius: 50%;
+
+    background-color: transparent;
+    color: var(--orange-color);
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.hawker-favourite-btn:hover,
+.hawker-favourite-btn.active {
+    background-color: var(--orange-color);
+    color: white;
+
+    transform: translateY(-2px);
+}
 
 /* ===================================================== */
 /* ordering progress steps */

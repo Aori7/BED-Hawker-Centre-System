@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
     <link rel="stylesheet" href="../css/pages/order.css"/>
     <link rel="stylesheet" href="../css/pages/order-hawker-page.css" />
+    <link rel="stylesheet" href="../css/pages/main-hawkers.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,178 +106,59 @@
     </section>
 
     <section class="filter-category-section">
-        <div class="filter-hawker-location">
-            <label for="locationfilter">Filter by Location:</label>
-            <select id="locationfilter" name="locationfilter">
-                <option value="all">All Locations</option>
-                <option value="north">North</option>
-                <option value="south">South</option>
-                <option value="east">East</option>
-                <option value="west">West</option>
-                <option value="central">Central</option>
-            </select>
-        </div>
-        <div class="filter-by-favourite">
-            <label for="favouritefilter">Filter by Favourite:</label>
-            <select id="favouritefilter" name="favouritefilter">
-                <option value="all">All Hawkers</option>
-                <option value="favourite">Favourites</option>
-            </select>
-        </div>
-    </section>
+        <div class="filter-bar">
+            <div class="filter-group">
+                <span class="material-symbols-rounded">location_on</span>
 
-    <section class="hawker-available-section">
-        <div class="popular-hawker">
-            <div class="title">
-                <h1>Popular Hawker Centres</h1>
+                <select id="locationfilter" name="locationfilter">
+                    <option value="all">All Locations</option>
+                    <option value="north">North</option>
+                    <option value="south">South</option>
+                    <option value="east">East</option>
+                    <option value="west">West</option>
+                    <option value="central">Central</option>
+                </select>
             </div>
-            <div class="container swiper">
-                <div class="wrapper">
-                    <div class="card-list swiper-wrapper">
 
-                        <div class="card swiper-slide">
-                            <div class="card-image">
-                                <img src="../images/picture-icon.jpg" alt="Hawker image">
-                                <p class="hawker-rating">
-                                    rating: ★★★★☆
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <h1 class="hawker-name">
-                                    Hawker Centre Name
-                                </h1>
-                                <p class="hawker-address">
-                                    Hawker Centre Address
-                                </p>
-                                <p class="hawker-desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat laborum doloribus sed nulla accusantium. Obcaecati sunt cum rerum enim nihil ex repudiandae sit quibusdam cumque odio ratione, optio culpa aspernatur!
-                                </p>
-                                <div class="card-footer">
-                                    <button class="card-fav material-symbols-rounded">favorite</button>
-                                    <button class="card-button">Order Here</button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card swiper-slide">
-                            <div class="card-image">
-                                <img src="../images/picture-icon.jpg" alt="Hawker image">
-                                <p class="hawker-rating">
-                                    rating: ★★★★☆
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <h1 class="hawker-name">
-                                    Hawker Centre Name
-                                </h1>
-                                <p class="hawker-address">
-                                    Hawker Centre Address
-                                </p>
-                                <p class="hawker-desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat laborum doloribus sed nulla accusantium. Obcaecati sunt cum rerum enim nihil ex repudiandae sit quibusdam cumque odio ratione, optio culpa aspernatur!
-                                </p>
-                                <div class="card-footer">
-                                    <button class="card-fav material-symbols-rounded">favorite</button>
-                                    <button class="card-button">Order Here</button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="filter-divider"></div>
 
-                        <div class="card swiper-slide">
-                            <div class="card-image">
-                                <img src="../images/picture-icon.jpg" alt="Hawker image">
-                                <p class="hawker-rating">
-                                    rating: ★★★★☆
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <h1 class="hawker-name">
-                                    Hawker Centre Name
-                                </h1>
-                                <p class="hawker-address">
-                                    Hawker Centre Address
-                                </p>
-                                <p class="hawker-desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat laborum doloribus sed nulla accusantium. Obcaecati sunt cum rerum enim nihil ex repudiandae sit quibusdam cumque odio ratione, optio culpa aspernatur!
-                                </p>
-                                <div class="card-footer">
-                                    <button class="card-fav material-symbols-rounded">favorite</button>
-                                    <button class="card-button">Order Here</button>
-                                </div>
-                            </div>
-                        </div>
+            <div class="filter-group">
+                <span class="material-symbols-rounded">favorite</span>
 
-                        <div class="card swiper-slide">
-                            <div class="card-image">
-                                <img src="../images/picture-icon.jpg" alt="Hawker image">
-                                <p class="hawker-rating">
-                                    rating: ★★★★☆
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <h1 class="hawker-name">
-                                    Hawker Centre Name
-                                </h1>
-                                <p class="hawker-address">
-                                    Hawker Centre Address
-                                </p>
-                                <p class="hawker-desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat laborum doloribus sed nulla accusantium. Obcaecati sunt cum rerum enim nihil ex repudiandae sit quibusdam cumque odio ratione, optio culpa aspernatur!
-                                </p>
-                                <div class="card-footer">
-                                    <button class="card-fav material-symbols-rounded">favorite</button>
-                                    <button class="card-button">Order Here</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card swiper-slide">
-                            <div class="card-image">
-                                <img src="../images/picture-icon.jpg" alt="Hawker image">
-                                <p class="hawker-rating">
-                                    rating: ★★★★☆
-                                </p>
-                            </div>
-                            <div class="card-content">
-                                <h1 class="hawker-name">
-                                    Hawker Centre Name
-                                </h1>
-                                <p class="hawker-address">
-                                    Hawker Centre Address
-                                </p>
-                                <p class="hawker-desc">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat laborum doloribus sed nulla accusantium. Obcaecati sunt cum rerum enim nihil ex repudiandae sit quibusdam cumque odio ratione, optio culpa aspernatur!
-                                </p>
-                                <div class="card-footer">
-                                    <button class="card-fav material-symbols-rounded">favorite</button>
-                                    <button class="card-button">Order Here</button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="swiper-pagination"></div>
-
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-button-next"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="all-hawker">
-            <div class="title">
-                <h1>All Hawker Centres</h1>
-            </div>
-            <div class="container">
-                <div class="wrapper">
-                    <div class="card-list" id="order-hawker-list">
-                        <p>Loading hawker centres...</p>
-                    </div>
-                    <div class="pagination" id="hawker-pagination"></div>
-                </div>
+                <select id="favouritefilter" name="favouritefilter">
+                    <option value="all">All Hawkers</option>
+                    <option value="favourite">Favourites</option>
+                </select>
             </div>
         </div>
     </section>
+
+    <section id="available-ordering-section">
+    <div class="hawker-section-header">
+        <div>
+            <p class="section-label">Order now</p>
+            <h1>Available for Ordering</h1>
+        </div>
+
+        <p>
+            Browse hawker centres that currently have registered stalls
+            and menu items.
+        </p>
+    </div>
+
+    <div
+        id="order-hawker-list"
+        class="hawker-grid"
+    >
+        <p>Loading available hawker centres...</p>
+    </div>
+
+    <div
+        class="pagination"
+        id="hawker-pagination"
+    ></div>
+</section>
+
 <!-- Order History Overlay , only shows for users who are logged in-->
     <div id="history-overlay"></div>
 
