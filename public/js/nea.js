@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStallSearch();
     setupHygieneGrades();
     setupStallDetails();
+    loadStallDetailsHistory();
+    renderStallDetailsHistory();
+    formatStallDetailsDate();
+    showStallDetailsError();
     setupHamburgerMenu();
 });
 
@@ -2770,6 +2774,194 @@ function displayStallDetails(stall) {
                 ${complianceStatus}
             </span>
         `;
+    }
+}
+
+async function loadStallDetailsHistory(
+    stallID
+) {
+    const tableBody =
+        document.getElementById(
+            "stall-details-history-body"
+        );
+
+    if (!tableBody) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/stall-details/${stallID}/inspections`
+        );
+
+        const inspections =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                inspections.error ||
+                "Unable to retrieve inspection history"
+            );
+        }
+
+        renderStallDetailsHistory(
+            inspections,
+            tableBody
+        );
+
+    } catch (error) {
+        console.error(
+            "Load stall inspection history error:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    Unable to load inspection history.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderStallDetailsHistory(
+    inspections,
+    tableBody
+) {
+    tableBody.innerHTML = "";
+
+    if (inspections.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    No inspection records found for this food stall.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    inspections.forEach(
+        (inspection) => {
+            const inspectionDate =
+                formatStallDetailsDate(
+                    inspection.InspectionDate
+                );
+
+            const inspectionStatus =
+                inspection.InspectionStatus ||
+                "Unknown";
+
+            const statusClass =
+                inspectionStatus
+                    .toLowerCase()
+                    .replaceAll(" ", "-");
+
+            tableBody.innerHTML += `
+                <tr>
+
+                    <td>
+                        ${inspection.InspectionID}
+                    </td>
+
+                    <td>
+                        ${inspectionDate}
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.InspectionScore !== null &&
+                            inspection.InspectionScore !== undefined
+                                ? `${inspection.InspectionScore} / 100`
+                                : "Not available"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.HygieneGrade
+                                ? `
+                                    <span
+                                        class="nea-grade-badge nea-grade-${inspection.HygieneGrade.toLowerCase()}"
+                                    >
+                                        Grade ${inspection.HygieneGrade}
+                                    </span>
+                                `
+                                : "Not available"
+                        }
+                    </td>
+
+                    <td>
+                        <span
+                            class="nea-status-badge nea-status-${statusClass}"
+                        >
+                            ${inspectionStatus}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.Remark ||
+                            "No remarks recorded"
+                        }
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+}
+
+function formatStallDetailsDate(
+    dateValue
+) {
+    if (!dateValue) {
+        return "Not available";
+    }
+
+    const date =
+        new Date(dateValue);
+
+    if (isNaN(date.getTime())) {
+        return "Not available";
+    }
+
+    return date.toLocaleDateString(
+        "en-SG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+function showStallDetailsError(
+    message
+) {
+    const errorContainer =
+        document.getElementById(
+            "stall-details-error"
+        );
+
+    const contentContainer =
+        document.getElementById(
+            "stall-details-content"
+        );
+
+    if (errorContainer) {
+        errorContainer.textContent =
+            message;
+
+        errorContainer.className =
+            "hygiene-message error show";
+    }
+
+    if (contentContainer) {
+        contentContainer.style.display =
+            "none";
     }
 }
 
