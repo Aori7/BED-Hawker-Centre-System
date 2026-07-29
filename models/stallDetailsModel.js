@@ -27,7 +27,6 @@ async function getStallDetails(stallID) {
                     fs.ImageURL,
 
                     hc.HCName,
-                    hc.Address,
 
                     latestInspection.InspectionID,
                     latestInspection.OfficerID,
