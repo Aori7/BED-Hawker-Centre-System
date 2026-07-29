@@ -72,8 +72,28 @@ async function getFoodStallById(req, res) {
     }
 }
 
+//get all food stalls with latest inspection details for nea search
+async function getFoodStallsForNEASearch(req, res) {
+    try {
+        const stalls =
+            await foodStallModel.getFoodStallsForNEASearch();
+
+        res.status(200).json(stalls);
+
+    } catch (error) {
+        console.error(
+            "Get food stalls for NEA search error:",
+            error
+        );
+
+        res.status(500).json({
+            error: "Error retrieving food stalls"
+        });
+    }
+}
 
 module.exports = {
+    getFoodStallsForNEASearch,
     getStallsByHawkerCentre,
     getFoodStallById
 };

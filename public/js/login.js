@@ -97,6 +97,7 @@ otherLoginForm.addEventListener("submit", async (event) => {
         }
 
         sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("accessToken", data.accessToken);
         sessionStorage.setItem("userID", data.user.userID);
         sessionStorage.setItem("userEmail", data.user.email);
         sessionStorage.setItem("userRole", data.user.role);
@@ -108,7 +109,7 @@ otherLoginForm.addEventListener("submit", async (event) => {
         } else if (data.user.role === "NEA Officer") {
             window.location.href = "nea-main.html";
         } else if (data.user.role === "Operator") {
-            window.location.href = "main-operator .html";
+            window.location.href = "main-operator.html";
         }
 
     } catch (error) {
@@ -239,7 +240,7 @@ customerLoginForm.addEventListener("submit", async (event) => {
     }
 
     try {
-        const response = await fetch("/customers/login", {
+       const response = await fetch("/auth/login", {
             method: "POST",
 
             headers: {
@@ -248,7 +249,8 @@ customerLoginForm.addEventListener("submit", async (event) => {
 
             body: JSON.stringify({
                 email,
-                password
+                password,
+                role: "Customer"
             })
         });
 
@@ -261,13 +263,11 @@ customerLoginForm.addEventListener("submit", async (event) => {
 
         // save login details only after backend confirms login
         sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("accessToken",data.accessToken);
         sessionStorage.setItem("userRole", data.user.role);
         sessionStorage.setItem("userID", data.user.userID);
         sessionStorage.setItem("customerID", data.user.customerID);
-        sessionStorage.setItem(
-            "customerName",
-            data.user.customerName
-        );
+        sessionStorage.setItem("customerName",data.user.customerName);
         sessionStorage.setItem("userEmail", data.user.email);
 
         //debug
@@ -284,58 +284,3 @@ customerLoginForm.addEventListener("submit", async (event) => {
         alert("Unable to connect to the server");
     }
 });
-
-
-// //customer login email and password - temporary login without firebase
-// const customerLoginBtn = document.getElementById("customer-login-btn");
-
-// if (customerLoginBtn) {
-//     customerLoginBtn.addEventListener("click", (e) => {
-//         e.preventDefault();
-
-//         const email = document.querySelector("#customer-login input[type='email']").value;
-//         const password = document.querySelector("#customer-login input[type='password']").value;
-
-//         if (!email || !password) {
-//             alert("Please fill in all fields");
-//             return;
-//         }
-
-//         // temporary mock login success
-//         sessionStorage.setItem("isLoggedIn", "true");
-//         sessionStorage.setItem("userRole", "customer");
-//         sessionStorage.setItem("userEmail", email);
-
-//         window.location.href = "../index.html";
-//     });
-// }
-
-// //registering customers - temporary register without firebase
-// const submit = document.querySelector(".reg-btn");
-
-// if (submit) {
-//     submit.addEventListener("click", function(event) {
-//         event.preventDefault();
-
-//         const email = document.getElementById("email").value;
-//         const password = document.getElementById("password").value;
-//         const confirmPassword = document.getElementById("confirm-password").value;
-
-//         if (!email || !password || !confirmPassword) {
-//             alert("Please fill in all fields");
-//             return;
-//         }
-
-//         if (password !== confirmPassword) {
-//             alert("Passwords do not match");
-//             return;
-//         }
-
-//         // temporary mock register
-//         alert("Account created successfully. Please log in.");
-
-//         sessionStorage.setItem("registeredEmail", email);
-//         toggleLoginState("customer-login");
-//     });
-// }
-
