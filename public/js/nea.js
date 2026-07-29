@@ -2,11 +2,12 @@ document.addEventListener("DOMContentLoaded", () => {
     setupDashboard();
     loadDashboardStatistics();
     loadTodayInspectionCount();
-    loadRecentInspections()
+    loadRecentInspections();
     setupInspectionForm();
     setupInspectionHistory();
     setupStallSearch();
     setupHygieneGrades();
+    setupStallDetails();
     setupHamburgerMenu();
 });
 
@@ -129,7 +130,7 @@ function setupQuickStallSearch() {
 
 /* inspection form functions */
 
-function setupInspectionForm() {
+async function setupInspectionForm() {
     const form = document.getElementById(
         "inspection-form"
     );
@@ -138,21 +139,40 @@ function setupInspectionForm() {
         return;
     }
 
-    const inspectionDate = document.getElementById(
-        "inspection-date"
-    );
+    const hawkerCentreSelect =
+        document.getElementById(
+            "hawker-centre"
+        );
 
-    const remarks = document.getElementById(
-        "inspection-remarks"
-    );
+    const foodStallSelect =
+        document.getElementById(
+            "food-stall"
+        );
 
-    const remarksCount = document.getElementById(
-        "remarks-count"
-    );
+    const inspectionDate =
+        document.getElementById(
+            "inspection-date"
+        );
 
-    const cancelButton = document.getElementById(
-        "cancel-inspection-btn"
-    );
+    const inspectionScore =
+        document.getElementById(
+            "inspection-score"
+        );
+
+    const remarks =
+        document.getElementById(
+            "inspection-remarks"
+        );
+
+    const remarksCount =
+        document.getElementById(
+            "remarks-count"
+        );
+
+    const cancelButton =
+        document.getElementById(
+            "cancel-inspection-btn"
+        );
 
     const today = new Date()
         .toISOString()
@@ -164,53 +184,341 @@ function setupInspectionForm() {
     }
 
     if (remarks && remarksCount) {
-        remarks.addEventListener("input", () => {
-            remarksCount.textContent =
-                `${remarks.value.length} / 1000`;
-        });
+        remarks.addEventListener(
+            "input",
+            () => {
+                remarksCount.textContent =
+                    `${remarks.value.length} / 1000`;
+            }
+        );
     }
 
     if (cancelButton) {
-        cancelButton.addEventListener("click", () => {
-            window.location.href =
-                "nea-inspection-history.html";
-        });
+        cancelButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-inspection-history.html";
+            }
+        );
     }
 
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
+    await loadInspectionHawkerCentres(
+        hawkerCentreSelect,
+        foodStallSelect
+    );
 
-        clearInspectionErrors();
+    await prefillInspectionStall(
+        hawkerCentreSelect,
+        foodStallSelect
+    );
 
-        if (!validateInspectionForm()) {
-            showInspectionMessage(
-                "Please correct the highlighted fields before submitting.",
-                "error"
+    hawkerCentreSelect.addEventListener(
+        "change",
+        async () => {
+            const hawkerCentreID =
+                hawkerCentreSelect.value;
+
+            foodStallSelect.innerHTML = `
+                <option value="">
+                    Select a food stall
+                </option>
+            `;
+
+            foodStallSelect.disabled = true;
+
+            if (!hawkerCentreID) {
+                return;
+            }
+
+            await loadInspectionFoodStalls(
+                hawkerCentreID,
+                foodStallSelect
             );
-
-            return;
         }
+    );
 
-        showInspectionMessage(
-            "Inspection results recorded successfully.",
-            "success"
+    form.addEventListener(
+        "submit",
+        async (event) => {
+            event.preventDefault();
+
+            clearInspectionErrors();
+
+            if (!validateInspectionForm()) {
+                showInspectionMessage(
+                    "Please correct the highlighted fields before submitting.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const selectedGrade =
+                document.querySelector(
+                    'input[name="hygieneGrade"]:checked'
+                );
+
+            const inspectionData = {
+                officerID: 1,
+                stallID: parseInt(
+                    foodStallSelect.value
+                ),
+                inspectionDate:
+                    inspectionDate.value,
+                inspectionScore:
+                    parseInt(
+                        inspectionScore.value
+                    ),
+                hygieneGrade:
+                    selectedGrade.value,
+                remark:
+                    remarks.value.trim()
+            };
+
+            try {
+                const response = await fetch(
+                    "/inspections",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        body: JSON.stringify(
+                            inspectionData
+                        )
+                    }
+                );
+
+                const result =
+                    await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.error ||
+                        "Unable to record inspection"
+                    );
+                }
+
+                showInspectionMessage(
+                    result.message,
+                    "success"
+                );
+
+                form.reset();
+
+                inspectionDate.value = today;
+
+                remarksCount.textContent =
+                    "0 / 1000";
+
+                foodStallSelect.innerHTML = `
+                    <option value="">
+                        Select a food stall
+                    </option>
+                `;
+
+                foodStallSelect.disabled = true;
+
+                window.scrollTo({
+                    top: 250,
+                    behavior: "smooth"
+                });
+
+            } catch (error) {
+                console.error(
+                    "Submit inspection error:",
+                    error
+                );
+
+                showInspectionMessage(
+                    error.message,
+                    "error"
+                );
+            }
+        }
+    );
+}
+
+async function loadInspectionHawkerCentres(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    if (
+        !hawkerCentreSelect ||
+        !foodStallSelect
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/hawker-centres"
         );
 
-        form.reset();
+        const hawkerCentres =
+            await response.json();
 
-        if (inspectionDate) {
-            inspectionDate.value = today;
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load hawker centres"
+            );
         }
 
-        if (remarksCount) {
-            remarksCount.textContent = "0 / 1000";
+        hawkerCentreSelect.innerHTML = `
+            <option value="">
+                Select a hawker centre
+            </option>
+        `;
+
+        hawkerCentres.forEach(
+            (hawkerCentre) => {
+                hawkerCentreSelect.innerHTML += `
+                    <option
+                        value="${hawkerCentre.HawkerCentreID}"
+                    >
+                        ${hawkerCentre.HCName}
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = true;
+
+    } catch (error) {
+        console.error(
+            "Load hawker centres error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to load hawker centres.",
+            "error"
+        );
+    }
+}
+
+async function loadInspectionFoodStalls(
+    hawkerCentreID,
+    foodStallSelect
+) {
+    try {
+        const response = await fetch(
+            `/food-stalls/hawker-centre/${hawkerCentreID}`
+        );
+
+        const foodStalls =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load food stalls"
+            );
         }
 
-        window.scrollTo({
-            top: 250,
-            behavior: "smooth"
-        });
-    });
+        foodStallSelect.innerHTML = `
+            <option value="">
+                Select a food stall
+            </option>
+        `;
+
+        foodStalls.forEach(
+            (foodStall) => {
+                foodStallSelect.innerHTML += `
+                    <option
+                        value="${foodStall.StallID}"
+                    >
+                        ${foodStall.StallName}
+                        (${foodStall.StallUnitNo})
+                    </option>
+                `;
+            }
+        );
+
+        foodStallSelect.disabled = false;
+
+    } catch (error) {
+        console.error(
+            "Load food stalls error:",
+            error
+        );
+
+        foodStallSelect.innerHTML = `
+            <option value="">
+                Unable to load food stalls
+            </option>
+        `;
+
+        foodStallSelect.disabled = true;
+
+        showInspectionMessage(
+            "Unable to load food stalls.",
+            "error"
+        );
+    }
+}
+
+async function prefillInspectionStall(
+    hawkerCentreSelect,
+    foodStallSelect
+) {
+    const queryParameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const stallID =
+        parseInt(
+            queryParameters.get("stallId")
+        );
+
+    if (
+        isNaN(stallID) ||
+        stallID <= 0
+    ) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/food-stalls/${stallID}`
+        );
+
+        const foodStall =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                foodStall.error ||
+                "Unable to retrieve food stall"
+            );
+        }
+
+        hawkerCentreSelect.value =
+            String(
+                foodStall.HawkerCentreID
+            );
+
+        await loadInspectionFoodStalls(
+            foodStall.HawkerCentreID,
+            foodStallSelect
+        );
+
+        foodStallSelect.value =
+            String(foodStall.StallID);
+
+    } catch (error) {
+        console.error(
+            "Prefill inspection stall error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to automatically select the food stall.",
+            "error"
+        );
+    }
 }
 
 function validateInspectionForm() {
@@ -358,7 +666,7 @@ function showInspectionMessage(message, type) {
 
 /* inspection history functions */
 
-function setupInspectionHistory() {
+async function setupInspectionHistory() {
     const tableBody = document.getElementById(
         "inspection-history-body"
     );
@@ -403,83 +711,164 @@ function setupInspectionHistory() {
         "history-empty-state"
     );
 
-    const rows = Array.from(
-        tableBody.querySelectorAll("tr")
-    );
+    let inspections = [];
+
+    try {
+        const response = await fetch(
+            "/inspections"
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to retrieve inspection history"
+            );
+        }
+
+        inspections = result;
+
+        renderInspectionHistory(
+            inspections,
+            tableBody
+        );
+
+    } catch (error) {
+        console.error(
+            "Load inspection history error:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    Unable to load inspection history.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
 
     function updateInspectionHistory() {
         const keyword =
-            searchInput.value.trim().toLowerCase();
+            searchInput.value
+                .trim()
+                .toLowerCase();
 
-        const selectedGrade = gradeFilter.value;
-        const selectedStatus = statusFilter.value;
-        const selectedSort = sortFilter.value;
+        const selectedGrade =
+            gradeFilter.value;
 
-        const matchingRows = rows.filter((row) => {
-            const stallName =
-                row.dataset.stall.toLowerCase();
+        const selectedStatus =
+            statusFilter.value;
 
-            const centreName =
-                row.dataset.centre.toLowerCase();
+        const selectedSort =
+            sortFilter.value;
 
-            const matchesSearch =
-                stallName.includes(keyword) ||
-                centreName.includes(keyword);
+        const matchingInspections =
+            inspections.filter(
+                (inspection) => {
+                    const stallName =
+                        inspection.StallName
+                            .toLowerCase();
 
-            const matchesGrade =
-                selectedGrade === "all" ||
-                row.dataset.grade === selectedGrade;
+                    const centreName =
+                        inspection.HCName
+                            .toLowerCase();
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                row.dataset.status === selectedStatus;
+                    const matchesSearch =
+                        stallName.includes(
+                            keyword
+                        ) ||
+                        centreName.includes(
+                            keyword
+                        );
 
-            return (
-                matchesSearch &&
-                matchesGrade &&
-                matchesStatus
+                    const matchesGrade =
+                        selectedGrade === "all" ||
+                        inspection.HygieneGrade ===
+                            selectedGrade;
+
+                    const matchesStatus =
+                        selectedStatus === "all" ||
+                        inspection.InspectionStatus ===
+                            selectedStatus;
+
+                    return (
+                        matchesSearch &&
+                        matchesGrade &&
+                        matchesStatus
+                    );
+                }
             );
-        });
 
-        matchingRows.sort((firstRow, secondRow) => {
-            if (selectedSort === "oldest") {
+        matchingInspections.sort(
+            (
+                firstInspection,
+                secondInspection
+            ) => {
+                if (
+                    selectedSort === "oldest"
+                ) {
+                    return (
+                        new Date(
+                            firstInspection
+                                .InspectionDate
+                        ) -
+                        new Date(
+                            secondInspection
+                                .InspectionDate
+                        )
+                    );
+                }
+
+                if (
+                    selectedSort ===
+                    "highest-score"
+                ) {
+                    return (
+                        secondInspection
+                            .InspectionScore -
+                        firstInspection
+                            .InspectionScore
+                    );
+                }
+
+                if (
+                    selectedSort ===
+                    "lowest-score"
+                ) {
+                    return (
+                        firstInspection
+                            .InspectionScore -
+                        secondInspection
+                            .InspectionScore
+                    );
+                }
+
                 return (
-                    new Date(firstRow.dataset.date) -
-                    new Date(secondRow.dataset.date)
+                    new Date(
+                        secondInspection
+                            .InspectionDate
+                    ) -
+                    new Date(
+                        firstInspection
+                            .InspectionDate
+                    )
                 );
             }
+        );
 
-            if (selectedSort === "highest-score") {
-                return (
-                    Number(secondRow.dataset.score) -
-                    Number(firstRow.dataset.score)
-                );
-            }
+        renderInspectionHistory(
+            matchingInspections,
+            tableBody
+        );
 
-            if (selectedSort === "lowest-score") {
-                return (
-                    Number(firstRow.dataset.score) -
-                    Number(secondRow.dataset.score)
-                );
-            }
-
-            return (
-                new Date(secondRow.dataset.date) -
-                new Date(firstRow.dataset.date)
-            );
-        });
-
-        rows.forEach((row) => {
-            row.style.display = "none";
-        });
-
-        matchingRows.forEach((row) => {
-            tableBody.appendChild(row);
-            row.style.display = "";
-        });
-
-        resultCount.textContent =
-            matchingRows.length;
+        if (resultCount) {
+            resultCount.textContent =
+                matchingInspections.length;
+        }
 
         const summaryParts = [];
 
@@ -496,20 +885,42 @@ function setupInspectionHistory() {
         }
 
         if (selectedStatus !== "all") {
-            summaryParts.push(selectedStatus);
+            summaryParts.push(
+                selectedStatus
+            );
         }
 
-        filterSummary.textContent =
-            summaryParts.length === 0
-                ? "All inspection records"
-                : summaryParts.join(" · ");
+        if (filterSummary) {
+            filterSummary.textContent =
+                summaryParts.length === 0
+                    ? "All inspection records"
+                    : summaryParts.join(" · ");
+        }
 
-        if (matchingRows.length === 0) {
-            tableWrapper.style.display = "none";
-            emptyState.classList.add("show");
+        if (
+            matchingInspections.length === 0
+        ) {
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "none";
+            }
+
+            if (emptyState) {
+                emptyState.classList.add(
+                    "show"
+                );
+            }
         } else {
-            tableWrapper.style.display = "";
-            emptyState.classList.remove("show");
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "";
+            }
+
+            if (emptyState) {
+                emptyState.classList.remove(
+                    "show"
+                );
+            }
         }
     }
 
@@ -533,17 +944,138 @@ function setupInspectionHistory() {
         updateInspectionHistory
     );
 
-    clearButton.addEventListener("click", () => {
-        searchInput.value = "";
-        gradeFilter.value = "all";
-        statusFilter.value = "all";
-        sortFilter.value = "newest";
+    clearButton.addEventListener(
+        "click",
+        () => {
+            searchInput.value = "";
+            gradeFilter.value = "all";
+            statusFilter.value = "all";
+            sortFilter.value = "newest";
 
-        updateInspectionHistory();
-    });
+            updateInspectionHistory();
+        }
+    );
 
-    setupInspectionDetailsModal(rows);
     updateInspectionHistory();
+}
+
+function renderInspectionHistory(
+    inspections,
+    tableBody
+) {
+    tableBody.innerHTML = "";
+
+    inspections.forEach(
+        (inspection) => {
+            const inspectionDate =
+                new Date(
+                    inspection.InspectionDate
+                ).toLocaleDateString(
+                    "en-SG"
+                );
+
+            const statusClass =
+                inspection.InspectionStatus
+                    .toLowerCase()
+                    .replaceAll(" ", "-");
+
+            const safeRemark =
+                inspection.Remark ||
+                "No remarks recorded.";
+
+            const row =
+                document.createElement("tr");
+
+            row.dataset.inspectionId =
+                inspection.InspectionID;
+
+            row.dataset.date =
+                inspection.InspectionDate;
+
+            row.dataset.stall =
+                inspection.StallName;
+
+            row.dataset.centre =
+                inspection.HCName;
+
+            row.dataset.score =
+                inspection.InspectionScore;
+
+            row.dataset.grade =
+                inspection.HygieneGrade;
+
+            row.dataset.status =
+                inspection.InspectionStatus;
+
+            row.dataset.officer =
+                `Officer ${inspection.OfficerID}`;
+
+            row.dataset.remarks =
+                safeRemark;
+
+            row.innerHTML = `
+                <td>
+                    ${inspection.InspectionID}
+                </td>
+
+                <td>
+                    ${inspectionDate}
+                </td>
+
+                <td>
+                    <strong>
+                        ${inspection.StallName}
+                    </strong>
+
+                    <small>
+                        Unit ${inspection.StallUnitNo}
+                    </small>
+                </td>
+
+                <td>
+                    ${inspection.HCName}
+                </td>
+
+                <td>
+                    ${inspection.InspectionScore}
+                    / 100
+                </td>
+
+                <td>
+                    <span
+                        class="nea-grade-badge nea-grade-${inspection.HygieneGrade.toLowerCase()}"
+                    >
+                        ${inspection.HygieneGrade}
+                    </span>
+                </td>
+
+                <td>
+                    <span
+                        class="nea-status-badge nea-status-${statusClass}"
+                    >
+                        ${inspection.InspectionStatus}
+                    </span>
+                </td>
+
+                <td>
+                    <button
+                        type="button"
+                        class="history-view-btn"
+                    >
+                        View
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+        }
+    );
+
+    setupInspectionDetailsModal(
+        Array.from(
+            tableBody.querySelectorAll("tr")
+        )
+    );
 }
 
 function setupInspectionDetailsModal(rows) {
@@ -555,44 +1087,59 @@ function setupInspectionDetailsModal(rows) {
         "inspection-details-modal"
     );
 
-    const closeTopButton = document.getElementById(
-        "close-inspection-modal"
-    );
+    const closeTopButton =
+        document.getElementById(
+            "close-inspection-modal"
+        );
 
-    const closeBottomButton = document.getElementById(
-        "close-inspection-modal-bottom"
-    );
+    const closeBottomButton =
+        document.getElementById(
+            "close-inspection-modal-bottom"
+        );
 
-    const editButton = document.getElementById(
-        "edit-inspection-btn"
-    );
+    const editButton =
+        document.getElementById(
+            "edit-inspection-btn"
+        );
 
     if (!overlay || !modal) {
         return;
     }
 
-    let selectedInspectionId = "";
+    let selectedInspectionID = "";
 
     rows.forEach((row) => {
-        const viewButton = row.querySelector(
-            ".history-view-btn"
-        );
+        const viewButton =
+            row.querySelector(
+                ".history-view-btn"
+            );
 
         if (!viewButton) {
             return;
         }
 
-        viewButton.addEventListener("click", () => {
-            selectedInspectionId =
-                row.dataset.inspectionId;
+        viewButton.addEventListener(
+            "click",
+            () => {
+                selectedInspectionID =
+                    row.dataset.inspectionId;
 
-            displayInspectionDetails(row);
+                displayInspectionDetails(
+                    row
+                );
 
-            overlay.classList.add("show");
-            modal.classList.add("show");
+                overlay.classList.add(
+                    "show"
+                );
 
-            document.body.style.overflow = "hidden";
-        });
+                modal.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+            }
+        );
     });
 
     function closeModal() {
@@ -603,39 +1150,45 @@ function setupInspectionDetailsModal(rows) {
     }
 
     if (closeTopButton) {
-        closeTopButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeTopButton.onclick =
+            closeModal;
     }
 
     if (closeBottomButton) {
-        closeBottomButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeBottomButton.onclick =
+            closeModal;
     }
 
-    overlay.addEventListener("click", closeModal);
+    overlay.onclick = closeModal;
+
+    modal.onclick = (event) => {
+        event.stopPropagation();
+    };
 
     if (editButton) {
-        editButton.addEventListener("click", () => {
+        editButton.onclick = () => {
             window.location.href =
-                "nea-record-inspection.html?inspectionId=" +
+                "nea-record-inspection.html" +
+                "?inspectionId=" +
                 encodeURIComponent(
-                    selectedInspectionId
+                    selectedInspectionID
                 );
-        });
+        };
     }
 
-    document.addEventListener("keydown", (event) => {
-        if (
-            event.key === "Escape" &&
-            modal.classList.contains("show")
-        ) {
-            closeModal();
+    document.addEventListener(
+        "keydown",
+        (event) => {
+            if (
+                event.key === "Escape" &&
+                modal.classList.contains(
+                    "show"
+                )
+            ) {
+                closeModal();
+            }
         }
-    });
+    );
 }
 
 function displayInspectionDetails(row) {
@@ -646,7 +1199,9 @@ function displayInspectionDetails(row) {
 
     setTextContent(
         "modal-inspection-date",
-        formatInspectionDate(row.dataset.date)
+        formatInspectionDate(
+            row.dataset.date
+        )
     );
 
     setTextContent(
@@ -674,18 +1229,22 @@ function displayInspectionDetails(row) {
         row.dataset.remarks
     );
 
-    const gradeContainer = document.getElementById(
-        "modal-inspection-grade"
-    );
+    const gradeContainer =
+        document.getElementById(
+            "modal-inspection-grade"
+        );
 
-    const statusContainer = document.getElementById(
-        "modal-inspection-status"
-    );
+    const statusContainer =
+        document.getElementById(
+            "modal-inspection-status"
+        );
 
     if (gradeContainer) {
         gradeContainer.innerHTML = `
-            <span class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}">
-                ${row.dataset.grade}
+            <span
+                class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}"
+            >
+                Grade ${row.dataset.grade}
             </span>
         `;
     }
@@ -697,7 +1256,9 @@ function displayInspectionDetails(row) {
                 .replaceAll(" ", "-");
 
         statusContainer.innerHTML = `
-            <span class="nea-status-badge nea-status-${statusClass}">
+            <span
+                class="nea-status-badge nea-status-${statusClass}"
+            >
                 ${row.dataset.status}
             </span>
         `;
@@ -752,10 +1313,6 @@ function setupStallSearch() {
         "stall-status-filter"
     );
 
-    const locationFilter = document.getElementById(
-        "stall-location-filter"
-    );
-
     const clearButton = document.getElementById(
         "clear-stall-filters"
     );
@@ -772,11 +1329,193 @@ function setupStallSearch() {
         "stall-empty-state"
     );
 
-    const stallCards = Array.from(
-        resultsGrid.querySelectorAll(
-            ".stall-result-card"
-        )
-    );
+    let stallCards = [];
+
+    async function loadFoodStalls() {
+
+        try {
+
+            const response = await fetch(
+                "/food-stalls/search/nea"
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Unable to retrieve food stalls."
+                );
+            }
+
+            const stalls =
+                await response.json();
+
+            resultsGrid.innerHTML = "";
+
+            stalls.forEach((stall) => {
+
+                const inspectionDate =
+                    stall.InspectionDate
+                        ? new Date(
+                            stall.InspectionDate
+                        ).toLocaleDateString(
+                            "en-SG"
+                        )
+                        : "Not inspected";
+
+                const grade =
+                    stall.HygieneGrade ??
+                    "-";
+
+                const status =
+                    stall.InspectionStatus ??
+                    "Not Inspected";
+                
+                const imageSource =
+                    stall.ImageURL?.startsWith("http")
+                        ? stall.ImageURL
+                        : stall.ImageURL
+                            ? `../${stall.ImageURL}`
+                            : "../images/picture-icon.jpg";
+
+                const statusClass =
+                        status === "Completed"
+                            ? "nea-status-compliant"
+                        : status === "Cancelled"
+                            ? "nea-status-non-compliant"
+                            : "nea-status-pending";
+
+                const gradeClass =
+                    stall.HygieneGrade
+                        ? `nea-grade-${stall.HygieneGrade.toLowerCase()}`
+                        : "nea-grade-none";
+
+                resultsGrid.innerHTML += `
+                    <article
+                        class="stall-result-card"
+                        data-stall-id="${stall.StallID}"
+                        data-stall="${stall.StallName}"
+                        data-centre="${stall.HCName}"
+                        data-grade="${grade}"
+                        data-status="${status}"
+                    >
+
+                        <div class="stall-image-container">
+
+                            <img
+                                src="${imageSource}"
+                                alt="${stall.StallName}"
+                                onerror="this.src='../images/picture-icon.jpg'"
+                            >
+
+                            ${
+                                stall.HygieneGrade
+                                    ? `
+                                        <span class="nea-grade-badge ${gradeClass}">
+                                            Grade ${stall.HygieneGrade}
+                                        </span>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+
+                        <div class="stall-result-content">
+
+                            <div class="stall-result-title">
+
+                                <div>
+                                    <h3>${stall.StallName}</h3>
+                                    <p>${stall.HCName}</p>
+                                </div>
+
+                                <span class="nea-status-badge ${statusClass}">
+                                    ${status}
+                                </span>
+
+                            </div>
+
+                            <div class="stall-result-info">
+
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        location_on
+                                    </span>
+
+                                    <p>Unit ${stall.StallUnitNo}</p>
+                                </div>
+
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        fact_check
+                                    </span>
+
+                                    <p>
+                                        Score:
+                                        ${
+                                            stall.InspectionScore !== null
+                                                ? `${stall.InspectionScore} / 100`
+                                                : "Not available"
+                                        }
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <span class="material-symbols-rounded">
+                                        event
+                                    </span>
+
+                                    <p>Last inspected: ${inspectionDate}</p>
+                                </div>
+
+                            </div>
+
+                            <div class="stall-result-actions">
+
+                                <a href="nea-stall-details.html?stallId=${stall.StallID}">
+                                    <button
+                                        type="button"
+                                        class="stall-view-btn"
+                                    >
+                                        View Details
+                                    </button>
+                                </a>
+
+                                <a href="nea-record-inspection.html?stallId=${stall.StallID}">
+                                    <button
+                                        type="button"
+                                        class="stall-inspect-btn"
+                                    >
+                                        Inspect
+                                    </button>
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+                `;
+
+            });
+
+            stallCards = Array.from(
+                resultsGrid.querySelectorAll(
+                    ".stall-result-card"
+                )
+            );
+
+            updateStallResults();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Unable to load food stalls.",
+                error
+            );
+
+        }
+
+    }
 
     function updateStallResults() {
         const keyword =
@@ -784,8 +1523,6 @@ function setupStallSearch() {
 
         const selectedGrade = gradeFilter.value;
         const selectedStatus = statusFilter.value;
-        const selectedLocation =
-            locationFilter.value;
 
         const matchingCards = stallCards.filter(
             (card) => {
@@ -809,16 +1546,10 @@ function setupStallSearch() {
                     card.dataset.status ===
                         selectedStatus;
 
-                const matchesLocation =
-                    selectedLocation === "all" ||
-                    card.dataset.location ===
-                        selectedLocation;
-
                 return (
                     matchesSearch &&
                     matchesGrade &&
-                    matchesStatus &&
-                    matchesLocation
+                    matchesStatus
                 );
             }
         );
@@ -846,10 +1577,6 @@ function setupStallSearch() {
 
         if (selectedStatus !== "all") {
             filters.push(selectedStatus);
-        }
-
-        if (selectedLocation !== "all") {
-            filters.push(selectedLocation);
         }
 
         filterSummary.textContent =
@@ -881,16 +1608,10 @@ function setupStallSearch() {
         updateStallResults
     );
 
-    locationFilter.addEventListener(
-        "change",
-        updateStallResults
-    );
-
     clearButton.addEventListener("click", () => {
         searchInput.value = "";
         gradeFilter.value = "all";
         statusFilter.value = "all";
-        locationFilter.value = "all";
 
         updateStallResults();
     });
@@ -900,7 +1621,7 @@ function setupStallSearch() {
         statusFilter
     );
 
-    updateStallResults();
+    loadFoodStalls();
 }
 
 function applyStallQueryParameters(
@@ -931,7 +1652,7 @@ function applyStallQueryParameters(
 
 /* hygiene grade functions */
 
-function setupHygieneGrades() {
+async function setupHygieneGrades() {
     const tableBody = document.getElementById(
         "hygiene-grade-body"
     );
@@ -976,17 +1697,59 @@ function setupHygieneGrades() {
         "hygiene-empty-state"
     );
 
-    const rows = Array.from(
-        tableBody.querySelectorAll("tr")
-    );
+    const summaryCards =
+        document.querySelectorAll(
+            ".hygiene-summary-card"
+        );
 
-    const summaryCards = document.querySelectorAll(
-        ".hygiene-summary-card"
-    );
+    let hygieneRecords = [];
+
+    async function loadHygieneGrades() {
+        try {
+            const response = await fetch(
+                "/hygiene-grades"
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to retrieve hygiene grades"
+                );
+            }
+
+            hygieneRecords = result;
+
+            populateHygieneCentreFilter(
+                hygieneRecords,
+                centreFilter
+            );
+
+            updateHygieneResults();
+
+        } catch (error) {
+            console.error(
+                "Load hygiene grades error:",
+                error
+            );
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="8">
+                        Unable to load hygiene grades.
+                    </td>
+                </tr>
+            `;
+        }
+    }
 
     function updateHygieneResults() {
         const keyword =
-            searchInput.value.trim().toLowerCase();
+            searchInput.value
+                .trim()
+                .toLowerCase();
 
         const selectedCentre =
             centreFilter.value;
@@ -997,73 +1760,98 @@ function setupHygieneGrades() {
         const selectedStatus =
             statusFilter.value;
 
-        const matchingRows = rows.filter((row) => {
-            const stallName =
-                row.dataset.stall.toLowerCase();
+        const matchingRecords =
+            hygieneRecords.filter(
+                (record) => {
+                    const stallName =
+                        record.StallName
+                            .toLowerCase();
 
-            const centreName =
-                row.dataset.centre.toLowerCase();
+                    const centreName =
+                        record.HCName
+                            .toLowerCase();
 
-            const matchesSearch =
-                stallName.includes(keyword) ||
-                centreName.includes(keyword);
+                    const matchesSearch =
+                        stallName.includes(
+                            keyword
+                        ) ||
+                        centreName.includes(
+                            keyword
+                        );
 
-            const matchesCentre =
-                selectedCentre === "all" ||
-                row.dataset.centre ===
-                    selectedCentre;
+                    const matchesCentre =
+                        selectedCentre === "all" ||
+                        String(
+                            record.HawkerCentreID
+                        ) === selectedCentre;
 
-            const matchesGrade =
-                selectedGrade === "all" ||
-                row.dataset.grade ===
-                    selectedGrade;
+                    const matchesGrade =
+                        selectedGrade === "all" ||
+                        record.HygieneGrade ===
+                            selectedGrade;
 
-            const matchesStatus =
-                selectedStatus === "all" ||
-                row.dataset.status ===
-                    selectedStatus;
+                    const matchesStatus =
+                        selectedStatus === "all" ||
+                        record.ComplianceStatus ===
+                            selectedStatus;
 
-            return (
-                matchesSearch &&
-                matchesCentre &&
-                matchesGrade &&
-                matchesStatus
+                    return (
+                        matchesSearch &&
+                        matchesCentre &&
+                        matchesGrade &&
+                        matchesStatus
+                    );
+                }
             );
-        });
 
-        rows.forEach((row) => {
-            row.style.display = "none";
-        });
+        renderHygieneGrades(
+            matchingRecords,
+            tableBody,
+            loadHygieneGrades
+        );
 
-        matchingRows.forEach((row) => {
-            row.style.display = "";
-        });
-
-        resultCount.textContent =
-            matchingRows.length;
+        if (resultCount) {
+            resultCount.textContent =
+                matchingRecords.length;
+        }
 
         const filters = [];
 
         if (keyword) {
-            filters.push(`Search: "${keyword}"`);
+            filters.push(
+                `Search: "${keyword}"`
+            );
         }
 
         if (selectedCentre !== "all") {
-            filters.push(selectedCentre);
+            const selectedOption =
+                centreFilter.options[
+                    centreFilter.selectedIndex
+                ];
+
+            filters.push(
+                selectedOption.textContent
+            );
         }
 
         if (selectedGrade !== "all") {
-            filters.push(`Grade ${selectedGrade}`);
+            filters.push(
+                `Grade ${selectedGrade}`
+            );
         }
 
         if (selectedStatus !== "all") {
-            filters.push(selectedStatus);
+            filters.push(
+                selectedStatus
+            );
         }
 
-        filterSummary.textContent =
-            filters.length === 0
-                ? "All hygiene grades"
-                : filters.join(" · ");
+        if (filterSummary) {
+            filterSummary.textContent =
+                filters.length === 0
+                    ? "All hygiene grades"
+                    : filters.join(" · ");
+        }
 
         summaryCards.forEach((card) => {
             card.classList.toggle(
@@ -1073,13 +1861,35 @@ function setupHygieneGrades() {
             );
         });
 
-        if (matchingRows.length === 0) {
-            tableWrapper.style.display = "none";
-            emptyState.classList.add("show");
+        if (
+            matchingRecords.length === 0
+        ) {
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "none";
+            }
+
+            if (emptyState) {
+                emptyState.classList.add(
+                    "show"
+                );
+            }
         } else {
-            tableWrapper.style.display = "";
-            emptyState.classList.remove("show");
+            if (tableWrapper) {
+                tableWrapper.style.display =
+                    "";
+            }
+
+            if (emptyState) {
+                emptyState.classList.remove(
+                    "show"
+                );
+            }
         }
+
+        updateHygieneSummaryCounts(
+            hygieneRecords
+        );
     }
 
     searchInput.addEventListener(
@@ -1102,40 +1912,217 @@ function setupHygieneGrades() {
         updateHygieneResults
     );
 
-    clearButton.addEventListener("click", () => {
-        searchInput.value = "";
-        centreFilter.value = "all";
-        gradeFilter.value = "all";
-        statusFilter.value = "all";
-
-        updateHygieneResults();
-    });
-
-    summaryCards.forEach((card) => {
-        card.addEventListener("click", () => {
-            const selectedGrade =
-                card.dataset.gradeFilter;
-
-            gradeFilter.value =
-                gradeFilter.value === selectedGrade
-                    ? "all"
-                    : selectedGrade;
+    clearButton.addEventListener(
+        "click",
+        () => {
+            searchInput.value = "";
+            centreFilter.value = "all";
+            gradeFilter.value = "all";
+            statusFilter.value = "all";
 
             updateHygieneResults();
-        });
+        }
+    );
+
+    summaryCards.forEach((card) => {
+        card.addEventListener(
+            "click",
+            () => {
+                const selectedGrade =
+                    card.dataset.gradeFilter;
+
+                gradeFilter.value =
+                    gradeFilter.value ===
+                    selectedGrade
+                        ? "all"
+                        : selectedGrade;
+
+                updateHygieneResults();
+            }
+        );
+    });
+
+    await loadHygieneGrades();
+}
+
+function populateHygieneCentreFilter(
+    hygieneRecords,
+    centreFilter
+) {
+    if (!centreFilter) {
+        return;
+    }
+
+    const centres = new Map();
+
+    hygieneRecords.forEach((record) => {
+        centres.set(
+            String(record.HawkerCentreID),
+            record.HCName
+        );
+    });
+
+    centreFilter.innerHTML = `
+        <option value="all">
+            All hawker centres
+        </option>
+    `;
+
+    Array.from(centres.entries())
+        .sort(
+            (
+                firstCentre,
+                secondCentre
+            ) =>
+                firstCentre[1].localeCompare(
+                    secondCentre[1]
+                )
+        )
+        .forEach(
+            (
+                [
+                    hawkerCentreID,
+                    hawkerCentreName
+                ]
+            ) => {
+                centreFilter.innerHTML += `
+                    <option
+                        value="${hawkerCentreID}"
+                    >
+                        ${hawkerCentreName}
+                    </option>
+                `;
+            }
+        );
+}
+
+function renderHygieneGrades(
+    hygieneRecords,
+    tableBody,
+    reloadHygieneGrades
+) {
+    tableBody.innerHTML = "";
+
+    hygieneRecords.forEach((record) => {
+        const inspectionDate =
+            formatHygieneDate(
+                record.InspectionDate
+            );
+
+        const gradeExpiry =
+            record.GradeExpiry
+                ? formatHygieneDate(
+                    record.GradeExpiry
+                )
+                : "Not available";
+
+        const statusClass =
+            record.ComplianceStatus
+                .toLowerCase()
+                .replaceAll(" ", "-");
+
+        const row =
+            document.createElement("tr");
+
+        row.dataset.inspectionId =
+            record.InspectionID;
+
+        row.dataset.stallId =
+            record.StallID;
+
+        row.dataset.stall =
+            record.StallName;
+
+        row.dataset.centre =
+            record.HCName;
+
+        row.dataset.centreId =
+            record.HawkerCentreID;
+
+        row.dataset.score =
+            record.InspectionScore;
+
+        row.dataset.grade =
+            record.HygieneGrade;
+
+        row.dataset.status =
+            record.ComplianceStatus;
+
+        row.dataset.remarks =
+            record.Remark || "";
+
+        row.innerHTML = `
+            <td>
+                ${record.StallID}
+            </td>
+
+            <td>
+                <strong>
+                    ${record.StallName}
+                </strong>
+
+                <small>
+                    Unit ${record.StallUnitNo}
+                </small>
+            </td>
+
+            <td>
+                ${record.HCName}
+            </td>
+
+            <td>
+                ${inspectionDate}
+            </td>
+
+            <td>
+                ${record.InspectionScore}
+                / 100
+            </td>
+
+            <td>
+                <span
+                    class="nea-grade-badge nea-grade-${record.HygieneGrade.toLowerCase()}"
+                >
+                    Grade ${record.HygieneGrade}
+                </span>
+            </td>
+
+            <td>
+                <span
+                    class="nea-status-badge nea-status-${statusClass}"
+                >
+                    ${record.ComplianceStatus}
+                </span>
+
+                <small>
+                    Expires ${gradeExpiry}
+                </small>
+            </td>
+
+            <td>
+                <button
+                    type="button"
+                    class="hygiene-update-btn"
+                >
+                    Update
+                </button>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
     });
 
     setupHygieneUpdateModal(
-        rows,
-        updateHygieneResults
+        Array.from(
+            tableBody.querySelectorAll("tr")
+        ),
+        reloadHygieneGrades
     );
-
-    updateHygieneResults();
 }
 
 function setupHygieneUpdateModal(
     rows,
-    updateHygieneResults
+    reloadHygieneGrades
 ) {
     const overlay = document.getElementById(
         "hygiene-modal-overlay"
@@ -1161,9 +2148,10 @@ function setupHygieneUpdateModal(
         "hygiene-update-remarks"
     );
 
-    const remarksCount = document.getElementById(
-        "hygiene-remarks-count"
-    );
+    const remarksCount =
+        document.getElementById(
+            "hygiene-remarks-count"
+        );
 
     if (!overlay || !modal || !form) {
         return;
@@ -1172,31 +2160,43 @@ function setupHygieneUpdateModal(
     let selectedRow = null;
 
     rows.forEach((row) => {
-        const updateButton = row.querySelector(
-            ".hygiene-update-btn"
-        );
+        const updateButton =
+            row.querySelector(
+                ".hygiene-update-btn"
+            );
 
         if (!updateButton) {
             return;
         }
 
-        updateButton.addEventListener("click", () => {
-            selectedRow = row;
+        updateButton.addEventListener(
+            "click",
+            () => {
+                selectedRow = row;
 
-            openHygieneUpdateModal(row);
+                openHygieneUpdateModal(
+                    row
+                );
 
-            overlay.classList.add("show");
-            modal.classList.add("show");
+                overlay.classList.add(
+                    "show"
+                );
 
-            document.body.style.overflow = "hidden";
-        });
+                modal.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+            }
+        );
     });
 
     if (remarks && remarksCount) {
-        remarks.addEventListener("input", () => {
+        remarks.oninput = () => {
             remarksCount.textContent =
-                `${remarks.value.length} / 500`;
-        });
+                `${remarks.value.length} / 1000`;
+        };
     }
 
     function closeModal() {
@@ -1210,29 +2210,28 @@ function setupHygieneUpdateModal(
         clearHygieneFormErrors();
 
         if (remarksCount) {
-            remarksCount.textContent = "0 / 500";
+            remarksCount.textContent =
+                "0 / 1000";
         }
 
         selectedRow = null;
     }
 
-    overlay.addEventListener("click", closeModal);
+    overlay.onclick = closeModal;
+
+    modal.onclick = (event) => {
+        event.stopPropagation();
+    };
 
     if (closeButton) {
-        closeButton.addEventListener(
-            "click",
-            closeModal
-        );
+        closeButton.onclick = closeModal;
     }
 
     if (cancelButton) {
-        cancelButton.addEventListener(
-            "click",
-            closeModal
-        );
+        cancelButton.onclick = closeModal;
     }
 
-    form.addEventListener("submit", (event) => {
+    form.onsubmit = async (event) => {
         event.preventDefault();
 
         clearHygieneFormErrors();
@@ -1265,40 +2264,108 @@ function setupHygieneUpdateModal(
             isValid = false;
         }
 
+        if (
+            updateRemarks.length > 1000
+        ) {
+            setFieldError(
+                "updated-remarks-error",
+                "The remarks cannot exceed 1000 characters."
+            );
+
+            isValid = false;
+        }
+
         if (!isValid || !selectedRow) {
             return;
         }
 
-        updateHygieneRow(
-            selectedRow,
-            selectedGrade.value,
-            updateRemarks
-        );
+        const submitButton =
+            form.querySelector(
+                'button[type="submit"]'
+            );
 
-        updateHygieneSummaryCounts();
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent =
+                "Updating...";
+        }
 
-        showHygieneMessage(
-            `${selectedRow.dataset.stall}'s hygiene grade was updated successfully.`,
-            "success"
-        );
+        try {
+            const inspectionID =
+                selectedRow.dataset
+                    .inspectionId;
 
-        closeModal();
-        updateHygieneResults();
+            const response = await fetch(
+                `/hygiene-grades/${inspectionID}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        hygieneGrade:
+                            selectedGrade.value,
+                        remark:
+                            updateRemarks
+                    })
+                }
+            );
 
-        window.scrollTo({
-            top: 300,
-            behavior: "smooth"
-        });
-    });
+            const result =
+                await response.json();
 
-    document.addEventListener("keydown", (event) => {
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to update hygiene grade"
+                );
+            }
+
+            const stallName =
+                selectedRow.dataset.stall;
+
+            closeModal();
+
+            showHygieneMessage(
+                `${stallName}'s hygiene grade was updated successfully.`,
+                "success"
+            );
+
+            await reloadHygieneGrades();
+
+        } catch (error) {
+            console.error(
+                "Update hygiene grade error:",
+                error
+            );
+
+            setFieldError(
+                "updated-remarks-error",
+                error.message
+            );
+
+        } finally {
+            if (submitButton) {
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Update Grade";
+            }
+        }
+    };
+
+    document.onkeydown = (event) => {
         if (
             event.key === "Escape" &&
-            modal.classList.contains("show")
+            modal.classList.contains(
+                "show"
+            )
         ) {
             closeModal();
         }
-    });
+    };
 }
 
 function openHygieneUpdateModal(row) {
@@ -1329,7 +2396,9 @@ function openHygieneUpdateModal(row) {
 
     if (currentGradeContainer) {
         currentGradeContainer.innerHTML = `
-            <span class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}">
+            <span
+                class="nea-grade-badge nea-grade-${row.dataset.grade.toLowerCase()}"
+            >
                 Grade ${row.dataset.grade}
             </span>
         `;
@@ -1348,62 +2417,25 @@ function openHygieneUpdateModal(row) {
         "hygiene-update-remarks"
     );
 
-    const remarksCount = document.getElementById(
-        "hygiene-remarks-count"
-    );
+    const remarksCount =
+        document.getElementById(
+            "hygiene-remarks-count"
+        );
 
     if (remarks) {
-        remarks.value = row.dataset.remarks || "";
+        remarks.value =
+            row.dataset.remarks || "";
     }
 
     if (remarks && remarksCount) {
         remarksCount.textContent =
-            `${remarks.value.length} / 500`;
+            `${remarks.value.length} / 1000`;
     }
 }
 
-function updateHygieneRow(
-    row,
-    newGrade,
-    updateRemarks
+function updateHygieneSummaryCounts(
+    hygieneRecords
 ) {
-    row.dataset.grade = newGrade;
-    row.dataset.remarks = updateRemarks;
-
-    const gradeCell = row.children[4];
-
-    gradeCell.innerHTML = `
-        <span class="nea-grade-badge nea-grade-${newGrade.toLowerCase()}">
-            Grade ${newGrade}
-        </span>
-    `;
-
-    const newStatus =
-        newGrade === "A" || newGrade === "B"
-            ? "Compliant"
-            : "Non-Compliant";
-
-    row.dataset.status = newStatus;
-
-    const statusClass =
-        newStatus
-            .toLowerCase()
-            .replaceAll(" ", "-");
-
-    const statusCell = row.children[5];
-
-    statusCell.innerHTML = `
-        <span class="nea-status-badge nea-status-${statusClass}">
-            ${newStatus}
-        </span>
-    `;
-}
-
-function updateHygieneSummaryCounts() {
-    const rows = document.querySelectorAll(
-        "#hygiene-grade-body tr"
-    );
-
     const counts = {
         A: 0,
         B: 0,
@@ -1411,8 +2443,9 @@ function updateHygieneSummaryCounts() {
         D: 0
     };
 
-    rows.forEach((row) => {
-        const grade = row.dataset.grade;
+    hygieneRecords.forEach((record) => {
+        const grade =
+            record.HygieneGrade;
 
         if (counts[grade] !== undefined) {
             counts[grade]++;
@@ -1441,13 +2474,15 @@ function updateHygieneSummaryCounts() {
 }
 
 function clearHygieneFormErrors() {
-    const gradeError = document.getElementById(
-        "updated-grade-error"
-    );
+    const gradeError =
+        document.getElementById(
+            "updated-grade-error"
+        );
 
-    const remarksError = document.getElementById(
-        "updated-remarks-error"
-    );
+    const remarksError =
+        document.getElementById(
+            "updated-remarks-error"
+        );
 
     if (gradeError) {
         gradeError.textContent = "";
@@ -1458,16 +2493,21 @@ function clearHygieneFormErrors() {
     }
 }
 
-function showHygieneMessage(message, type) {
-    const messageElement = document.getElementById(
-        "hygiene-message"
-    );
+function showHygieneMessage(
+    message,
+    type
+) {
+    const messageElement =
+        document.getElementById(
+            "hygiene-message"
+        );
 
     if (!messageElement) {
         return;
     }
 
     messageElement.textContent = message;
+
     messageElement.className =
         `hygiene-message ${type} show`;
 
@@ -1475,6 +2515,445 @@ function showHygieneMessage(message, type) {
         messageElement.className =
             "hygiene-message";
     }, 5000);
+}
+
+function formatHygieneDate(dateValue) {
+    if (!dateValue) {
+        return "Not available";
+    }
+
+    const date = new Date(dateValue);
+
+    return date.toLocaleDateString(
+        "en-SG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+/* stall details functions */
+
+async function setupStallDetails() {
+    const pageContainer =
+        document.getElementById(
+            "stall-details-page"
+        );
+
+    if (!pageContainer) {
+        return;
+    }
+
+    const queryParameters =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const stallID =
+        Number(
+            queryParameters.get("stallId")
+        );
+
+    console.log(
+        "stall details page loaded:",
+        stallID
+    );
+
+    if (
+        !Number.isInteger(stallID) ||
+        stallID <= 0
+    ) {
+        showStallDetailsError(
+            "Invalid food stall selected."
+        );
+
+        return;
+    }
+
+    const inspectButton =
+        document.getElementById(
+            "stall-details-inspect-btn"
+        );
+
+    const backButton =
+        document.getElementById(
+            "stall-details-back-btn"
+        );
+
+    if (inspectButton) {
+        inspectButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-record-inspection.html" +
+                    `?stallId=${stallID}`;
+            }
+        );
+    }
+
+    if (backButton) {
+        backButton.addEventListener(
+            "click",
+            () => {
+                window.location.href =
+                    "nea-search-stall.html";
+            }
+        );
+    }
+
+    await loadStallDetails(stallID);
+
+    await loadStallDetailsHistory(
+        stallID
+    );
+}
+
+async function loadStallDetails(stallID) {
+    try {
+        const response = await fetch(
+            `/stall-details/${stallID}`
+        );
+
+        const stall =
+            await response.json();
+
+        console.log(
+            "stall details response:",
+            stall
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                stall.error ||
+                "Unable to retrieve food stall details"
+            );
+        }
+
+        displayStallDetails(stall);
+
+    } catch (error) {
+        console.error(
+            "Load stall details error:",
+            error
+        );
+
+        showStallDetailsError(
+            error.message
+        );
+    }
+}
+
+function displayStallDetails(stall) {
+    setTextContent(
+        "stall-details-name",
+        stall.StallName
+    );
+
+    setTextContent(
+        "stall-details-centre",
+        stall.HCName
+    );
+
+    setTextContent(
+        "stall-details-unit",
+        `Unit ${stall.StallUnitNo}`
+    );
+
+    setTextContent(
+        "stall-details-id",
+        stall.StallID
+    );
+
+    setTextContent(
+        "stall-details-owner-id",
+        stall.OwnerID
+    );
+
+    setTextContent(
+        "stall-details-score",
+        stall.InspectionScore !== null &&
+        stall.InspectionScore !== undefined
+            ? `${stall.InspectionScore} / 100`
+            : "Not inspected"
+    );
+
+    setTextContent(
+        "stall-details-date",
+        stall.InspectionDate
+            ? formatStallDetailsDate(
+                stall.InspectionDate
+            )
+            : "Not inspected"
+    );
+
+    setTextContent(
+        "stall-details-expiry",
+        stall.GradeExpiry
+            ? formatStallDetailsDate(
+                stall.GradeExpiry
+            )
+            : "Not available"
+    );
+
+    setTextContent(
+        "stall-details-remarks",
+        stall.Remark
+            ? stall.Remark
+            : "No inspection remarks available."
+    );
+
+    const stallImage =
+        document.getElementById(
+            "stall-details-image"
+        );
+
+    if (stallImage) {
+        stallImage.src =
+            stall.ImageURL ||
+            "../images/picture-icon.jpg";
+
+        stallImage.alt =
+            stall.StallName;
+
+        stallImage.onerror = () => {
+            stallImage.src =
+                "../images/picture-icon.jpg";
+        };
+    }
+
+    const gradeContainer =
+        document.getElementById(
+            "stall-details-grade"
+        );
+
+    if (gradeContainer) {
+        if (stall.HygieneGrade) {
+            gradeContainer.innerHTML = `
+                <span
+                    class="nea-grade-badge nea-grade-${stall.HygieneGrade.toLowerCase()}"
+                >
+                    Grade ${stall.HygieneGrade}
+                </span>
+            `;
+        } else {
+            gradeContainer.textContent =
+                "Not inspected";
+        }
+    }
+
+    const statusContainer =
+        document.getElementById(
+            "stall-details-status"
+        );
+
+    if (statusContainer) {
+        const complianceStatus =
+            stall.ComplianceStatus ||
+            "Not Inspected";
+
+        const statusClass =
+            complianceStatus
+                .toLowerCase()
+                .replaceAll(" ", "-");
+
+        statusContainer.innerHTML = `
+            <span
+                class="nea-status-badge nea-status-${statusClass}"
+            >
+                ${complianceStatus}
+            </span>
+        `;
+    }
+}
+
+async function loadStallDetailsHistory(
+    stallID
+) {
+    const tableBody =
+        document.getElementById(
+            "stall-details-history-body"
+        );
+
+    if (!tableBody) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `/stall-details/${stallID}/inspections`
+        );
+
+        const inspections =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                inspections.error ||
+                "Unable to retrieve inspection history"
+            );
+        }
+
+        renderStallDetailsHistory(
+            inspections,
+            tableBody
+        );
+
+    } catch (error) {
+        console.error(
+            "Load stall inspection history error:",
+            error
+        );
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    Unable to load inspection history.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderStallDetailsHistory(
+    inspections,
+    tableBody
+) {
+    tableBody.innerHTML = "";
+
+    if (inspections.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    No inspection records found for this food stall.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    inspections.forEach(
+        (inspection) => {
+            const inspectionDate =
+                formatStallDetailsDate(
+                    inspection.InspectionDate
+                );
+
+            const inspectionStatus =
+                inspection.InspectionStatus ||
+                "Unknown";
+
+            const statusClass =
+                inspectionStatus
+                    .toLowerCase()
+                    .replaceAll(" ", "-");
+
+            tableBody.innerHTML += `
+                <tr>
+
+                    <td>
+                        ${inspection.InspectionID}
+                    </td>
+
+                    <td>
+                        ${inspectionDate}
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.InspectionScore !== null &&
+                            inspection.InspectionScore !== undefined
+                                ? `${inspection.InspectionScore} / 100`
+                                : "Not available"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.HygieneGrade
+                                ? `
+                                    <span
+                                        class="nea-grade-badge nea-grade-${inspection.HygieneGrade.toLowerCase()}"
+                                    >
+                                        Grade ${inspection.HygieneGrade}
+                                    </span>
+                                `
+                                : "Not available"
+                        }
+                    </td>
+
+                    <td>
+                        <span
+                            class="nea-status-badge nea-status-${statusClass}"
+                        >
+                            ${inspectionStatus}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${
+                            inspection.Remark ||
+                            "No remarks recorded"
+                        }
+                    </td>
+
+                </tr>
+            `;
+        }
+    );
+}
+
+function formatStallDetailsDate(
+    dateValue
+) {
+    if (!dateValue) {
+        return "Not available";
+    }
+
+    const date =
+        new Date(dateValue);
+
+    if (isNaN(date.getTime())) {
+        return "Not available";
+    }
+
+    return date.toLocaleDateString(
+        "en-SG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+function showStallDetailsError(
+    message
+) {
+    const errorContainer =
+        document.getElementById(
+            "stall-details-error"
+        );
+
+    const contentContainer =
+        document.getElementById(
+            "stall-details-content"
+        );
+
+    if (errorContainer) {
+        errorContainer.textContent =
+            message;
+
+        errorContainer.className =
+            "hygiene-message error show";
+    }
+
+    if (contentContainer) {
+        contentContainer.style.display =
+            "none";
+    }
 }
 
 /* mobile navigation menu */
@@ -1501,13 +2980,19 @@ function setupHamburgerMenu() {
 async function loadDashboardStatistics() {
 
     try {
+        const totalInspectionsElement =
+            document.getElementById("total-inspections");
+
+        if (!totalInspectionsElement) {
+            return;
+        }
 
         const response = await fetch("/dashboard/statistics");
 
         const statistics = await response.json();
 
-        document.getElementById("total-inspections").textContent =
-            statistics.totalInspections;
+        totalInspectionsElement.textContent =
+        statistics.totalInspections;
 
         document.getElementById("compliant-stalls").textContent =
             statistics.compliantStalls;

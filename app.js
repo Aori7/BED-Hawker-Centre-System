@@ -18,6 +18,10 @@ const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
+// Import - dayana's
+const inspectionRoutes = require("./routes/inspectionRoutes");
+const hygieneGradeRoutes = require("./routes/hygieneGradeRoutes");
+const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
 
 
 //create express app
@@ -47,6 +51,9 @@ app.use("/contact-submissions", contactSubmissionRoutes);
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
 //dayana's
+app.use("/inspections", inspectionRoutes);
+app.use("/hygiene-grades", hygieneGradeRoutes);
+app.use("/stall-details", stallDetailsRoutes);
 
 //start server
 app.listen(port, async () => {
