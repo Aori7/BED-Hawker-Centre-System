@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setupDashboard();
     loadDashboardStatistics();
     loadTodayInspectionCount();
-    loadRecentInspections()
+    loadRecentInspections();
     setupInspectionForm();
     setupInspectionHistory();
     setupStallSearch();
     setupHygieneGrades();
-    setupHamburgerMenu();
     setupStallDetails();
+    setupHamburgerMenu();
 });
 
 

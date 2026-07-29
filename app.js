@@ -21,6 +21,7 @@ const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 const inspectionRoutes = require("./routes/inspectionRoutes");
 const hygieneGradeRoutes = require("./routes/hygieneGradeRoutes");
 const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
+const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
 
 
 //create express app
@@ -52,6 +53,7 @@ app.use("/vendor-promotions", vendorPromotionRoutes);
 //dayana's
 app.use("/inspections", inspectionRoutes);
 app.use("/hygiene-grades", hygieneGradeRoutes);
+app.use("/stall-details", stallDetailsRoutes);
 app.use("/stall-details", stallDetailsRoutes);
 
 //start server
