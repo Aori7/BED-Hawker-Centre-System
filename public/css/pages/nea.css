@@ -1121,6 +1121,22 @@
     font-weight: 700;
 }
 
+/* stall details badge sizing */
+
+#stall-details-grade,
+#stall-details-status {
+    display: flex;
+    align-items: flex-start;
+}
+
+#stall-details-grade .nea-grade-badge,
+#stall-details-status .nea-status-badge {
+    width: auto;
+    align-self: flex-start;
+    padding: 8px 16px;
+    border-radius: 999px;
+}
+
 /* responsive design */
 
 @media (max-width: 1250px) {
