@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
   /* dom elements: reply dialog */
   const replyDialog = document.querySelector("#reply-dialog");
   const replyForm = document.querySelector("#reply-form");
+  /* selected submission id */
+  const replySubmissionId = document.querySelector("#reply-submission-id");
   const replyDialogCustomerName = document.querySelector(
     "#reply-dialog-customer-name",
   );
@@ -342,6 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (replyErrorMessage) {
       replyErrorMessage.hidden = true;
     }
+    if (replySubmissionId) {
+      replySubmissionId.value = card.dataset.feedbackId || "";
+    }
     replyDialog.showModal();
     replyMessageInput.focus();
   }
@@ -350,13 +355,16 @@ document.addEventListener("DOMContentLoaded", () => {
     replyDialog.close();
     selectedFeedbackCard = null;
   }
+
   /* reply character counter */
   function updateReplyCharacterCount() {
     if (!replyMessageInput || !replyCharacterCount) {
       return;
     }
+
     replyCharacterCount.textContent = String(replyMessageInput.value.length);
   }
+
   /* reply count */
   function getReplyCount(card) {
     const countText =
@@ -370,7 +378,7 @@ document.addEventListener("DOMContentLoaded", () => {
       count === 1 ? "1 reply" : `${count} replies`;
   }
   /* add new reply preview */
-  function addReplyToCard(card, replyMessage) {
+  function addReplyToCard(card, replyData) {
     const replyPreviewList = card.querySelector(".reply-preview-list");
     if (!replyPreviewList) return;
     const currentDate = new Intl.DateTimeFormat("en-SG", {
@@ -409,13 +417,13 @@ document.addEventListener("DOMContentLoaded", () => {
       avatarElement.textContent = initials || "VS";
     }
     if (stallNameElement) {
-      stallNameElement.textContent = stallName;
+      stallNameElement.textContent = replyData.senderName || stallName;
     }
     if (dateElement) {
-      dateElement.textContent = currentDate;
+      dateElement.textContent = replyData.createdAt || currentDate;
     }
     if (replyParagraph) {
-      replyParagraph.textContent = replyMessage;
+      replyParagraph.textContent = replyData.message;
     }
     replyPreviewList.appendChild(replyPreview);
     const updatedCount = getReplyCount(card) + 1;
@@ -425,7 +433,16 @@ document.addEventListener("DOMContentLoaded", () => {
   /* submit reply */
   function submitReply(event) {
     event.preventDefault();
-    if (!selectedFeedbackCard || !replyMessageInput) {
+    if (!replySubmissionId || !replyMessageInput) {
+      return;
+    }
+
+    const submissionId = replySubmissionId.value;
+    const selectedFeedbackCard = document.querySelector(
+      `[data-feedback-id="${submissionId}"]`,
+    );
+
+    if (!selectedFeedbackCard) {
       return;
     }
     const replyMessage = replyMessageInput.value.trim();
@@ -436,6 +453,17 @@ document.addEventListener("DOMContentLoaded", () => {
       replyMessageInput.focus();
       return;
     }
+    /* TODO
+      await fetch(
+      `/api/contact-submissions/${submissionId}/replies`,
+      {
+      method:"POST",
+      body:JSON.stringify({
+      replyMessage
+      })
+      }
+      );
+      */
     addReplyToCard(selectedFeedbackCard, replyMessage);
     closeReplyDialog();
     showSuccessToast();
