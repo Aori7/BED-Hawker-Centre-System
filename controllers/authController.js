@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authModel = require("../models/authModel");
 
@@ -36,12 +37,27 @@ async function loginUser(req, res) {
             });
         }
 
-        res.status(200).json({
-            message: "Login successful",
-            user: {
+        const accessToken = jwt.sign(
+            {
                 userID: user.UserID,
                 email: user.Email,
                 role: user.RoleName
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: "1h"
+            }
+        );
+
+        res.status(200).json({
+            message: "Login successful",
+            accessToken,
+            user: {
+                userID: user.UserID,
+                email: user.Email,
+                role: user.RoleName,
+                customerID: user.CustomerID,
+                customerName: user.CustomerName
             }
         });
 

@@ -10,6 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   const recordsPerPage = 15;
 
+  function getHawkerRegion(hawkerCentre) {
+    const latitude = Number(hawkerCentre.Latitude);
+    const longitude = Number(hawkerCentre.Longitude);
+
+    if (longitude < 103.79) {
+      return "West";
+    }
+
+    if (longitude > 103.87) {
+      return "East";
+    }
+
+    if (latitude >= 1.365) {
+      return "North";
+    }
+
+    if (latitude <= 1.30) {
+      return "South";
+    }
+
+    return "Central";
+  }
   function escapeHTML(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -43,64 +65,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     currentRecords.forEach((hawker) => {
-      const card = document.createElement("div");
-      card.classList.add("card");
+    const region = getHawkerRegion(hawker);
 
-      const imagePath =
-        hawker.ImageURL || "../images/picture-icon.jpg";
+    const imagePath =
+      hawker.ImageURL || "../images/picture-icon.jpg";
 
-      card.innerHTML = `
-        <div class="card-image">
-          <img
-            src="${escapeHTML(imagePath)}"
-            alt="${escapeHTML(hawker.HCName)}"
-            onerror="this.src='../images/picture-icon.jpg'"
+    const description =
+      hawker.Description ||
+      "Discover stalls and local food available at this hawker centre.";
+
+    const card = document.createElement("article");
+    card.classList.add("hawker-card");
+
+    card.innerHTML = `
+      <div class="hawker-card-image">
+        <img
+          src="${escapeHTML(imagePath)}"
+          alt="${escapeHTML(hawker.HCName)}"
+          onerror="
+            this.onerror = null;
+            this.src = '../images/picture-icon.jpg';
+          "
+        >
+
+        <span class="hawker-region-label">
+          ${region}
+        </span>
+      </div>
+
+      <div class="hawker-card-content">
+        <h2>
+          ${escapeHTML(hawker.HCName)}
+        </h2>
+
+        <p class="hawker-card-address">
+          ${escapeHTML(hawker.HCAddress)}
+        </p>
+
+        <p class="hawker-card-description">
+          ${escapeHTML(description)}
+        </p>
+
+        <div class="hawker-card-footer">
+          <button
+            type="button"
+            class="hawker-favourite-btn material-symbols-rounded"
+            data-hawker-id="${hawker.HawkerCentreID}"
+            aria-label="Add ${escapeHTML(hawker.HCName)} to favourites"
           >
+            favorite
+          </button>
+
+          <button
+            type="button"
+            class="view-stalls-btn"
+            data-hawker-id="${hawker.HawkerCentreID}"
+          >
+            View Stalls
+          </button>
         </div>
+      </div>
+    `;
 
-        <div class="card-content">
-          <h1 class="hawker-name">
-            ${escapeHTML(hawker.HCName)}
-          </h1>
-
-          <p class="hawker-address">
-            ${escapeHTML(hawker.HCAddress)}
-          </p>
-
-          <p class="hawker-desc">
-            ${escapeHTML(
-              hawker.Description || "No description available."
-            )}
-          </p>
-
-          <p class="hawker-hours">
-            <strong>Opening hours:</strong>
-            ${escapeHTML(
-              hawker.OpeningHours || "Not available"
-            )}
-          </p>
-
-          <div class="card-footer">
-            <button
-              type="button"
-              class="card-fav material-symbols-rounded"
-            >
-              favorite
-            </button>
-
-            <button
-              type="button"
-              class="card-button order-hawker-btn"
-              data-hawker-id="${hawker.HawkerCentreID}"
-            >
-              Order Here
-            </button>
-          </div>
-        </div>
-      `;
-
-      hawkerList.appendChild(card);
-    });
+    hawkerList.appendChild(card);
+  });
 
     displayPagination();
   }
@@ -242,15 +270,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   hawkerList.addEventListener("click", (event) => {
-    const orderButton =
-      event.target.closest(".order-hawker-btn");
+    const viewStallsButton =
+      event.target.closest(".view-stalls-btn");
 
-    if (!orderButton) {
+    if (!viewStallsButton) {
       return;
     }
 
     const hawkerCentreID =
-      orderButton.dataset.hawkerId;
+      viewStallsButton.dataset.hawkerId;
 
     window.location.href =
       `/html/order-stall.html?hawkerCentreID=${hawkerCentreID}`;

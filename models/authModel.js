@@ -6,18 +6,21 @@ async function getUserByEmail(email) {
 
     const result = await connection
         .request()
-        .input("Email", sql.VarChar(100), email)
+        .input("Email", sql.VarChar, email)
         .query(`
             SELECT
-                hu.UserID,
-                hu.Email,
-                hu.PasswordHash,
-                r.RoleID,
-                r.RoleName
-            FROM HawkerUser hu
-            INNER JOIN Role r
-                ON hu.RoleID = r.RoleID
-            WHERE hu.Email = @Email
+                HU.UserID,
+                HU.Email,
+                HU.PasswordHash,
+                R.RoleName,
+                C.CustomerID,
+                C.CustomerName
+            FROM HawkerUser HU
+            INNER JOIN Role R
+                ON HU.RoleID = R.RoleID
+            LEFT JOIN Customer C
+                ON HU.UserID = C.UserID
+            WHERE HU.Email = @Email
         `);
 
     return result.recordset[0];
