@@ -22,6 +22,8 @@ const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 const inspectionRoutes = require("./routes/inspectionRoutes");
 const hygieneGradeRoutes = require("./routes/hygieneGradeRoutes");
 const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
+// Import - calista's
+const operatorRentalAgreementRoutes = require("./routes/operatorRentalAgreementRoutes");
 
 
 //create express app
@@ -47,6 +49,7 @@ app.use("/orders", orderRoutes);
 
 app.use("/contact-submissions", contactSubmissionRoutes);
 //calista's
+app.use("/rental-agreements", operatorRentalAgreementRoutes);
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
