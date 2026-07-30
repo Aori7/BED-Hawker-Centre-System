@@ -816,20 +816,298 @@
       <span>Add promotion</span>
     </button>
 
-    <label class="dialog-checkbox">
-      <input type="checkbox" name="menuItems" value="1" />
-      <span>Chicken Rice</span>
-    </label>
+    <!-- add promotion dialog -->
+    <div class="promotion-dialog" id="add-promotion-dialog" hidden>
+      <div class="promotion-dialog-card">
+        <div class="promotion-dialog-header">
+          <h3>Add Promotion</h3>
+        </div>
 
-    <label class="dialog-checkbox">
-      <input type="checkbox" name="menuItems" value="2" />
-      <span>Roasted Chicken Rice</span>
-    </label>
+        <form id="add-promotion-form">
+          <input
+            type="hidden"
+            id="add-promotion-stall-id"
+            name="stallId"
+            value="1"
+          />
 
-    <label class="dialog-checkbox">
-      <input type="checkbox" name="menuItems" value="3" />
-      <span>Chicken Rice Set</span>
-    </label>
+          <div class="promotion-dialog-body">
+            <label class="dialog-field">
+              <span>Promotion name</span>
+              <input
+                type="text"
+                id="add-promotion-name"
+                name="promotionName"
+                required
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>Description</span>
+              <textarea
+                id="add-promotion-description"
+                name="description"
+                rows="4"
+                maxlength="250"
+              ></textarea>
+            </label>
+
+            <label class="dialog-field">
+              <span>Discount type</span>
+
+              <select id="add-discount-type" name="discountType" required>
+                <option value="">Select discount type</option>
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed Amount</option>
+                <option value="free-item">Free Item</option>
+              </select>
+            </label>
+
+            <label class="dialog-field" id="add-discount-value-field">
+              <span id="add-discount-value-label">Discount value</span>
+
+              <input
+                type="number"
+                id="add-discount-value"
+                name="discountValue"
+                min="0"
+                step="0.01"
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>Start date</span>
+
+              <input
+                type="date"
+                id="add-start-date"
+                name="startDate"
+                required
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>End date</span>
+
+              <input type="date" id="add-end-date" name="endDate" required />
+            </label>
+
+            <!-- affected menu items -->
+            <div class="dialog-field">
+              <span>Affected menu items</span>
+
+              <div class="promotion-menu-items">
+                <label class="dialog-checkbox">
+                  <input type="checkbox" name="menuItems" value="1" />
+                  <span>Chicken Rice</span>
+                </label>
+
+                <label class="dialog-checkbox">
+                  <input type="checkbox" name="menuItems" value="2" />
+                  <span>Roasted Chicken Rice</span>
+                </label>
+
+                <label class="dialog-checkbox">
+                  <input type="checkbox" name="menuItems" value="3" />
+                  <span>Chicken Rice Set</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="dialog-field">
+              <span>Status</span>
+
+              <select id="add-promotion-status" name="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="promotion-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Close
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Add Promotion
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- edit promotion dialog -->
+    <div class="promotion-dialog" id="edit-promotion-dialog" hidden>
+      <div class="promotion-dialog-card">
+        <div class="promotion-dialog-header">
+          <h3>Edit Promotion</h3>
+        </div>
+
+        <form id="edit-promotion-form">
+          <input type="hidden" id="edit-promotion-id" name="promotionId" />
+
+          <div class="promotion-dialog-body">
+            <label class="dialog-field">
+              <span>Promotion name</span>
+
+              <input type="text" id="edit-promotion-name" required />
+            </label>
+
+            <label class="dialog-field">
+              <span>Description</span>
+
+              <textarea
+                id="edit-promotion-description"
+                rows="4"
+                maxlength="250"
+              ></textarea>
+            </label>
+
+            <label class="dialog-field">
+              <span>Discount type</span>
+
+              <select id="edit-discount-type">
+                <option value="percentage">Percentage</option>
+                <option value="fixed">Fixed Amount</option>
+                <option value="free-item">Free Item</option>
+              </select>
+            </label>
+
+            <label class="dialog-field" id="edit-discount-value-field">
+              <span id="edit-discount-value-label"> Discount value </span>
+
+              <input
+                type="number"
+                id="edit-discount-value"
+                min="0"
+                step="0.01"
+              />
+            </label>
+
+            <label class="dialog-field">
+              <span>Start date</span>
+
+              <input type="date" id="edit-start-date" required />
+            </label>
+
+            <label class="dialog-field">
+              <span>End date</span>
+
+              <input type="date" id="edit-end-date" required />
+            </label>
+
+            <div class="dialog-field">
+              <span>Affected menu items</span>
+
+              <div class="promotion-menu-items">
+                <label class="dialog-checkbox">
+                  <input type="checkbox" value="1" />
+                  <span>Chicken Rice</span>
+                </label>
+
+                <label class="dialog-checkbox">
+                  <input type="checkbox" value="2" />
+                  <span>Roasted Chicken Rice</span>
+                </label>
+
+                <label class="dialog-checkbox">
+                  <input type="checkbox" value="3" />
+                  <span>Chicken Rice Set</span>
+                </label>
+              </div>
+            </div>
+
+            <label class="dialog-field">
+              <span>Status</span>
+
+              <select id="edit-promotion-status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="promotion-dialog-footer">
+            <button
+              type="button"
+              class="dialog-secondary-button close-dialog-button"
+            >
+              Close
+            </button>
+
+            <button type="submit" class="dialog-primary-button">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- remove promotion dialog -->
+    <div class="promotion-dialog" id="remove-promotion-dialog" hidden>
+      <div class="promotion-dialog-card promotion-dialog-small">
+        <div class="promotion-dialog-header">
+          <h3>Remove Promotion</h3>
+        </div>
+
+        <div class="promotion-dialog-body">
+          <p id="remove-promotion-message">
+            Are you sure you want to remove this promotion?
+          </p>
+        </div>
+
+        <div class="promotion-dialog-footer">
+          <button
+            type="button"
+            class="dialog-secondary-button close-dialog-button"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="dialog-primary-button"
+            id="confirm-remove-promotion"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- promotion status dialog -->
+    <div class="promotion-dialog" id="promotion-status-dialog" hidden>
+      <div class="promotion-dialog-card promotion-dialog-small">
+        <div class="promotion-dialog-header">
+          <h3>Change Promotion Status</h3>
+        </div>
+
+        <div class="promotion-dialog-body">
+          <p id="promotion-status-message">Are you sure?</p>
+        </div>
+
+        <div class="promotion-dialog-footer">
+          <button
+            type="button"
+            class="dialog-secondary-button close-dialog-button"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="dialog-primary-button"
+            id="confirm-promotion-status"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Promotion page JavaScript -->
     <script src="../js/vendor-promotions.js"></script>
