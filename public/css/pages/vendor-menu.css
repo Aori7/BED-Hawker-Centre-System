@@ -765,7 +765,7 @@ Keep the controls easier to see and click.
   overflow-y: auto;
   border: 1px solid var(--menu-border);
   border-radius: 22px;
-  background: var(--menu-surface);
+  background: var(--beige-color);
   box-shadow: var(--menu-popup-shadow);
 }
 
@@ -777,12 +777,12 @@ Keep the controls easier to see and click.
 .menu-dialog-header {
   padding: 22px 28px;
   border-bottom: 1px solid var(--menu-border);
-  background: var(--beige-color);
+  background: var(--orange-color);
 }
 
 .menu-dialog-header h3 {
   margin: 0;
-  color: var(--menu-text);
+  color: var(--white-color);
   font-family: "Archivo", sans-serif;
   font-size: 28px;
 }
@@ -847,6 +847,7 @@ Keep the controls easier to see and click.
   gap: 12px;
   padding: 22px 28px;
   border-top: 1px solid var(--menu-border);
+  background-color: var(--white-color);
 }
 
 /* secondary button */
