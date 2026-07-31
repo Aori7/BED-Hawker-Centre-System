@@ -491,32 +491,55 @@
       </div>
     </section>
 
-    <!-- Order History Overlay , only shows for users who are logged in-->
+    <!-- Order History Overlay -->
     <div id="history-overlay"></div>
 
     <!-- Order History Sidebar -->
     <aside id="order-history-sidebar">
-      <div class="sidebar-header">
-        <h2>Order History</h2>
-        <button id="close-history">✕</button>
+      <div class="history-sidebar-header">
+        <div>
+          <p class="history-eyebrow">Your activity</p>
+
+          <h2>Recent Orders</h2>
+
+          <p class="history-subtitle">
+            View your latest orders, receipts and reorder favourites.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="close-history"
+          aria-label="Close order history"
+        >
+          <span class="material-symbols-rounded">close</span>
+        </button>
       </div>
 
-      <div class="history-list">
-        <!-- SAMPLE ORDER CARD (design only for now),
-         the cards will be overwritten in js. -->
-        <div class="history-card">
-          <h4>Ah Seng Chicken Rice</h4>
-          <p>2 items</p>
-          <p class="history-meta">$12.50 • 12 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+      <div class="history-summary">
+        <div class="history-summary-icon">
+          <span class="material-symbols-rounded"> receipt_long </span>
         </div>
 
-        <div class="history-card">
-          <h4>Laksa King</h4>
-          <p>1 item</p>
-          <p class="history-meta">$6.50 • 10 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+        <div>
+          <strong id="recent-order-count"> Loading recent orders... </strong>
+
+          <p>Your latest food journeys</p>
         </div>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <p class="history-loading">Loading your recent orders...</p>
+      </div>
+
+      <div class="history-sidebar-footer">
+        <a href="/html/order-history.html" class="view-all-history-btn">
+          <span class="material-symbols-rounded">history</span>
+
+          View All Order History
+
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </a>
       </div>
     </aside>
 
@@ -645,8 +668,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/swiper.js"></script>
-    <script src="js/script.js"></script>
     <script src="js/authUI.js"></script>
+    <script src="/js/order-history.js"></script>
     <script src="js/index.js"></script>
   </body>
 </html>

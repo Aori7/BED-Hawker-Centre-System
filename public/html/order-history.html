@@ -1,38 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/pages/index.css" />
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/pages/order-history.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
-
-    <!-- font 2 for nav bar-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"/>
-
-    <!-- google rounded icons -->
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-    <title>Contact Us</title>
-</head>
-<body>
-
-    <!-- navigation bar done by ada-->
+    <title>Order History</title>
+  </head>
+  <body>
     <header id="navigationbar">
       <div class="logo">
-        <a href="../index.html">
+        <a href="index.html">
           <!-- image of logo sourced from google icons -->
           <span class="material-symbols-rounded">restaurant_menu</span>
           <h1 id="logotitle">Hawker<em>SG</em></h1>
@@ -41,14 +43,14 @@
 
       <ul class="navitems">
         <li><a href="../index.html">Home</a></li>
-        <li><a href="../html/order-hawker.html">Order</a></li>
-        <li><a href="../html/main-hawkers.html">Hawkers</a></li>
-        <li><a href="../html/about-us.html">About Us</a></li>
-        <li><a href="../html/contact-us.html" class="active">Contact Us</a></li>
+        <li><a href="order-hawker.html">Order</a></li>
+        <li><a href="main-hawkers.html">Hawkers</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="contact-us.html">Contact Us</a></li>
       </ul>
 
       <div class="loginbutton">
-        <a href="../html/login.html" id="login-link">
+        <a href="login.html" id="login-link">
           <button id="login-btn">Login</button>
         </a>
         <button id="logout-btn" style="display: none">Logout</button>
@@ -58,149 +60,117 @@
       <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
     </header>
 
+    <main class="order-history-page">
+      <section class="history-page-header">
+        <div>
+          <p class="history-page-label">Your orders</p>
 
-      <section id="contactus-section">
-      <div class="contact-header">
-        <div class="title">
-          <h1>Contact Us</h1>
-        </div>
-        <div class="contact-desc">
+          <h1>Order History</h1>
+
           <p>
-            Have questions or feedback? We'd love to hear from you! Reach out to
-            our team for assistance or to share your thoughts on how we can
-            improve HawkerSG.
+            View your past orders, check their status and reorder your
+            favourites.
           </p>
         </div>
-      </div>
-      <div class="contact-container">
-        <div class="contact-form">
-          <div class="title">
-            <h2>Get In Touch</h2>
-          </div>
-          <form id="contact-form">
-            <label for="name">Name:</label>
-            <input
-                type="text"
-                id="name"
-                name="name"
-                maxlength="100"
-                placeholder="Your name.."
-                required
-            />
 
-            <label for="name">Email:</label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                maxlength="100"
-                placeholder="Your email.."
-                required
-            />
+        <a href="order-hawker.html" class="history-order-again-btn">
+          <span class="material-symbols-rounded">add_shopping_cart</span>
+          Order Food
+        </a>
+      </section>
 
-            
-            <label for="submission-type">
-                Submission Type:
-            </label>
+      <section class="history-overview">
+        <div class="history-overview-card">
+          <span class="material-symbols-rounded">receipt_long</span>
 
-            <select
-                id="submission-type"
-                name="submissionType"
-                required
-            >
-                <option value="">
-                    Select a type
-                </option>
-
-                <option value="Complaint">
-                    Complaint
-                </option>
-
-                <option value="Feedback">
-                    Feedback
-                </option>
-
-                <option value="Suggestion">
-                    Suggestion
-                </option>
-
-                <option value="Others">
-                    Others
-                </option>
-            </select>
-            <label for="subject">
-                Subject:
-            </label>
-
-            <input
-                type="text"
-                id="subject"
-                name="subject"
-                maxlength="150"
-                placeholder="Enter the subject"
-                required
-            />
-
-
-            <label for="message">Message:</label>
-            <textarea
-                id="message"
-                name="message"
-                maxlength="1000"
-                placeholder="Write your message.."
-                style="height: 200px"
-                required
-            ></textarea>
-
-            <input type="submit" value="Submit" id="submitbtn" />
-          </form>
-        </div>
-
-        <div class="contact-info">
-          <div class="contact-business-info">
-            <div class="title">
-              <h2>Contact Information</h2>
-            </div>
-            <div class="phone">
-              <span class="material-symbols-rounded">phone</span>
-              <h2>Phone</h2>
-              <p>+65 1234 5678</p>
-            </div>
-            <div class="email">
-              <span class="material-symbols-rounded">email</span>
-              <h2>Email</h2>
-              <p>contact@hawker.sg</p>
-            </div>
-            <div class="address">
-              <span class="material-symbols-rounded">location_on</span>
-              <h2>Address</h2>
-              <p>123 Hawker St, Singapore 123456</p>
-            </div>
-          </div>
-          <div class="contact-business-hrs">
-            <div class="title">
-              <h2>Business Hours</h2>
-            </div>
-            <div class="days">
-              <div class="mon-fri">
-                <h2>Monday-Friday</h2>
-                <p>8:00 AM - 8:00 PM</p>
-              </div>
-              <div class="saturday">
-                <h2>Saturday</h2>
-                <p>9:00 AM - 6:00 PM</p>
-              </div>
-              <div class="sunday">
-                <h2>Sunday</h2>
-                <p>Closed</p>
-              </div>
-            </div>
+          <div>
+            <p>Total Orders</p>
+            <strong id="total-orders-count">0</strong>
           </div>
         </div>
+
+        <div class="history-overview-card">
+          <span class="material-symbols-rounded">payments</span>
+
+          <div>
+            <p>Total Spent</p>
+            <strong id="total-spent">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="history-overview-card">
+          <span class="material-symbols-rounded">restaurant</span>
+
+          <div>
+            <p>Favourite Stall</p>
+            <strong id="favourite-stall">-</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="history-controls">
+        <div class="history-search">
+          <span class="material-symbols-rounded">search</span>
+
+          <input
+            type="text"
+            id="order-history-search"
+            placeholder="Search by stall name or order ID"
+          />
+        </div>
+
+        <div class="history-filters">
+          <select id="order-status-filter">
+            <option value="all">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Ready for Collection">Ready for Collection</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+          <select id="order-type-filter">
+            <option value="all">All Order Types</option>
+            <option value="Dine-in">Dine-in</option>
+            <option value="Pickup">Pickup</option>
+            <option value="Delivery">Delivery</option>
+          </select>
+
+          <select id="order-sort-filter">
+            <option value="latest">Latest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="highest">Highest Amount</option>
+            <option value="lowest">Lowest Amount</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="history-results-header">
+        <div>
+          <h2>Your Orders</h2>
+          <p id="history-result-count">Showing 0 orders</p>
+        </div>
+      </section>
+
+      <section id="full-order-history-list" class="full-order-history-list">
+        <div class="history-page-loading">
+          <span class="material-symbols-rounded">hourglass_top</span>
+          <p>Loading your orders...</p>
+        </div>
+      </section>
+
+      <div id="order-history-empty" class="order-history-empty">
+        <span class="material-symbols-rounded">receipt_long</span>
+
+        <h2>No orders found</h2>
+
+        <p>Your completed and ongoing orders will appear here.</p>
+
+        <a href="order-hawker.html"> Start Ordering </a>
       </div>
-    </section>
-    
-        <!-- Order History Overlay -->
+    </main>
+
+    <!-- Order History Overlay -->
     <div id="history-overlay"></div>
 
     <!-- Order History Sidebar -->
@@ -366,9 +336,7 @@
         </div>
       </div>
     </footer>
-
-    <script src="../js/contact-us.js"></script>
-    <script type="module" src="../js/order-history.js"></script>
-    <script src="/js/authUI.js"></script>
-</body>
+    <script src="../js/authUI.js"></script>
+    <script src="../js/order-history.js"></script>
+  </body>
 </html>

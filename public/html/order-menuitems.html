@@ -28,7 +28,7 @@
     <!-- navigation bar done by ada-->
     <header id="navigationbar">
       <div class="logo">
-        <a href="index.html">
+        <a href="../index.html">
           <!-- image of logo sourced from google icons -->
           <span class="material-symbols-rounded">restaurant_menu</span>
           <h1 id="logotitle">Hawker<em>SG</em></h1>
@@ -36,7 +36,7 @@
       </div>
 
       <ul class="navitems">
-        <li><a href="index.html">Home</a></li>
+        <li><a href="../index.html">Home</a></li>
         <li><a href="order-hawker.html" class="active">Order</a></li>
         <li><a href="main-hawkers.html">Hawkers</a></li>
         <li><a href="about-us.html">About Us</a></li>
@@ -205,7 +205,175 @@
       <span class="material-symbols-rounded">shopping_cart</span>
     </button>
 
+    <!-- Order History Overlay -->
+    <div id="history-overlay"></div>
+
+    <!-- Order History Sidebar -->
+    <aside id="order-history-sidebar">
+      <div class="history-sidebar-header">
+        <div>
+          <p class="history-eyebrow">Your activity</p>
+
+          <h2>Recent Orders</h2>
+
+          <p class="history-subtitle">
+            View your latest orders, receipts and reorder favourites.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="close-history"
+          aria-label="Close order history"
+        >
+          <span class="material-symbols-rounded">close</span>
+        </button>
+      </div>
+
+      <div class="history-summary">
+        <div class="history-summary-icon">
+          <span class="material-symbols-rounded"> receipt_long </span>
+        </div>
+
+        <div>
+          <strong id="recent-order-count"> Loading recent orders... </strong>
+
+          <p>Your latest food journeys</p>
+        </div>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <p class="history-loading">Loading your recent orders...</p>
+      </div>
+
+      <div class="history-sidebar-footer">
+        <a href="/html/order-history.html" class="view-all-history-btn">
+          <span class="material-symbols-rounded">history</span>
+
+          View All Order History
+
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </a>
+      </div>
+    </aside>
+
+    <footer id="footercontainer">
+      <div class="footer-glow footer-glow-one"></div>
+      <div class="footer-glow footer-glow-two"></div>
+
+      <div class="footer-container">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-logo">
+              <span class="material-symbols-rounded">restaurant_menu</span>
+
+              <h2>Hawker<em>SG</em></h2>
+            </a>
+
+            <p>
+              Discover Singapore’s hawker centres, support local food businesses
+              and enjoy familiar favourites through one connected platform.
+            </p>
+
+            <div class="footer-tagline">
+              <span>Discover.</span>
+              <span>Order.</span>
+              <span>Support.</span>
+            </div>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Explore</h3>
+
+            <a href="index.html">Home</a>
+            <a href="order-hawker.html">Order Food</a>
+            <a href="main-hawkers.html">Hawker Centres</a>
+            <a href="about-us.html">About Us</a>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Customer</h3>
+
+            <a href="login.html">Login</a>
+            <a href="customer-profile.html">Profile</a>
+            <a href="order-history.html">Order History</a>
+            <a href="contact-us.html">Contact Us</a>
+          </div>
+
+          <div class="footer-contact">
+            <h3>Stay Connected</h3>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">mail</span>
+
+              <div>
+                <small>Email</small>
+                <p>contact@hawkersg.com</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">call</span>
+
+              <div>
+                <small>Phone</small>
+                <p>+65 6123 4567</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">location_on</span>
+
+              <div>
+                <small>Based in</small>
+                <p>Singapore</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-highlight">
+          <div>
+            <span class="material-symbols-rounded">storefront</span>
+
+            <div>
+              <strong>Supporting local hawkers</strong>
+
+              <p>
+                Every order and discovery helps keep Singapore’s hawker culture
+                visible and connected.
+              </p>
+            </div>
+          </div>
+
+          <a href="html/order-hawker.html">
+            Explore Hawkers
+            <span class="material-symbols-rounded">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            © <span id="current-year">2026</span> HawkerSG. All rights reserved.
+          </p>
+
+          <div class="footer-bottom-links">
+            <a href="credit.html">Credits</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+
+          <p class="footer-made-with">
+            Made with
+            <span class="material-symbols-rounded">favorite</span>
+            for Singapore’s hawker community
+          </p>
+        </div>
+      </div>
+    </footer>
+
     <script src="/js/authUI.js"></script>
+    <script src="../js/order-history.js"></script>
     <script src="/js/order-menuitems.js"></script>
     <script type="module" src="/js/swiper.js"></script>
   </body>
