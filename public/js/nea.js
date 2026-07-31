@@ -11,7 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     setupHamburgerMenu();
 });
 
-
+const accessToken =
+    sessionStorage.getItem("accessToken");
+    
 /* dashboard functions */
 
 function setupDashboard() {
