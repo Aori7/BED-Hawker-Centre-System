@@ -1,3 +1,5 @@
+// stall details controller done by dayana
+
 const stallDetailsModel =
     require("../models/stallDetailsModel");
 

@@ -117,4 +117,4 @@ async function updateHygieneGrade(req, res) {
 module.exports = {
     getHygieneGrades,
     updateHygieneGrade
-}
+};

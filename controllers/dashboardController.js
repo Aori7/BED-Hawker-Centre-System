@@ -4,7 +4,6 @@ const dashboardModel = require(
     "../models/dashboardModel"
 );
 
-
 // get dashboard statistics
 async function getDashboardStatistics(req, res) {
     try {
@@ -39,7 +38,6 @@ async function getDashboardStatistics(req, res) {
     }
 }
 
-
 // get recent inspections
 async function getRecentInspections(req, res) {
     try {
@@ -61,7 +59,6 @@ async function getRecentInspections(req, res) {
         });
     }
 }
-
 
 // get today's inspection count
 async function getTodayInspectionCount(req, res) {
@@ -87,7 +84,6 @@ async function getTodayInspectionCount(req, res) {
         });
     }
 }
-
 
 // update inspection status
 async function updateInspectionStatus(req, res) {
@@ -168,7 +164,6 @@ async function updateInspectionStatus(req, res) {
         });
     }
 }
-
 
 module.exports = {
     getDashboardStatistics,
