@@ -9,4 +9,19 @@ router.get(
     announcementController.getAllAnnouncements
 );
 
+router.get(
+    "/:id",
+    announcementController.getAnnouncementById
+);
+
+router.post(
+    "/",
+    announcementController.createAnnouncement
+);
+
+router.put(
+    "/:id",
+    announcementController.updateAnnouncement
+);
+
 module.exports = router;
