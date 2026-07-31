@@ -260,6 +260,11 @@ async function setupInspectionForm() {
                 document.querySelector(
                     'input[name="hygieneGrade"]:checked'
                 );
+            
+            console.log(
+                "Selected stall ID:",
+                foodStallSelect.value
+            );   
 
             const inspectionData = {
                 officerID: 1,
@@ -298,8 +303,18 @@ async function setupInspectionForm() {
                     );
                 }
 
+                const selectedStallOption =
+                    foodStallSelect.options[
+                        foodStallSelect.selectedIndex
+                    ];
+
+                const selectedStallName =
+                    selectedStallOption
+                        ? selectedStallOption.textContent.trim()
+                        : "the selected food stall";
+
                 showInspectionMessage(
-                    result.message,
+                    `Inspection recorded successfully for ${selectedStallName}.`,
                     "success"
                 );
 
@@ -712,7 +727,12 @@ async function setupInspectionHistory() {
 
     try {
         const response = await fetch(
-            "/inspections"
+            "/inspections",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
 
         const result = await response.json();
