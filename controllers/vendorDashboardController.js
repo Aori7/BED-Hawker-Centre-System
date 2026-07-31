@@ -10,12 +10,12 @@ async function getRevenueByStallId(req, res) {
       req.query.endDate,
     );
 
-    res.json(revenue);
+    res.status(200).json(revenue);
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      error: "Database error",
+      error: "Unable to retrieve revenue.",
     });
   }
 }
@@ -30,12 +30,12 @@ async function getTotalOrdersByStallId(req, res) {
       req.query.endDate,
     );
 
-    res.json(totalOrders);
+    res.status(200).json(totalOrders);
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      error: "Error retrieving total orders",
+      error: "Unable to retrieve total orders.",
     });
   }
 }
@@ -49,12 +49,12 @@ async function getTotalUnavailableItemsByStallId(req, res) {
         req.params.stallId,
       );
 
-    res.json(totalUnavailableItems);
+    res.status(200).json(totalUnavailableItems);
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      error: "Error retrieving total unavailable items",
+      error: "Unable to retrieve total unavailable items.",
     });
   }
 }
@@ -70,12 +70,12 @@ async function getTotalComplaintsByStallId(req, res) {
         req.query.endDate,
       );
 
-    res.json(totalComplaints);
+    res.status(200).json(totalComplaints);
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      error: "Error retrieving total complaints",
+      error: "Unable to retrieve total complaints.",
     });
   }
 }
@@ -90,12 +90,12 @@ async function getOrdersBreakdownByStallId(req, res) {
         req.query.endDate,
       );
 
-    res.json(ordersBreakdown);
+    res.status(200).json(ordersBreakdown);
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      error: "Error retrieving breakdown of orders",
+      error: "Unable to retrieve breakdown of orders.",
     });
   }
 }
@@ -126,6 +126,64 @@ async function getOrderTrendByStallId(req, res) {
   }
 }
 
+// Get Top 3 menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/top-menu-items?startDate=2026-07-01&endDate=2026-08-01
+async function getTopMenuItemsByStallId(req, res) {
+  try {
+    const topMenuItems = await vendorDashboardModel.getTopMenuItemsByStallId(
+      req.params.stallId,
+      req.query.startDate,
+      req.query.endDate,
+    );
+
+    res.status(200).json(topMenuItems);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve top menu items.",
+    });
+  }
+}
+
+// Get unavailable menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
+async function getUnavailableMenuItemsByStallId(req, res) {
+  try {
+    const unavailableMenuItems =
+      await vendorDashboardModel.getUnavailableMenuItemsByStallId(
+        req.params.stallId,
+      );
+
+    res.status(200).json(unavailableMenuItems);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve unavailable menu items.",
+    });
+  }
+}
+
+// Get active promotions by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/active-promotions
+async function getActivePromotionsByStallId(req, res) {
+  try {
+    const activePromotions =
+      await vendorDashboardModel.getActivePromotionsByStallId(
+        req.params.stallId,
+      );
+
+    res.status(200).json(activePromotions);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve active promotions.",
+    });
+  }
+}
+
 module.exports = {
   getRevenueByStallId,
   getTotalOrdersByStallId,
@@ -133,9 +191,14 @@ module.exports = {
   getTotalComplaintsByStallId,
   getOrdersBreakdownByStallId,
   getOrderTrendByStallId,
+  getTopMenuItemsByStallId,
+  getUnavailableMenuItemsByStallId,
+  getActivePromotionsByStallId,
 };
 
 // notes:
+
+// error codes:
 
 // async - wait for DB results | req - conatins info sent by FE/PM | res - used to send results back to FE/PM
 // await - Wait until the model finishes retrieving the result from SQL Server

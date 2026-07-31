@@ -68,14 +68,3 @@ async function loginUser(req, res) {
 module.exports = {
   loginUser,
 };
-
-// ruimin might be missing
-
-// JWT creation
-// const token = jwt.sign(
-//     payload,
-//     process.env.ACCESS_TOKEN_SECRET,
-//     {
-//         expiresIn:"1h"
-//     }
-// );

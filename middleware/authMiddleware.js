@@ -22,7 +22,10 @@ function authenticateToken(req, res, next) {
                     error: "Invalid or expired token"
                 });
             }
-            req.user = decodedUser;
+            req.user = {
+                userID: decodedUser.userID,
+                role: decodedUser.role,
+            };
             next();
         }
     );
