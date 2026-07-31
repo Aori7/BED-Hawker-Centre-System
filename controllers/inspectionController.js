@@ -1,11 +1,7 @@
 // inspection controller done by dayana
+
 const inspectionModel =
     require("../models/inspectionModel");
-
-const {
-    authenticateToken,
-    authorizeRoles
-} = require("../middleware/authMiddleware");
 
 // get all inspection records
 async function getAllInspections(req, res) {
