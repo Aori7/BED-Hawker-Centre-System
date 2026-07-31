@@ -126,6 +126,64 @@ async function getOrderTrendByStallId(req, res) {
   }
 }
 
+// Get Top 3 menu items by stall ID
+// test run:
+async function getTopMenuItemsByStallId(req, res) {
+  try {
+    const topMenuItems = await vendorDashboardModel.getTopMenuItemsByStallId(
+      req.params.stallId,
+      req.query.startDate,
+      req.query.endDate,
+    );
+
+    res.status(200).json(topMenuItems);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve top menu items.",
+    });
+  }
+}
+
+// Get unavailable menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
+async function getUnavailableMenuItemsByStallId(req, res) {
+  try {
+    const unavailableMenuItems =
+      await vendorDashboardModel.getUnavailableMenuItemsByStallId(
+        req.params.stallId,
+      );
+
+    res.status(200).json(unavailableMenuItems);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve unavailable menu items.",
+    });
+  }
+}
+
+// Get active promotions by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/active-promotions
+async function getActivePromotionsByStallId(req, res) {
+  try {
+    const activePromotions =
+      await vendorDashboardModel.getActivePromotionsByStallId(
+        req.params.stallId,
+      );
+
+    res.status(200).json(activePromotions);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Unable to retrieve active promotions.",
+    });
+  }
+}
+
 module.exports = {
   getRevenueByStallId,
   getTotalOrdersByStallId,
@@ -133,9 +191,14 @@ module.exports = {
   getTotalComplaintsByStallId,
   getOrdersBreakdownByStallId,
   getOrderTrendByStallId,
+  getTopMenuItemsByStallId,
+  getUnavailableMenuItemsByStallId,
+  getActivePromotionsByStallId,
 };
 
 // notes:
+
+// error codes:
 
 // async - wait for DB results | req - conatins info sent by FE/PM | res - used to send results back to FE/PM
 // await - Wait until the model finishes retrieving the result from SQL Server

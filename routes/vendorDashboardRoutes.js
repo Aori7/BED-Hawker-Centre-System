@@ -57,4 +57,29 @@ router.get(
   vendorDashboardController.getOrderTrendByStallId,
 );
 
+// Get top 3 menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/top-menu-items?startDate=2026-07-01&endDate=2026-08-01
+router.get(
+  "/:stallId/top-menu-items",
+  vendorDashboardValidation.validateStallId,
+  vendorDashboardValidation.validateDateRange,
+  vendorDashboardController.getTopMenuItemsByStallId,
+);
+
+// Get unavailable menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
+router.get(
+  "/:stallId/unavailable-menu-items",
+  vendorDashboardValidation.validateStallId,
+  vendorDashboardController.getUnavailableMenuItemsByStallId,
+);
+
+// Get active promotions by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/active-promotions
+router.get(
+  "/:stallId/active-promotions",
+  vendorDashboardValidation.validateStallId,
+  vendorDashboardController.getActivePromotionsByStallId,
+);
+
 module.exports = router;
