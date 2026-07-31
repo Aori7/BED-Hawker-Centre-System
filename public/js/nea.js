@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const accessToken =
     sessionStorage.getItem("accessToken");
-    
+
 /* dashboard functions */
 
 function setupDashboard() {
@@ -282,14 +282,9 @@ async function setupInspectionForm() {
                 const response = await fetch(
                     "/inspections",
                     {
-                        method: "POST",
                         headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-                        body: JSON.stringify(
-                            inspectionData
-                        )
+                            Authorization: `Bearer ${accessToken}`
+                        }
                     }
                 );
 
@@ -1709,7 +1704,16 @@ async function setupHygieneGrades() {
     async function loadHygieneGrades() {
         try {
             const response = await fetch(
-                "/hygiene-grades"
+                "/hygiene-grades",
+                {
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                Authorization:
+                        `Bearer ${accessToken}`
+                    },
+                }
             );
 
             const result =
@@ -2303,7 +2307,9 @@ function setupHygieneUpdateModal(
                     method: "PUT",
                     headers: {
                         "Content-Type":
-                            "application/json"
+                            "application/json",
+                        Authorization:
+                            `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({
                         hygieneGrade:
@@ -2615,7 +2621,12 @@ async function setupStallDetails() {
 async function loadStallDetails(stallID) {
     try {
         const response = await fetch(
-            `/stall-details/${stallID}`
+            `/stall-details/${stallID}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
 
         const stall =
@@ -2784,7 +2795,12 @@ async function loadStallDetailsHistory(
 
     try {
         const response = await fetch(
-            `/stall-details/${stallID}/inspections`
+            `/stall-details/${stallID}/inspections`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
 
         const inspections =
@@ -2989,7 +3005,14 @@ async function loadDashboardStatistics() {
             return;
         }
 
-        const response = await fetch("/dashboard/statistics");
+        const response = await fetch(
+            "/dashboard/statistics",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
+        );
 
         const statistics = await response.json();
 
@@ -3028,15 +3051,14 @@ async function loadTodayInspectionCount() {
     }
 
     try {
-        const response = await fetch(
-            "/dashboard/today"
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to retrieve today's inspections"
+            const response = await fetch(
+                "/dashboard/today",
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                }
             );
-        }
 
         const result = await response.json();
 
@@ -3065,14 +3087,13 @@ async function loadRecentInspections() {
     try {
 
         const response = await fetch(
-            "/dashboard/recent"
+            "/dashboard/recent",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to retrieve recent inspections."
-            );
-        }
 
         const inspections =
             await response.json();
