@@ -48,12 +48,16 @@ async function loginUser(req, res) {
 
     res.status(200).json({
       message: "Login successful",
-      // ruimin insert JWT token
       accessToken: token,
+
       user: {
         userID: user.UserID,
         email: user.Email,
         role: user.RoleName,
+
+        customerID: user.CustomerID ?? null,
+
+        customerName: user.CustomerName ?? null,
       },
     });
   } catch (error) {

@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- link to main css -->
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/pages/hawker-card.css" />
     <link rel="stylesheet" href="css/pages/index.css" />
-    <link rel="stylesheet" href="css/pages/main-hawkers.css">
-
+    <link rel="stylesheet" href="css/pages/main-hawkers.css" />
 
     <!-- font chosen by ada: Archivo -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,10 +56,8 @@
     />
 
     <title>BED Hawker Centre Management System</title>
-
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- navigation bar section done by ada-->
     <header id="navigationbar">
       <div class="logo">
@@ -85,12 +82,11 @@
         </a>
         <button id="logout-btn" style="display: none">Logout</button>
       </div>
-      
+
       <button id="open-history-btn">Order History</button>
       <!-- hamburger menu -->
       <button id="hamburger-btn" class="material-symbols-rounded">menu</button>
     </header>
-
 
     <!-- the "order now" section -->
     <section id="content">
@@ -113,7 +109,6 @@
         </div>
       </div>
     </section>
-
 
     <!-- the map + hawker location section -->
     <section id="hawkerlocationmap-section">
@@ -138,37 +133,34 @@
         <button type="submit" id="searchbtn">Search</button>
       </div>
     </section>
-<!-- popular hawker centres section -->
-     <!-- in this html file section, this part acts as a skeleton of the html and texts will be overwritten by using js. the data used to replace the information are from the hawker centre api
+    <!-- popular hawker centres section -->
+    <!-- in this html file section, this part acts as a skeleton of the html and texts will be overwritten by using js. the data used to replace the information are from the hawker centre api
     this section also uses the swiper.js library, to make a nice carousel of hawker centres available. swiper initialisation can be found in my file js/script.js-->
-<section id="homepage-hawker-section">
-    <div class="hawker-section-header">
+    <section id="homepage-hawker-section">
+      <div class="hawker-section-header">
         <div>
-            <p class="section-label">Popular choices</p>
-            <h1>Popular Hawker Centres</h1>
+          <p class="section-label">Popular choices</p>
+          <h1>Popular Hawker Centres</h1>
         </div>
 
         <p>
-            Explore some of Singapore's favourite hawker centres
-            and browse their available stalls.
+          Explore some of Singapore's favourite hawker centres and browse their
+          available stalls.
         </p>
-    </div>
+      </div>
 
-    <div
-        id="homepage-hawker-list"
-        class="hawker-grid"
-    >
+      <div id="homepage-hawker-list" class="hawker-grid">
         <p>Loading popular hawker centres...</p>
-    </div>
+      </div>
 
-    <div class="homepage-hawker-footer">
+      <div class="homepage-hawker-footer">
         <a href="html/order-hawker.html">
-            <button type="button" class="view-all-hawkers-btn">
-                View All Hawker Centres
-            </button>
+          <button type="button" class="view-all-hawkers-btn">
+            View All Hawker Centres
+          </button>
         </a>
-    </div>
-</section>
+      </div>
+    </section>
 
     <!-- about us section -->
     <section id="aboutus-section">
@@ -348,15 +340,14 @@
       <!-- content 1: link to lead to credit.html? -->
       <a href="credit.html">View Credit.html</a>
       <p>© 2026 HawkerSG. All rights reserved.</p>
-
     </footer>
 
     <!-- importing leaflet js library using cdn link -->
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin="">
-    </script>
+      crossorigin=""
+    ></script>
     <!-- importing swiper js library -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src="js/leaflet.js"></script>
@@ -364,6 +355,6 @@
     <script src="js/script.js"></script>
     <script src="js/authUI.js"></script>
     <!-- <script type="module" src="js/auth.js"></script> -->
-     <script src="js/index.js"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>

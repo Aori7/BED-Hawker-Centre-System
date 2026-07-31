@@ -1,24 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/components.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
-    <link rel="stylesheet" href="../css/pages/order.css"/> 
+    <link rel="stylesheet" href="../css/pages/order.css" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- google rounded icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
 
     <title>Order - Menu</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- navigation bar done by ada-->
     <header id="navigationbar">
       <div class="logo">
@@ -49,176 +55,158 @@
     </header>
 
     <section class="order-hawker-banner">
-    <div class="banner"></div>
-    <div class="order-hawker-header">
+      <div class="banner"></div>
+      <div class="order-hawker-header">
         <h1 id="selected-stall-name">Stall Menu</h1>
         <p>Famous Hainanese Chicken Rice • Stall #12</p>
-    </div>
-
+      </div>
     </section>
 
-        <section class="order-progress-section">
-        <div class="order-progress">
+    <section class="order-progress-section">
+      <div class="order-progress">
+        <div class="progress-step">
+          <span class="progress-number">1</span>
 
-            <div class="progress-step">
-                <span class="progress-number">1</span>
-
-                <div class="progress-text">
-                    <strong>Choose Centre</strong>
-                    <small>Pick a location</small>
-                </div>
-            </div>
-
-            <div class="progress-line"></div>
-
-            <div class="progress-step">
-                <span class="progress-number">2</span>
-
-                <div class="progress-text">
-                    <strong>Choose Stall</strong>
-                    <small>Browse stalls</small>
-                </div>
-            </div>
-
-            <div class="progress-line"></div>
-
-            <div class="progress-step active">
-                <span class="progress-number">3</span>
-
-                <div class="progress-text">
-                    <strong>Choose Food</strong>
-                    <small>Build your order</small>
-                </div>
-            </div>
-
+          <div class="progress-text">
+            <strong>Choose Centre</strong>
+            <small>Pick a location</small>
+          </div>
         </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step">
+          <span class="progress-number">2</span>
+
+          <div class="progress-text">
+            <strong>Choose Stall</strong>
+            <small>Browse stalls</small>
+          </div>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step active">
+          <span class="progress-number">3</span>
+
+          <div class="progress-text">
+            <strong>Choose Food</strong>
+            <small>Build your order</small>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="back-to-hawker">
-        <a href="order-stall.html">← Back to stalls</a>
+      <a href="order-stall.html">← Back to stalls</a>
     </section>
 
     <section class="filter-category-section">
-        <button class="category-btn active">All</button>
-        <button class="category-btn">Rice</button>
-        <button class="category-btn">Noodles</button>
-        <button class="category-btn">Drinks</button>
+      <button class="category-btn active">All</button>
+      <button class="category-btn">Rice</button>
+      <button class="category-btn">Noodles</button>
+      <button class="category-btn">Drinks</button>
     </section>
 
     <section class="menu-items-section">
-        <div class="menu-items-container">
-            <div class="menu-item-list" id="menu-item-list">
-            <p>Loading menu items...</p>
-            </div>
+      <div class="menu-items-container">
+        <div class="menu-item-list" id="menu-item-list">
+          <p>Loading menu items...</p>
+        </div>
+      </div>
+
+      <div class="cart-container">
+        <div class="cart-header">
+          <h3>Your Cart</h3>
         </div>
 
-        <div class="cart-container">
-            <div class="cart-header">
-                <h3>Your Cart</h3>
-            </div>
-
-            <div class="cart-items">
-                <p>No items added yet</p>
-            </div>
-
-            <div class="cart-footer">
-                <p>Total: $0.00</p>
-                <button class="checkout-btn">Checkout</button>
-            </div>
-            <!-- summary section only shows when user clicks checkout. default state is displayed as none -->
-                <section class="checkout-section" style="display: none;">
-                <h2>Checkout</h2>
-
-                <p class="checkout-summary"></p>
-                <div class="special-request-section">
-                    <label for="special-request">
-                        Special Request (Optional)
-                    </label>
-
-                    <textarea
-                        id="special-request"
-                        maxlength="255"
-                        placeholder="E.g. no chilli, less rice"
-                    ></textarea>
-
-                    <p>
-                        <span id="request-character-count">0</span>/255
-                    </p>
-                </div>
-                <div class="order-type-section">
-                    <h3>Order Type</h3>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="orderType"
-                            value="Dine-in"
-                        >
-                        Dine-in
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="orderType"
-                            value="Pickup"
-                        >
-                        Pickup
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="orderType"
-                            value="Delivery"
-                        >
-                        Delivery
-                    </label>
-                </div>
-                <div class="payment-methods">
-                    <h3>Select Payment Method</h3>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="PayNow"
-                            checked
-                        >
-                        PayNow
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="Credit Card"
-                        >
-                        Credit / Debit Card
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value="Cash"
-                        >
-                        Cash
-                    </label>
-                </div>
-                <button class="confirm-btn">Confirm Order</button>
-                <button class="cancel-btn">Cancel</button>
-            </section>
+        <div class="cart-items">
+          <p>No items added yet</p>
         </div>
+
+        <div class="cart-footer">
+          <p>Total: $0.00</p>
+          <button class="checkout-btn">Checkout</button>
+        </div>
+        <!-- summary section only shows when user clicks checkout. default state is displayed as none -->
+        <section class="checkout-section" style="display: none">
+          <h2>Checkout</h2>
+
+          <p class="checkout-summary"></p>
+          <div class="special-request-section">
+            <label for="special-request"> Special Request (Optional) </label>
+
+            <textarea
+              id="special-request"
+              maxlength="255"
+              placeholder="E.g. no chilli, less rice"
+            ></textarea>
+
+            <p><span id="request-character-count">0</span>/255</p>
+          </div>
+          <div class="order-type-section">
+            <h3>Order Type</h3>
+
+            <label>
+              <input type="radio" name="orderType" value="Dine-in" />
+              Dine-in
+            </label>
+
+            <label>
+              <input type="radio" name="orderType" value="Pickup" />
+              Pickup
+            </label>
+
+            <label>
+              <input type="radio" name="orderType" value="Delivery" />
+              Delivery
+            </label>
+          </div>
+
+          <div id="delivery-address-section" style="display: none">
+            <h3>Delivery Address</h3>
+
+            <textarea
+              id="delivery-address"
+              maxlength="255"
+              placeholder="Enter your delivery address"
+            ></textarea>
+
+            <small>
+              This address will be saved to your customer profile.
+            </small>
+          </div>
+
+          <div class="payment-methods">
+            <h3>Select Payment Method</h3>
+
+            <label>
+              <input type="radio" name="payment" value="PayNow" checked />
+              PayNow
+            </label>
+
+            <label>
+              <input type="radio" name="payment" value="Credit Card" />
+              Credit / Debit Card
+            </label>
+
+            <label>
+              <input type="radio" name="payment" value="Cash" />
+              Cash
+            </label>
+          </div>
+          <button class="confirm-btn">Confirm Order</button>
+          <button class="cancel-btn">Cancel</button>
+        </section>
+      </div>
     </section>
 
     <button class="floating-cart-btn">
-        <span class="material-symbols-rounded">shopping_cart</span>    
+      <span class="material-symbols-rounded">shopping_cart</span>
     </button>
 
     <script src="/js/authUI.js"></script>
     <script src="/js/order-menuitems.js"></script>
     <script type="module" src="/js/swiper.js"></script>
-    
-</body>
+  </body>
 </html>
