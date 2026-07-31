@@ -2,21 +2,30 @@ const express = require("express");
 const vendorDashboardController = require("../controllers/vendorDashboardController");
 const vendorDashboardValidation = require("../middleware/vendorDashboardValidation");
 const router = express.Router();
+// auth vendor - user & stall
+const {
+  authenticateToken,
+  authorizeRoles,
+} = require("../middleware/authMiddleware");
+const { validateVendorStall } = require("../middleware/vendorValidation");
 
 // Get revenue by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/revenue?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/revenue",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardController.getRevenueByStallId,
 );
-
 // Get total orders by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/total-orders?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/total-orders",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardController.getTotalOrdersByStallId,
 );
@@ -25,7 +34,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/total-unavailable-items?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/total-unavailable-items",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardController.getTotalUnavailableItemsByStallId,
 );
 
@@ -33,7 +44,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/total-complaints?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/total-complaints",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardController.getTotalComplaintsByStallId,
 );
@@ -42,7 +55,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/orders-breakdown?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/orders-breakdown",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardController.getOrdersBreakdownByStallId,
 );
@@ -51,7 +66,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/order-trend?startDate=2026-07-01&endDate=2026-08-01&filterType=monthly
 router.get(
   "/:stallId/order-trend",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardValidation.validateOrderTrendFilter,
   vendorDashboardController.getOrderTrendByStallId,
@@ -61,7 +78,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/top-menu-items?startDate=2026-07-01&endDate=2026-08-01
 router.get(
   "/:stallId/top-menu-items",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardValidation.validateDateRange,
   vendorDashboardController.getTopMenuItemsByStallId,
 );
@@ -70,7 +89,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
 router.get(
   "/:stallId/unavailable-menu-items",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardController.getUnavailableMenuItemsByStallId,
 );
 
@@ -78,7 +99,9 @@ router.get(
 // test run: http://localhost:3000/vendor-dashboard/1/active-promotions
 router.get(
   "/:stallId/active-promotions",
-  vendorDashboardValidation.validateStallId,
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
   vendorDashboardController.getActivePromotionsByStallId,
 );
 

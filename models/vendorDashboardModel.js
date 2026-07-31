@@ -19,8 +19,8 @@ async function getRevenueByStallId(stallId, startDate, endDate) {
     // declaring parameters
     const request = connection.request();
     request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, startDate);
-    request.input("endDate", sql.DateTime, endDate);
+    request.input("startDate", sql.DateTime, new Date(startDate));
+    request.input("endDate", sql.DateTime, new Date(endDate));
     // send quuery to the DB
     const result = await request.query(query);
     // return retrived data
@@ -50,8 +50,8 @@ async function getTotalOrdersByStallId(stallId, startDate, endDate) {
     const request = connection.request();
 
     request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, startDate);
-    request.input("endDate", sql.DateTime, endDate);
+    request.input("startDate", sql.DateTime, new Date(startDate));
+    request.input("endDate", sql.DateTime, new Date(endDate));
 
     const result = await request.query(query);
 
@@ -81,8 +81,8 @@ async function getTotalUnavailableItemsByStallId(stallId, startDate, endDate) {
     const request = connection.request();
 
     request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, startDate);
-    request.input("endDate", sql.DateTime, endDate);
+    request.input("startDate", sql.DateTime, new Date(startDate));
+    request.input("endDate", sql.DateTime, new Date(endDate));
 
     const result = await request.query(query);
 
@@ -123,7 +123,6 @@ async function getTotalUnavailableItemsByStallId(stallId) {
 // Get total complaints by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/total-complaints?startDate=2026-07-01&endDate=2026-08-01
 async function getTotalComplaintsByStallId(stallId, startDate, endDate) {
-  let connection;
   try {
     connection = await sql.connect(dbConfig);
 
@@ -140,8 +139,8 @@ async function getTotalComplaintsByStallId(stallId, startDate, endDate) {
     const request = connection.request();
 
     request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, startDate);
-    request.input("endDate", sql.DateTime, endDate);
+    request.input("startDate", sql.DateTime, new Date(startDate));
+    request.input("endDate", sql.DateTime, new Date(endDate));
 
     const result = await request.query(query);
 
@@ -155,8 +154,6 @@ async function getTotalComplaintsByStallId(stallId, startDate, endDate) {
 // Get breakdown of orders by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/orders-breakdown?startDate=2026-07-01&endDate=2026-08-01
 async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
-  let connection;
-
   try {
     connection = await sql.connect(dbConfig);
 
@@ -211,8 +208,8 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
     const request = connection.request();
 
     request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, startDate);
-    request.input("endDate", sql.DateTime, endDate);
+    request.input("startDate", sql.DateTime, new Date(startDate));
+    request.input("endDate", sql.DateTime, new Date(endDate));
 
     const result = await request.query(query);
 
@@ -286,13 +283,13 @@ async function getOrderTrendByStallId(stallId, startDate, endDate, filterType) {
 
     return result.recordset;
   } catch (error) {
-    console.error("Error getting order trend:", error);
+    console.error("Database error:", error);
     throw error;
   }
 }
 
 // Get Top 3 menu items by stall ID
-// test run:
+// test run: http://localhost:3000/vendor-dashboard/1/top-menu-items?startDate=2026-07-01&endDate=2026-08-01
 async function getTopMenuItemsByStallId(stallId, startDate, endDate) {
   try {
     const connection = await sql.connect(dbConfig);
@@ -328,7 +325,7 @@ async function getTopMenuItemsByStallId(stallId, startDate, endDate) {
 
     return result.recordset;
   } catch (error) {
-    console.error("Error getting top menu items:", error);
+    console.error("Database error:", error);
     throw error;
   }
 }
@@ -357,7 +354,7 @@ async function getUnavailableMenuItemsByStallId(stallId) {
 
     return result.recordset;
   } catch (error) {
-    console.error("Error getting unavailable menu items:", error);
+    console.error("Database error:", error);
     throw error;
   }
 }
