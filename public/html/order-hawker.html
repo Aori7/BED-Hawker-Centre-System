@@ -1,32 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/components.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
-    <link rel="stylesheet" href="../css/pages/order.css"/>
-    <link rel="stylesheet" href="../css/pages/order-hawker-page.css" />
-    <link rel="stylesheet" href="../css/pages/main-hawkers.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/pages/order.css" />
+    <!-- <link rel="stylesheet" href="../css/pages/order-hawker-page.css" /> -->
+    <link rel="stylesheet" href="../css/pages/main-hawkers.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- google rounded icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
 
-     <!-- importing swiper -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    <!-- importing swiper -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
     <title>Order - Pick Hawker</title>
-</head>
-<body>
+  </head>
+  <body>
     <!-- navigation bar done by ada-->
     <header id="navigationbar">
       <div class="logo">
-        <a href="index.html">
+        <a href="../index.html">
           <!-- image of logo sourced from google icons -->
           <span class="material-symbols-rounded">restaurant_menu</span>
           <h1 id="logotitle">Hawker<em>SG</em></h1>
@@ -53,149 +62,282 @@
     </header>
 
     <section class="order-hawker-banner">
-        <div class="banner"></div>
-        <div class="order-hawker-header">
-            <h1>Pick a Hawker Centre</h1>
-            <p>Select your preferred hawker centre to explore its delicious offerings!</p>
-        </div>
+      <div class="banner"></div>
+      <div class="order-hawker-header">
+        <h1>Pick a Hawker Centre</h1>
+        <p>
+          Select your preferred hawker centre to explore its delicious
+          offerings!
+        </p>
+      </div>
     </section>
 
     <section class="order-progress-section">
-        <div class="order-progress">
+      <div class="order-progress">
+        <div class="progress-step active">
+          <span class="progress-number">1</span>
 
-            <div class="progress-step active">
-                <span class="progress-number">1</span>
-
-                <div class="progress-text">
-                    <strong>Choose Centre</strong>
-                    <small>Pick a location</small>
-                </div>
-            </div>
-
-            <div class="progress-line"></div>
-
-            <div class="progress-step">
-                <span class="progress-number">2</span>
-
-                <div class="progress-text">
-                    <strong>Choose Stall</strong>
-                    <small>Browse stalls</small>
-                </div>
-            </div>
-
-            <div class="progress-line"></div>
-
-            <div class="progress-step">
-                <span class="progress-number">3</span>
-
-                <div class="progress-text">
-                    <strong>Choose Food</strong>
-                    <small>Build your order</small>
-                </div>
-            </div>
-
+          <div class="progress-text">
+            <strong>Choose Centre</strong>
+            <small>Pick a location</small>
+          </div>
         </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step">
+          <span class="progress-number">2</span>
+
+          <div class="progress-text">
+            <strong>Choose Stall</strong>
+            <small>Browse stalls</small>
+          </div>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step">
+          <span class="progress-number">3</span>
+
+          <div class="progress-text">
+            <strong>Choose Food</strong>
+            <small>Build your order</small>
+          </div>
+        </div>
+      </div>
     </section>
-    
+
     <section class="search-hawker-section">
-            <div class="searchHawker">
-            <!-- search bar for hawker centres here -->
-            <input type="text" id="hawkersearch" name="hawkersearch" placeholder="Search for hawker centres...">
-            <button type="submit" id="searchbtn">Search</button>
-        </div>
+      <div class="searchHawker">
+        <!-- search bar for hawker centres here -->
+        <input
+          type="text"
+          id="hawkersearch"
+          name="hawkersearch"
+          placeholder="Search for hawker centres..."
+        />
+        <button type="submit" id="searchbtn">Search</button>
+      </div>
     </section>
 
     <section class="filter-category-section">
-        <div class="filter-bar">
-            <div class="filter-group">
-                <span class="material-symbols-rounded">location_on</span>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="material-symbols-rounded">location_on</span>
 
-                <select id="locationfilter" name="locationfilter">
-                    <option value="all">All Locations</option>
-                    <option value="north">North</option>
-                    <option value="south">South</option>
-                    <option value="east">East</option>
-                    <option value="west">West</option>
-                    <option value="central">Central</option>
-                </select>
-            </div>
-
-            <div class="filter-divider"></div>
-
-            <div class="filter-group">
-                <span class="material-symbols-rounded">favorite</span>
-
-                <select id="favouritefilter" name="favouritefilter">
-                    <option value="all">All Hawkers</option>
-                    <option value="favourite">Favourites</option>
-                </select>
-            </div>
+          <select id="locationfilter" name="locationfilter">
+            <option value="all">All Locations</option>
+            <option value="north">North</option>
+            <option value="south">South</option>
+            <option value="east">East</option>
+            <option value="west">West</option>
+            <option value="central">Central</option>
+          </select>
         </div>
+
+        <div class="filter-divider"></div>
+
+        <div class="filter-group">
+          <span class="material-symbols-rounded">favorite</span>
+
+          <select id="favouritefilter" name="favouritefilter">
+            <option value="all">All Hawkers</option>
+            <option value="favourite">Favourites</option>
+          </select>
+        </div>
+      </div>
     </section>
 
     <section id="available-ordering-section">
-    <div class="hawker-section-header">
+      <div class="hawker-section-header">
         <div>
-            <p class="section-label">Order now</p>
-            <h1>Available for Ordering</h1>
+          <p class="section-label">Order now</p>
+          <h1>Available for Ordering</h1>
         </div>
 
         <p>
-            Browse hawker centres that currently have registered stalls
-            and menu items.
+          Browse hawker centres that currently have registered stalls and menu
+          items.
         </p>
-    </div>
+      </div>
 
-    <div
-        id="order-hawker-list"
-        class="hawker-grid"
-    >
+      <div id="order-hawker-list" class="hawker-grid">
         <p>Loading available hawker centres...</p>
-    </div>
+      </div>
 
-    <div
-        class="pagination"
-        id="hawker-pagination"
-    ></div>
-</section>
+      <div class="pagination" id="hawker-pagination"></div>
+    </section>
 
-<!-- Order History Overlay , only shows for users who are logged in-->
+    <!-- Order History Overlay -->
     <div id="history-overlay"></div>
 
     <!-- Order History Sidebar -->
     <aside id="order-history-sidebar">
-      <div class="sidebar-header">
-        <h2>Order History</h2>
-        <button id="close-history">✕</button>
+      <div class="history-sidebar-header">
+        <div>
+          <p class="history-eyebrow">Your activity</p>
+
+          <h2>Recent Orders</h2>
+
+          <p class="history-subtitle">
+            View your latest orders, receipts and reorder favourites.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="close-history"
+          aria-label="Close order history"
+        >
+          <span class="material-symbols-rounded">close</span>
+        </button>
       </div>
 
-      <div class="history-list">
-        <!-- SAMPLE ORDER CARD (design only for now),
-         the cards will be overwritten in js. -->
-        <div class="history-card">
-          <h4>Ah Seng Chicken Rice</h4>
-          <p>2 items</p>
-          <p class="history-meta">$12.50 • 12 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+      <div class="history-summary">
+        <div class="history-summary-icon">
+          <span class="material-symbols-rounded"> receipt_long </span>
         </div>
 
-        <div class="history-card">
-          <h4>Laksa King</h4>
-          <p>1 item</p>
-          <p class="history-meta">$6.50 • 10 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+        <div>
+          <strong id="recent-order-count"> Loading recent orders... </strong>
+
+          <p>Your latest food journeys</p>
         </div>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <p class="history-loading">Loading your recent orders...</p>
+      </div>
+
+      <div class="history-sidebar-footer">
+        <a href="/html/order-history.html" class="view-all-history-btn">
+          <span class="material-symbols-rounded">history</span>
+
+          View All Order History
+
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </a>
       </div>
     </aside>
-    
+
     <footer id="footercontainer">
-        <!-- footer contents here -->
-        <!-- content 1: link to lead to credit.html? -->
-         footer
+      <div class="footer-glow footer-glow-one"></div>
+      <div class="footer-glow footer-glow-two"></div>
+
+      <div class="footer-container">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-logo">
+              <span class="material-symbols-rounded">restaurant_menu</span>
+
+              <h2>Hawker<em>SG</em></h2>
+            </a>
+
+            <p>
+              Discover Singapore’s hawker centres, support local food businesses
+              and enjoy familiar favourites through one connected platform.
+            </p>
+
+            <div class="footer-tagline">
+              <span>Discover.</span>
+              <span>Order.</span>
+              <span>Support.</span>
+            </div>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Explore</h3>
+
+            <a href="index.html">Home</a>
+            <a href="order-hawker.html">Order Food</a>
+            <a href="main-hawkers.html">Hawker Centres</a>
+            <a href="about-us.html">About Us</a>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Customer</h3>
+
+            <a href="login.html">Login</a>
+            <a href="customer-profile.html">Profile</a>
+            <a href="order-history.html">Order History</a>
+            <a href="contact-us.html">Contact Us</a>
+          </div>
+
+          <div class="footer-contact">
+            <h3>Stay Connected</h3>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">mail</span>
+
+              <div>
+                <small>Email</small>
+                <p>contact@hawkersg.com</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">call</span>
+
+              <div>
+                <small>Phone</small>
+                <p>+65 6123 4567</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">location_on</span>
+
+              <div>
+                <small>Based in</small>
+                <p>Singapore</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-highlight">
+          <div>
+            <span class="material-symbols-rounded">storefront</span>
+
+            <div>
+              <strong>Supporting local hawkers</strong>
+
+              <p>
+                Every order and discovery helps keep Singapore’s hawker culture
+                visible and connected.
+              </p>
+            </div>
+          </div>
+
+          <a href="html/order-hawker.html">
+            Explore Hawkers
+            <span class="material-symbols-rounded">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            © <span id="current-year">2026</span> HawkerSG. All rights reserved.
+          </p>
+
+          <div class="footer-bottom-links">
+            <a href="credit.html">Credits</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+
+          <p class="footer-made-with">
+            Made with
+            <span class="material-symbols-rounded">favorite</span>
+            for Singapore’s hawker community
+          </p>
+        </div>
+      </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src="/js/authUI.js"></script>
+    <script src="/js/order-history.js"></script>
     <script src="/js/order-hawker.js"></script>
     <script src="/js/swiper.js"></script>
-</body>
+  </body>
 </html>
