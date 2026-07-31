@@ -2,13 +2,8 @@ const express = require("express");
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
 // // Load environment variables
-<<<<<<< HEAD
 const dotenv = require("dotenv"); // ruimin
 dotenv.config();  // ruimin
-=======
-const dotenv = require("dotenv");
-dotenv.config();
->>>>>>> 3a1493f9dc26ff4b86098cd3e4449df4fff7ba90
 
 // Import - ada's
 const customerController = require("./controllers/customerController");
@@ -55,7 +50,6 @@ app.use("/contact-submissions", contactSubmissionRoutes);
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
-app.use()
 //dayana's
 app.use("/inspections", inspectionRoutes);
 app.use("/hygiene-grades", hygieneGradeRoutes);

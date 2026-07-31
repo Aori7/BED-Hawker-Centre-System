@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authModel = require("../models/authModel");
-const jwt = require("jsonwebtoken"); // ruimin
 
 async function loginUser(req, res) {
   try {

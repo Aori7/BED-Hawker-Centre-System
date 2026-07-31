@@ -45,12 +45,15 @@ function validateDateRange(req, res, next) {
 // Validate order trend filter
 function validateOrderTrendFilter(req, res, next) {
   const allowedFilterTypes = ["daily", "weekly", "monthly", "yearly"];
+  const filterType = req.query.filterType?.trim().toLowerCase();
 
-  if (!allowedFilterTypes.includes(req.query.filterType)) {
+  if (!allowedFilterTypes.includes(filterType)) {
     return res.status(400).json({
       error: "Filter type must be daily, weekly, monthly or yearly.",
     });
   }
+
+  req.query.filterType = filterType;
   next();
 }
 
