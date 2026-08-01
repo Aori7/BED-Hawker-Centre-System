@@ -20,6 +20,52 @@ function setupDashboard() {
     updateDashboardDate();
     animateDashboardStatistics();
     setupQuickStallSearch();
+    loadDashboardOfficerName();
+}
+
+async function loadDashboardOfficerName() {
+    const officerNameElement =
+        document.getElementById(
+            "dashboard-officer-name"
+        );
+
+    if (!officerNameElement) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/dashboard/officer-profile",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const officer =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                officer.error ||
+                "Unable to retrieve officer profile"
+            );
+        }
+
+        officerNameElement.textContent =
+            officer.OfficerName;
+
+    } catch (error) {
+        console.error(
+            "Load officer name error:",
+            error
+        );
+
+        officerNameElement.textContent =
+            "Officer";
+    }
 }
 
 function updateDashboardDate() {
@@ -141,6 +187,57 @@ async function setupInspectionForm() {
         return;
     }
 
+    let loggedInOfficerID = null;
+
+    try {
+        const response = await fetch(
+            "/dashboard/officer-profile",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const officer =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                officer.error ||
+                "Unable to retrieve officer profile"
+            );
+        }
+
+        loggedInOfficerID =
+            Number(officer.OfficerID);
+
+        if (
+            !Number.isInteger(
+                loggedInOfficerID
+            ) ||
+            loggedInOfficerID <= 0
+        ) {
+            throw new Error(
+                "Invalid officer profile"
+            );
+        }
+
+    } catch (error) {
+        console.error(
+            "Load officer profile error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to identify the logged-in NEA officer.",
+            "error"
+        );
+
+        return;
+    }
+
     const hawkerCentreSelect =
         document.getElementById(
             "hawker-centre"
@@ -259,26 +356,27 @@ async function setupInspectionForm() {
             const selectedGrade =
                 document.querySelector(
                     'input[name="hygieneGrade"]:checked'
-                );
-            
-            console.log(
-                "Selected stall ID:",
-                foodStallSelect.value
-            );   
+                ); 
 
             const inspectionData = {
-                officerID: 1,
+                officerID:
+                    loggedInOfficerID,
+
                 stallID: parseInt(
                     foodStallSelect.value
                 ),
+
                 inspectionDate:
                     inspectionDate.value,
+
                 inspectionScore:
                     parseInt(
                         inspectionScore.value
                     ),
+
                 hygieneGrade:
                     selectedGrade.value,
+
                 remark:
                     remarks.value.trim()
             };
@@ -287,9 +385,19 @@ async function setupInspectionForm() {
                 const response = await fetch(
                     "/inspections",
                     {
+                        method: "POST",
+
                         headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        }
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${accessToken}`
+                        },
+
+                        body: JSON.stringify(
+                            inspectionData
+                        )
                     }
                 );
 
@@ -722,15 +830,33 @@ async function setupInspectionHistory() {
     const emptyState = document.getElementById(
         "history-empty-state"
     );
+    const previousButton = document.getElementById(
+        "history-previous-btn"
+    );
+
+    const nextButton = document.getElementById(
+        "history-next-btn"
+    );
+
+    const pageNumberContainer = document.getElementById(
+        "history-page-numbers"
+    );
 
     let inspections = [];
+
+    let filteredInspections = [];
+
+    let currentPage = 1;
+
+    const recordsPerPage = 10;
 
     try {
         const response = await fetch(
             "/inspections",
             {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization:
+                        `Bearer ${accessToken}`
                 }
             }
         );
@@ -740,16 +866,19 @@ async function setupInspectionHistory() {
         if (!response.ok) {
             throw new Error(
                 result.error ||
-                "Unable to retrieve inspection history"
+                "Unable to record inspection"
             );
         }
 
         inspections = result;
 
-        renderInspectionHistory(
-            inspections,
-            tableBody
-        );
+        filteredInspections = [
+            ...inspections
+        ];
+
+        currentPage = 1;
+
+    displayInspectionHistoryPage();
 
     } catch (error) {
         console.error(
@@ -766,6 +895,51 @@ async function setupInspectionHistory() {
         `;
 
         return;
+    }
+
+    if (previousButton) {
+        previousButton.addEventListener(
+            "click",
+            () => {
+                if (currentPage > 1) {
+                    currentPage--;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        );
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener(
+            "click",
+            () => {
+                const totalPages =
+                    Math.ceil(
+                        filteredInspections.length /
+                        recordsPerPage
+                    );
+
+                if (
+                    currentPage <
+                    totalPages
+                ) {
+                    currentPage++;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        );
     }
 
     function updateInspectionHistory() {
@@ -877,10 +1051,11 @@ async function setupInspectionHistory() {
             }
         );
 
-        renderInspectionHistory(
-            matchingInspections,
-            tableBody
-        );
+        filteredInspections = matchingInspections;
+
+        currentPage = 1;
+
+        displayInspectionHistoryPage();
 
         if (resultCount) {
             resultCount.textContent =
@@ -938,6 +1113,110 @@ async function setupInspectionHistory() {
                     "show"
                 );
             }
+        }
+    }
+
+    function displayInspectionHistoryPage() {
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    filteredInspections.length /
+                    recordsPerPage
+                )
+            );
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        const startIndex =
+            (currentPage - 1) *
+            recordsPerPage;
+
+        const endIndex =
+            startIndex +
+            recordsPerPage;
+
+        const recordsForCurrentPage =
+            filteredInspections.slice(
+                startIndex,
+                endIndex
+            );
+
+        renderInspectionHistory(
+            recordsForCurrentPage,
+            tableBody
+        );
+
+        updateInspectionPagination(
+            totalPages
+        );
+    }
+
+    function updateInspectionPagination(
+        totalPages
+    ) {
+        if (previousButton) {
+            previousButton.disabled =
+                currentPage === 1;
+        }
+
+        if (nextButton) {
+            nextButton.disabled =
+                currentPage === totalPages;
+        }
+
+        if (!pageNumberContainer) {
+            return;
+        }
+
+        pageNumberContainer.innerHTML = "";
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= totalPages;
+            pageNumber++
+        ) {
+            const pageButton =
+                document.createElement(
+                    "button"
+                );
+
+            pageButton.type = "button";
+
+            pageButton.textContent =
+                pageNumber;
+
+            pageButton.className =
+                "history-page-btn";
+
+            if (
+                pageNumber === currentPage
+            ) {
+                pageButton.classList.add(
+                    "active"
+                );
+            }
+
+            pageButton.addEventListener(
+                "click",
+                () => {
+                    currentPage =
+                        pageNumber;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            );
+
+            pageNumberContainer.appendChild(
+                pageButton
+            );
         }
     }
 
@@ -1036,10 +1315,6 @@ function renderInspectionHistory(
                 </td>
 
                 <td>
-                    ${inspectionDate}
-                </td>
-
-                <td>
                     <strong>
                         ${inspection.StallName}
                     </strong>
@@ -1051,6 +1326,10 @@ function renderInspectionHistory(
 
                 <td>
                     ${inspection.HCName}
+                </td>
+
+                <td>
+                    ${inspectionDate}
                 </td>
 
                 <td>
@@ -2584,11 +2863,6 @@ async function setupStallDetails() {
             queryParameters.get("stallId")
         );
 
-    console.log(
-        "stall details page loaded:",
-        stallID
-    );
-
     if (
         !Number.isInteger(stallID) ||
         stallID <= 0
@@ -2651,11 +2925,6 @@ async function loadStallDetails(stallID) {
 
         const stall =
             await response.json();
-
-        console.log(
-            "stall details response:",
-            stall
-        );
 
         if (!response.ok) {
             throw new Error(

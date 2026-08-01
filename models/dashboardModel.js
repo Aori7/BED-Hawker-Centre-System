@@ -232,10 +232,37 @@ async function updateInspectionStatus(
     }
 }
 
+// get logged in nea officer details
+async function getOfficerProfile(userID) {
+    const connection =
+        await sql.connect(dbConfig);
+
+    const result = await connection
+        .request()
+        .input(
+            "UserID",
+            sql.Int,
+            userID
+        )
+        .query(`
+            SELECT
+                OfficerID,
+                UserID,
+                OfficerName,
+                ContactNo
+
+            FROM NEA_Officer
+
+            WHERE UserID = @UserID;
+        `);
+
+    return result.recordset[0];
+}
 
 module.exports = {
     getDashboardStatistics,
     getRecentInspections,
     getTodayInspectionCount,
-    updateInspectionStatus
+    updateInspectionStatus,
+    getOfficerProfile
 };

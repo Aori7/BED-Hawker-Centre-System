@@ -45,4 +45,12 @@ router.put(
     dashboardController.updateInspectionStatus
 );
 
+// get logged in nea officer details
+router.get(
+    "/officer-profile",
+    authenticateToken,
+    authorizeRoles("NEA Officer"),
+    dashboardController.getOfficerProfile
+);
+
 module.exports = router;

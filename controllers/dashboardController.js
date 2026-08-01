@@ -165,9 +165,46 @@ async function updateInspectionStatus(req, res) {
     }
 }
 
+// get logged in nea officer details
+async function getOfficerProfile(req, res) {
+    try {
+        const userID =
+            req.user.userID;
+
+        const officer =
+            await dashboardModel
+                .getOfficerProfile(
+                    userID
+                );
+
+        if (!officer) {
+            return res.status(404).json({
+                error:
+                    "NEA officer profile not found"
+            });
+        }
+
+        res.status(200).json(
+            officer
+        );
+
+    } catch (error) {
+        console.error(
+            "Get officer profile error:",
+            error
+        );
+
+        res.status(500).json({
+            error:
+                "Error retrieving NEA officer profile"
+        });
+    }
+}
+
 module.exports = {
     getDashboardStatistics,
     getRecentInspections,
     getTodayInspectionCount,
-    updateInspectionStatus
+    updateInspectionStatus,
+    getOfficerProfile
 };

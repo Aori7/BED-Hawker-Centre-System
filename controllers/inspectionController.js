@@ -139,6 +139,8 @@ async function createInspection(req, res) {
                 hygieneGrade,
                 remark
             });
+        
+        console.log("Inspection returned from model:", newInspection);
 
         res.status(201).json({
             message:
