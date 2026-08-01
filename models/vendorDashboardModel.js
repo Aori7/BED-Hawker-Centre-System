@@ -44,8 +44,7 @@ async function getTotalOrdersByStallId(stallId, startDate, endDate) {
       WHERE StallID = @stallId
         AND OrderStatus = 'Completed'
         AND OrderDateTime >= @startDate
-        AND OrderDateTime < @endDate
-    `;
+        AND OrderDateTime < @endDate`;
 
     const request = connection.request();
 
@@ -75,8 +74,7 @@ async function getTotalUnavailableItemsByStallId(stallId, startDate, endDate) {
       WHERE StallID = @stallId
         AND OrderStatus = 'Completed'
         AND OrderDateTime >= @startDate
-        AND OrderDateTime < @endDate
-    `;
+        AND OrderDateTime < @endDate`;
 
     const request = connection.request();
 
@@ -104,8 +102,7 @@ async function getTotalUnavailableItemsByStallId(stallId) {
         SUM(CASE WHEN IsAvailable = 0 THEN 1 ELSE 0 END) AS TotalUnavailableItems,
         COUNT(MenuItemID) AS TotalMenuItems
       FROM MenuItem
-      WHERE StallID = @stallId
-    `;
+      WHERE StallID = @stallId`;
 
     const request = connection.request();
 
@@ -242,8 +239,7 @@ async function getOrderTrendByStallId(stallId, startDate, endDate, filterType) {
       WEEK,
       DATEDIFF(WEEK, @startDate, OrderDateTime),
       CAST(@startDate AS DATE)
-    )
-  `;
+    )`;
     }
 
     // Group yearly filter by month
@@ -253,8 +249,7 @@ async function getOrderTrendByStallId(stallId, startDate, endDate, filterType) {
       YEAR(OrderDateTime),
       MONTH(OrderDateTime),
       1
-    )
-  `;
+    )`;
     }
 
     if (!period) {
