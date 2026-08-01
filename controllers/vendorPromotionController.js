@@ -43,6 +43,32 @@ async function createPromotion(req, res) {
   }
 }
 
+// Update promotion [PUT]
+// test run: http://localhost:3000/vendor-promotions/1/1
+async function updatePromotion(req, res) {
+  try {
+    const updatedPromotion = await vendorPromotionModel.updatePromotion(
+      req.params.stallId,
+      req.params.promotionId,
+      req.body,
+    );
+
+    if (!updatedPromotion) {
+      return res.status(404).json({
+        error: "Promotion not found.",
+      });
+    }
+
+    res.status(200).json(updatedPromotion);
+  } catch (error) {
+    console.error("Controller error:", error);
+
+    res.status(500).json({
+      error: "Unable to update promotion.",
+    });
+  }
+}
+
 // delete promotion [DELETE]
 // test run: http://localhost:3000/vendor-promotions/1/1
 async function deletePromotion(req, res) {
@@ -73,5 +99,6 @@ async function deletePromotion(req, res) {
 module.exports = {
   getPromotionsByStallId,
   createPromotion,
+  updatePromotion,
   deletePromotion,
 };

@@ -3,7 +3,8 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 // validate if promo data inputted by user
-// validate promo and menu item id
+// validate promoID 
+// validate menu item selected selected as affected
 
 // Validation schema for promotion data
 const promotionSchema = Joi.object({
@@ -68,7 +69,7 @@ const promotionSchema = Joi.object({
 });
 
 // Validate promotion input
-function validatePromotion(req, res, next) {
+function validatePromotionInput(req, res, next) {
   const { error, value } = promotionSchema.validate(req.body, {
     abortEarly: false,
     stripUnknown: true,
@@ -110,9 +111,9 @@ function validatePromotion(req, res, next) {
 
 // Validate promotion ID
 function validatePromotionId(req, res, next) {
-  const promotionId = parseInt(req.params.promotionId, 10);
+  req.params.promotionId = parseInt(req.params.promotionId, 10);
 
-  if (Number.isNaN(promotionId) || promotionId <= 0) {
+  if (Number.isNaN(req.params.promotionId) || req.params.promotionId <= 0) {
     return res.status(400).json({
       error: "Valid promotion ID is required.",
     });
@@ -120,8 +121,8 @@ function validatePromotionId(req, res, next) {
   next();
 }
 
-// Validate menu item ID
-async function validateMenuItems(req, res, next) {
+// Validate menu items
+async function validateAffectedMenuItems(req, res, next) {
   try {
     const menuItemIds = req.body.MenuItemIDs || [];
 
@@ -134,6 +135,7 @@ async function validateMenuItems(req, res, next) {
     const request = connection.request();
 
     request.input("stallId", sql.Int, req.params.stallId);
+    request.input("promotionId", sql.Int, req.params.promotionId || null);
 
     // Create SQL parameters for each menu item ID
     const parameterNames = menuItemIds.map((id, index) => {
@@ -148,17 +150,20 @@ async function validateMenuItems(req, res, next) {
       SELECT MenuItemID
       FROM MenuItem
       WHERE StallID = @stallId
-        AND MenuItemID IN (${parameterNames.join(",")})
-    `;
+        AND (
+          PromotionID IS NULL
+          OR PromotionID = @promotionId
+        )
+        AND MenuItemID IN (${parameterNames.join(",")})`;
 
     const result = await request.query(query);
 
     if (result.recordset.length !== menuItemIds.length) {
       return res.status(400).json({
-        error: "One or more selected menu items do not belong to this stall.",
+        error:
+          "One or more selected menu items are invalid or already belong to another promotion.",
       });
     }
-
     next();
   } catch (error) {
     console.error(error);
@@ -170,7 +175,7 @@ async function validateMenuItems(req, res, next) {
 }
 
 module.exports = {
-  validatePromotion,
+  validatePromotionInput,
   validatePromotionId,
-  validateMenuItems,
+  validateAffectedMenuItems,
 };

@@ -37,9 +37,22 @@ router.post(
   authenticateToken,
   authorizeRoles("Stall Owner"),
   validateVendorStall,
-  vendorPromotionValidation.validatePromotion,
-  vendorPromotionValidation.validateMenuItems,
+  vendorPromotionValidation.validatePromotionInput,
+  vendorPromotionValidation.validateAffectedMenuItems,
   vendorPromotionController.createPromotion,
+);
+
+// Update promotion [PUT]
+// test run: http://localhost:3000/vendor-promotions/1/1
+router.put(
+  "/:stallId/:promotionId",
+  authenticateToken,
+  authorizeRoles("Stall Owner"),
+  validateVendorStall,
+  vendorPromotionValidation.validatePromotionId,
+  vendorPromotionValidation.validatePromotionInput,
+  vendorPromotionValidation.validateAffectedMenuItems,
+  vendorPromotionController.updatePromotion,
 );
 
 // delete promotion [DELETE]
