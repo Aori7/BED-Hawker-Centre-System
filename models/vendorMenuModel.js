@@ -14,12 +14,14 @@ async function getMenuItemsByStallId(stallId) {
     const query = `
       SELECT
         MI.MenuItemID,
+        MI.StallID,
         MI.ItemName,
         MI.ItemDescription,
         MI.ItemPrice,
         MI.ItemCategory,
         MI.ImageURL,
         MI.IsAvailable,
+        MI.IsActive,
         MI.CreatedAt,
         MI.UpdatedAt,
         P.PromotionID,
@@ -30,8 +32,8 @@ async function getMenuItemsByStallId(stallId) {
       WHERE MI.StallID = @stallId
         AND MI.IsActive = 1
       ORDER BY
-        MI.ItemCategory,
-        MI.ItemName`;
+        MI.ItemCategory ASC,
+        MI.ItemName ASC`;
 
     const result = await request.query(query);
 
@@ -57,52 +59,49 @@ async function createMenuItem(stallId, menuItemData) {
       sql.VarChar(500),
       menuItemData.ItemDescription || null,
     );
-    request.input("ItemPrice", sql.Decimal(10, 2), menuItemData.ItemPrice);
+    request.input("ItemPrice", sql.Decimal(8, 2), menuItemData.ItemPrice);
     request.input("ItemCategory", sql.VarChar(50), menuItemData.ItemCategory);
     request.input("ImageURL", sql.VarChar(255), menuItemData.ImageURL || null);
     request.input("IsAvailable", sql.Bit, menuItemData.IsAvailable);
-    request.input("IsActive", sql.Bit, true);
 
     const query = `
-        INSERT INTO MenuItem
-        (
-            StallID,
-            ItemName,
-            ItemDescription,
-            ItemPrice,
-            ItemCategory,
-            ImageURL,
-            IsAvailable,
-            IsActive
-        )
-        VALUES
-        (
-            @StallID,
-            @ItemName,
-            @ItemDescription,
-            @ItemPrice,
-            @ItemCategory,
-            @ImageURL,
-            @IsAvailable,
-            @IsActive
-        );
-        SELECT SCOPE_IDENTITY() AS id`;
+      INSERT INTO MenuItem
+      (
+        StallID,
+        ItemName,
+        ItemDescription,
+        ItemPrice,
+        ItemCategory,
+        ImageURL,
+        IsAvailable
+      )
+      OUTPUT
+        INSERTED.MenuItemID,
+        INSERTED.StallID,
+        INSERTED.ItemName,
+        INSERTED.ItemDescription,
+        INSERTED.ItemPrice,
+        INSERTED.ItemCategory,
+        INSERTED.PromotionID,
+        INSERTED.ImageURL,
+        INSERTED.IsAvailable,
+        INSERTED.IsActive,
+        INSERTED.CreatedAt,
+        INSERTED.UpdatedAt
+      VALUES
+      (
+        @StallID,
+        @ItemName,
+        @ItemDescription,
+        @ItemPrice,
+        @ItemCategory,
+        @ImageURL,
+        @IsAvailable
+      )`;
 
     const result = await request.query(query);
 
-    const newMenuItemId = Number(result.recordset[0].id);
-
-    return {
-      MenuItemID: newMenuItemId,
-      StallID: stallId,
-      ItemName: menuItemData.ItemName,
-      ItemDescription: menuItemData.ItemDescription || null,
-      ItemPrice: menuItemData.ItemPrice,
-      ItemCategory: menuItemData.ItemCategory,
-      ImageURL: menuItemData.ImageURL || null,
-      IsAvailable: menuItemData.IsAvailable,
-      IsActive: menuItemData.IsActive,
-    };
+    return result.recordset[0];
   } catch (error) {
     console.error("Database error:", error);
     throw error;
@@ -114,6 +113,7 @@ async function createMenuItem(stallId, menuItemData) {
 async function updateMenuItem(stallId, menuItemId, menuItemData) {
   try {
     const connection = await sql.connect(dbConfig);
+
     const request = connection.request();
 
     request.input("StallID", sql.Int, stallId);
@@ -124,7 +124,7 @@ async function updateMenuItem(stallId, menuItemId, menuItemData) {
       sql.VarChar(500),
       menuItemData.ItemDescription || null,
     );
-    request.input("ItemPrice", sql.Decimal(10, 2), menuItemData.ItemPrice);
+    request.input("ItemPrice", sql.Decimal(8, 2), menuItemData.ItemPrice);
     request.input("ItemCategory", sql.VarChar(50), menuItemData.ItemCategory);
     request.input("ImageURL", sql.VarChar(255), menuItemData.ImageURL || null);
     request.input("IsAvailable", sql.Bit, menuItemData.IsAvailable);
@@ -139,33 +139,37 @@ async function updateMenuItem(stallId, menuItemId, menuItemData) {
         ImageURL = @ImageURL,
         IsAvailable = @IsAvailable,
         UpdatedAt = GETDATE()
+      OUTPUT
+        INSERTED.MenuItemID,
+        INSERTED.StallID,
+        INSERTED.ItemName,
+        INSERTED.ItemDescription,
+        INSERTED.ItemPrice,
+        INSERTED.ItemCategory,
+        INSERTED.PromotionID,
+        INSERTED.ImageURL,
+        INSERTED.IsAvailable,
+        INSERTED.IsActive,
+        INSERTED.CreatedAt,
+        INSERTED.UpdatedAt
       WHERE StallID = @StallID
-        AND MenuItemID = @MenuItemID`;
+        AND MenuItemID = @MenuItemID
+        AND IsActive = 1`;
 
     const result = await request.query(query);
 
-    if (result.rowsAffected[0] === 0) {
+    if (result.recordset.length === 0) {
       return null;
     }
 
-    return {
-      MenuItemID: menuItemId,
-      StallID: stallId,
-      ItemName: menuItemData.ItemName,
-      ItemDescription: menuItemData.ItemDescription || null,
-      ItemPrice: menuItemData.ItemPrice,
-      ItemCategory: menuItemData.ItemCategory,
-      ImageURL: menuItemData.ImageURL || null,
-      IsAvailable: menuItemData.IsAvailable,
-      IsActive: menuItemData.IsActive,
-    };
+    return result.recordset[0];
   } catch (error) {
     console.error("Database error:", error);
     throw error;
   }
 }
 
-// Delete menu item [DELETE] --- actually just changing the IsActive status
+// Delete menu item [DELETE] --- not actually deleting, just chnaging a status
 // test run: http://localhost:3000/vendor-menu/1/1
 async function deleteMenuItem(stallId, menuItemId) {
   try {
@@ -176,15 +180,18 @@ async function deleteMenuItem(stallId, menuItemId) {
     request.input("StallID", sql.Int, stallId);
     request.input("MenuItemID", sql.Int, menuItemId);
 
-    const result = await request.query(`
+    const query = `
       UPDATE MenuItem
       SET
         IsActive = 0,
         IsAvailable = 0,
+        PromotionID = NULL,
         UpdatedAt = GETDATE()
-      WHERE
-        StallID = @StallID
-        AND MenuItemID = @MenuItemID`);
+      WHERE StallID = @StallID
+        AND MenuItemID = @MenuItemID
+        AND IsActive = 1`;
+
+    const result = await request.query(query);
 
     return result.rowsAffected[0] > 0;
   } catch (error) {

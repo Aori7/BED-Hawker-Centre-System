@@ -62,36 +62,6 @@ async function getTotalOrdersByStallId(stallId, startDate, endDate) {
 }
 
 // Get total unavailable items by stall ID
-// test run: http://localhost:3000/vendor-dashboard/1/total-unavailable-items?startDate=2026-07-01&endDate=2026-08-01
-async function getTotalUnavailableItemsByStallId(stallId, startDate, endDate) {
-  try {
-    const connection = await sql.connect(dbConfig);
-
-    const query = `
-      SELECT
-        COUNT(OrderID) AS TotalOrders
-      FROM Orders
-      WHERE StallID = @stallId
-        AND OrderStatus = 'Completed'
-        AND OrderDateTime >= @startDate
-        AND OrderDateTime < @endDate`;
-
-    const request = connection.request();
-
-    request.input("stallId", sql.Int, stallId);
-    request.input("startDate", sql.DateTime, new Date(startDate));
-    request.input("endDate", sql.DateTime, new Date(endDate));
-
-    const result = await request.query(query);
-
-    return result.recordset[0];
-  } catch (error) {
-    console.error("Database error:", error);
-    throw error;
-  }
-}
-
-// Get total unavailable items by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/total-unavailable-items
 async function getTotalUnavailableItemsByStallId(stallId) {
   try {
@@ -99,10 +69,16 @@ async function getTotalUnavailableItemsByStallId(stallId) {
 
     const query = `
       SELECT
-        SUM(CASE WHEN IsAvailable = 0 THEN 1 ELSE 0 END) AS TotalUnavailableItems,
+        SUM(
+          CASE
+            WHEN IsAvailable = 0 THEN 1
+            ELSE 0
+          END
+        ) AS TotalUnavailableItems,
         COUNT(MenuItemID) AS TotalMenuItems
       FROM MenuItem
-      WHERE StallID = @stallId`;
+      WHERE StallID = @stallId
+        AND IsActive = 1`;
 
     const request = connection.request();
 
@@ -110,7 +86,10 @@ async function getTotalUnavailableItemsByStallId(stallId) {
 
     const result = await request.query(query);
 
-    return result.recordset[0];
+    return {
+      TotalUnavailableItems: result.recordset[0].TotalUnavailableItems || 0,
+      TotalMenuItems: result.recordset[0].TotalMenuItems || 0,
+    };
   } catch (error) {
     console.error("Database error:", error);
     throw error;
@@ -322,6 +301,8 @@ async function getTopMenuItemsByStallId(stallId, startDate, endDate) {
 
 // Get unavailable menu items by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
+// Get unavailable menu items by stall ID
+// test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
 async function getUnavailableMenuItemsByStallId(stallId) {
   try {
     const connection = await sql.connect(dbConfig);
@@ -331,9 +312,9 @@ async function getUnavailableMenuItemsByStallId(stallId) {
         MenuItemID,
         ItemName
       FROM MenuItem
-      WHERE
-        StallID = @stallId
+      WHERE StallID = @stallId
         AND IsAvailable = 0
+        AND IsActive = 1
       ORDER BY ItemName ASC`;
 
     const request = connection.request();
