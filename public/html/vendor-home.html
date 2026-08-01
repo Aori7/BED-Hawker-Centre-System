@@ -2,14 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <!-- page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-home.css" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
@@ -26,38 +24,81 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-
     <title>Vendor Home Page</title>
   </head>
-
-  <body>
+  <body data-page="vendor-home">
     <!-- NAV BAR -->
-    <nav class="nav-bar">
-      <a class="nav-link active" href="vendor-home.html"> Home </a>
-      <a class="nav-link" href="vendor-menu.html"> Menu </a>
-      <a class="nav-link" href="vendor-orders.html"> Orders </a>
-      <a class="nav-link" href="vendor-promotions.html"> Promotions </a>
-      <a class="nav-link" href="vendor-feedback.html"> Feedback </a>
-      <a class="nav-link" href="vendor-profile.html"> Profile </a>
-    </nav>
+    <nav
+      class="nav-bar"
+      id="vendor-navigation"
+      data-component="vendor-navigation"
+    >
+    <div class="logo">
+        <a href="index.html">
+          <!-- image of logo sourced from google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
 
-    <main class="dashboard-main">
+      <a class="nav-link active" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
+      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
+        Menu
+      </a>
+      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+        Orders
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-promotions.html"
+        data-nav-target="promotions"
+      >
+        Promotions
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-feedback.html"
+        data-nav-target="feedback"
+      >
+        Feedback
+      </a>
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Login</button>
+        </a>
+      </div>
+
+    </nav>
+    <main class="dashboard-main" id="vendor-home-page" data-page-content="home">
       <!-- stall dropdown -->
-      <section class="stall-selector-section">
+      <section
+        class="stall-selector-section"
+        id="vendor-stall-selector"
+        data-component="stall-selector"
+      >
         <!-- display the stall name and info -->
         <div class="stall-details">
-          <p class="stall-name">Stall A</p>
-          <address class="stall-address">@Hawker A, #00-00</address>
-          <p class="stall-description">Selling the best chicken rice</p>
-          <p class="stall-rating">4.7/5.0</p>
-
+          <p class="stall-name" data-field="stall-name">Stall A</p>
+          <address class="stall-address" data-field="stall-address">
+            @Hawker A, #00-00
+          </address>
+          <p class="stall-description" data-field="stall-description">
+            Selling the best chicken rice
+          </p>
+          <p class="stall-rating" data-field="stall-rating">4.7/5.0</p>
           <img
             class="stall-hygiene-grade"
             src="../images/hygiene-grade.png"
             alt="Hygiene grade"
+            data-field="hygiene-grade"
           />
         </div>
-
         <!-- switch dropdown -->
         <div class="stall-switcher">
           <!--
@@ -65,27 +106,28 @@
             Change stall
           </label>
           -->
-
-          <select id="stall-select" name="stall">
+          <select
+            id="stall-select"
+            name="stall"
+            data-control="stall-selector"
+            aria-label="Select stall"
+          >
             <option value="1">Stall A</option>
             <option value="2">Stall B</option>
           </select>
         </div>
       </section>
-
       <!-- dashboard heading and time filter -->
       <div class="dashboard-controls">
-        <header class="dashboard-header">
+        <header class="dashboard-header" data-component="page-heading">
           <!-- header -->
           <div class="dashboard-heading">
             <h1 class="dashboard-title">Vendor Dashboard</h1>
-
             <p class="dashboard-description">
               View data such as revenue, total orders and more.
             </p>
           </div>
         </header>
-
         <!-- dashboard time filter -->
         <section
           class="dashboard-time-filter"
@@ -97,152 +139,152 @@
             class="period-navigation-button"
             type="button"
             aria-label="View previous period"
+            data-action="previous-period"
           >
             &#9664;
           </button>
-
           <!-- selected date or date range -->
           <div class="selected-period">
             <span class="selected-period-label"> Selected period </span>
-
             <strong id="selected-period-text"> July 2026 </strong>
           </div>
-
           <!-- move to the next period -->
           <button
             id="next-period-button"
             class="period-navigation-button"
             type="button"
             aria-label="View next period"
+            data-action="next-period"
           >
             &#9654;
           </button>
-
           <!-- choose how dashboard data is grouped -->
           <div class="period-type-filter">
             <label for="time-period"> View data by </label>
-
-            <select id="time-period" name="timePeriod">
+            <select
+              id="time-period"
+              name="timePeriod"
+              data-filter="time-period"
+            >
               <option value="daily">Daily</option>
-
               <option value="weekly">Weekly</option>
-
               <option value="monthly" selected>Monthly</option>
-
               <option value="yearly">Yearly</option>
             </select>
           </div>
         </section>
       </div>
-
       <div class="summary-grid">
         <!-- revenue -->
         <div class="summary-card">
           <h3>Revenue</h3>
-
-          <p id="revenue-value" class="summary-value">$XX</p>
+          <p id="revenue-value" class="summary-value" data-metric="revenue">
+            $XX
+          </p>
         </div>
-
         <!-- total orders -->
         <div class="summary-card">
           <h3>Total Orders</h3>
-
-          <p id="total-orders-value" class="summary-value">XX</p>
+          <p
+            id="total-orders-value"
+            class="summary-value"
+            data-metric="total-orders"
+          >
+            XX
+          </p>
         </div>
-
         <!-- total unavailable items -->
         <div class="summary-card">
           <h3>Unavailable Items</h3>
-
-          <p id="total-unavailable-items-value" class="summary-value">XX/XX</p>
+          <p
+            id="total-unavailable-items-value"
+            class="summary-value"
+            data-metric="unavailable-items"
+          >
+            XX/XX
+          </p>
         </div>
-
         <!-- total complaints -->
         <div class="summary-card">
           <h3>Total Complaints</h3>
-
-          <p id="total-complaints-value" class="summary-value">XX</p>
+          <p
+            id="total-complaints-value"
+            class="summary-value"
+            data-metric="complaints"
+          >
+            XX
+          </p>
         </div>
       </div>
-
       <div class="analytics-grid">
         <!-- Orders -->
-        <section id="order-stats" class="dashboard-panel orders-panel">
+        <section
+          id="order-stats"
+          class="dashboard-panel orders-panel"
+          data-widget="orders-breakdown"
+        >
           <div class="chart-card-header">
             <div>
               <h2>Orders</h2>
-
               <p>Breakdown of orders received this week</p>
             </div>
           </div>
-
           <div class="orders-chart-content">
             <div class="chart-wrapper">
-              <canvas id="ordersChart">
+              <canvas id="ordersChart" data-chart="orders-breakdown">
                 Your browser does not support the chart.
               </canvas>
             </div>
-
             <div class="orders-chart-summary">
               <ul class="orders-legend">
                 <li>
                   <span class="legend-colour dine-in-colour"></span>
-
                   <div class="legend-label">
                     <span>Dine-in</span>
                     <small>36% of orders</small>
                   </div>
-
                   <strong>18</strong>
                 </li>
-
                 <li>
                   <span class="legend-colour pickup-colour"></span>
-
                   <div class="legend-label">
                     <span>Pickup</span>
                     <small>40% of orders</small>
                   </div>
-
                   <strong>20</strong>
                 </li>
-
                 <li>
                   <span class="legend-colour delivery-colour"></span>
-
                   <div class="legend-label">
                     <span>Delivery</span>
                     <small>24% of orders</small>
                   </div>
-
                   <strong>12</strong>
                 </li>
               </ul>
-
               <div class="cancelled-orders">
                 <div>
                   <span> Cancelled orders </span>
-
                   <small> Not included in completed orders </small>
                 </div>
-
                 <strong>3</strong>
               </div>
             </div>
           </div>
         </section>
-
         <!-- Order Trends -->
-        <section id="order-trends" class="dashboard-panel">
+        <section
+          id="order-trends"
+          class="dashboard-panel"
+          data-widget="order-trends"
+        >
           <div class="trend-chart-header">
             <div>
               <h2>Order Trends</h2>
-
               <p id="trend-description">
                 Orders grouped by day over the last seven days.
               </p>
             </div>
-
             <!--
       The vendor can select two bars to compare their
       percentage difference.
@@ -253,65 +295,58 @@
               aria-live="polite"
             >
               <span class="comparison-label"> Compare periods </span>
-
               <strong id="comparison-value"> Select two bars </strong>
-
               <small id="comparison-description">
                 Click any two bars in the chart.
               </small>
             </div>
           </div>
-
           <div class="order-trend-chart-container">
-            <canvas id="order-trend-chart">
+            <canvas id="order-trend-chart" data-chart="order-trend">
               Your browser does not support the chart.
             </canvas>
           </div>
-
           <p class="trend-chart-note">
             Select two bars to compare their order totals.
           </p>
         </section>
       </div>
-
       <section class="dashboard-panel top-items-section">
         <!-- Top 3 Items -->
         <h2>Top 3 Menu Items</h2>
-
         <ol class="menu-item-list">
           <li class="menu-item-card">Menu Item 1</li>
-
           <li class="menu-item-card">Menu Item 2</li>
-
           <li class="menu-item-card">Menu Item 3</li>
         </ol>
       </section>
-
       <div class="management-grid">
         <!-- sold out/ unavailable items -->
-        <section id="unavailable-items" class="dashboard-panel">
+        <section
+          id="unavailable-items"
+          class="dashboard-panel"
+          data-widget="unavailable-items"
+        >
           <h2>Unavailable Menu Items</h2>
-
           <ul class="menu-item-list">
             <li class="menu-item-card">Menu Item 1</li>
-
             <li class="menu-item-card">Menu Item 2</li>
           </ul>
         </section>
-
         <!-- active promotions -->
-        <section id="active-promotions" class="dashboard-panel">
+        <section
+          id="active-promotions"
+          class="dashboard-panel"
+          data-widget="active-promotions"
+        >
           <h2>Active Promotions</h2>
-
           <ul class="promotion-list">
             <li class="promotion-card">Promotion 1</li>
-
             <li class="promotion-card">Promotion 2</li>
           </ul>
         </section>
       </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/vendor-home.js"></script>
   </body>

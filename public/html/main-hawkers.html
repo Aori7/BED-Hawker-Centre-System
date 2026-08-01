@@ -1,41 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/components.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
-    
-    <link rel="stylesheet" href="../css/pages/main-hawkers.css" />
+    <!-- index css to link the map style -->
+    <link rel="stylesheet" href="../css/pages/index.css" />
 
     <!-- font chosen by ada: Archivo -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- font 2 for nav bar-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- google rounded icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
-     <!-- importing swiper -->
     <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
-    /> 
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+    <!-- importing swiper -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
     <!-- leaflet js library for interactive map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
 
     <title>Hawkers</title>
-</head>
-<body>
-<!-- navigation bar done by ada-->
+  </head>
+  <body>
+    <!-- navigation bar done by ada-->
     <header id="navigationbar">
       <div class="logo">
         <a href="index.html">
@@ -65,166 +77,231 @@
     </header>
 
     <section class="order-hawker-banner">
-        <div class="banner"></div>
-        <div class="order-hawker-header">
-            <h1>Hawker Centres</h1>
-            <p>Discover hawker centres across Singapore</p>
-        </div>
+      <div class="banner"></div>
+      <div class="order-hawker-header">
+        <h1>Hawker Centres</h1>
+        <p>Discover hawker centres across Singapore</p>
+      </div>
     </section>
 
     <!-- the map + hawker location section? -->
     <section id="hawkerlocationmap-section">
-        <div class="title">
-            <h1>
-                Hawker Centres Available
-            </h1>
-        </div>
-        
+      <div class="title">
+        <h1>Hawker Centres Available</h1>
+      </div>
 
-        <div id="map">
-        </div>
-        
-        <h1>
-            Find Us!
-        </h1>
+      <div id="map"></div>
 
-        <div class="searchHawker">
-            <!-- search bar for hawker centres here -->
-            <input type="text" id="hawkersearch" name="hawkersearch" placeholder="Search for hawker centres...">
-            <button type="submit" id="searchbtn">Search</button>
-        </div>
+      <h1>Find Us!</h1>
 
+      <div class="searchHawker">
+        <!-- search bar for hawker centres here -->
+        <input
+          type="text"
+          id="hawkersearch"
+          name="hawkersearch"
+          placeholder="Search for hawker centres..."
+        />
+        <button type="submit" id="searchbtn">Search</button>
+      </div>
     </section>
 
-      
-    <!-- Hawker centres that currently have stalls -->
-    <section id="available-ordering-section">
-        <div class="hawker-section-header">
-            <div>
-                <p class="section-label">Order now</p>
-                <h1>Available for Ordering</h1>
-            </div>
+    <section id="hawker-centre-section">
+      <div class="title">
+        <h1>Highly-Rated Hawker Centres</h1>
+      </div>
 
-            <p>
-                Browse hawker centres that currently have registered stalls
-                and menu items.
-            </p>
-        </div>
-
-        <div
-            id="available-hawker-list"
-            class="hawker-grid"
-        >
-            <p>Loading available hawker centres...</p>
-        </div>
-    </section>
-
-
-  <!-- Browse available hawker centres by location -->
-  <section id="location-section">
-      <div class="hawker-section-header">
-          <div>
-              <p class="section-label">Explore Singapore</p>
-              <h1>Browse by Location</h1>
+      <div class="container swiper">
+        <div class="wrapper">
+          <!-- Hawker cards will be injected here using hawker.js -->
+          <div class="card-list swiper-wrapper" id="hawker-list">
+            <p>Loading hawker centres...</p>
           </div>
 
-          <p>
-              Find available hawker centres from different parts of Singapore.
-          </p>
+          <div class="swiper-pagination"></div>
+
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
       </div>
-
-      <div class="location-filter-container">
-          <button
-              class="location-filter active"
-              data-region="All"
-          >
-              All
-          </button>
-
-          <button
-              class="location-filter"
-              data-region="Central"
-          >
-              Central
-          </button>
-
-          <button
-              class="location-filter"
-              data-region="North"
-          >
-              North
-          </button>
-
-          <button
-              class="location-filter"
-              data-region="South"
-          >
-              South
-          </button>
-
-          <button
-              class="location-filter"
-              data-region="East"
-          >
-              East
-          </button>
-
-          <button
-              class="location-filter"
-              data-region="West"
-          >
-              West
-          </button>
-      </div>
-
-      <p id="location-result-count"></p>
-
-      <div
-          id="location-hawker-list"
-          class="hawker-grid"
-      >
-      </div>
-  </section>
-<!-- Order History Overlay , only shows for users who are logged in-->
+    </section>
+    <!-- Order History Overlay -->
     <div id="history-overlay"></div>
 
     <!-- Order History Sidebar -->
     <aside id="order-history-sidebar">
-      <div class="sidebar-header">
-        <h2>Order History</h2>
-        <button id="close-history">✕</button>
+      <div class="history-sidebar-header">
+        <div>
+          <p class="history-eyebrow">Your activity</p>
+
+          <h2>Recent Orders</h2>
+
+          <p class="history-subtitle">
+            View your latest orders, receipts and reorder favourites.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="close-history"
+          aria-label="Close order history"
+        >
+          <span class="material-symbols-rounded">close</span>
+        </button>
       </div>
 
-      <div class="history-list">
-        <!-- SAMPLE ORDER CARD (design only for now),
-         the cards will be overwritten in js. -->
-        <div class="history-card">
-          <h4>Ah Seng Chicken Rice</h4>
-          <p>2 items</p>
-          <p class="history-meta">$12.50 • 12 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+      <div class="history-summary">
+        <div class="history-summary-icon">
+          <span class="material-symbols-rounded"> receipt_long </span>
         </div>
 
-        <div class="history-card">
-          <h4>Laksa King</h4>
-          <p>1 item</p>
-          <p class="history-meta">$6.50 • 10 Sep 2025</p>
-          <button class="reorder-btn">Reorder</button>
+        <div>
+          <strong id="recent-order-count"> Loading recent orders... </strong>
+
+          <p>Your latest food journeys</p>
         </div>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <p class="history-loading">Loading your recent orders...</p>
+      </div>
+
+      <div class="history-sidebar-footer">
+        <a href="/html/order-history.html" class="view-all-history-btn">
+          <span class="material-symbols-rounded">history</span>
+
+          View All Order History
+
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </a>
       </div>
     </aside>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script> 
-    
+    <footer id="footercontainer">
+      <div class="footer-glow footer-glow-one"></div>
+      <div class="footer-glow footer-glow-two"></div>
 
-    
+      <div class="footer-container">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="index.html" class="footer-logo">
+              <span class="material-symbols-rounded">restaurant_menu</span>
 
+              <h2>Hawker<em>SG</em></h2>
+            </a>
+
+            <p>
+              Discover Singapore’s hawker centres, support local food businesses
+              and enjoy familiar favourites through one connected platform.
+            </p>
+
+            <div class="footer-tagline">
+              <span>Discover.</span>
+              <span>Order.</span>
+              <span>Support.</span>
+            </div>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Explore</h3>
+
+            <a href="index.html">Home</a>
+            <a href="order-hawker.html">Order Food</a>
+            <a href="main-hawkers.html">Hawker Centres</a>
+            <a href="about-us.html">About Us</a>
+          </div>
+
+          <div class="footer-links-column">
+            <h3>Customer</h3>
+
+            <a href="login.html">Login</a>
+            <a href="customer-profile.html">Profile</a>
+            <a href="order-history.html">Order History</a>
+            <a href="contact-us.html">Contact Us</a>
+          </div>
+
+          <div class="footer-contact">
+            <h3>Stay Connected</h3>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">mail</span>
+
+              <div>
+                <small>Email</small>
+                <p>contact@hawkersg.com</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">call</span>
+
+              <div>
+                <small>Phone</small>
+                <p>+65 6123 4567</p>
+              </div>
+            </div>
+
+            <div class="footer-contact-item">
+              <span class="material-symbols-rounded">location_on</span>
+
+              <div>
+                <small>Based in</small>
+                <p>Singapore</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-highlight">
+          <div>
+            <span class="material-symbols-rounded">storefront</span>
+
+            <div>
+              <strong>Supporting local hawkers</strong>
+
+              <p>
+                Every order and discovery helps keep Singapore’s hawker culture
+                visible and connected.
+              </p>
+            </div>
+          </div>
+
+          <a href="html/order-hawker.html">
+            Explore Hawkers
+            <span class="material-symbols-rounded">arrow_forward</span>
+          </a>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            © <span id="current-year">2026</span> HawkerSG. All rights reserved.
+          </p>
+
+          <div class="footer-bottom-links">
+            <a href="credit.html">Credits</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+
+          <p class="footer-made-with">
+            Made with
+            <span class="material-symbols-rounded">favorite</span>
+            for Singapore’s hawker community
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script type="module" src="../js/order-history.js"></script>
     <script src="../js/leaflet.js"></script>
-    <script src="../js/main-hawkers.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="../js/authUI.js"></script>
-</body>
+    <script src="../js/swiper.js"></script>
+    <script src="../js/hawker.js"></script>
+    <script type="module" src="../js/swiper.js"></script>
+  </body>
 </html>

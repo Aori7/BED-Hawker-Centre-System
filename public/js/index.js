@@ -89,7 +89,7 @@ function createHomepageHawkerCard(hawker) {
 
 async function loadHomepageHawkers() {
     try {
-        const response = await fetch("/hawker-centres");
+        const response = await fetch("/hawker-centres/available");
 
         if (!response.ok) {
             throw new Error("Unable to retrieve hawker centres");
@@ -99,7 +99,7 @@ async function loadHomepageHawkers() {
 
         homepageHawkerList.innerHTML = "";
 
-        const homepageHawkers = hawkerCentres.slice(0, 3);
+        const homepageHawkers = hawkerCentres.slice(0, 6);
 
         homepageHawkers.forEach((hawker) => {
             const card = createHomepageHawkerCard(hawker);
