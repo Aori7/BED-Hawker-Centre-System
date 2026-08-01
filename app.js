@@ -26,7 +26,10 @@ const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
 const operatorRentalAgreementRoutes = require("./routes/operatorRentalAgreementRoutes");
 const operatorAccountRoutes = require("./routes/operatorAccountRoutes");
 const operatorAnnouncementRoutes = require("./routes/operatorAnnouncementRoutes");
-const operatorMaintenanceScheduleRoutes = require("./routes/operatorMaintenanceRoutes");
+const operatorMaintenanceRoutes = require("./routes/operatorMaintenanceRoutes");
+const operatorCleaningRoutes = require("./routes/operatorCleaningRoutes");
+const operatorInspectionRoutes = require("./routes/operatorInspectionRoutes");
+const operatorDashboardRoutes = require("./routes/operatorDashboardRoutes");
 
 //create express app
 const app = express();
@@ -54,7 +57,10 @@ app.use("/contact-submissions", contactSubmissionRoutes);
 app.use("/rental-agreements", operatorRentalAgreementRoutes);
 app.use("/operators", operatorAccountRoutes);
 app.use("/announcements",operatorAnnouncementRoutes);
-app.use( "/maintenance-schedules",operatorMaintenanceScheduleRoutes);
+app.use( "/maintenance-schedules",operatorMaintenanceRoutes);
+app.use( "/cleaning-schedules",operatorCleaningRoutes);
+app.use("/inspections-schedules",operatorInspectionRoutes);
+app.use("/operator-dashboard",operatorDashboardRoutes);
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);

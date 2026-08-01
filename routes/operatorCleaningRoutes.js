@@ -1,6 +1,7 @@
 const express = require("express");
-const maintenanceScheduleController =
-    require("../controllers/operatorMaintenanceController");
+
+const cleaningScheduleController =
+    require("../controllers/operatorCleaningController");
 const {
     authenticateToken,
     authorizeRoles
@@ -8,70 +9,72 @@ const {
 
 const router = express.Router();
 
+// GET all
 router.get(
     "/",
-    maintenanceScheduleController.getAllMaintenanceSchedules
+    cleaningScheduleController
+        .getAllCleaningSchedules
 );
 
 // GET by ID
 router.get(
     "/:id",
-    maintenanceScheduleController
-        .getMaintenanceScheduleById
+    cleaningScheduleController
+        .getCleaningScheduleById
 );
 
-// POST
+// POST create
 router.post(
     "/",
-    maintenanceScheduleController
-        .createMaintenanceSchedule
+    cleaningScheduleController
+        .createCleaningSchedule
 );
 
-// PUT
+// PUT update
 router.put(
     "/:id",
-    maintenanceScheduleController
-        .updateMaintenanceSchedule
+    cleaningScheduleController
+        .updateCleaningSchedule
 );
 
 // DELETE / cancel
 router.delete(
     "/:id",
-    maintenanceScheduleController
-        .deleteMaintenanceSchedule
+    cleaningScheduleController
+        .deleteCleaningSchedule
 );
 router.get(
     "/",
     authenticateToken,
     authorizeRoles("Operator"),
-    maintenanceScheduleController.getAllMaintenanceSchedules
+    cleaningScheduleController.getAllCleaningSchedules
 );
 
 router.get(
     "/:id",
     authenticateToken,
     authorizeRoles("Operator"),
-    maintenanceScheduleController.getMaintenanceScheduleById
+    cleaningScheduleController.getCleaningScheduleById
 );
 
 router.post(
     "/",
     authenticateToken,
     authorizeRoles("Operator"),
-    maintenanceScheduleController.createMaintenanceSchedule
+    cleaningScheduleController.createCleaningSchedule
 );
 
 router.put(
     "/:id",
     authenticateToken,
     authorizeRoles("Operator"),
-    maintenanceScheduleController.updateMaintenanceSchedule
+    cleaningScheduleController.updateCleaningSchedule
 );
 
 router.delete(
     "/:id",
     authenticateToken,
     authorizeRoles("Operator"),
-    maintenanceScheduleController.deleteMaintenanceSchedule
+    cleaningScheduleController.deleteCleaningSchedule
 );
 module.exports = router;
