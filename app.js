@@ -18,6 +18,10 @@ const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
+const vendorMenuRoutes = require("./routes/vendorMenuRoutes");
+const vendorOrdersRoutes = require("./routes/vendorOrdersRoutes");
+const vendorFeedbackRoutes = require("./routes/vendorFeedbackRoutes");
+const vendorProfileRoutes = require("./routes/vendorProfileRoutes");
 // Import - dayana's
 const inspectionRoutes = require("./routes/inspectionRoutes");
 const hygieneGradeRoutes = require("./routes/hygieneGradeRoutes");
@@ -56,6 +60,10 @@ app.use("/announcements", operatorAnnouncementRoutes);
 //rui min's
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
+app.use("/vendor-menu", vendorMenuRoutes);
+app.use("/vendor-orders", vendorOrdersRoutes);
+app.use("/vendor-feedback", vendorFeedbackRoutes);
+app.use("/vendor-profile", vendorProfileRoutes);
 //dayana's
 app.use("/inspections", inspectionRoutes);
 app.use("/hygiene-grades", hygieneGradeRoutes);

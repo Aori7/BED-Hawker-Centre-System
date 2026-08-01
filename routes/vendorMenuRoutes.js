@@ -65,3 +65,5 @@ router.delete(
   vendorMenuValidation.validateMenuBelongsToStall,
   vendorMenuController.deleteMenuItem,
 );
+
+module.exports = router;

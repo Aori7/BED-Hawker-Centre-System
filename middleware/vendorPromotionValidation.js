@@ -89,22 +89,28 @@ function validatePromotionInput(req, res, next) {
       error: "Percentage discount cannot exceed 100%.",
     });
   }
+}
 
   // Validate active promotion period
-  if (req.body.IsActive) {
-    const today = new Date();
-    const startDate = new Date(req.body.StartDate);
-    const endDate = new Date(req.body.EndDate);
+function validatePromotionInput(req, res, next) {
+  const { error, value } = promotionSchema.validate(req.body, {
+    abortEarly: false,
+    stripUnknown: true,
+  });
 
-    today.setHours(0, 0, 0, 0);
-    startDate.setHours(0, 0, 0, 0);
-    endDate.setHours(23, 59, 59, 999);
+  if (error) {
+    return res.status(400).json({
+      error: error.details.map((detail) => detail.message).join(", "),
+    });
+  }
 
-    if (today < startDate || today > endDate) {
-      return res.status(400).json({
-        error: "Only promotions within the promotion period can be activated.",
-      });
-    }
+  req.body = value;
+
+  // Validate percentage discount
+  if (req.body.DiscountType === "Percentage" && req.body.DiscountValue > 100) {
+    return res.status(400).json({
+      error: "Percentage discount cannot exceed 100%.",
+    });
   }
   next();
 }

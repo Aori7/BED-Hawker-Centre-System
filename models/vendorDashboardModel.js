@@ -121,7 +121,7 @@ async function getTotalUnavailableItemsByStallId(stallId) {
 // test run: http://localhost:3000/vendor-dashboard/1/total-complaints?startDate=2026-07-01&endDate=2026-08-01
 async function getTotalComplaintsByStallId(stallId, startDate, endDate) {
   try {
-    connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig);
 
     const query = `
       SELECT
@@ -152,7 +152,7 @@ async function getTotalComplaintsByStallId(stallId, startDate, endDate) {
 // test run: http://localhost:3000/vendor-dashboard/1/orders-breakdown?startDate=2026-07-01&endDate=2026-08-01
 async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
   try {
-    connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig);
 
     const query = `
       SELECT
@@ -162,7 +162,6 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
             ELSE 0
           END
         ) AS TotalOrders,
-
         SUM(
           CASE
             WHEN OrderType = 'Dine-in'
@@ -171,7 +170,6 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
             ELSE 0
           END
         ) AS DineIn,
-
         SUM(
           CASE
             WHEN OrderType = 'Pickup'
@@ -180,7 +178,6 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
             ELSE 0
           END
         ) AS Pickup,
-
         SUM(
           CASE
             WHEN OrderType = 'Delivery'
@@ -189,14 +186,12 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
             ELSE 0
           END
         ) AS Delivery,
-
         SUM(
           CASE
             WHEN OrderStatus = 'Cancelled' THEN 1
             ELSE 0
           END
         ) AS CancelledOrders
-
       FROM Orders
       WHERE StallID = @stallId
         AND OrderDateTime >= @startDate
@@ -301,7 +296,7 @@ async function getTopMenuItemsByStallId(stallId, startDate, endDate) {
           ON oi.MenuItemID = m.MenuItemID
       WHERE
           o.StallID = @stallId
-          AND o.OrderStatus <> 'Cancelled'
+          AND o.OrderStatus = 'Completed'
           AND o.OrderDateTime >= @startDate
           AND o.OrderDateTime < @endDate
       GROUP BY
@@ -369,6 +364,8 @@ async function getActivePromotionsByStallId(stallId) {
       FROM Promotion
       WHERE StallID = @stallId
         AND IsActive = 1
+        AND StartDate <= CAST(GETDATE() AS DATE)
+        AND EndDate >= CAST(GETDATE() AS DATE)
       ORDER BY PromotionName ASC`;
 
     const request = connection.request();
