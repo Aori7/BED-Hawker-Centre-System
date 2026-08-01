@@ -80,17 +80,74 @@
     
         <!-- Leasing Details -->
         <section class="profile-card">
-            <h3>Leasing Details</h3>
-          
-            <p><strong>Total Active Leases:</strong> <span id="leaseActive">X</span></p>
-            <p><strong>Upcoming Payments:</strong> <span id="leasePayments">X</span></p>
-            <p><strong>Leases Expiring Soon:</strong> <span id="leaseExpiring">X</span></p>
-          
-            <div class="card-actions">
-                <button id="btnViewLeases" class="btn-primary">View All Leases</button>
-                <button id="btnRequestLease" class="btn-outline">Request New Leases</button>
+          <h3>Leasing Details</h3>
+        
+          <p>
+            <strong>Total Active Leases:</strong>
+            <span id="leaseActive">0</span>
+          </p>
+        
+          <p>
+            <strong>Upcoming Payments:</strong>
+            <span id="leasePayments">0</span>
+          </p>
+        
+          <p>
+            <strong>Leases Expiring Soon:</strong>
+            <span id="leaseExpiring">0</span>
+          </p>
+        
+          <div class="card-actions">
+            <button
+              id="btnViewLeases"
+              class="btn-primary"
+              type="button"
+            >
+              View All Leases
+            </button>
+        
+            <button
+              id="btnRequestLease"
+              class="btn-outline"
+              type="button"
+            >
+              Request New Lease
+            </button>
+          </div>
+        
+          <div
+            id="rentalTableSection"
+            style="display: none; margin-top: 25px;"
+          >
+            <h3>Rental Agreements</h3>
+        
+            <div style="overflow-x: auto;">
+              <table class="rental-table">
+                <thead>
+                  <tr>
+                    <th>Agreement ID</th>
+                    <th>Stall</th>
+                    <th>Unit</th>
+                    <th>Hawker Centre</th>
+                    <th>Owner</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Rental Price</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+        
+                <tbody id="rentalTableBody">
+                  <tr>
+                    <td colspan="9">
+                      Click “View All Leases” to load rental agreements.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-          </section>
+          </div>
+        </section>
       </main>
     
       <!-- Modal -->
