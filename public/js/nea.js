@@ -474,17 +474,39 @@ async function loadInspectionHawkerCentres(
 
     try {
         const response = await fetch(
-            "/hawker-centres"
+            "/food-stalls/search/nea"
         );
 
-        const hawkerCentres =
+        const foodStalls =
             await response.json();
 
         if (!response.ok) {
             throw new Error(
+                foodStalls.error ||
                 "Unable to load hawker centres"
             );
         }
+
+        const hawkerCentres =
+            new Map();
+
+        foodStalls.forEach(
+            (foodStall) => {
+                const hawkerCentreID =
+                    foodStall.HawkerCentreID ??
+                    foodStall.HCID;
+
+                if (
+                    hawkerCentreID !== null &&
+                    hawkerCentreID !== undefined
+                ) {
+                    hawkerCentres.set(
+                        String(hawkerCentreID),
+                        foodStall.HCName
+                    );
+                }
+            }
+        );
 
         hawkerCentreSelect.innerHTML = `
             <option value="">
@@ -492,17 +514,39 @@ async function loadInspectionHawkerCentres(
             </option>
         `;
 
-        hawkerCentres.forEach(
-            (hawkerCentre) => {
-                hawkerCentreSelect.innerHTML += `
-                    <option
-                        value="${hawkerCentre.HawkerCentreID}"
-                    >
-                        ${hawkerCentre.HCName}
-                    </option>
-                `;
-            }
-        );
+        Array.from(
+            hawkerCentres.entries()
+        )
+            .sort(
+                (
+                    firstCentre,
+                    secondCentre
+                ) =>
+                    firstCentre[1]
+                        .localeCompare(
+                            secondCentre[1]
+                        )
+            )
+            .forEach(
+                ([
+                    hawkerCentreID,
+                    hawkerCentreName
+                ]) => {
+                    hawkerCentreSelect.innerHTML += `
+                        <option
+                            value="${hawkerCentreID}"
+                        >
+                            ${hawkerCentreName}
+                        </option>
+                    `;
+                }
+            );
+
+        foodStallSelect.innerHTML = `
+            <option value="">
+                Select a food stall
+            </option>
+        `;
 
         foodStallSelect.disabled = true;
 
@@ -528,11 +572,14 @@ async function loadInspectionFoodStalls(
             `/food-stalls/hawker-centre/${hawkerCentreID}`
         );
 
-        const foodStalls =
-            await response.json();
+        const foodStalls = await response.json();
+
+        console.log(foodStalls);
+        console.log(foodStalls[0]);
 
         if (!response.ok) {
             throw new Error(
+                foodStalls.error ||
                 "Unable to load food stalls"
             );
         }
@@ -556,7 +603,8 @@ async function loadInspectionFoodStalls(
             }
         );
 
-        foodStallSelect.disabled = false;
+        foodStallSelect.disabled =
+            foodStalls.length === 0;
 
     } catch (error) {
         console.error(
@@ -571,11 +619,6 @@ async function loadInspectionFoodStalls(
         `;
 
         foodStallSelect.disabled = true;
-
-        showInspectionMessage(
-            "Unable to load food stalls.",
-            "error"
-        );
     }
 }
 
