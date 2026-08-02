@@ -1024,10 +1024,19 @@ async function setupInspectionHistory() {
                         inspection.HygieneGrade ===
                             selectedGrade;
 
-                    const matchesStatus =
-                        selectedStatus === "all" ||
-                        inspection.InspectionStatus ===
-                            selectedStatus;
+                    let matchesStatus = true;
+
+                    if (selectedStatus === "Compliant") {
+                        matchesStatus =
+                            inspection.HygieneGrade === "A" ||
+                            inspection.HygieneGrade === "B";
+                    }
+
+                    if (selectedStatus === "Non-Compliant") {
+                        matchesStatus =
+                            inspection.HygieneGrade === "C" ||
+                            inspection.HygieneGrade === "D";
+                    }
 
                     return (
                         matchesSearch &&
@@ -1313,8 +1322,14 @@ function renderInspectionHistory(
                     "en-SG"
                 );
 
+            const complianceStatus =
+                inspection.HygieneGrade === "A" ||
+                inspection.HygieneGrade === "B"
+                    ? "Compliant"
+                    : "Non-Compliant";
+
             const statusClass =
-                inspection.InspectionStatus
+                complianceStatus
                     .toLowerCase()
                     .replaceAll(" ", "-");
 
@@ -1344,7 +1359,7 @@ function renderInspectionHistory(
                 inspection.HygieneGrade;
 
             row.dataset.status =
-                inspection.InspectionStatus;
+                complianceStatus;
 
             row.dataset.officer =
                 `Officer ${inspection.OfficerID}`;
@@ -1392,7 +1407,7 @@ function renderInspectionHistory(
                     <span
                         class="nea-status-badge nea-status-${statusClass}"
                     >
-                        ${inspection.InspectionStatus}
+                        ${complianceStatus}
                     </span>
                 </td>
 

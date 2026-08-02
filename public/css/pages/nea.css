@@ -1066,11 +1066,6 @@
     color: rgb(163, 25, 25);
 }
 
-.nea-status-pending {
-    background-color: rgb(255, 240, 199);
-    color: rgb(148, 97, 0);
-}
-
 /* stall details */
 
 .stall-overview-right {
