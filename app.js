@@ -16,7 +16,7 @@ const menuItemRoutes = require("./routes/menuItemRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
-const vendorRoutes = require("./routes/vendorRoutes");
+
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 // Import - dayana's
@@ -55,7 +55,7 @@ app.use("/rental-agreements", operatorRentalAgreementRoutes);
 app.use("/operators", operatorAccountRoutes);
 app.use("/announcements", operatorAnnouncementRoutes);
 //rui min's
-app.use("/vendors", vendorRoutes);
+
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
 //dayana's
