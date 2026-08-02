@@ -1,3 +1,6 @@
+// implementing BE to FE
+
+
 document.addEventListener("DOMContentLoaded", () => {
   /* dom elements: stall selector */
   const switchStallButton = document.querySelector("#switch-stall-button");

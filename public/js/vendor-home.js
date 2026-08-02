@@ -1,4 +1,3 @@
-/* temporary data and dashboard behaviour */
 /*
 hard coded/ temporary data
     orderValues
