@@ -16,9 +16,12 @@ const menuItemRoutes = require("./routes/menuItemRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
-
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
+const vendorMenuRoutes = require("./routes/vendorMenuRoutes");
+const vendorOrdersRoutes = require("./routes/vendorOrdersRoutes");
+const vendorFeedbackRoutes = require("./routes/vendorFeedbackRoutes");
+const vendorProfileRoutes = require("./routes/vendorProfileRoutes");
 // Import - dayana's
 const inspectionRoutes = require("./routes/inspectionRoutes");
 const hygieneGradeRoutes = require("./routes/hygieneGradeRoutes");
@@ -27,6 +30,10 @@ const stallDetailsRoutes = require("./routes/stallDetailsRoutes");
 const operatorRentalAgreementRoutes = require("./routes/operatorRentalAgreementRoutes");
 const operatorAccountRoutes = require("./routes/operatorAccountRoutes");
 const operatorAnnouncementRoutes = require("./routes/operatorAnnouncementRoutes");
+const operatorMaintenanceRoutes = require("./routes/operatorMaintenanceRoutes");
+const operatorCleaningRoutes = require("./routes/operatorCleaningRoutes");
+const operatorInspectionRoutes = require("./routes/operatorInspectionRoutes");
+const operatorDashboardRoutes = require("./routes/operatorDashboardRoutes");
 
 //create express app
 const app = express();
@@ -53,11 +60,18 @@ app.use("/contact-submissions", contactSubmissionRoutes);
 //calista's
 app.use("/rental-agreements", operatorRentalAgreementRoutes);
 app.use("/operators", operatorAccountRoutes);
-app.use("/announcements", operatorAnnouncementRoutes);
+app.use("/announcements",operatorAnnouncementRoutes);
+app.use( "/maintenance-schedules",operatorMaintenanceRoutes);
+app.use( "/cleaning-schedules",operatorCleaningRoutes);
+app.use("/inspections-schedules",operatorInspectionRoutes);
+app.use("/operator-dashboard",operatorDashboardRoutes);
 //rui min's
-
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
+app.use("/vendor-menu", vendorMenuRoutes);
+app.use("/vendor-orders", vendorOrdersRoutes);
+app.use("/vendor-feedback", vendorFeedbackRoutes);
+app.use("/vendor-profile", vendorProfileRoutes);
 //dayana's
 app.use("/inspections", inspectionRoutes);
 app.use("/hygiene-grades", hygieneGradeRoutes);
