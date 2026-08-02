@@ -1,3 +1,16 @@
+const Joi = require("joi");
+const sql = require("mssql");
+const dbConfig = require("../dbConfig");
+
+// Validate reply message
+const replySchema = Joi.object({
+  ReplyMessage: Joi.string().trim().min(1).max(1000).required().messages({
+    "string.empty": "Reply message is required.",
+    "string.max": "Reply message cannot exceed 1000 characters.",
+    "any.required": "Reply message is required.",
+  }),
+});
+
 // Validate submission ID
 function validateSubmissionId(req, res, next) {
   req.params.submissionId = parseInt(req.params.submissionId, 10);
@@ -51,8 +64,7 @@ async function validateSubmissionBelongsToStall(req, res, next) {
         FROM ContactSubmission
         WHERE SubmissionID = @submissionId
           AND StallID = @stallId
-          AND TargetType = 'Stall'
-      `);
+          AND TargetType = 'Stall'`);
 
     if (result.recordset.length === 0) {
       return res.status(404).json({
@@ -61,7 +73,7 @@ async function validateSubmissionBelongsToStall(req, res, next) {
     }
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Submission ownership validation error:", error);
 
     res.status(500).json({
       error: "Unable to validate submission.",
@@ -79,19 +91,23 @@ async function validateSubmissionIsOpen(req, res, next) {
       .input("submissionId", sql.Int, req.params.submissionId).query(`
         SELECT Status
         FROM ContactSubmission
-        WHERE SubmissionID = @submissionId`);
+        WHERE SubmissionID = @submissionId
+      `);
 
-    if (
-      result.recordset.length === 0 ||
-      result.recordset[0].Status === "Closed"
-    ) {
+    if (result.recordset.length === 0) {
+      return res.status(404).json({
+        error: "Submission not found.",
+      });
+    }
+
+    if (result.recordset[0].Status === "Closed") {
       return res.status(400).json({
         error: "Replies cannot be added to closed submissions.",
       });
     }
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Submission status validation error:", error);
 
     res.status(500).json({
       error: "Unable to validate submission status.",
@@ -121,7 +137,7 @@ async function validateReplyBelongsToSubmission(req, res, next) {
     }
     next();
   } catch (error) {
-    console.error(error);
+    console.error("Reply ownership validation error:", error);
 
     res.status(500).json({
       error: "Unable to validate reply.",

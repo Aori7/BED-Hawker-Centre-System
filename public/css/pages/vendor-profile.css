@@ -31,7 +31,6 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--black-text-color);
-  background-color: var(--lighter-beige);
   background-image: none;
   font-family: "Archivo", Arial, sans-serif;
   line-height: 1.5;
