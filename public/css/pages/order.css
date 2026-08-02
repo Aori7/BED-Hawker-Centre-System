@@ -1,284 +1,274 @@
-
 /* ===================================================== */
 /* Order-hawker.html */
 
-
-
-.search-hawker-section{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 100px 20px;
-    gap: 32px;
+.search-hawker-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 20px;
+  gap: 32px;
 }
 
 /* ===================================================== */
 /* hawker filter bar */
 
 .filter-category-section {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    padding: 25px 20px 45px;
+  padding: 25px 20px 45px;
 
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .filter-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
 
-    width: fit-content;
+  width: fit-content;
 
-    padding: 14px 20px;
+  padding: 14px 20px;
 
-    background-color: white;
-    border-radius: 50px;
+  background-color: white;
+  border-radius: 50px;
 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
 
 .filter-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filter-group > span {
-    color: var(--orange-color);
+  color: var(--orange-color);
 
-    font-size: 22px;
+  font-size: 22px;
 }
 
 .filter-group select {
-    min-width: 155px;
+  min-width: 155px;
 
-    padding: 10px 34px 10px 12px;
+  padding: 10px 34px 10px 12px;
 
-    border: none;
-    outline: none;
+  border: none;
+  outline: none;
 
-    background-color: var(--lighter-beige);
-    color: var(--black-text-color);
+  background-color: var(--lighter-beige);
+  color: var(--black-text-color);
 
-    border-radius: 25px;
+  border-radius: 25px;
 
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .filter-divider {
-    width: 1px;
-    height: 30px;
+  width: 1px;
+  height: 30px;
 
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 /* mobile */
 
 @media screen and (max-width: 600px) {
-    .filter-bar {
-        width: 100%;
+  .filter-bar {
+    width: 100%;
 
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
 
-        border-radius: 20px;
-    }
+    border-radius: 20px;
+  }
 
-    .filter-group {
-        width: 100%;
-    }
+  .filter-group {
+    width: 100%;
+  }
 
-    .filter-group select {
-        width: 100%;
-    }
+  .filter-group select {
+    width: 100%;
+  }
 
-    .filter-divider {
-        width: 100%;
-        height: 1px;
-    }
+  .filter-divider {
+    width: 100%;
+    height: 1px;
+  }
 }
 /* selection of hawker centre section */
 .hawker-available-section,
-.stall-available-section{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 100px 20px;
-    gap: 32px;
-    margin: 40px;
-    border-radius: 20px;
+.stall-available-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 20px;
+  gap: 32px;
+  margin: 40px;
+  border-radius: 20px;
 
-    background-color: var(--lighter-beige);
+  background-color: var(--lighter-beige);
 }
 
-.all-hawker .container .wrapper .card-list .card{
-    width: 350px;
-    height: auto;
+.all-hawker .container .wrapper .card-list .card {
+  width: 350px;
+  height: auto;
 }
 
-.hawker-available-section .all-hawker .container .wrapper .card-list{
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+.hawker-available-section .all-hawker .container .wrapper .card-list {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 }
 
 /* order-stall.html */
 /* this page is the page users will be brought to upon choosing a prefered hawker centre to order at */
 
-.all-stalls{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.all-stalls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-.all-stalls .card-wrapper-stall{
-    display: flex;
-    flex-direction:row;
-    max-width: 100%;
+.all-stalls .card-wrapper-stall {
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
 }
-.all-stalls .card{
-    display: flex;
-    flex-direction: column;
-    width: 500px;
-    height: auto;
-    background: var(--beige-color);
-    border-radius: 20px;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.10);
-    transition: transform 0.3s ease; 
+.all-stalls .card {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: auto;
+  background: var(--beige-color);
+  border-radius: 20px;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 
-     margin: 20px;
+  margin: 20px;
 }
 
 /* order-menuiitems.html */
-.menu-items-section{
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 40px;
+.menu-items-section {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
 
-    padding: 60px;
-    margin: 40px;
-    border-radius: 20px;
+  padding: 60px;
+  margin: 40px;
+  border-radius: 20px;
 
-    background-color: var(--lighter-beige);
+  background-color: var(--lighter-beige);
 }
-.menu-items-container{
-    flex: 3;
+.menu-items-container {
+  flex: 3;
 }
-.cart-container{
-    flex: 1;
+.cart-container {
+  flex: 1;
 
-    background: var(--beige-color);
-    border-radius: 20px;
-    padding: 24px;
+  background: var(--beige-color);
+  border-radius: 20px;
+  padding: 24px;
 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 
-    position: sticky;
-    top: 100px; /* stays below navbar */
+  position: sticky;
+  top: 100px; /* stays below navbar */
 
-    min-height: 300px;
+  min-height: 300px;
 }
 
 .category-btn {
-    padding: 10px 24px;
-    border-radius: 20px;
-    background: var(--beige-color);
-    color: var(--black-text-color);
-    font-size: 16px;
+  padding: 10px 24px;
+  border-radius: 20px;
+  background: var(--beige-color);
+  color: var(--black-text-color);
+  font-size: 16px;
 }
 
 .category-btn.active {
-    background: var(--orange-color);
-    color: white;
+  background: var(--orange-color);
+  color: white;
 }
 
 .menu-items-section {
-    padding: 80px 40px;
-    display: flex;
-    justify-content: center;
+  padding: 80px 40px;
+  display: flex;
+  justify-content: center;
 }
 
 .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 30px;
-    max-width: 1200px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .menu-card {
-    background: var(--beige-color);
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
-    overflow: hidden;
-    transition: transform 0.3s ease;
+  background: var(--beige-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
 .menu-card:hover {
-    transform: translateY(-6px);
+  transform: translateY(-6px);
 }
 
 .menu-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
 }
 
 .menu-info {
-    padding: 20px;
+  padding: 20px;
 }
 
 .menu-info h3 {
-    margin: 0;
-    font-size: 20px;
+  margin: 0;
+  font-size: 20px;
 }
 
 .menu-desc {
-    font-size: 14px;
-    color: #555;
-    margin: 8px 0 16px;
+  font-size: 14px;
+  color: #555;
+  margin: 8px 0 16px;
 }
 
 .menu-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .price {
-    font-size: 18px;
-    font-weight: 700;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .add-btn {
-    padding: 8px 20px;
-    font-size: 14px;
+  padding: 8px 20px;
+  font-size: 14px;
 }
 
-
-
-
-
-   /* CART / ORDER PAGE */
-
+/* CART / ORDER PAGE */
 
 .floating-cart-btn {
   display: none;
 }
 
-
-   /* HAWKER GRID OVERRIDE */
-
+/* HAWKER GRID OVERRIDE */
 
 .hawker-available-section .all-hawker .container .wrapper .card-list {
   display: grid;
@@ -290,9 +280,7 @@
   width: 100%;
 }
 
-
-
-   /* STALL FILTER BUTTONS */
+/* STALL FILTER BUTTONS */
 
 .filter-wrapper-stall {
   display: flex;
@@ -303,7 +291,7 @@
   padding: 24px 30px;
   border-radius: 30px;
 
-  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
 .stall-filter {
@@ -318,7 +306,7 @@
   border: none;
   cursor: pointer;
 
-  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
   transition: all 0.25s ease;
 }
 
@@ -331,7 +319,6 @@
   background: var(--orange-color);
   color: white;
 }
-
 
 /* hawker pagination */
 .pagination {
@@ -616,7 +603,7 @@
   background-color: white;
   border-radius: 20px;
 
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 
   overflow: hidden;
 }
@@ -888,184 +875,186 @@
 }
 
 .hawker-favourite-btn {
-    width: 45px;
-    height: 45px;
+  width: 45px;
+  height: 45px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    padding: 0;
+  padding: 0;
 
-    border: 1px solid var(--orange-color);
-    border-radius: 50%;
+  border: 1px solid var(--orange-color);
+  border-radius: 50%;
 
-    background-color: transparent;
-    color: var(--orange-color);
+  background-color: transparent;
+  color: var(--orange-color);
 
-    font-size: 24px;
+  font-family: "Material Symbols Rounded";
+  font-size: 24px;
 
-    cursor: pointer;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
+  cursor: pointer;
 }
 
-.hawker-favourite-btn:hover,
 .hawker-favourite-btn.active {
-    background-color: var(--orange-color);
-    color: white;
+  color: #d93434;
 
-    transform: translateY(-2px);
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
 
 /* ===================================================== */
 /* ordering progress steps */
 
 .order-progress-section {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    padding: 0 20px;
+  padding: 0 20px;
 
-    /*
+  /*
         Pulls the progress box slightly over
         the bottom of the banner.
     */
-    transform: translateY(-35px);
+  transform: translateY(-35px);
 
-    margin-bottom: -35px;
+  margin-bottom: -35px;
 }
 
 .order-progress {
-    width: 100%;
-    max-width: 950px;
+  width: 100%;
+  max-width: 950px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    padding: 24px 35px;
+  padding: 24px 35px;
 
-    background-color: white;
-    border-radius: 22px;
+  background-color: white;
+  border-radius: 22px;
 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.14);
 }
 
 .progress-step {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-    color: #8b8178;
+  color: #8b8178;
 }
 
 .progress-number {
-    width: 45px;
-    height: 45px;
+  width: 45px;
+  height: 45px;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    flex-shrink: 0;
+  flex-shrink: 0;
 
-    border-radius: 50%;
+  border-radius: 50%;
 
-    background-color: #eee8df;
-    color: #746a61;
+  background-color: #eee8df;
+  color: #746a61;
 
-    font-size: 17px;
-    font-weight: 700;
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .progress-text strong,
 .progress-text small {
-    display: block;
+  display: block;
 }
 
 .progress-text strong {
-    margin-bottom: 3px;
+  margin-bottom: 3px;
 
-    color: #4c423a;
+  color: #4c423a;
 
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .progress-text small {
-    color: #8b8178;
+  color: #8b8178;
 
-    font-size: 13px;
+  font-size: 13px;
 }
 
 /* active/current step */
 .progress-step.active .progress-number {
-    background-color: var(--orange-color);
-    color: white;
+  background-color: var(--orange-color);
+  color: white;
 
-    box-shadow: 0 8px 18px rgba(255, 122, 0, 0.3);
+  box-shadow: 0 8px 18px rgba(255, 122, 0, 0.3);
 }
 
 .progress-step.active .progress-text strong {
-    color: var(--orange-color);
+  color: var(--orange-color);
 }
 
 /* line connecting each step */
 .progress-line {
-    width: 100px;
-    height: 2px;
+  width: 100px;
+  height: 2px;
 
-    margin: 0 25px;
+  margin: 0 25px;
 
-    background-color: #e4ddd5;
+  background-color: #e4ddd5;
 }
-
 
 /* tablet/mobile */
 
 @media screen and (max-width: 750px) {
-    .order-progress {
-        padding: 20px;
-    }
+  .order-progress {
+    padding: 20px;
+  }
 
-    .progress-text {
-        display: none;
-    }
+  .progress-text {
+    display: none;
+  }
 
-    .progress-line {
-        flex: 1;
-        width: auto;
+  .progress-line {
+    flex: 1;
+    width: auto;
 
-        margin: 0 15px;
-    }
+    margin: 0 15px;
+  }
 }
 
 @media screen and (max-width: 450px) {
-    .order-progress-section {
-        padding: 0 12px;
-    }
+  .order-progress-section {
+    padding: 0 12px;
+  }
 
-    .order-progress {
-        padding: 17px 15px;
-        border-radius: 18px;
-    }
+  .order-progress {
+    padding: 17px 15px;
+    border-radius: 18px;
+  }
 
-    .progress-number {
-        width: 40px;
-        height: 40px;
-    }
+  .progress-number {
+    width: 40px;
+    height: 40px;
+  }
 
-    .progress-line {
-        margin: 0 8px;
-    }
+  .progress-line {
+    margin: 0 8px;
+  }
 }
-
 
 /* responsive layout */
 @media (max-width: 1000px) {
@@ -1092,8 +1081,7 @@
 }
 @media (max-width: 900px) {
   .card-wrapper-stall {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

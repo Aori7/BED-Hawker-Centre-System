@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
     <link rel="stylesheet" href="../css/pages/hawker-card.css" />
-    <!-- index css to link the map style -->
-    <link rel="stylesheet" href="../css/pages/index.css" />
-
+    <link rel="stylesheet" href="../css/pages/main-hawkers.css" />
+    <link rel="stylesheet" href="../css/pages/order.css" />
     <!-- font chosen by ada: Archivo -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,8 +27,8 @@
 
     <!-- google rounded icons -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:FILL@0..1"
     />
     <!-- importing swiper -->
     <link
@@ -106,25 +105,24 @@
       </div>
     </section>
 
-    <section id="hawker-centre-section">
-      <div class="title">
-        <h1>Highly-Rated Hawker Centres</h1>
+    <section id="available-ordering-section">
+      <div class="hawker-section-header">
+        <div>
+          <p class="section-label">Explore Singapore</p>
+          <h1>Featured Hawker Centres</h1>
+        </div>
+
+        <p>
+          Browse selected hawker centres with participating stalls and available
+          menu items.
+        </p>
       </div>
 
-      <div class="container swiper">
-        <div class="wrapper">
-          <!-- Hawker cards will be injected here using hawker.js -->
-          <div class="card-list swiper-wrapper" id="hawker-list">
-            <p>Loading hawker centres...</p>
-          </div>
-
-          <div class="swiper-pagination"></div>
-
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
-        </div>
+      <div id="available-hawker-list" class="hawker-grid">
+        <p>Loading hawker centres...</p>
       </div>
     </section>
+
     <!-- Order History Overlay -->
     <div id="history-overlay"></div>
 
@@ -297,11 +295,9 @@
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
       crossorigin=""
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script type="module" src="../js/order-history.js"></script>
     <script src="../js/leaflet.js"></script>
     <script src="/js/authUI.js"></script>
-    <script src="../js/swiper.js"></script>
-    <script src="../js/hawker.js"></script>
+    <script src="../js/main-hawkers.js"></script>
   </body>
 </html>
