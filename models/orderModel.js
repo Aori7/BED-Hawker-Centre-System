@@ -92,8 +92,6 @@ async function createOrder(orderData) {
       .input("Subtotal", sql.Decimal(10, 2), subtotal)
       .input("DeliveryFee", sql.Decimal(10, 2), deliveryFee)
       .input("TotalAmount", sql.Decimal(10, 2), totalAmount)
-      .input("PaymentMethod", sql.VarChar(20), paymentMethod)
-      .input("PaymentStatus", sql.VarChar(20), paymentStatus)
       .input("SpecialRequest", sql.VarChar(255), specialRequest || null).query(`
                     INSERT INTO Orders
                     (
@@ -103,8 +101,6 @@ async function createOrder(orderData) {
                         Subtotal,
                         DeliveryFee,
                         TotalAmount,
-                        PaymentMethod,
-                        PaymentStatus,
                         SpecialRequest
                     )
                     OUTPUT INSERTED.OrderID
@@ -116,8 +112,6 @@ async function createOrder(orderData) {
                         @Subtotal,
                         @DeliveryFee,
                         @TotalAmount,
-                        @PaymentMethod,
-                        @PaymentStatus,
                         @SpecialRequest
                     )
                 `);
@@ -207,8 +201,8 @@ async function getRecentOrdersByCustomer(customerID) {
                     o.OrderStatus,
                     o.OrderType,
                     o.TotalAmount,
-                    o.PaymentMethod,
-                    o.PaymentStatus,
+                    p.PaymentMethod,
+                    p.PaymentStatus,
                     fs.StallName,
                     COALESCE(SUM(oi.Quantity), 0) AS ItemCount
                 FROM Orders o
@@ -218,7 +212,8 @@ async function getRecentOrdersByCustomer(customerID) {
 
                 LEFT JOIN OrderItem oi
                     ON o.OrderID = oi.OrderID
-
+                LEFT JOIN Payment p
+                    ON o.OrderID = p.OrderID
                 WHERE o.CustomerID = @CustomerID
 
                 GROUP BY
@@ -227,8 +222,8 @@ async function getRecentOrdersByCustomer(customerID) {
                     o.OrderStatus,
                     o.OrderType,
                     o.TotalAmount,
-                    o.PaymentMethod,
-                    o.PaymentStatus,
+                    p.PaymentMethod,
+                    p.PaymentStatus,
                     fs.StallName
 
                 ORDER BY o.OrderDateTime DESC;
@@ -252,15 +247,16 @@ async function getAllOrdersByCustomer(customerID) {
           o.OrderStatus,
           o.OrderType,
           o.TotalAmount,
-          o.PaymentMethod,
-          o.PaymentStatus,
+          p.PaymentMethod,
+          p.PaymentStatus,
           fs.StallName,
           COALESCE(SUM(oi.Quantity), 0) AS ItemCount
         FROM Orders o
 
         INNER JOIN FoodStall fs
           ON o.StallID = fs.StallID
-
+        LEFT JOIN Payment p
+            ON o.OrderID = p.OrderID
         LEFT JOIN OrderItem oi
           ON o.OrderID = oi.OrderID
 
@@ -272,8 +268,8 @@ async function getAllOrdersByCustomer(customerID) {
           o.OrderStatus,
           o.OrderType,
           o.TotalAmount,
-          o.PaymentMethod,
-          o.PaymentStatus,
+          p.PaymentMethod,
+          p.PaymentStatus,
           fs.StallName
 
         ORDER BY
@@ -299,8 +295,8 @@ async function getReceiptByOrderID(orderID, customerID) {
           o.OrderDateTime,
           o.OrderStatus,
           o.OrderType,
-          o.PaymentMethod,
-          o.PaymentStatus,
+          p.PaymentMethod,
+          p.PaymentStatus,
           o.Subtotal,
           o.DeliveryFee,
           o.TotalAmount,
@@ -309,6 +305,8 @@ async function getReceiptByOrderID(orderID, customerID) {
         FROM Orders o
         INNER JOIN FoodStall fs
           ON o.StallID = fs.StallID
+        LEFT JOIN Payment p
+            ON o.OrderID = p.OrderID
         WHERE o.OrderID = @OrderID
         AND o.CustomerID = @CustomerID
       `);
