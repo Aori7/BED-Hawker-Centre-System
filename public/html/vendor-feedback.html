@@ -2,13 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
     <!-- Shared stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
+
     <!-- Feedback page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-feedback.css" />
+
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,35 +19,38 @@
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Noto+Serif:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <!-- Google Material Symbols -->
+
+    <!-- Google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
+
     <title>Vendor Feedback</title>
   </head>
   <body data-page="vendor-feedback">
-    <!-- navigation bar -->
+    <!-- Navigation bar -->
     <nav
       class="nav-bar"
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
-      <a class="nav-link" href="vendor-home.html" data-nav-target="home"
-        >Home</a
-      >
-      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu"
-        >Menu</a
-      >
-      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders"
-        >Orders</a
-      >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
+      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
+        Menu
+      </a>
+      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+        Orders
+      </a>
       <a
         class="nav-link"
         href="vendor-promotions.html"
         data-nav-target="promotions"
-        >Promotions</a
       >
+        Promotions
+      </a>
       <a
         class="nav-link active"
         href="vendor-feedback.html"
@@ -53,11 +59,12 @@
       >
         Feedback
       </a>
-      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile"
-        >Profile</a
-      >
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
     </nav>
-    <!-- stall selector -->
+
+    <!-- Stall selector -->
     <header
       class="orders-stall-selector"
       id="vendor-stall-selector"
@@ -65,16 +72,15 @@
     >
       <div class="stall-details">
         <p class="stall-name" id="selected-stall-name" data-field="stall-name">
-          Ah Seng Chicken Rice
+          Loading stall...
         </p>
         <address
           class="stall-address"
           id="selected-stall-address"
           data-field="stall-address"
-        >
-          #01-01 · Maxwell Food Centre
-        </address>
+        ></address>
       </div>
+
       <div class="stall-switcher">
         <button
           type="button"
@@ -90,61 +96,24 @@
             keyboard_arrow_down
           </span>
         </button>
+
+        <!-- Stall options are inserted by JavaScript -->
         <div
           class="stall-dropdown"
           id="stall-dropdown"
           hidden
           data-role="stall-options"
-        >
-          <button
-            type="button"
-            class="stall-option active"
-            data-stall-id="1"
-            data-stall-name="Ah Seng Chicken Rice"
-            data-stall-address="#01-01 · Maxwell Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name"> Ah Seng Chicken Rice </span>
-            <span class="stall-option-location">
-              #01-01 · Maxwell Food Centre
-            </span>
-          </button>
-          <button
-            type="button"
-            class="stall-option"
-            data-stall-id="2"
-            data-stall-name="Megan's Laksa"
-            data-stall-address="#02-12 · Old Airport Road Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name"> Megan's Laksa </span>
-            <span class="stall-option-location">
-              #02-12 · Old Airport Road Food Centre
-            </span>
-          </button>
-          <button
-            type="button"
-            class="stall-option"
-            data-stall-id="3"
-            data-stall-name="Golden Wok"
-            data-stall-address="#01-08 · Adam Road Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name"> Golden Wok </span>
-            <span class="stall-option-location">
-              #01-08 · Adam Road Food Centre
-            </span>
-          </button>
-        </div>
+        ></div>
       </div>
     </header>
-    <!-- main page content -->
+
+    <!-- Main page content -->
     <main
       class="feedback-page"
       id="vendor-feedback-page"
       data-page-content="feedback"
     >
-      <!-- page heading -->
+      <!-- Page heading -->
       <header class="feedback-page-heading" data-component="page-heading">
         <div>
           <h1>Feedback</h1>
@@ -154,7 +123,8 @@
           </p>
         </div>
       </header>
-      <!-- feedback filters -->
+
+      <!-- Feedback filters -->
       <section class="feedback-filters" aria-label="Feedback filters">
         <label class="filter-control">
           <span>Feedback type</span>
@@ -168,26 +138,29 @@
             <option value="feedback">General feedback</option>
           </select>
         </label>
+
         <label class="filter-control">
-          <span>Rating</span>
-          <select id="rating-filter" name="rating" data-filter="rating">
-            <option value="all">All ratings</option>
-            <option value="5">5 stars</option>
-            <option value="4">4 stars</option>
-            <option value="3">3 stars</option>
-            <option value="2">2 stars</option>
-            <option value="1">1 star</option>
+          <span>Status</span>
+          <select
+            id="feedback-status-filter"
+            name="feedback-status"
+            data-filter="feedback-status"
+          >
+            <option value="all">All statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
           </select>
         </label>
+
         <label class="filter-control">
           <span>Sort by</span>
           <select id="sort-filter" name="sort" data-filter="sort">
             <option value="newest">Newest</option>
-            <option value="popular">Most popular</option>
-            <option value="highest">Highest rating</option>
-            <option value="lowest">Lowest rating</option>
+            <option value="oldest">Oldest</option>
           </select>
         </label>
+
         <button
           type="button"
           class="clear-filter-button"
@@ -197,7 +170,8 @@
           Clear filters
         </button>
       </section>
-      <!-- complaints section -->
+
+      <!-- Complaints section -->
       <section
         class="feedback-section complaints-section"
         id="complaints-section"
@@ -206,268 +180,35 @@
           <div>
             <div class="section-title-row">
               <span class="section-icon complaint-icon">
-                <span class="material-symbols-rounded"> report </span>
+                <span class="material-symbols-rounded">report</span>
               </span>
               <h2>Complaints</h2>
             </div>
             <p>Customer concerns that may require your attention.</p>
           </div>
-          <span class="section-count" id="complaint-count"> 3 complaints </span>
+          <span class="section-count" id="complaint-count">0 complaints</span>
         </header>
-        <div class="feedback-grid" id="complaints-grid">
-          <!-- Complaint card 1 -->
-          <article
-            class="feedback-card complaint-card"
-            data-feedback-id="FB001"
-            data-vendor-replied="false"
-            data-feedback-type="complaint"
-            data-rating="2"
-            data-date="2026-07-25T13:30:00"
-            data-popularity="12"
-            data-resource="feedback"
-            data-customer-id="CUS001"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">AL</div>
-              <div class="customer-details">
-                <strong>Alicia Lim</strong>
-                <time datetime="2026-07-25T13:30:00">
-                  25 Jul 2026, 1:30 PM
-                </time>
-              </div>
-              <span class="feedback-type-badge complaint-badge">
-                Complaint
-              </span>
-            </header>
-            <div class="feedback-rating">
-              <strong>2.0</strong>
-              <div class="rating-stars" aria-label="2 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                I waited more than thirty minutes for my order even though the
-                collection time shown in the application had already passed. The
-                food was also slightly cold when I finally collected it.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">0 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-          </article>
-          <!-- Complaint card 2 -->
-          <article
-            class="feedback-card complaint-card"
-            data-feedback-id="FB002"
-            data-vendor-replied="true"
-            data-feedback-type="complaint"
-            data-rating="3"
-            data-date="2026-07-24T18:45:00"
-            data-popularity="18"
-            data-resource="feedback"
-            data-customer-id="CUS002"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">BT</div>
-              <div class="customer-details">
-                <strong>Brian Tan</strong>
-                <time datetime="2026-07-24T18:45:00">
-                  24 Jul 2026, 6:45 PM
-                </time>
-              </div>
-              <span class="feedback-type-badge complaint-badge">
-                Complaint
-              </span>
-            </header>
-            <div class="feedback-rating">
-              <strong>3.0</strong>
-              <div class="rating-stars" aria-label="3 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                The portion was smaller than what I received during my previous
-                order. The food still tasted good, but I hope the serving sizes
-                can be kept more consistent.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">1 reply</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-            <div class="existing-replies">
-              <article class="reply-preview" data-author-type="vendor">
-                <div class="reply-avatar">AS</div>
-                <div class="reply-content">
-                  <div class="reply-heading">
-                    <strong>Ah Seng Chicken Rice</strong>
-                    <time datetime="2026-07-24T20:10:00">
-                      24 Jul 2026, 8:10 PM
-                    </time>
-                  </div>
-                  <p>
-                    Thank you for informing us. We will review our portioning
-                    process with the team.
-                  </p>
-                </div>
-              </article>
-            </div>
-          </article>
-          <!-- Complaint card 3 -->
-          <article
-            class="feedback-card complaint-card"
-            data-feedback-id="FB003"
-            data-vendor-replied="false"
-            data-feedback-type="complaint"
-            data-rating="1"
-            data-date="2026-07-22T12:20:00"
-            data-popularity="7"
-            data-resource="feedback"
-            data-customer-id="CUS003"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">JL</div>
-              <div class="customer-details">
-                <strong>Joelle Lee</strong>
-                <time datetime="2026-07-22T12:20:00">
-                  22 Jul 2026, 12:20 PM
-                </time>
-              </div>
-              <span class="feedback-type-badge complaint-badge">
-                Complaint
-              </span>
-            </header>
-            <div class="feedback-rating">
-              <strong>1.0</strong>
-              <div class="rating-stars" aria-label="1 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                One of the items in my delivery order was missing. I was charged
-                for the full order but only received two out of the three dishes
-                that I purchased.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">0 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-          </article>
-        </div>
-        <!-- Show or hide additional complaints -->
+
+        <!-- Complaint cards are inserted by JavaScript -->
+        <div class="feedback-grid" id="complaints-grid"></div>
+
         <button
           type="button"
           class="section-see-more-button"
           id="complaints-see-more-button"
           aria-expanded="false"
           hidden
-          data-action="toggle-message"
         >
           <span class="section-see-more-text">See more complaints</span>
-          <span class="material-symbols-rounded section-see-more-arrow">
-            keyboard_arrow_down
-          </span>
+          <span class="material-symbols-rounded">expand_more</span>
         </button>
+
         <p class="empty-section-message" id="no-complaints-message" hidden>
           No complaints match the selected filters.
         </p>
       </section>
-      <!-- general feedback section -->
+
+      <!-- General feedback section -->
       <section
         class="feedback-section general-feedback-section"
         id="general-feedback-section"
@@ -476,341 +217,47 @@
           <div>
             <div class="section-title-row">
               <span class="section-icon feedback-icon">
-                <span class="material-symbols-rounded"> reviews </span>
+                <span class="material-symbols-rounded">chat</span>
               </span>
-              <h2>Feedback</h2>
+              <h2>General feedback</h2>
             </div>
-            <p>General reviews and comments from your customers.</p>
+            <p>Comments and suggestions submitted by customers.</p>
           </div>
-          <span class="section-count" id="feedback-count"> 4 feedback </span>
+          <span class="section-count" id="feedback-count">0 feedback</span>
         </header>
-        <div class="feedback-grid" id="feedback-grid">
-          <!-- Feedback card 1 -->
-          <article
-            class="feedback-card"
-            data-feedback-id="FB004"
-            data-vendor-replied="true"
-            data-feedback-type="feedback"
-            data-rating="5"
-            data-date="2026-07-25T11:15:00"
-            data-popularity="31"
-            data-resource="feedback"
-            data-customer-id="CUS004"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">SW</div>
-              <div class="customer-details">
-                <strong>Sharon Wong</strong>
-                <time datetime="2026-07-25T11:15:00">
-                  25 Jul 2026, 11:15 AM
-                </time>
-              </div>
-            </header>
-            <div class="feedback-rating">
-              <strong>5.0</strong>
-              <div class="rating-stars" aria-label="5 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                The chicken was tender and the rice was very flavourful. My
-                pickup order was also prepared earlier than expected. I will
-                definitely order again.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">2 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-            <div class="reply-list" data-role="reply-list">
-              <article class="reply-preview" data-author-type="vendor">
-                <div class="reply-avatar">AS</div>
-                <div class="reply-content">
-                  <div class="reply-heading">
-                    <strong>Ah Seng Chicken Rice</strong>
-                    <time datetime="2026-07-25T11:50:00">
-                      25 Jul 2026, 11:50 AM
-                    </time>
-                  </div>
-                  <p>
-                    Thank you for your support. We are glad that you enjoyed
-                    your meal!
-                  </p>
-                </div>
-              </article>
-              <article class="reply-preview" data-author-type="customer">
-                <div class="reply-avatar customer-reply-avatar">SW</div>
-                <div class="reply-content">
-                  <div class="reply-heading">
-                    <strong>Sharon Wong</strong>
-                    <time datetime="2026-07-25T12:05:00">
-                      25 Jul 2026, 12:05 PM
-                    </time>
-                  </div>
-                  <p>
-                    You're welcome! I will be recommending the stall to my
-                    friends too.
-                  </p>
-                </div>
-              </article>
-            </div>
-          </article>
-          <!-- Feedback card 2 -->
-          <article
-            class="feedback-card"
-            data-feedback-id="FB005"
-            data-vendor-replied="false"
-            data-feedback-type="feedback"
-            data-rating="4"
-            data-date="2026-07-24T14:05:00"
-            data-popularity="22"
-            data-resource="feedback"
-            data-customer-id="CUS005"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">JY</div>
-              <div class="customer-details">
-                <strong>Jun Yao</strong>
-                <time datetime="2026-07-24T14:05:00">
-                  24 Jul 2026, 2:05 PM
-                </time>
-              </div>
-            </header>
-            <div class="feedback-rating">
-              <strong>4.0</strong>
-              <div class="rating-stars" aria-label="4 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                Food was tasty and reasonably priced. It would be even better if
-                customers could choose an additional chilli option when ordering
-                online.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-list" data-role="reply-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">0 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-          </article>
-          <!-- Feedback card 3 -->
-          <article
-            class="feedback-card"
-            data-feedback-id="FB006"
-            data-vendor-replied="false"
-            data-feedback-type="feedback"
-            data-rating="5"
-            data-date="2026-07-23T17:40:00"
-            data-popularity="25"
-            data-resource="feedback"
-            data-customer-id="CUS006"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">NC</div>
-              <div class="customer-details">
-                <strong>Nicole Chan</strong>
-                <time datetime="2026-07-23T17:40:00">
-                  23 Jul 2026, 5:40 PM
-                </time>
-              </div>
-            </header>
-            <div class="feedback-rating">
-              <strong>5.0</strong>
-              <div class="rating-stars" aria-label="5 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                Fast service and friendly staff. The packaging was neat and none
-                of the food spilled during delivery.
-              </p>
-              <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-                data-action="toggle-message"
-              >
-                See more
-              </button>
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">0 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-          </article>
-          <!-- Feedback card 4 -->
-          <article
-            class="feedback-card"
-            data-feedback-id="FB007"
-            data-vendor-replied="false"
-            data-feedback-type="feedback"
-            data-rating="4"
-            data-date="2026-07-21T10:25:00"
-            data-popularity="15"
-            data-resource="feedback"
-            data-customer-id="CUS007"
-            data-stall-id="1"
-          >
-            <header class="feedback-card-header">
-              <div class="customer-avatar">MT</div>
-              <div class="customer-details">
-                <strong>Marcus Teo</strong>
-                <time datetime="2026-07-21T10:25:00">
-                  21 Jul 2026, 10:25 AM
-                </time>
-              </div>
-            </header>
-            <div class="feedback-rating">
-              <strong>4.0</strong>
-              <div class="rating-stars" aria-label="4 out of 5 stars">
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded filled-star"> star </span>
-                <span class="material-symbols-rounded"> star </span>
-              </div>
-            </div>
-            <div class="feedback-message-container">
-              <p class="feedback-message">
-                Overall a good dining experience. The soup could have been
-                slightly hotter, but the main dish tasted great.
-              </p>
-              <!-- <button
-                type="button"
-                class="see-more-button"
-                aria-expanded="false"
-               data-action="toggle-message">
-                See more
-              </button> -->
-            </div>
-            <div class="reply-preview-list"></div>
-            <footer class="feedback-card-footer">
-              <button
-                type="button"
-                class="reply-count-button"
-                aria-label="View replies"
-                aria-expanded="false"
-                data-action="toggle-replies"
-              >
-                <span class="material-symbols-rounded"> forum </span>
-                <span class="reply-count">0 replies</span>
-              </button>
-              <button
-                type="button"
-                class="reply-button"
-                data-action="open-reply-dialog"
-              >
-                <span class="material-symbols-rounded"> reply </span>
-                Reply
-              </button>
-            </footer>
-          </article>
-        </div>
+
+        <!-- General feedback cards are inserted by JavaScript -->
+        <div class="feedback-grid" id="feedback-grid"></div>
+
+        <button
+          type="button"
+          class="section-see-more-button"
+          id="feedback-see-more-button"
+          aria-expanded="false"
+          hidden
+        >
+          <span class="section-see-more-text">See more feedback</span>
+          <span class="material-symbols-rounded">expand_more</span>
+        </button>
+
         <p class="empty-section-message" id="no-feedback-message" hidden>
           No feedback matches the selected filters.
         </p>
       </section>
-      <!-- empty page state -->
+
+      <!-- Empty page state -->
       <section class="empty-page-message" id="empty-page-message" hidden>
-        <span class="material-symbols-rounded"> search_off </span>
+        <span class="material-symbols-rounded">search_off</span>
         <h2>No feedback found</h2>
-        <p>Try selecting a different feedback type or rating.</p>
+        <p>Try selecting a different feedback type or status.</p>
       </section>
     </main>
-    <!-- reply dialog -->
+
+    <!-- Reply dialog -->
     <dialog class="reply-dialog" id="reply-dialog" data-dialog="feedback-reply">
-      <form
-        method="dialog"
-        type="hidden"
-        id="reply-submission-id"
-        name="submissionId"
-        data-form="feedback-reply"
-      >
+      <form id="reply-form" data-form="feedback-reply">
+        <input type="hidden" id="reply-submission-id" name="submissionId" />
+
         <header class="dialog-header">
           <div>
             <p class="dialog-eyebrow">Reply to customer</p>
@@ -823,34 +270,39 @@
             aria-label="Close reply dialog"
             data-action="close-reply-dialog"
           >
-            <span class="material-symbols-rounded"> close </span>
+            <span class="material-symbols-rounded">close</span>
           </button>
         </header>
+
         <div class="dialog-body">
           <div class="original-feedback-preview">
             <span>Customer message</span>
             <p id="reply-dialog-message"></p>
           </div>
+
           <label class="reply-field">
             <span>Your reply</span>
             <textarea
               id="reply-message-input"
               rows="6"
-              maxlength="500"
+              maxlength="1000"
               placeholder="Write your reply here..."
               required
-              name="reply-message"
+              name="replyMessage"
               data-field="reply-message"
             ></textarea>
           </label>
+
           <div class="character-count">
             <span id="reply-character-count">0</span>
-            <span>/ 500</span>
+            <span>/ 1000</span>
           </div>
+
           <p class="reply-error-message" id="reply-error-message" hidden>
             Please enter a reply before submitting.
           </p>
         </div>
+
         <footer class="dialog-footer">
           <button
             type="button"
@@ -870,7 +322,35 @@
         </footer>
       </form>
     </dialog>
-    <!-- success message -->
+
+    <!-- Delete reply dialog -->
+    <dialog
+      class="reply-dialog"
+      id="delete-reply-dialog"
+      data-dialog="delete-reply"
+    >
+      <div class="dialog-header">
+        <div>
+          <p class="dialog-eyebrow">Delete reply</p>
+          <h2>Remove vendor reply</h2>
+        </div>
+      </div>
+
+      <div class="dialog-body">
+        <p>Are you sure you want to delete this reply?</p>
+      </div>
+
+      <div class="dialog-footer">
+        <button type="button" class="secondary-button" id="delete-reply-cancel">
+          Cancel
+        </button>
+        <button type="button" class="primary-button" id="delete-reply-confirm">
+          Delete reply
+        </button>
+      </div>
+    </dialog>
+
+    <!-- Success message -->
     <div
       class="success-toast"
       id="success-toast"
@@ -878,9 +358,10 @@
       aria-live="polite"
       hidden
     >
-      <span class="material-symbols-rounded"> check_circle </span>
-      <span>Your reply has been posted.</span>
+      <span class="material-symbols-rounded">check_circle</span>
+      <span id="success-toast-message">Your reply has been posted.</span>
     </div>
+
     <!-- Feedback page JavaScript -->
     <script src="../js/vendor-feedback.js"></script>
   </body>

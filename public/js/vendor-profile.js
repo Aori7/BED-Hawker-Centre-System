@@ -1,209 +1,402 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* element selectors */
-  const switchStallButton = document.querySelector("#switch-stall-button");
-  const stallDropdown = document.querySelector("#stall-dropdown");
-  const stallOptions = document.querySelectorAll(".stall-option");
-  const selectedStallName = document.querySelector("#selected-stall-name");
-  const selectedStallAddress = document.querySelector(
-    "#selected-stall-address",
-  );
+  const accessToken = sessionStorage.getItem("accessToken");
+  let currentProfile = null;
+  let toastTimeout = null;
 
-  const stallInformationForm = document.querySelector(
-    "#stall-information-form",
-  );
-  const contactInformationForm = document.querySelector(
-    "#contact-information-form",
-  );
-  const businessInformationForm = document.querySelector(
-    "#business-information-form",
-  );
+  // Element selectors
+  const profilePageMessage = document.querySelector("#profile-page-message");
+  const profileGrid = document.querySelector("#profile-grid");
+  const profileSummary = document.querySelector("#profile-summary");
+  const profileSummaryName = document.querySelector("#profile-summary-name");
+  const profileSummaryEmail = document.querySelector("#profile-summary-email");
+  const profileUserId = document.querySelector("#profile-user-id");
+  const profileOwnerId = document.querySelector("#profile-owner-id");
+  const profileEmail = document.querySelector("#profile-email");
+  const profileNric = document.querySelector("#profile-nric");
+  const profileForm = document.querySelector("#profile-form");
+  const ownerNameInput = document.querySelector("#owner-name");
+  const contactNumberInput = document.querySelector("#contact-number");
+  const profileFormMessage = document.querySelector("#profile-form-message");
+  const saveProfileButton = document.querySelector("#save-profile-button");
   const passwordForm = document.querySelector("#password-form");
+  const currentPasswordInput = document.querySelector("#current-password");
+  const newPasswordInput = document.querySelector("#new-password");
+  const confirmPasswordInput = document.querySelector("#confirm-password");
+  const passwordFormMessage = document.querySelector("#password-form-message");
+  const updatePasswordButton = document.querySelector(
+    "#update-password-button",
+  );
+  const passwordToggleButtons = document.querySelectorAll(
+    ".password-toggle-button",
+  );
+  const successToast = document.querySelector("#success-toast");
+  const successToastMessage = document.querySelector("#success-toast-message");
 
-  const changeLogoButton = document.querySelector("#change-logo-button");
+  // Redirect when not logged in
+  if (!accessToken) {
+    alert("Please log in first.");
+    window.location.href = "login.html";
+    return;
+  }
 
-  /* stall dropdown */
-  function closeStallDropdown() {
-    if (!switchStallButton || !stallDropdown) {
+  // Send request to backend
+  async function vendorFetch(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        ...options.headers,
+      },
+    });
+
+    let data = {};
+
+    try {
+      data = await response.json();
+    } catch (error) {
+      throw new Error("The server returned an invalid response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed.");
+    }
+    return data;
+  }
+
+  // Show page message
+  function showPageMessage(message, isError = false) {
+    if (!profilePageMessage) {
+      return;
+    }
+    profilePageMessage.textContent = message;
+    profilePageMessage.classList.toggle("error-message", isError);
+    profilePageMessage.hidden = false;
+  }
+
+  // Hide page message
+  function hidePageMessage() {
+    if (profilePageMessage) {
+      profilePageMessage.hidden = true;
+    }
+  }
+
+  // Show form message
+  function showFormMessage(element, message, isError = true) {
+    if (!element) {
+      return;
+    }
+    element.textContent = message;
+    element.classList.toggle("error-message", isError);
+    element.classList.toggle("success-message", !isError);
+    element.hidden = false;
+  }
+
+  // Hide form message
+  function hideFormMessage(element) {
+    if (element) {
+      element.hidden = true;
+      element.textContent = "";
+    }
+  }
+
+  // Show success toast
+  function showSuccessToast(message) {
+    if (!successToast) {
       return;
     }
 
-    switchStallButton.setAttribute("aria-expanded", "false");
-    stallDropdown.hidden = true;
+    if (successToastMessage) {
+      successToastMessage.textContent = message;
+    }
+
+    successToast.hidden = false;
+    window.clearTimeout(toastTimeout);
+
+    toastTimeout = window.setTimeout(() => {
+      successToast.hidden = true;
+    }, 3000);
   }
 
-  function toggleStallDropdown() {
-    if (!switchStallButton || !stallDropdown) {
+  // Set button loading state
+  function setButtonLoading(button, isLoading, loadingText, normalText) {
+    if (!button) {
       return;
     }
-
-    const isOpen = switchStallButton.getAttribute("aria-expanded") === "true";
-
-    switchStallButton.setAttribute("aria-expanded", String(!isOpen));
-    stallDropdown.hidden = isOpen;
+    button.disabled = isLoading;
+    button.textContent = isLoading ? loadingText : normalText;
   }
 
-  /* save helpers */
-  function saveStallInformation() {
-    /* backend request goes here */
+  // Display profile information
+  function displayProfile(profile) {
+    currentProfile = profile;
 
-    alert("Stall information updated.");
+    if (profileSummaryName) {
+      profileSummaryName.textContent = profile.OwnerName || "Stall Owner";
+    }
+
+    if (profileSummaryEmail) {
+      profileSummaryEmail.textContent = profile.Email || "";
+    }
+
+    if (profileUserId) {
+      profileUserId.value = profile.UserID ?? "";
+    }
+
+    if (profileOwnerId) {
+      profileOwnerId.value = profile.OwnerID ?? "";
+    }
+
+    if (profileEmail) {
+      profileEmail.value = profile.Email || "";
+    }
+
+    if (profileNric) {
+      profileNric.value = profile.NRIC || "";
+    }
+
+    if (ownerNameInput) {
+      ownerNameInput.value = profile.OwnerName || "";
+    }
+
+    if (contactNumberInput) {
+      contactNumberInput.value = profile.ContactNo || "";
+    }
+
+    if (profileSummary) {
+      profileSummary.hidden = false;
+    }
+
+    if (profileGrid) {
+      profileGrid.hidden = false;
+    }
+    hidePageMessage();
   }
 
-  function saveContactInformation() {
-    /* backend request goes here */
+  // Load vendor profile
+  async function loadVendorProfile() {
+    showPageMessage("Loading profile...");
 
-    alert("Contact information updated.");
+    try {
+      const profile = await vendorFetch("/vendor-profile");
+      displayProfile(profile);
+    } catch (error) {
+      console.error("Error loading vendor profile:", error);
+      showPageMessage(error.message, true);
+    }
   }
 
-  function saveBusinessInformation() {
-    /* backend request goes here */
+  // Validate profile form
+  function validateProfileForm() {
+    const ownerName = ownerNameInput?.value.trim() || "";
+    const contactNumber = contactNumberInput?.value.trim() || "";
 
-    alert("Business information updated.");
-  }
-
-  function updatePassword() {
-    /* backend request goes here */
-
-    alert("Password updated.");
-  }
-
-  /* validate password */
-  function validatePassword() {
-    const currentPassword = document.querySelector("#current-password");
-    const newPassword = document.querySelector("#new-password");
-    const confirmPassword = document.querySelector("#confirm-password");
-
-    if (!currentPassword || !newPassword || !confirmPassword) {
+    if (!ownerName) {
+      showFormMessage(profileFormMessage, "Owner name is required.");
+      ownerNameInput?.focus();
       return false;
     }
 
-    if (newPassword.value.trim().length < 8) {
-      alert("Password must be at least 8 characters.");
-      newPassword.focus();
+    if (ownerName.length > 100) {
+      showFormMessage(
+        profileFormMessage,
+        "Owner name cannot exceed 100 characters.",
+      );
+      ownerNameInput?.focus();
       return false;
     }
 
-    if (newPassword.value !== confirmPassword.value) {
-      alert("Passwords do not match.");
-      confirmPassword.focus();
+    if (!/^[89]\d{7}$/.test(contactNumber)) {
+      showFormMessage(
+        profileFormMessage,
+        "Contact number must be a valid Singapore mobile number.",
+      );
+      contactNumberInput?.focus();
       return false;
     }
-
     return true;
   }
 
-  /* stall switcher */
-  if (switchStallButton && stallDropdown) {
-    switchStallButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toggleStallDropdown();
-    });
-  }
-
-  stallOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      if (!selectedStallName || !selectedStallAddress) {
-        return;
-      }
-
-      selectedStallName.textContent = option.dataset.stallName || "";
-      selectedStallAddress.textContent = option.dataset.stallAddress || "";
-
-      stallOptions.forEach((stall) => {
-        stall.classList.remove("active");
-      });
-
-      option.classList.add("active");
-
-      closeStallDropdown();
-
-      /* backend request goes here */
-    });
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!event.target.closest(".stall-switcher")) {
-      closeStallDropdown();
-    }
-  });
-
-  /* logo upload */
-  changeLogoButton?.addEventListener("click", () => {
-    /* image upload will be connected later */
-
-    alert("Logo upload will be connected to the backend.");
-  });
-
-  /* stall information */
-  stallInformationForm?.addEventListener("submit", (event) => {
+  // Update vendor profile
+  async function updateVendorProfile(event) {
     event.preventDefault();
+    hideFormMessage(profileFormMessage);
 
-    saveStallInformation();
-  });
-
-  /* contact information */
-  contactInformationForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    saveContactInformation();
-  });
-
-  /* business information */
-  businessInformationForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    saveBusinessInformation();
-  });
-
-  /* password */
-  passwordForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    if (!validatePassword()) {
+    if (!validateProfileForm()) {
       return;
     }
 
-    updatePassword();
+    const profileData = {
+      OwnerName: ownerNameInput.value.trim(),
+      ContactNo: contactNumberInput.value.trim(),
+    };
 
-    passwordForm.reset();
+    setButtonLoading(saveProfileButton, true, "Saving...", "Save Changes");
+
+    try {
+      const updatedProfile = await vendorFetch("/vendor-profile", {
+        method: "PUT",
+        body: JSON.stringify(profileData),
+      });
+
+      displayProfile(updatedProfile);
+      showSuccessToast("Profile updated successfully.");
+    } catch (error) {
+      console.error("Error updating vendor profile:", error);
+      showFormMessage(profileFormMessage, error.message);
+    } finally {
+      setButtonLoading(saveProfileButton, false, "Saving...", "Save Changes");
+    }
+  }
+
+  // Validate password form
+  function validatePasswordForm() {
+    const currentPassword = currentPasswordInput?.value || "";
+    const newPassword = newPasswordInput?.value || "";
+    const confirmPassword = confirmPasswordInput?.value || "";
+
+    if (!currentPassword) {
+      showFormMessage(passwordFormMessage, "Current password is required.");
+      currentPasswordInput?.focus();
+      return false;
+    }
+
+    if (newPassword.length < 8) {
+      showFormMessage(
+        passwordFormMessage,
+        "New password must be at least 8 characters.",
+      );
+      newPasswordInput?.focus();
+      return false;
+    }
+
+    if (newPassword.length > 100) {
+      showFormMessage(
+        passwordFormMessage,
+        "New password cannot exceed 100 characters.",
+      );
+      newPasswordInput?.focus();
+      return false;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showFormMessage(passwordFormMessage, "Passwords do not match.");
+      confirmPasswordInput?.focus();
+      return false;
+    }
+
+    if (currentPassword === newPassword) {
+      showFormMessage(
+        passwordFormMessage,
+        "New password must be different from your current password.",
+      );
+      newPasswordInput?.focus();
+      return false;
+    }
+    return true;
+  }
+
+  // Change vendor password
+  async function changeVendorPassword(event) {
+    event.preventDefault();
+    hideFormMessage(passwordFormMessage);
+
+    if (!validatePasswordForm()) {
+      return;
+    }
+    const passwordData = {
+      CurrentPassword: currentPasswordInput.value,
+      NewPassword: newPasswordInput.value,
+      ConfirmPassword: confirmPasswordInput.value,
+    };
+
+    setButtonLoading(
+      updatePasswordButton,
+      true,
+      "Updating...",
+      "Update Password",
+    );
+
+    try {
+      const result = await vendorFetch("/vendor-profile/password", {
+        method: "PUT",
+        body: JSON.stringify(passwordData),
+      });
+
+      passwordForm.reset();
+      showSuccessToast(result.message || "Password updated successfully.");
+    } catch (error) {
+      console.error("Error updating password:", error);
+      showFormMessage(passwordFormMessage, error.message);
+    } finally {
+      setButtonLoading(
+        updatePasswordButton,
+        false,
+        "Updating...",
+        "Update Password",
+      );
+    }
+  }
+
+  // Toggle password visibility
+  function togglePasswordVisibility(button) {
+    const targetId = button.dataset.passwordTarget;
+    const input = document.querySelector(`#${targetId}`);
+    const icon = button.querySelector(".material-symbols-rounded");
+
+    if (!input) {
+      return;
+    }
+
+    const shouldShow = input.type === "password";
+
+    input.type = shouldShow ? "text" : "password";
+    button.setAttribute(
+      "aria-label",
+      shouldShow ? "Hide password" : "Show password",
+    );
+
+    if (icon) {
+      icon.textContent = shouldShow ? "visibility_off" : "visibility";
+    }
+  }
+
+  // Clear profile message when editing
+  ownerNameInput?.addEventListener("input", () => {
+    hideFormMessage(profileFormMessage);
   });
 
-  /* detect unsaved changes */
-  document.querySelectorAll("input,textarea,select").forEach((field) => {
-    field.dataset.originalValue = field.value;
+  contactNumberInput?.addEventListener("input", () => {
+    contactNumberInput.value = contactNumberInput.value.replace(/\D/g, "");
+    hideFormMessage(profileFormMessage);
+  });
 
-    field.addEventListener("change", () => {
-      if (field.value !== field.dataset.originalValue) {
-        field.dataset.modified = "true";
-      } else {
-        field.dataset.modified = "false";
-      }
+  // Clear password message when editing
+  currentPasswordInput?.addEventListener("input", () => {
+    hideFormMessage(passwordFormMessage);
+  });
+
+  newPasswordInput?.addEventListener("input", () => {
+    hideFormMessage(passwordFormMessage);
+  });
+
+  confirmPasswordInput?.addEventListener("input", () => {
+    hideFormMessage(passwordFormMessage);
+  });
+
+  // Profile form
+  profileForm?.addEventListener("submit", updateVendorProfile);
+
+  // Password form
+  passwordForm?.addEventListener("submit", changeVendorPassword);
+
+  // Password visibility buttons
+  passwordToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      togglePasswordVisibility(button);
     });
   });
 
-  /* backend profile loader */
-  function loadVendorProfile() {
-    /*
-      Example:
-
-      fetch("/api/vendor/profile")
-      .then(...)
-      .then(...)
-    */
-  }
-
-  /* backend stall loader */
-  function loadVendorStalls() {
-    /*
-      Example:
-
-      fetch("/api/vendor/stalls")
-      .then(...)
-      .then(...)
-    */
-  }
-
-  /* initialise page */
+  // Initial page load
   loadVendorProfile();
-  loadVendorStalls();
 });

@@ -3,59 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <!-- Shared stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
+
+    <!-- Menu page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-menu.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
-      rel="stylesheet"
-    />
+
+    <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-    <title>Vendor Menu Page</title>
+
+    <title>Vendor Menu</title>
   </head>
+
   <body data-page="vendor-menu">
+    <!-- Navigation bar -->
     <nav
       class="nav-bar"
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
-      <a class="nav-link" href="vendor-home.html" data-nav-target="home"
-        >Home</a
-      >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
       <a
         class="nav-link active"
         href="vendor-menu.html"
         aria-current="page"
         data-nav-target="menu"
-        >Menu</a
       >
-      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders"
-        >Orders</a
-      >
+        Menu
+      </a>
+      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+        Orders
+      </a>
       <a
         class="nav-link"
         href="vendor-promotions.html"
         data-nav-target="promotions"
-        >Promotions</a
       >
-      <a class="nav-link" href="vendor-feedback.html" data-nav-target="feedback"
-        >Feedback</a
+        Promotions
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-feedback.html"
+        data-nav-target="feedback"
       >
-      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile"
-        >Profile</a
-      >
+        Feedback
+      </a>
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
     </nav>
 
+    <!-- Stall selector -->
     <header
       class="menu-stall-selector"
       id="vendor-stall-selector"
@@ -71,6 +85,7 @@
           data-field="stall-address"
         ></address>
       </div>
+
       <div class="stall-switcher">
         <button
           type="button"
@@ -82,10 +97,12 @@
         >
           <span class="material-symbols-rounded">storefront</span>
           <span>Switch stalls</span>
-          <span class="material-symbols-rounded dropdown-arrow"
-            >keyboard_arrow_down</span
-          >
+          <span class="material-symbols-rounded dropdown-arrow">
+            keyboard_arrow_down
+          </span>
         </button>
+
+        <!-- Stall options are inserted by JavaScript -->
         <div
           class="stall-dropdown"
           id="stall-dropdown"
@@ -95,13 +112,16 @@
       </div>
     </header>
 
+    <!-- Menu page -->
     <main
       class="vendor-menu-layout"
       id="vendor-menu-page"
       data-page-content="menu"
     >
+      <!-- Category navigation -->
       <aside class="menu-sidebar">
         <nav class="category-navigation" aria-label="Menu categories">
+          <!-- Category links are inserted by JavaScript -->
           <button
             type="button"
             class="add-category-button"
@@ -113,16 +133,19 @@
         </nav>
       </aside>
 
+      <!-- Menu content -->
       <section class="menu-content">
+        <!-- Page heading -->
         <div class="menu-page-heading">
           <div>
-            <h2>Menu</h2>
+            <h1>Menu</h1>
             <p class="menu-page-description">
               View and manage the items offered by your selected stall.
             </p>
           </div>
         </div>
 
+        <!-- Search and filter -->
         <div class="menu-toolbar">
           <label class="menu-search">
             <span class="material-symbols-rounded">search</span>
@@ -136,6 +159,7 @@
               data-filter="search"
             />
           </label>
+
           <label class="menu-filter">
             <select
               id="availability-filter"
@@ -150,13 +174,17 @@
           </label>
         </div>
 
+        <!-- Menu categories and cards are inserted by JavaScript -->
         <div id="menu-category-container"></div>
+
+        <!-- No results message -->
         <p class="no-menu-results" id="no-menu-results" hidden>
           No menu items match your search or filter.
         </p>
       </section>
     </main>
 
+    <!-- Add menu item button -->
     <button
       type="button"
       class="floating-add-menu-button"
@@ -167,21 +195,27 @@
       <span>Add menu item</span>
     </button>
 
+    <!-- Add menu item dialog -->
     <div class="menu-dialog" id="add-menu-dialog" hidden>
       <div class="menu-dialog-card">
-        <div class="menu-dialog-header"><h3>Add Menu Item</h3></div>
+        <div class="menu-dialog-header">
+          <h3>Add Menu Item</h3>
+        </div>
+
         <form id="add-menu-form">
           <div class="menu-dialog-body">
             <label class="dialog-field">
               <span>Item name</span>
               <input type="text" id="add-item-name" name="itemName" required />
             </label>
+
             <label class="dialog-field">
               <span>Category</span>
               <select id="add-item-category" name="category" required>
                 <option value="">Select category</option>
               </select>
             </label>
+
             <label class="dialog-field">
               <span>Price</span>
               <input
@@ -194,6 +228,7 @@
                 required
               />
             </label>
+
             <label class="dialog-field">
               <span>Description</span>
               <textarea
@@ -203,6 +238,7 @@
                 maxlength="500"
               ></textarea>
             </label>
+
             <label class="dialog-field">
               <span>Availability</span>
               <select id="add-item-status" name="availability">
@@ -210,6 +246,7 @@
                 <option value="unavailable">Unavailable</option>
               </select>
             </label>
+
             <label class="dialog-field">
               <span>Image URL</span>
               <input
@@ -220,6 +257,7 @@
               />
             </label>
           </div>
+
           <div class="menu-dialog-footer">
             <button
               type="button"
@@ -235,22 +273,29 @@
       </div>
     </div>
 
+    <!-- Edit menu item dialog -->
     <div class="menu-dialog" id="edit-menu-dialog" hidden>
       <div class="menu-dialog-card">
-        <div class="menu-dialog-header"><h3>Edit Menu Item</h3></div>
+        <div class="menu-dialog-header">
+          <h3>Edit Menu Item</h3>
+        </div>
+
         <form id="edit-menu-form">
           <input type="hidden" id="edit-menu-item-id" name="menuItemId" />
+
           <div class="menu-dialog-body">
             <label class="dialog-field">
               <span>Item name</span>
               <input type="text" id="edit-item-name" name="itemName" required />
             </label>
+
             <label class="dialog-field">
               <span>Category</span>
               <select id="edit-item-category" name="category" required>
                 <option value="">Select category</option>
               </select>
             </label>
+
             <label class="dialog-field">
               <span>Price</span>
               <input
@@ -263,6 +308,7 @@
                 required
               />
             </label>
+
             <label class="dialog-field">
               <span>Description</span>
               <textarea
@@ -272,6 +318,7 @@
                 maxlength="500"
               ></textarea>
             </label>
+
             <label class="dialog-field">
               <span>Availability</span>
               <select id="edit-item-status" name="availability">
@@ -279,6 +326,7 @@
                 <option value="unavailable">Unavailable</option>
               </select>
             </label>
+
             <label class="dialog-field">
               <span>Image URL</span>
               <input
@@ -289,6 +337,7 @@
               />
             </label>
           </div>
+
           <div class="menu-dialog-footer">
             <button
               type="button"
@@ -304,9 +353,13 @@
       </div>
     </div>
 
+    <!-- Add category dialog -->
     <div class="menu-dialog" id="add-category-dialog" hidden>
       <div class="menu-dialog-card menu-dialog-small">
-        <div class="menu-dialog-header"><h3>Add Category</h3></div>
+        <div class="menu-dialog-header">
+          <h3>Add Category</h3>
+        </div>
+
         <form id="add-category-form">
           <div class="menu-dialog-body">
             <label class="dialog-field">
@@ -319,6 +372,7 @@
               />
             </label>
           </div>
+
           <div class="menu-dialog-footer">
             <button
               type="button"
@@ -334,11 +388,16 @@
       </div>
     </div>
 
+    <!-- Delete menu item dialog -->
     <div class="menu-dialog" id="delete-menu-dialog" hidden>
       <div class="menu-dialog-card menu-dialog-small">
-        <div class="menu-dialog-header"><h3>Delete Menu Item</h3></div>
+        <div class="menu-dialog-header">
+          <h3>Delete Menu Item</h3>
+        </div>
+
         <form id="delete-menu-form">
           <input type="hidden" id="delete-menu-item-id" name="menuItemId" />
+
           <div class="menu-dialog-body">
             <p>
               Are you sure you want to delete
@@ -346,6 +405,7 @@
             </p>
             <p>This action cannot be undone.</p>
           </div>
+
           <div class="menu-dialog-footer">
             <button
               type="button"
@@ -361,6 +421,7 @@
       </div>
     </div>
 
+    <!-- JavaScript -->
     <script src="../js/vendor-menu.js"></script>
   </body>
 </html>

@@ -2,23 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <!-- Shared stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
+
+    <!-- Orders page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-orders.css" />
+
+    <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Noto+Serif:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
+
     <title>Vendor Orders</title>
   </head>
+
   <body data-page="vendor-orders">
     <!-- Navigation bar -->
     <nav
@@ -26,32 +36,39 @@
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
-      <a class="nav-link" href="vendor-home.html" data-nav-target="home"
-        >Home</a
-      >
-      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu"
-        >Menu</a
-      >
+      <a class="nav-link" href="vendor-home.html" data-nav-target="home">
+        Home
+      </a>
+      <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
+        Menu
+      </a>
       <a
         class="nav-link active"
         href="vendor-orders.html"
         aria-current="page"
         data-nav-target="orders"
-        >Orders</a
       >
+        Orders
+      </a>
       <a
         class="nav-link"
         href="vendor-promotions.html"
         data-nav-target="promotions"
-        >Promotions</a
       >
-      <a class="nav-link" href="vendor-feedback.html" data-nav-target="feedback"
-        >Feedback</a
+        Promotions
+      </a>
+      <a
+        class="nav-link"
+        href="vendor-feedback.html"
+        data-nav-target="feedback"
       >
-      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile"
-        >Profile</a
-      >
+        Feedback
+      </a>
+      <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
+        Profile
+      </a>
     </nav>
+
     <!-- Stall selector -->
     <header
       class="orders-stall-selector"
@@ -60,16 +77,15 @@
     >
       <div class="stall-details">
         <p class="stall-name" id="selected-stall-name" data-field="stall-name">
-          Ah Seng Chicken Rice
+          Loading stall...
         </p>
         <address
           class="stall-address"
           id="selected-stall-address"
           data-field="stall-address"
-        >
-          #01-01 · Maxwell Food Centre
-        </address>
+        ></address>
       </div>
+
       <div class="stall-switcher">
         <button
           type="button"
@@ -81,67 +97,32 @@
         >
           <span class="material-symbols-rounded">storefront</span>
           <span>Switch stalls</span>
-          <span class="material-symbols-rounded dropdown-arrow"
-            >keyboard_arrow_down</span
-          >
+          <span class="material-symbols-rounded dropdown-arrow">
+            keyboard_arrow_down
+          </span>
         </button>
+
         <div
           class="stall-dropdown"
           id="stall-dropdown"
           hidden
           data-role="stall-options"
-        >
-          <button
-            type="button"
-            class="stall-option active"
-            data-stall-id="1"
-            data-stall-name="Ah Seng Chicken Rice"
-            data-stall-address="#01-01 · Maxwell Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name">Ah Seng Chicken Rice</span>
-            <span class="stall-option-location"
-              >#01-01 · Maxwell Food Centre</span
-            >
-          </button>
-          <button
-            type="button"
-            class="stall-option"
-            data-stall-id="2"
-            data-stall-name="Megan's Laksa"
-            data-stall-address="#02-12 · Old Airport Road Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name">Megan's Laksa</span>
-            <span class="stall-option-location"
-              >#02-12 · Old Airport Road Food Centre</span
-            >
-          </button>
-          <button
-            type="button"
-            class="stall-option"
-            data-stall-id="3"
-            data-stall-name="Golden Wok"
-            data-stall-address="#01-08 · Adam Road Food Centre"
-            data-action="select-stall"
-          >
-            <span class="stall-option-name">Golden Wok</span>
-            <span class="stall-option-location"
-              >#01-08 · Adam Road Food Centre</span
-            >
-          </button>
-        </div>
+        ></div>
       </div>
     </header>
+
+    <!-- Orders page -->
     <main
       class="orders-page"
       id="vendor-orders-page"
       data-page-content="orders"
     >
+      <!-- Page heading -->
       <header class="orders-page-heading" data-component="page-heading">
         <h1>Orders</h1>
         <p>View and manage orders received by your selected stall.</p>
       </header>
+
       <!-- Search -->
       <section class="orders-toolbar" aria-label="Order search">
         <label class="orders-search">
@@ -149,7 +130,7 @@
           <input
             type="search"
             id="order-search-input"
-            placeholder="Search order ID, customer ID or date"
+            placeholder="Search order ID or customer"
             aria-label="Search orders"
             autocomplete="off"
             name="order-search"
@@ -157,45 +138,17 @@
           />
         </label>
       </section>
+
       <!-- Filters -->
       <section class="filters" id="filters" aria-label="Order filters">
         <label class="orders-filter">
-          <span>Date &amp; Time</span>
+          <span>Date</span>
           <input
             type="date"
             id="date-filter"
             name="order-date"
             data-filter="date"
           />
-        </label>
-
-        <label class="orders-filter">
-          <span>Payment Type</span>
-          <select
-            id="payment-filter"
-            name="payment-method"
-            data-filter="payment-method"
-          >
-            <option value="all">All payment types</option>
-            <option value="PayNow">PayNow</option>
-            <option value="Credit Card">Credit Card</option>
-            <option value="NETS">NETS</option>
-            <option value="Cash">Cash</option>
-          </select>
-        </label>
-
-        <label class="orders-filter">
-          <span>Payment Status</span>
-          <select
-            id="payment-status-filter"
-            name="payment-status"
-            data-filter="payment-status"
-          >
-            <option value="all">All payment statuses</option>
-            <option value="Pending">Pending</option>
-            <option value="Paid">Paid</option>
-            <option value="Refunded">Refunded</option>
-          </select>
         </label>
 
         <label class="orders-filter">
@@ -229,6 +182,7 @@
           Clear filters
         </button>
       </section>
+
       <!-- Orders table -->
       <section class="orders-table-section" aria-label="Orders list">
         <div class="table-scroll">
@@ -236,284 +190,42 @@
             <thead>
               <tr>
                 <th>Order ID</th>
-                <th>Customer ID</th>
+                <th>Customer</th>
                 <th>Date &amp; Time</th>
                 <th>Total</th>
-                <th>Payment Type</th>
-                <th>Payment Status</th>
                 <th>Order Type</th>
                 <th>Special Request</th>
                 <th>Order Status</th>
-                <th><span class="visually-hidden">Actions</span></th>
+                <th>
+                  <span class="visually-hidden">Actions</span>
+                </th>
               </tr>
             </thead>
-            <tbody id="orders-table-body">
-              <tr
-                class="order-row"
-                data-order-id="ORD1001"
-                data-customer-id="CUS023"
-                data-date="2026-07-24T12:35"
-                data-order-type="Pickup"
-                data-order-status="Preparing"
-                data-subtotal="18.50"
-                data-delivery-fee="-"
-                data-total="18.50"
-                data-payment-method="PayNow"
-                data-payment-status="Paid"
-                data-special-request="Less chilli, extra cucumber"
-                data-menu-items='[{"menuItemName":"Chicken Rice","quantity":2,"price":7.50}, {"menuItemName":"Braised Egg","quantity":1,"price":1.50}, {"menuItemName":"Iced Milo","quantity":1,"price":2.00}]'
-              >
-                <td data-label="Order ID"><strong>ORD1001</strong></td>
-                <td data-label="Customer ID">CUS023</td>
-                <td data-label="Date &amp; Time">
-                  <time datetime="2026-07-24T12:35">24 Jul 2026, 12:35 PM</time>
-                </td>
-                <td data-label="Total">$18.50</td>
-                <td data-label="Payment Type">PayNow</td>
-                <td data-label="Payment Status">
-                  <span class="payment-status payment-paid">Paid</span>
-                </td>
-                <td data-label="Order Type">Pickup</td>
-                <td class="special-request" data-label="Special Request">✓</td>
-                <td data-label="Order Status">
-                  <select class="order-status-select status-preparing">
-                    <option value="Pending">Pending</option>
-                    <option value="Preparing" selected>Preparing</option>
-                    <option value="Ready for Collection">
-                      Ready for Collection
-                    </option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="order-actions">
-                  <button
-                    type="button"
-                    class="view-details-button"
-                    data-order-id="ORD1001"
-                    data-action="view-order-details"
-                  >
-                    See details
-                  </button>
-                </td>
-              </tr>
 
-              <tr
-                class="order-row"
-                data-order-id="ORD1002"
-                data-customer-id="CUS041"
-                data-date="2026-07-24T12:18"
-                data-order-type="Pickup"
-                data-order-status="Ready for Collection"
-                data-subtotal="12.00"
-                data-delivery-fee="-"
-                data-total="12.00"
-                data-payment-method="Credit Card"
-                data-payment-status="Paid"
-                data-special-request=""
-                data-menu-items='[{"menuItemName":"Wanton Noodles","quantity":1,"price":8.50}, {"menuItemName":"Iced Lemon Tea","quantity":1,"price":3.50}]'
-              >
-                <td data-label="Order ID"><strong>ORD1002</strong></td>
-                <td data-label="Customer ID">CUS041</td>
-                <td data-label="Date &amp; Time">
-                  <time datetime="2026-07-24T12:18">24 Jul 2026, 12:18 PM</time>
-                </td>
-                <td data-label="Total">$12.00</td>
-                <td data-label="Payment Type">Credit Card</td>
-                <td data-label="Payment Status">
-                  <span class="payment-status payment-paid">Paid</span>
-                </td>
-                <td data-label="Order Type">Pickup</td>
-                <td class="special-request" data-label="Special Request">-</td>
-                <td data-label="Order Status">
-                  <select class="order-status-select status-ready">
-                    <option value="Pending">Pending</option>
-                    <option value="Preparing">Preparing</option>
-                    <option value="Ready for Collection" selected>
-                      Ready for Collection
-                    </option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="order-actions">
-                  <button
-                    type="button"
-                    class="view-details-button"
-                    data-order-id="ORD1002"
-                    data-action="view-order-details"
-                  >
-                    See details
-                  </button>
-                </td>
-              </tr>
-
-              <tr
-                class="order-row"
-                data-order-id="ORD1003"
-                data-customer-id="CUS052"
-                data-date="2026-07-24T11:50"
-                data-order-type="Dine-in"
-                data-order-status="Completed"
-                data-subtotal="7.50"
-                data-delivery-fee="-"
-                data-total="7.50"
-                data-payment-method="Cash"
-                data-payment-status="Paid"
-                data-special-request="No spring onions"
-                data-menu-items='[{"menuItemName":"Fishball Noodles","quantity":1,"price":7.50}]'
-              >
-                <td data-label="Order ID"><strong>ORD1003</strong></td>
-                <td data-label="Customer ID">CUS052</td>
-                <td data-label="Date &amp; Time">
-                  <time datetime="2026-07-24T11:50">24 Jul 2026, 11:50 AM</time>
-                </td>
-                <td data-label="Total">$7.50</td>
-                <td data-label="Payment Type">Cash</td>
-                <td data-label="Payment Status">
-                  <span class="payment-status payment-paid">Paid</span>
-                </td>
-                <td data-label="Order Type">Dine-in</td>
-                <td class="special-request" data-label="Special Request">✓</td>
-                <td data-label="Order Status">
-                  <select class="order-status-select status-completed">
-                    <option value="Pending">Pending</option>
-                    <option value="Preparing">Preparing</option>
-                    <option value="Ready for Collection">
-                      Ready for Collection
-                    </option>
-                    <option value="Completed" selected>Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="order-actions">
-                  <button
-                    type="button"
-                    class="view-details-button"
-                    data-order-id="ORD1003"
-                    data-action="view-order-details"
-                  >
-                    See details
-                  </button>
-                </td>
-              </tr>
-
-              <tr
-                class="order-row"
-                data-order-id="ORD1004"
-                data-customer-id="CUS016"
-                data-date="2026-07-23T19:20"
-                data-order-type="Delivery"
-                data-order-status="Cancelled"
-                data-subtotal="19.00"
-                data-delivery-fee="3.00"
-                data-total="22.00"
-                data-payment-method="PayNow"
-                data-payment-status="Refunded"
-                data-special-request=""
-                data-menu-items='[{"menuItemName":"Chicken Rice","quantity":2,"price":7.50}, {"menuItemName":"Coke","quantity":2,"price":2.00}]'
-              >
-                <td data-label="Order ID"><strong>ORD1004</strong></td>
-                <td data-label="Customer ID">CUS016</td>
-                <td data-label="Date &amp; Time">
-                  <time datetime="2026-07-23T19:20">23 Jul 2026, 7:20 PM</time>
-                </td>
-                <td data-label="Total">$22.00</td>
-                <td data-label="Payment Type">PayNow</td>
-                <td data-label="Payment Status">
-                  <span class="payment-status payment-refunded">Refunded</span>
-                </td>
-                <td data-label="Order Type">Delivery</td>
-                <td class="special-request" data-label="Special Request">-</td>
-                <td data-label="Order Status">
-                  <select class="order-status-select status-cancelled">
-                    <option value="Pending">Pending</option>
-                    <option value="Preparing">Preparing</option>
-                    <option value="Ready for Collection">
-                      Ready for Collection
-                    </option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled" selected>Cancelled</option>
-                  </select>
-                </td>
-                <td class="order-actions">
-                  <button
-                    type="button"
-                    class="view-details-button"
-                    data-order-id="ORD1004"
-                    data-action="view-order-details"
-                  >
-                    See details
-                  </button>
-                </td>
-              </tr>
-
-              <tr
-                class="order-row"
-                data-order-id="ORD1005"
-                data-customer-id="CUS075"
-                data-date="2026-07-24T13:10"
-                data-order-type="Delivery"
-                data-order-status="Pending"
-                data-subtotal="12.80"
-                data-delivery-fee="3.00"
-                data-total="15.80"
-                data-payment-method="NETS"
-                data-payment-status="Pending"
-                data-special-request="Extra gravy"
-                data-menu-items='[{"menuItemName":"Chicken Curry Rice","quantity":1,"price":9.30}, {"menuItemName":"Iced Barley","quantity":1,"price":3.50}]'
-              >
-                <td data-label="Order ID"><strong>ORD1005</strong></td>
-                <td data-label="Customer ID">CUS075</td>
-                <td data-label="Date &amp; Time">
-                  <time datetime="2026-07-24T13:10">24 Jul 2026, 1:10 PM</time>
-                </td>
-                <td data-label="Total">$15.80</td>
-                <td data-label="Payment Type">NETS</td>
-                <td data-label="Payment Status">
-                  <span class="payment-status payment-pending">Pending</span>
-                </td>
-                <td data-label="Order Type">Delivery</td>
-                <td class="special-request" data-label="Special Request">✓</td>
-                <td data-label="Order Status">
-                  <select class="order-status-select status-pending">
-                    <option value="Pending" selected>Pending</option>
-                    <option value="Preparing">Preparing</option>
-                    <option value="Ready for Collection">
-                      Ready for Collection
-                    </option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td class="order-actions">
-                  <button
-                    type="button"
-                    class="view-details-button"
-                    data-order-id="ORD1005"
-                    data-action="view-order-details"
-                  >
-                    See details
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+            <!-- Orders are inserted by JavaScript -->
+            <tbody id="orders-table-body"></tbody>
           </table>
         </div>
+
+        <!-- No results message -->
         <p class="no-orders-message" id="no-orders-message" hidden>
           No orders match the selected search and filters.
         </p>
       </section>
     </main>
+
     <!-- Order details dialog -->
     <div class="order-dialog" id="order-dialog" hidden>
       <div class="dialog-header">
         <div>
           <p class="dialog-eyebrow">Order details</p>
-          <h2 id="dialog-order-id">ORD1001</h2>
+          <h2 id="dialog-order-id">Order</h2>
         </div>
       </div>
+
+      <!-- Order details are inserted by JavaScript -->
       <div class="dialog-body" id="dialog-body"></div>
+
       <div class="dialog-footer">
         <button
           type="button"
@@ -523,11 +235,10 @@
         >
           Close
         </button>
-        <!-- <button type="button" class="primary-button" data-action="update-order">
-          Update order
-        </button> -->
       </div>
     </div>
+
+    <!-- JavaScript -->
     <script src="../js/vendor-orders.js"></script>
   </body>
 </html>

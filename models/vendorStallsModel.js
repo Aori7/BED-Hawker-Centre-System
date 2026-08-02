@@ -16,10 +16,15 @@ async function getVendorStalls(userID) {
         FS.StallID,
         FS.StallName,
         FS.StallUnitNo,
+        FS.StallDescription,
         FS.HawkerCentreID,
         FS.ImageURL,
         FS.IsOpen,
-        HC.HCName
+        HC.HCName,
+        LatestInspection.InspectionDate,
+        LatestInspection.InspectionScore,
+        LatestInspection.HygieneGrade,
+        LatestInspection.GradeExpiry
       FROM StallOwner SO
 
       INNER JOIN FoodStall FS
@@ -28,11 +33,24 @@ async function getVendorStalls(userID) {
       INNER JOIN HawkerCentre HC
         ON FS.HawkerCentreID=HC.HawkerCentreID
 
+      OUTER APPLY (
+        SELECT TOP 1
+          I.InspectionDate,
+          I.InspectionScore,
+          I.HygieneGrade,
+          I.GradeExpiry
+        FROM Inspection I
+        WHERE I.StallID=FS.StallID
+          AND I.InspectionStatus='Completed'
+        ORDER BY
+          I.InspectionDate DESC,
+          I.InspectionID DESC
+      ) LatestInspection
+
       WHERE SO.UserID=@userID
         AND FS.IsActive=1
 
-      ORDER BY FS.StallName
-    `);
+      ORDER BY FS.StallName`);
 
     return result.recordset;
   } catch (error) {
