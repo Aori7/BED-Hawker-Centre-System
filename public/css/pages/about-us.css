@@ -1,0 +1,197 @@
+body {
+  background: #fffaf3;
+  color: #1f1f1f;
+}
+
+
+#aboutus-section-main {
+  width: min(1100px, 90%);
+  margin: 90px auto;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.about-us-content .title h1,
+.about-us-more .title h1,
+#be-a-member-section .title h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.about-us-content .title h1::after,
+.about-us-more .title h1::after {
+  content: "";
+  display: block;
+  width: 58px;
+  height: 4px;
+  margin-top: 18px;
+  border-radius: 999px;
+  background: #c85b12;
+}
+
+.aboutus-text {
+  margin-top: 28px;
+}
+
+.aboutus-text p {
+  margin: 0 0 18px;
+  font-size: 1.06rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+.about-us-image {
+  position: relative;
+}
+
+.about-us-image::before {
+  content: "";
+  position: absolute;
+  width: 82%;
+  height: 82%;
+  right: -18px;
+  bottom: -18px;
+  background: #f2c895;
+  border-radius: 28px;
+  z-index: -1;
+}
+
+.about-us-image img {
+  width: 100%;
+  height: 430px;
+  display: block;
+  object-fit: cover;
+  border-radius: 28px;
+  box-shadow: 0 18px 45px rgba(59, 35, 13, 0.16);
+}
+
+.about-us-more {
+  width: min(1100px, 90%);
+  margin: 0 auto 90px;
+  padding: 56px;
+  background: #1f1f1f;
+  color: white;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-us-more::after {
+  content: "restaurant";
+  position: absolute;
+  right: 24px;
+  bottom: -35px;
+  font-family: "Material Symbols Rounded";
+  font-size: 11rem;
+  color: rgba(255, 255, 255, 0.05);
+}
+
+.about-us-more .title h1::after {
+  background: #f2a65a;
+}
+
+.about-us-more p {
+  max-width: 760px;
+  margin: 26px 0 0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+#be-a-member-section {
+  width: min(1100px, 90%);
+  margin: 0 auto 100px;
+  padding: 70px 40px;
+  text-align: center;
+  background: #f7e4cf;
+  border: 1px solid #ecd1b3;
+  border-radius: 30px;
+}
+
+#be-a-member-section p {
+  max-width: 620px;
+  margin: 20px auto 30px;
+  color: #5e5144;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+#be-a-member-section a {
+  text-decoration: none;
+}
+
+#be-a-member-section button {
+  border: 0;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: #b84f0b;
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#be-a-member-section button:hover {
+  transform: translateY(-2px);
+  background: #943f08;
+  box-shadow: 0 10px 24px rgba(184, 79, 11, 0.24);
+}
+
+@media (max-width: 850px) {
+  .order-hawker-banner {
+    min-height: 300px;
+  }
+
+  #aboutus-section-main {
+    grid-template-columns: 1fr;
+    gap: 42px;
+    margin: 65px auto;
+  }
+
+  .about-us-image {
+    order: -1;
+  }
+
+  .about-us-image img {
+    height: 340px;
+  }
+
+  .about-us-more {
+    padding: 42px 28px;
+  }
+}
+
+@media (max-width: 520px) {
+  .order-hawker-header {
+    text-align: center;
+  }
+
+  .about-us-image img {
+    height: 270px;
+    border-radius: 20px;
+  }
+
+  .about-us-image::before {
+    right: -10px;
+    bottom: -10px;
+    border-radius: 20px;
+  }
+
+  .about-us-more,
+  #be-a-member-section {
+    border-radius: 22px;
+  }
+
+  #be-a-member-section {
+    padding: 50px 24px;
+  }
+}

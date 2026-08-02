@@ -105,7 +105,67 @@ async function getRecentOrders(req, res) {
     });
   }
 }
+async function getAllOrders(req, res) {
+  try {
+    const customerID = parseInt(req.params.customerID);
+
+    if (Number.isNaN(customerID) || customerID <= 0) {
+      return res.status(400).json({
+        error: "A valid customer ID is required",
+      });
+    }
+
+    const orders =
+      await orderModel.getAllOrdersByCustomer(customerID);
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Get all orders error:", error);
+
+    res.status(500).json({
+      error: "Unable to retrieve order history",
+    });
+  }
+}
+async function getReceipt(req, res) {
+  try {
+    const orderID = parseInt(req.params.orderID);
+    const customerID = parseInt(req.params.customerID);
+
+    if (
+      Number.isNaN(orderID) ||
+      orderID <= 0 ||
+      Number.isNaN(customerID) ||
+      customerID <= 0
+    ) {
+      return res.status(400).json({
+        error: "A valid order ID and customer ID are required",
+      });
+    }
+
+    const receipt = await orderModel.getReceiptByOrderID(
+      orderID,
+      customerID
+    );
+
+    if (!receipt) {
+      return res.status(404).json({
+        error: "Receipt not found",
+      });
+    }
+
+    res.status(200).json(receipt);
+  } catch (error) {
+    console.error("Get receipt error:", error);
+
+    res.status(500).json({
+      error: "Unable to retrieve receipt",
+    });
+  }
+}
 module.exports = {
   createOrder,
   getRecentOrders,
+  getAllOrders,
+  getReceipt,
 };

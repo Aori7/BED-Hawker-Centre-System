@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/pages/index.css" />
-
+<link rel="stylesheet" href="../css/pages/order-history.css" />
+    <link rel="stylesheet" href="../css/pages/contact-us-target.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
@@ -32,7 +33,7 @@
     <!-- navigation bar done by ada-->
     <header id="navigationbar">
       <div class="logo">
-        <a href="../index.html">
+        <a href="index.html">
           <!-- image of logo sourced from google icons -->
           <span class="material-symbols-rounded">restaurant_menu</span>
           <h1 id="logotitle">Hawker<em>SG</em></h1>
@@ -41,14 +42,14 @@
 
       <ul class="navitems">
         <li><a href="../index.html">Home</a></li>
-        <li><a href="../html/order-hawker.html">Order</a></li>
-        <li><a href="../html/main-hawkers.html">Hawkers</a></li>
-        <li><a href="../html/about-us.html">About Us</a></li>
-        <li><a href="../html/contact-us.html" class="active">Contact Us</a></li>
+        <li><a href="order-hawker.html">Order</a></li>
+        <li><a href="main-hawkers.html">Hawkers</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="contact-us.html" class="active">Contact Us</a></li>
       </ul>
 
       <div class="loginbutton">
-        <a href="../html/login.html" id="login-link">
+        <a href="login.html" id="login-link">
           <button id="login-btn">Login</button>
         </a>
         <button id="logout-btn" style="display: none">Logout</button>
@@ -128,6 +129,72 @@
                     Others
                 </option>
             </select>
+
+            <div class="contact-target-box">
+              <div class="contact-target-heading">
+                <span class="material-symbols-rounded">near_me</span>
+
+                <div>
+                  <strong>Who is this about?</strong>
+                  <p id="target-help-text">
+                    Choose who your message is about.
+                  </p>
+                </div>
+              </div>
+
+              <label for="target-type">
+                Target Type:
+              </label>
+
+              <select
+                id="target-type"
+                name="targetType"
+                required
+              >
+                <option value="">
+                  Select a target
+                </option>
+
+                <option value="General">
+                  General HawkerSG Support
+                </option>
+
+                <option value="Stall">
+                  Specific Stall
+                </option>
+
+                <option value="HawkerCentre">
+                  Specific Hawker Centre
+                </option>
+
+                <option value="Operator">
+                  Specific Operator
+                </option>
+              </select>
+
+              <div
+                id="target-selection-group"
+                class="target-selection-group"
+                hidden
+              >
+                <label
+                  for="target-id"
+                  id="target-selection-label"
+                >
+                  Select Target
+                </label>
+
+                <select
+                  id="target-id"
+                  name="targetID"
+                >
+                  <option value="">
+                    Select an option
+                  </option>
+                </select>
+              </div>
+            </div>
+
             <label for="subject">
                 Subject:
             </label>
@@ -251,7 +318,22 @@
         </a>
       </div>
     </aside>
+    <div id="receipt-modal-overlay" class="receipt-modal-overlay">
+      <div class="receipt-modal">
+        <button
+          type="button"
+          id="close-receipt-modal"
+          class="close-receipt-modal material-symbols-rounded"
+          aria-label="Close receipt"
+        >
+          close
+        </button>
 
+        <div id="receipt-content">
+          <p>Loading receipt...</p>
+        </div>
+      </div>
+    </div>
     <footer id="footercontainer">
       <div class="footer-glow footer-glow-one"></div>
       <div class="footer-glow footer-glow-two"></div>

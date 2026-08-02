@@ -1,442 +1,673 @@
-/* set a universal input design... so to keep consistency*/
-input{
-    width: 400px;
-    height: 50px;
-    padding: 0 20px;
+/* ======================================================= */
+/* login page */
 
-    border-radius: 25px;
-    border: 2px solid transparent;
-
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--black-text-color);
-
-    background-color: #ffffff;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-
-    outline: none;
-    transition: 
-        border 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.2s ease;
+* {
+    box-sizing: border-box;
 }
-input:focus{
-    border-color: var(--orange-color);
-    box-shadow: 
-        0 0 0 4px rgba(250, 129, 18, 0.2),
-        0 10px 20px rgba(0, 0, 0, 0.12);
-}
-input::placeholder{
-    color: #999;
-    font-weight: 500;
-}
-
 
 body {
+    min-height: 100vh;
     margin: 0;
-    background-image: none;
-    background-color: var(--orange-color);
-}
 
-.back-btn{
-    position: absolute;
-    top: 30px;
-    left: 30px;
-
-    background: none;
+    background-color: #fff8ef;
     color: var(--black-text-color);
-    box-shadow: none;
-    padding: 0;
-    font-size: 18px;
+
+    font-family: "Noto Sans", sans-serif;
 }
 
-.back-btn:hover{
-    transform: none;
-    color: var(--orange-color);
+button,
+input,
+select {
+    font-family: inherit;
 }
 
 
-.login-container{
-    /* position: absolute; */
+/* ======================================================= */
+/* overall layout */
+
+.login-container {
     width: 100%;
-    /* height is = height of the view port */
-    height: 100vh;
-    /* background-color: aliceblue; */
+    min-height: 100vh;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+
+/* ======================================================= */
+/* left visual panel */
+
+.left-container {
+    position: relative;
+
+    min-height: 100vh;
 
     display: flex;
-    flex-direction: row;
-}
+    align-items: center;
+    justify-content: center;
 
-.left-container,
-.right-container{
-    position: relative;
-    width: 100%;
-    height: 100%;
     overflow: hidden;
 }
 
-
-.bg-image{    
+.bg-image {
     position: absolute;
-    background-image: url("../images/bg-img.jpg");
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(31, 20, 12, 0.35),
+            rgba(31, 20, 12, 0.68)
+        ),
+        url("../../images/bg-img.jpg");
+
     background-size: cover;
     background-position: center;
-    top: 0;
-    left: 0;
 
-    width: 100%;
-    height: 100%;
-    
-    filter: blur(10px) brightness(90%);
-    transform: scale(1.05);
-    /* inset: -40px;
-    z-index: -1; */
-    /* z-index: -3; */
+    transform: scale(1.03);
 }
 
-.logo{
+.left-container::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 25% 25%,
+            rgba(255, 151, 55, 0.3),
+            transparent 35%
+        );
+}
+
+.logo {
     position: relative;
+    z-index: 2;
+
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    text-decoration: none;
+}
+
+.logo span {
+    width: 78px;
+    height: 78px;
+
+    display: flex;
     align-items: center;
     justify-content: center;
 
-    /* left: 20px; */
-    top: 40%;
+    border-radius: 24px;
 
+    background-color: var(--orange-color);
+    color: white;
+
+    font-size: 48px;
+
+    box-shadow:
+        0 16px 35px rgba(0, 0, 0, 0.25);
 }
 
-.logo a{
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    text-decoration: none;
-}
-.logo span{
-    /* the logo symbol icon */
-    font-size: 60px;
-    color: #ffffff;
-    background: var(--orange-color);
-    border-radius: 20px;
-    padding: 4px;
+#logotitle {
+    margin: 0;
+
+    color: white;
+
+    font-family: "Noto Serif", serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 700;
+    letter-spacing: -2px;
+
+    text-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.35);
 }
 
-#logotitle{
-    font-size: 60px;
-    font-weight: 550;
+#logotitle em {
     color: var(--orange-color);
-    text-decoration: none;
-    text-shadow: 0 10px 10px black;
-}
 
-#logotitle em{
     font-style: italic;
-    color: var(--black-text-color);
-    font-weight: 750;
 }
 
 
-/* right container */
-/* login containers */
+/* ======================================================= */
+/* right panel */
 
-.title h1{
-    font-size: 40px;
-    font-weight: bold;
-}
+.right-container {
+    min-height: 100vh;
 
-.right-container{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-}
-/* display only on active state */
-.login-state.active{
-    display: block;
-    display: flex;
+    justify-content: center;
 
+    padding: 48px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(255, 164, 77, 0.16),
+            transparent 35%
+        ),
+        #fff8ef;
 }
-.login-state{
+
+
+/* ======================================================= */
+/* login states */
+
+.login-state {
     display: none;
 }
 
-/* same border card design for all states to keep consistency */
-#choose-role,
-#customer-login,
-#other-login,
-#register-acc{
-    background-color: var(--lighter-beige);
-    width: 70%;
-    height: 80%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 20px;
-    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.10);
-}
+.login-state.active {
+    position: relative;
 
-.roles{
-    /* display: grid;
-    grid-template-columns: repeat(2, 1fr); */
+    width: 100%;
+    max-width: 560px;
+    min-height: 620px;
+
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    
-    gap: 20px;
+    align-items: stretch;
+
+    padding: 58px 62px;
+
+    border: 1px solid rgba(255, 122, 0, 0.12);
+    border-radius: 30px;
+
+    background-color: rgba(255, 255, 255, 0.94);
+
+    box-shadow:
+        0 24px 60px rgba(72, 43, 20, 0.12);
 }
 
-.roles button{
-    /* override universal width of button */
-    width: 350px;
-    margin: 6px;
+
+/* ======================================================= */
+/* headings */
+
+.title {
+    text-align: center;
 }
-.roles select{
-    right: 22px; 
+
+.title h1 {
+    margin: 0 0 34px;
+
+    color: #2d2722;
+
+    font-size: clamp(32px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1px;
 }
-/* dropdown list deco */
-#role-select{
-    width: 500px;
-    height: 50px;
-    border-radius: 25px;
-    padding: 0 20px;
-    font-size: 18px;
-    font-weight: 600;
+
+.singpass-input .title,
+.qr-input .title {
+    margin-bottom: 20px;
+}
+
+.singpass-input .title h2,
+.qr-input .title h2 {
+    margin: 0 0 8px;
+
+    color: #2d2722;
+
+    font-size: 24px;
+}
+
+.qr-input .title p {
+    margin: 0;
+
+    color: #7f7167;
+
+    font-size: 14px;
+}
+
+
+/* ======================================================= */
+/* back button */
+
+.back-btn {
+    position: absolute;
+    top: 24px;
+    left: 28px;
+
+    width: auto;
+
+    padding: 8px 12px;
 
     border: none;
+    border-radius: 12px;
+
+    background: transparent;
+    color: #74665c;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #fff0df;
+    color: var(--orange-color);
+
+    transform: none;
+}
+
+
+/* ======================================================= */
+/* form fields */
+
+.login-info,
+.reg-info,
+.singpass-login-info {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.email-title,
+.pass-title,
+.name-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin: 16px 0 8px;
+
+    color: #4a4039;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.email-title span,
+.pass-title span,
+.name-title span {
+    color: var(--orange-color);
+
+    font-size: 20px;
+}
+
+input,
+#role-select {
+    width: 100%;
+    height: 54px;
+
+    padding: 0 18px;
+
+    border: 1px solid #eadfd4;
+    border-radius: 15px;
     outline: none;
 
+    background-color: #fffaf4;
+    color: #312b27;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    box-shadow: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+input:focus,
+#role-select:focus {
+    border-color: var(--orange-color);
+
     background-color: white;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+
+    box-shadow:
+        0 0 0 4px rgba(255, 122, 0, 0.12);
+}
+
+input::placeholder {
+    color: #a79b92;
+}
+
+
+/* ======================================================= */
+/* role selection */
+
+.roles {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+#role-select {
     cursor: pointer;
 }
 
-.register{
-    display: flex;
-    flex-direction: column;
-}
-.register p{
-    font-size: 20px;
-    margin: 0;
-    margin-top: 60px;
-    margin-bottom: 15px;
-}
-
-/* state customer login  */
-#customer-login .login-info{
-    display: flex;
-    flex-direction: column;
-}
-/* #customer-login .login-info input{
-
-} */
-
-.email-title,.pass-title,.name-title{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    /* margin: 0;
-    margin-top: 15px; */
-    margin: 10px 0px 10px 0px;
-
-    font-size: 25px;
-    gap: 8px;
-}
-
-.forgot-pass{
-    margin: 20px;
-}
-
-.login{
-    margin: 20px;
-}
-
-.login-with-google{
-    border-top: 1px solid black;
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.google-title{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-}
-/* google image icon */
-.login-with-google .google-title img{
-    width: 40px;
-    height: auto;
-}
-.google-title a{
-    font-size: 20px;
-    text-decoration: none;
-}
-
-
-/* singpass login methods */
-/* for vendor, nea and operator */
-
-/* if the login type is active, button ui is lighter color */
-.singpass-login.active{
-    background: var(--ligter-orange);
-}
-/* if not toggled - not active = default button color */
-
-/* show only the active states of the login methods */
-
-.login-method.active{
-    display:block;
+.roles button,
+.login-btn,
+.reg-btn {
     width: 100%;
+    min-height: 54px;
+
+    border: none;
+    border-radius: 16px;
+
+    background-color: var(--orange-color);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 24px rgba(255, 122, 0, 0.24);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
 }
-.login-method{
+
+.roles button:hover,
+.login-btn:hover,
+.reg-btn:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.04);
+
+    box-shadow:
+        0 16px 30px rgba(255, 122, 0, 0.32);
+}
+
+.roles button:active,
+.login-btn:active,
+.reg-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ======================================================= */
+/* signup section */
+
+.register {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register p {
+    margin: 40px 0 12px;
+
+    color: #81736a;
+
+    font-size: 14px;
+}
+
+.sign-up {
+    border: none;
+
+    background: transparent;
+    color: var(--orange-color);
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow: none;
+}
+
+.sign-up:hover {
+    text-decoration: underline;
+
+    transform: none;
+}
+
+
+/* ======================================================= */
+/* login button containers */
+
+.login {
+    width: 100%;
+
+    margin: 28px 0 0;
+}
+
+#register-acc .register {
+    margin-top: 28px;
+}
+
+
+/* ======================================================= */
+/* staff login toggle */
+
+.choose-login {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+
+    margin-bottom: 28px;
+    padding: 6px;
+
+    border-radius: 16px;
+
+    background-color: #f4e9dc;
+}
+
+.singpass-login {
+    min-height: 44px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: transparent;
+    color: #75665c;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow: none;
+}
+
+.singpass-login.active {
+    background-color: white;
+    color: var(--orange-color);
+
+    box-shadow:
+        0 7px 18px rgba(67, 40, 18, 0.08);
+}
+
+.singpass-login:hover {
+    transform: none;
+}
+
+
+/* ======================================================= */
+/* login methods */
+
+.login-method {
     display: none;
 }
+
+.login-method.active {
+    width: 100%;
+
+    display: block;
+}
+
+.login-methods,
 .singpass-input,
-.qr-input{
+.qr-input {
+    width: 100%;
+}
+
+.singpass-input,
+.qr-input {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
-/* 1. password login singpasss */
-#login-password{
-    /* display: flex; */
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-#login-password form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+.singpass-login-info {
+    gap: 16px;
 }
 
 
+/* ======================================================= */
+/* QR login */
 
-/* 2. using qr login singpass */
-#login-qr .qr-input .title{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.singpass-qr-code {
+    padding: 14px;
+
+    border: 2px solid #f1d3b4;
+    border-radius: 22px;
+
+    background-color: white;
+
+    box-shadow:
+        0 14px 28px rgba(55, 34, 18, 0.1);
 }
-.singpass-qr-code{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    border: 5px solid red;
-    border-radius: 15px;
+
+.singpass-qr-code img {
+    width: 235px;
+    height: 235px;
+
+    display: block;
+
+    border-radius: 12px;
 }
-.singpass-qr-code img{
-    width: 300px;
-    height: auto;
-    border-radius: 15px;
-}
-.login-footer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: center;
-    margin-top: 20px;
+
+.login-footer {
+    margin-top: 24px;
+
     text-align: center;
 }
-.login-footer a{
+
+.login-footer p {
+    margin: 0 0 6px;
+
+    color: #81736a;
+
+    font-size: 13px;
+}
+
+.login-footer a {
+    color: var(--orange-color);
+
+    font-size: 14px;
+    font-weight: 800;
     text-decoration: none;
-    margin: 0;
-    color: rgb(26, 26, 165);
-}
-.login-footer a:hover{
-    color: rgb(83, 83, 255);
-}
-.login-footer p{
-    margin: 0;
 }
 
-/* register section */
-/* register button container */
-#register-acc .register {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
+.login-footer a:hover {
+    text-decoration: underline;
 }
 
-@media (max-width: 768px) {
 
-    /* layout */
+/* ======================================================= */
+/* responsive */
+
+@media screen and (max-width: 950px) {
     .login-container {
-        flex-direction: column;
-        width: 90%;
-        height: auto;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 40px;
+        grid-template-columns: 1fr;
     }
 
-    /* hide left image panel */
     .left-container {
-        display: none;
+        min-height: 240px;
     }
 
-    /* right side full screen */
+    .logo span {
+        width: 60px;
+        height: 60px;
+
+        font-size: 36px;
+    }
+
+    #logotitle {
+        font-size: 46px;
+    }
+
     .right-container {
-        width: 100%;
-        padding: 20px;
-        justify-content: center;
+        min-height: calc(100vh - 240px);
+
+        padding: 40px 24px 60px;
     }
 
-    /* login cards */
-    #choose-role,
-    #customer-login,
-    #other-login,
-    #register-acc {
-        width: 100%;
-        height: auto;
-        padding: 30px 20px;
+    .login-state.active {
+        max-width: 600px;
+        min-height: 570px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .left-container {
+        min-height: 180px;
     }
 
-    /* titles */
+    .logo span {
+        width: 50px;
+        height: 50px;
+
+        border-radius: 16px;
+
+        font-size: 30px;
+    }
+
+    #logotitle {
+        font-size: 36px;
+    }
+
+    .right-container {
+        padding: 24px 16px 40px;
+    }
+
+    .login-state.active {
+        min-height: 540px;
+
+        padding: 56px 24px 34px;
+
+        border-radius: 24px;
+    }
+
     .title h1 {
-        font-size: 28px;
-        text-align: center;
+        margin-bottom: 26px;
+
+        font-size: 30px;
     }
 
-    /* inputs + selects */
-    input,
-    #role-select {
-        width: 100%;
-        max-width: 100%;
+    .choose-login {
+        grid-template-columns: 1fr;
     }
 
-    /* buttons */
-    button {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    /* role buttons spacing */
-    .roles {
-        width: 100%;
-    }
-
-    /* back button */
-    .back-btn {
-        top: 16px;
-        left: 16px;
-    }
-
-    /* QR image */
     .singpass-qr-code img {
-        width: 220px;
+        width: 190px;
+        height: 190px;
     }
-    
+
+    .back-btn {
+        top: 18px;
+        left: 18px;
+    }
 }

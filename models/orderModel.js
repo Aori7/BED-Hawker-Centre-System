@@ -75,10 +75,9 @@ async function createOrder(orderData) {
       });
     }
 
-    // Delivery currently has no calculated delivery fee
-    const deliveryFee = 0;
-    const totalAmount = subtotal + deliveryFee;
+    const deliveryFee = orderType === "Delivery" ? 3 : 0;
 
+    const totalAmount = subtotal + deliveryFee;
     /*
         For now, payment remains Pending because
         there is no real payment gateway yet.
@@ -93,8 +92,6 @@ async function createOrder(orderData) {
       .input("Subtotal", sql.Decimal(10, 2), subtotal)
       .input("DeliveryFee", sql.Decimal(10, 2), deliveryFee)
       .input("TotalAmount", sql.Decimal(10, 2), totalAmount)
-      .input("PaymentMethod", sql.VarChar(20), paymentMethod)
-      .input("PaymentStatus", sql.VarChar(20), paymentStatus)
       .input("SpecialRequest", sql.VarChar(255), specialRequest || null).query(`
                     INSERT INTO Orders
                     (
@@ -104,8 +101,6 @@ async function createOrder(orderData) {
                         Subtotal,
                         DeliveryFee,
                         TotalAmount,
-                        PaymentMethod,
-                        PaymentStatus,
                         SpecialRequest
                     )
                     OUTPUT INSERTED.OrderID
@@ -117,8 +112,6 @@ async function createOrder(orderData) {
                         @Subtotal,
                         @DeliveryFee,
                         @TotalAmount,
-                        @PaymentMethod,
-                        @PaymentStatus,
                         @SpecialRequest
                     )
                 `);
@@ -208,8 +201,8 @@ async function getRecentOrdersByCustomer(customerID) {
                     o.OrderStatus,
                     o.OrderType,
                     o.TotalAmount,
-                    o.PaymentMethod,
-                    o.PaymentStatus,
+                    p.PaymentMethod,
+                    p.PaymentStatus,
                     fs.StallName,
                     COALESCE(SUM(oi.Quantity), 0) AS ItemCount
                 FROM Orders o
@@ -219,7 +212,8 @@ async function getRecentOrdersByCustomer(customerID) {
 
                 LEFT JOIN OrderItem oi
                     ON o.OrderID = oi.OrderID
-
+                LEFT JOIN Payment p
+                    ON o.OrderID = p.OrderID
                 WHERE o.CustomerID = @CustomerID
 
                 GROUP BY
@@ -228,8 +222,8 @@ async function getRecentOrdersByCustomer(customerID) {
                     o.OrderStatus,
                     o.OrderType,
                     o.TotalAmount,
-                    o.PaymentMethod,
-                    o.PaymentStatus,
+                    p.PaymentMethod,
+                    p.PaymentStatus,
                     fs.StallName
 
                 ORDER BY o.OrderDateTime DESC;
@@ -240,8 +234,113 @@ async function getRecentOrdersByCustomer(customerID) {
     await connection.close();
   }
 }
+async function getAllOrdersByCustomer(customerID) {
+  const connection = await sql.connect(dbConfig);
 
+  try {
+    const result = await connection
+      .request()
+      .input("CustomerID", sql.Int, customerID).query(`
+        SELECT
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          o.TotalAmount,
+          p.PaymentMethod,
+          p.PaymentStatus,
+          fs.StallName,
+          COALESCE(SUM(oi.Quantity), 0) AS ItemCount
+        FROM Orders o
+
+        INNER JOIN FoodStall fs
+          ON o.StallID = fs.StallID
+        LEFT JOIN Payment p
+            ON o.OrderID = p.OrderID
+        LEFT JOIN OrderItem oi
+          ON o.OrderID = oi.OrderID
+
+        WHERE o.CustomerID = @CustomerID
+
+        GROUP BY
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          o.TotalAmount,
+          p.PaymentMethod,
+          p.PaymentStatus,
+          fs.StallName
+
+        ORDER BY
+          o.OrderDateTime DESC,
+          o.OrderID DESC;
+      `);
+
+    return result.recordset;
+  } finally {
+    await connection.close();
+  }
+}
+async function getReceiptByOrderID(orderID, customerID) {
+  const connection = await sql.connect(dbConfig);
+
+  try {
+    const orderResult = await connection
+      .request()
+      .input("OrderID", sql.Int, orderID)
+      .input("CustomerID", sql.Int, customerID).query(`
+        SELECT
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          p.PaymentMethod,
+          p.PaymentStatus,
+          o.Subtotal,
+          o.DeliveryFee,
+          o.TotalAmount,
+          o.SpecialRequest,
+          fs.StallName
+        FROM Orders o
+        INNER JOIN FoodStall fs
+          ON o.StallID = fs.StallID
+        LEFT JOIN Payment p
+            ON o.OrderID = p.OrderID
+        WHERE o.OrderID = @OrderID
+        AND o.CustomerID = @CustomerID
+      `);
+
+    if (orderResult.recordset.length === 0) {
+      return null;
+    }
+
+    const itemsResult = await connection
+      .request()
+      .input("OrderID", sql.Int, orderID).query(`
+        SELECT
+          OrderItemID,
+          ItemName,
+          Quantity,
+          UnitPrice,
+          Subtotal,
+          SpecialRequest
+        FROM OrderItem
+        WHERE OrderID = @OrderID
+        ORDER BY OrderItemID ASC
+      `);
+
+    return {
+      ...orderResult.recordset[0],
+      Items: itemsResult.recordset,
+    };
+  } finally {
+    await connection.close();
+  }
+}
 module.exports = {
   createOrder,
   getRecentOrdersByCustomer,
+  getAllOrdersByCustomer,
+  getReceiptByOrderID,
 };

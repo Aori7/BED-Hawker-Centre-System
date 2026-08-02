@@ -80,20 +80,20 @@ app.use("/hygiene-grades", hygieneGradeRoutes);
 app.use("/stall-details", stallDetailsRoutes);
 
 //start server
-app.listen(port, async () => {
-  try {
-    // Connect to the database
-    await sql.connect(dbConfig);
-    console.log("Database connection established successfully");
-  } catch (err) {
-    console.error("Database connection error:", err);
-    // Terminate the application with an error code (optional)
-    process.exit(1); // Exit with code 1 indicating an error
-  }
+module.exports = app;
 
-  console.log(`Server listening on port ${port}`);
-});
+if (require.main === module) {
+    app.listen(port, async () => {
+        try {
+            await sql.connect(dbConfig);
+            console.log("Database connection established successfully");
+        } catch (err) {
+            console.error(err);
+        }
 
+        console.log(`Server listening on port ${port}`);
+    });
+}
 // Close the connection pool on SIGINT signal
 process.on("SIGINT", async () => {
   console.log("Server is gracefully shutting down");

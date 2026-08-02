@@ -3,7 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const pagination = document.getElementById("hawker-pagination");
   const searchInput = document.getElementById("hawkersearch");
   const searchButton = document.getElementById("searchbtn");
+  const accessToken = sessionStorage.getItem("accessToken");
 
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
+
+  const userRole = sessionStorage.getItem("userRole");
   let hawkerCentres = [];
   let filteredHawkerCentres = [];
 
@@ -104,13 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="hawker-card-footer">
           <button
-            type="button"
-            class="hawker-favourite-btn material-symbols-rounded"
-            data-hawker-id="${hawker.HawkerCentreID}"
-            aria-label="Add ${escapeHTML(hawker.HCName)} to favourites"
-          >
-            favorite
-          </button>
+          type="button"
+          class="hawker-favourite-btn material-symbols-rounded"
+          data-hawker-id="${hawker.HawkerCentreID}"
+          aria-label="Add ${escapeHTML(hawker.HCName)} to favourites"
+        >
+          favorite_border
+        </button>
 
           <button
             type="button"
@@ -250,8 +254,49 @@ document.addEventListener("DOMContentLoaded", () => {
       searchHawkerCentres();
     }
   });
+  async function toggleFavourite(favouriteButton) {
+    if (!isLoggedIn || userRole !== "Customer") {
+      alert("Please log in to save favourite hawker centres.");
+      window.location.href = "/html/login.html";
+      return;
+    }
 
+    const hawkerCentreID = favouriteButton.dataset.hawkerId;
+
+    const isFavourite = favouriteButton.classList.contains("active");
+
+    const response = await fetch(
+      `/hawker-centres/${hawkerCentreID}/favourite`,
+      {
+        method: isFavourite ? "DELETE" : "POST",
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.error);
+      return;
+    }
+
+    favouriteButton.classList.toggle("active");
+
+    favouriteButton.textContent = favouriteButton.classList.contains("active")
+      ? "favorite"
+      : "favorite_border";
+  }
   hawkerList.addEventListener("click", (event) => {
+    const favouriteButton = event.target.closest(".hawker-favourite-btn");
+
+    if (favouriteButton) {
+      toggleFavourite(favouriteButton);
+      return;
+    }
+
     const viewStallsButton = event.target.closest(".view-stalls-btn");
 
     if (!viewStallsButton) {
