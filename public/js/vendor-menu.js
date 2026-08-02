@@ -1,12 +1,14 @@
 // Implementing BE to FE
 document.addEventListener("DOMContentLoaded", () => {
   const accessToken = sessionStorage.getItem("accessToken");
-  let selectedStallId = sessionStorage.getItem("selectedStallId") || "1";
+  let selectedStallId = sessionStorage.getItem("selectedStallId");
 
-  // element selectors
+  // Element selectors
   const switchStallButton = document.querySelector("#switch-stall-button");
   const stallDropdown = document.querySelector("#stall-dropdown");
-  const stallOptions = document.querySelectorAll(".stall-option");
+  function getStallOptions() {
+    return document.querySelectorAll(".stall-option");
+  }
   const selectedStallName = document.querySelector("#selected-stall-name");
   const selectedStallAddress = document.querySelector(
     "#selected-stall-address",
@@ -16,29 +18,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const noResultsMessage = document.querySelector("#no-menu-results");
   const categoryNavigation = document.querySelector(".category-navigation");
   const menuContent = document.querySelector(".menu-content");
-
-  // dialogs
+  const menuCategoryContainer = document.querySelector(
+    "#menu-category-container",
+  );
   const addMenuDialog = document.querySelector("#add-menu-dialog");
   const editMenuDialog = document.querySelector("#edit-menu-dialog");
   const addCategoryDialog = document.querySelector("#add-category-dialog");
-
   const addMenuButton = document.querySelector(".floating-add-menu-button");
   const addCategoryButton = document.querySelector(".add-category-button");
   const closeDialogButtons = document.querySelectorAll(".close-dialog-button");
-
-  // forms
   const addMenuForm = document.querySelector("#add-menu-form");
   const editMenuForm = document.querySelector("#edit-menu-form");
   const addCategoryForm = document.querySelector("#add-category-form");
+  const addCategorySelect = document.querySelector("#add-item-category");
+  const editCategorySelect = document.querySelector("#edit-item-category");
 
-  // redirect if not logged in
+  // Redirect when not logged in
   if (!accessToken) {
     alert("Please log in first.");
     window.location.href = "login.html";
     return;
   }
 
-  // send request to backend
+  // Send request to backend
   async function vendorFetch(url, options = {}) {
     const response = await fetch(url, {
       ...options,
@@ -58,7 +60,83 @@ document.addEventListener("DOMContentLoaded", () => {
     return data;
   }
 
-  // create safe HTML text
+  // Create one stall option
+  function createStallOption(stall) {
+    const address = [stall.StallUnitNo, stall.HCName]
+      .filter(Boolean)
+      .join(" · ");
+
+    return `
+    <button
+      type="button"
+      class="stall-option"
+      data-stall-id="${stall.StallID}"
+      data-stall-name="${escapeHtml(stall.StallName)}"
+      data-stall-address="${escapeHtml(address)}"
+      data-action="select-stall"
+    >
+      <span class="stall-option-name">
+        ${escapeHtml(stall.StallName)}
+      </span>
+      <span class="stall-option-location">
+        ${escapeHtml(address)}
+      </span>
+    </button>
+  `;
+  }
+
+  // Load stalls from backend
+  async function loadVendorStalls() {
+    try {
+      const stalls = await vendorFetch("/vendor-stalls");
+
+      if (!Array.isArray(stalls) || stalls.length === 0) {
+        selectedStallId = null;
+        sessionStorage.removeItem("selectedStallId");
+
+        if (selectedStallName) {
+          selectedStallName.textContent = "No stalls found";
+        }
+
+        if (selectedStallAddress) {
+          selectedStallAddress.textContent = "";
+        }
+
+        if (stallDropdown) {
+          stallDropdown.innerHTML = "";
+        }
+        showMenuMessage("No stalls are linked to this vendor.");
+        return false;
+      }
+
+      if (stallDropdown) {
+        stallDropdown.innerHTML = stalls.map(createStallOption).join("");
+      }
+
+      const selectedStallExists = stalls.some(
+        (stall) => String(stall.StallID) === String(selectedStallId),
+      );
+
+      if (!selectedStallExists) {
+        selectedStallId = String(stalls[0].StallID);
+        sessionStorage.setItem("selectedStallId", selectedStallId);
+      }
+
+      displaySelectedStall();
+      return true;
+    } catch (error) {
+      console.error("Error loading vendor stalls:", error);
+
+      if (selectedStallName) {
+        selectedStallName.textContent = "Unable to load stalls";
+      }
+
+      showMenuMessage(error.message);
+      return false;
+    }
+  }
+
+  // Prevent unsafe HTML
   function escapeHtml(value) {
     return String(value ?? "")
       .replaceAll("&", "&amp;")
@@ -68,22 +146,22 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll("'", "&#039;");
   }
 
-  // create category ID */
+  // Create category ID
   function createCategoryId(category) {
     return String(category).trim().toLowerCase().replaceAll(" ", "-");
   }
 
-  // get current menu cards
+  // Get current menu cards
   function getMenuCards() {
     return document.querySelectorAll(".menu-card");
   }
 
-  // get current category links
+  // Get current category links
   function getCategoryLinks() {
     return document.querySelectorAll(".category-link");
   }
 
-  // open dialog
+  // Open dialog
   function openDialog(dialog) {
     if (!dialog) {
       return;
@@ -93,23 +171,24 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.style.overflow = "hidden";
   }
 
-  // close dialog
+  // Close dialog
   function closeDialog(dialog) {
     if (!dialog) {
       return;
     }
+
     dialog.hidden = true;
     document.body.style.overflow = "";
   }
 
-  // close all dialogs
+  // Close all dialogs
   function closeAllDialogs() {
     closeDialog(addMenuDialog);
     closeDialog(editMenuDialog);
     closeDialog(addCategoryDialog);
   }
 
-  // close stall dropdown
+  // Close stall dropdown
   function closeStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
@@ -119,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
     stallDropdown.hidden = true;
   }
 
-  // toggle stall dropdown
+  // Toggle stall dropdown
   function toggleStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
@@ -131,8 +210,12 @@ document.addEventListener("DOMContentLoaded", () => {
     stallDropdown.hidden = isOpen;
   }
 
-  // display selected stall
+  // Display selected stall
   function displaySelectedStall() {
+    if (!selectedStallId) {
+      return;
+    }
+
     const selectedOption = document.querySelector(
       `.stall-option[data-stall-id="${selectedStallId}"]`,
     );
@@ -141,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    stallOptions.forEach((option) => {
+    getStallOptions().forEach((option) => {
       option.classList.remove("active");
     });
 
@@ -155,24 +238,60 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedStallAddress.textContent =
         selectedOption.dataset.stallAddress || "";
     }
+  }
 
-    const addStallId = document.querySelector("#add-stall-id");
+  // Display page message
+  function showMenuMessage(message) {
+    if (!noResultsMessage) {
+      return;
+    }
 
-    if (addStallId) {
-      addStallId.value = selectedStallId;
+    noResultsMessage.textContent = message;
+    noResultsMessage.hidden = false;
+  }
+
+  // Reset category selects
+  function resetCategorySelects() {
+    if (addCategorySelect) {
+      addCategorySelect.innerHTML = '<option value="">Select category</option>';
+    }
+
+    if (editCategorySelect) {
+      editCategorySelect.innerHTML =
+        '<option value="">Select category</option>';
     }
   }
 
-  // create one menu card
+  // Add category to selects
+  function addCategoryOption(category) {
+    if (!category) {
+      return;
+    }
+
+    const addOptionExists = Array.from(addCategorySelect?.options || []).some(
+      (option) => option.value === category,
+    );
+
+    const editOptionExists = Array.from(editCategorySelect?.options || []).some(
+      (option) => option.value === category,
+    );
+
+    if (addCategorySelect && !addOptionExists) {
+      addCategorySelect.add(new Option(category, category));
+    }
+
+    if (editCategorySelect && !editOptionExists) {
+      editCategorySelect.add(new Option(category, category));
+    }
+  }
+
+  // Create one menu card
   function createMenuCard(menuItem) {
-    const availability = menuItem.IsAvailable ? "available" : "unavailable";
-    const unavailableClass = menuItem.IsAvailable
-      ? ""
-      : " menu-card-unavailable";
-    const statusClass = menuItem.IsAvailable
-      ? "status-available"
-      : "status-unavailable";
-    const statusText = menuItem.IsAvailable ? "Available" : "Unavailable";
+    const isAvailable = Boolean(menuItem.IsAvailable);
+    const availability = isAvailable ? "available" : "unavailable";
+    const unavailableClass = isAvailable ? "" : " menu-card-unavailable";
+    const statusClass = isAvailable ? "status-available" : "status-unavailable";
+    const statusText = isAvailable ? "Available" : "Unavailable";
     const imageStyle = menuItem.ImageURL
       ? `style="background-image:url('${escapeHtml(menuItem.ImageURL)}')"`
       : "";
@@ -190,35 +309,28 @@ document.addEventListener("DOMContentLoaded", () => {
         data-resource="menu-item"
       >
         <div class="menu-image" ${imageStyle}></div>
-
         <div class="menu-price-box single-price">
           <h4 class="menu-name">${escapeHtml(menuItem.ItemName)}</h4>
-          <span class="current-price">
-            $${Number(menuItem.ItemPrice).toFixed(2)}
-          </span>
+          <span class="current-price">$${Number(menuItem.ItemPrice).toFixed(2)}</span>
         </div>
-
         <p class="menu-description">
           ${escapeHtml(menuItem.ItemDescription || "No description provided.")}
         </p>
-
         <div class="menu-card-footer">
           <button
             type="button"
             class="status-toggle ${statusClass}"
-            aria-pressed="${menuItem.IsAvailable}"
+            aria-pressed="${isAvailable}"
             aria-label="Change ${escapeHtml(menuItem.ItemName)} availability"
             data-action="toggle-availability"
           >
             <span class="status-dot"></span>
             <span class="status-text">${statusText}</span>
           </button>
-
           <details class="more-menu">
             <summary aria-label="Open ${escapeHtml(menuItem.ItemName)} actions">
               <span class="material-symbols-rounded">more_horiz</span>
             </summary>
-
             <div class="action-menu">
               <button
                 type="button"
@@ -227,7 +339,6 @@ document.addEventListener("DOMContentLoaded", () => {
               >
                 Change status
               </button>
-
               <button
                 type="button"
                 class="edit-action"
@@ -235,7 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
               >
                 Edit item
               </button>
-
               <button
                 type="button"
                 class="delete-action"
@@ -250,21 +360,20 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
-  // display menu items by category
+  // Render menu items
   function renderMenuItems(menuItems) {
-    document.querySelectorAll(".menu-category-section").forEach((section) => {
-      section.remove();
-    });
-
     document.querySelectorAll(".category-link").forEach((link) => {
       link.remove();
     });
 
-    if (!menuItems.length) {
-      if (noResultsMessage) {
-        noResultsMessage.textContent = "No menu items found for this stall.";
-        noResultsMessage.hidden = false;
-      }
+    resetCategorySelects();
+
+    if (menuCategoryContainer) {
+      menuCategoryContainer.innerHTML = "";
+    }
+
+    if (!Array.isArray(menuItems) || menuItems.length === 0) {
+      showMenuMessage("No menu items found for this stall.");
       return;
     }
 
@@ -276,61 +385,66 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!groupedItems[category]) {
         groupedItems[category] = [];
       }
+
       groupedItems[category].push(menuItem);
+      addCategoryOption(category);
     });
 
     Object.entries(groupedItems).forEach(([category, items], categoryIndex) => {
       const categoryId = createCategoryId(category);
-
       const link = document.createElement("a");
+
       link.href = `#${categoryId}`;
       link.className =
         categoryIndex === 0 ? "category-link active" : "category-link";
       link.textContent = category;
 
-      categoryNavigation.insertBefore(link, addCategoryButton);
+      categoryNavigation?.insertBefore(link, addCategoryButton);
 
       const section = document.createElement("section");
+
       section.className = "menu-category-section";
       section.id = categoryId;
-
       section.innerHTML = `
-          <div class="category-heading">
-            <div>
-              <h3>${escapeHtml(category)}</h3>
-              <p>
-                ${items.length} ${items.length === 1 ? "item" : "items"}
-              </p>
-            </div>
+        <div class="category-heading">
+          <div>
+            <h3>${escapeHtml(category)}</h3>
+            <p>${items.length} ${items.length === 1 ? "item" : "items"}</p>
           </div>
+        </div>
+        <div class="menu-grid">
+          ${items.map(createMenuCard).join("")}
+        </div>
+      `;
 
-          <div class="menu-grid">
-            ${items.map(createMenuCard).join("")}
-          </div>
-        `;
-
-      menuContent.insertBefore(section, noResultsMessage);
+      menuCategoryContainer?.appendChild(section);
     });
 
     if (noResultsMessage) {
       noResultsMessage.hidden = true;
     }
+
     filterMenuItems();
   }
 
-  // retrieve menu items
+  // Retrieve menu items
   async function loadMenuItems() {
+    if (!selectedStallId) {
+      showMenuMessage("Select a stall to view its menu.");
+      return;
+    }
+
     try {
       const menuItems = await vendorFetch(`/vendor-menu/${selectedStallId}`);
 
       renderMenuItems(menuItems);
     } catch (error) {
       console.error("Error loading menu items:", error);
-      alert(error.message);
+      showMenuMessage(error.message);
     }
   }
 
-  // get card data for PUT request
+  // Create PUT request data
   function getMenuItemDataFromCard(card, isAvailable) {
     return {
       ItemName: card.dataset.menuItemName,
@@ -342,7 +456,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // filter menu cards
+  // Filter menu items
   function filterMenuItems() {
     if (!searchInput || !availabilityFilter) {
       return;
@@ -359,6 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const matchesStatus =
         selectedStatus === "all" || itemStatus === selectedStatus;
       const shouldShow = matchesSearch && matchesStatus;
+
       card.hidden = !shouldShow;
 
       if (shouldShow) {
@@ -366,15 +481,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    if (noResultsMessage) {
+    if (noResultsMessage && getMenuCards().length > 0) {
+      noResultsMessage.textContent =
+        "No menu items match your search or filter.";
       noResultsMessage.hidden = visibleItemCount !== 0;
     }
   }
 
-  // update availability in database
+  // Update availability
   async function toggleAvailability(card) {
     const menuItemId = card.dataset.menuItemId;
     const isCurrentlyAvailable = card.dataset.availability === "available";
+
     const updatedData = getMenuItemDataFromCard(card, !isCurrentlyAvailable);
 
     try {
@@ -390,9 +508,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // create menu item
+  // Create menu item
   addMenuForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (!selectedStallId) {
+      alert("Please select a stall first.");
+      return;
+    }
 
     const menuItemData = {
       ItemName: document.querySelector("#add-item-name").value.trim(),
@@ -400,7 +523,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector("#add-item-description").value.trim() || null,
       ItemPrice: Number(document.querySelector("#add-item-price").value),
       ItemCategory: document.querySelector("#add-item-category").value,
-      ImageURL: null,
+      ImageURL:
+        document.querySelector("#add-item-image-url").value.trim() || null,
       IsAvailable:
         document.querySelector("#add-item-status").value === "available",
     };
@@ -414,7 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
       addMenuForm.reset();
       closeDialog(addMenuDialog);
       await loadMenuItems();
-
       alert("Menu item created successfully.");
     } catch (error) {
       console.error("Error creating menu item:", error);
@@ -422,8 +545,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // open edit dialog
+  // Open edit dialog
   function openEditMenuDialog(card) {
+    addCategoryOption(card.dataset.category);
+
     document.querySelector("#edit-menu-item-id").value =
       card.dataset.menuItemId;
     document.querySelector("#edit-item-name").value = card.dataset.menuItemName;
@@ -434,34 +559,25 @@ document.addEventListener("DOMContentLoaded", () => {
       card.dataset.description;
     document.querySelector("#edit-item-price").value =
       card.dataset.currentPrice;
-
-    const recommendedCheckbox = document.querySelector(
-      "#edit-item-recommended",
-    );
-
-    if (recommendedCheckbox) {
-      recommendedCheckbox.checked = false;
-    }
+    document.querySelector("#edit-item-image-url").value =
+      card.dataset.image || "";
 
     openDialog(editMenuDialog);
   }
 
-  // update menu item
+  // Update menu item
   editMenuForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const menuItemId = document.querySelector("#edit-menu-item-id").value;
-    const currentCard = document.querySelector(
-      `.menu-card[data-menu-item-id="${menuItemId}"]`,
-    );
-
     const menuItemData = {
       ItemName: document.querySelector("#edit-item-name").value.trim(),
       ItemDescription:
         document.querySelector("#edit-item-description").value.trim() || null,
       ItemPrice: Number(document.querySelector("#edit-item-price").value),
       ItemCategory: document.querySelector("#edit-item-category").value,
-      ImageURL: currentCard?.dataset.image || null,
+      ImageURL:
+        document.querySelector("#edit-item-image-url").value.trim() || null,
       IsAvailable:
         document.querySelector("#edit-item-status").value === "available",
     };
@@ -474,7 +590,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       closeDialog(editMenuDialog);
       await loadMenuItems();
-
       alert("Menu item updated successfully.");
     } catch (error) {
       console.error("Error updating menu item:", error);
@@ -482,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // delete menu item
+  // Delete menu item
   async function deleteMenuItem(card) {
     const menuItemId = card.dataset.menuItemId;
     const itemName = card.dataset.menuItemName;
@@ -499,7 +614,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       await loadMenuItems();
-
       alert("Menu item deleted successfully.");
     } catch (error) {
       console.error("Error deleting menu item:", error);
@@ -507,53 +621,64 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // stall dropdown button
+  // Stall dropdown button
   switchStallButton?.addEventListener("click", (event) => {
     event.stopPropagation();
     toggleStallDropdown();
   });
 
-  // select stall 
-  stallOptions.forEach((option) => {
-    option.addEventListener("click", async () => {
-      selectedStallId = option.dataset.stallId;
+  // Select stall
+  stallDropdown?.addEventListener("click", async (event) => {
+    const option = event.target.closest(".stall-option");
 
-      sessionStorage.setItem("selectedStallId", selectedStallId);
+    if (!option) {
+      return;
+    }
+    selectedStallId = option.dataset.stallId;
+    sessionStorage.setItem("selectedStallId", selectedStallId);
 
-      displaySelectedStall();
-      closeStallDropdown();
-      await loadMenuItems();
-    });
+    displaySelectedStall();
+    closeStallDropdown();
+    await loadMenuItems();
   });
 
-  // close stall dropdown
+  // Close stall dropdown
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".stall-switcher")) {
       closeStallDropdown();
     }
   });
-  // open add menu dialog
+
+  // Open add menu dialog
   addMenuButton?.addEventListener("click", () => {
+    if (!selectedStallId) {
+      alert("Please select a stall first.");
+      return;
+    }
+
     openDialog(addMenuDialog);
   });
-  // open add category dialog
+
+  // Open add category dialog
   addCategoryButton?.addEventListener("click", () => {
     openDialog(addCategoryDialog);
   });
-  // close dialog buttons
+
+  // Close dialog buttons
   closeDialogButtons.forEach((button) => {
     button.addEventListener("click", () => {
       closeAllDialogs();
     });
   });
 
-  // close dialog when background is clicked
+  // Close dialog background
   document.addEventListener("click", (event) => {
     if (event.target.classList.contains("menu-dialog")) {
       closeAllDialogs();
     }
   });
-  // card actions 
+
+  // Menu card actions
   document.addEventListener("click", async (event) => {
     const card = event.target.closest(".menu-card");
 
@@ -579,7 +704,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // close other three-dot menus
+  // Close other three-dot menus
   document.addEventListener(
     "toggle",
     (event) => {
@@ -598,7 +723,7 @@ document.addEventListener("DOMContentLoaded", () => {
     true,
   );
 
-  // close three-dot menus outside
+  // Close three-dot menus outside
   document.addEventListener("click", (event) => {
     document.querySelectorAll(".more-menu").forEach((menu) => {
       if (!menu.contains(event.target)) {
@@ -607,11 +732,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // search filter
+  // Search filter
   searchInput?.addEventListener("input", filterMenuItems);
-  // availability filter
+
+  // Availability filter
   availabilityFilter?.addEventListener("change", filterMenuItems);
-  // category navigation
+
+  // Category navigation
   categoryNavigation?.addEventListener("click", (event) => {
     const link = event.target.closest(".category-link");
 
@@ -626,7 +753,7 @@ document.addEventListener("DOMContentLoaded", () => {
     link.classList.add("active");
   });
 
-  // add category to frontend
+  // Add category to frontend
   addCategoryForm?.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -637,48 +764,18 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const categoryId = createCategoryId(categoryName);
-
-    if (document.querySelector(`#${categoryId}`)) {
-      alert("This category already exists.");
-      return;
-    }
-
-    const link = document.createElement("a");
-    link.href = `#${categoryId}`;
-    link.className = "category-link";
-    link.textContent = categoryName;
-
-    categoryNavigation.insertBefore(link, addCategoryButton);
-
-    const section = document.createElement("section");
-    section.className = "menu-category-section";
-    section.id = categoryId;
-
-    section.innerHTML = `
-      <div class="category-heading">
-        <div>
-          <h3>${escapeHtml(categoryName)}</h3>
-          <p>0 items</p>
-        </div>
-      </div>
-
-      <div class="menu-grid"></div>
-    `;
-
-    menuContent.insertBefore(section, noResultsMessage);
-
-    const addCategorySelect = document.querySelector("#add-item-category");
-    const editCategorySelect = document.querySelector("#edit-item-category");
-
-    addCategorySelect?.add(new Option(categoryName, categoryName));
-    editCategorySelect?.add(new Option(categoryName, categoryName));
-
+    addCategoryOption(categoryName);
     input.value = "";
     closeDialog(addCategoryDialog);
   });
 
-  // initial page load
-  displaySelectedStall();
-  loadMenuItems();
+  // Initial page load
+  async function initialiseMenuPage() {
+    const stallsLoaded = await loadVendorStalls();
+    if (!stallsLoaded) {
+      return;
+    }
+    await loadMenuItems();
+  }
+  initialiseMenuPage();
 });
