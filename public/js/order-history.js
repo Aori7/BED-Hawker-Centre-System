@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch(`/orders/customer/${customerID}/recent`, {
+      const response = await fetch(`/orders/customer/${customerID}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

@@ -105,7 +105,30 @@ async function getRecentOrders(req, res) {
     });
   }
 }
+async function getAllOrders(req, res) {
+  try {
+    const customerID = parseInt(req.params.customerID);
+
+    if (Number.isNaN(customerID) || customerID <= 0) {
+      return res.status(400).json({
+        error: "A valid customer ID is required",
+      });
+    }
+
+    const orders =
+      await orderModel.getAllOrdersByCustomer(customerID);
+
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Get all orders error:", error);
+
+    res.status(500).json({
+      error: "Unable to retrieve order history",
+    });
+  }
+}
 module.exports = {
   createOrder,
   getRecentOrders,
+  getAllOrders,
 };

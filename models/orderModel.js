@@ -240,8 +240,56 @@ async function getRecentOrdersByCustomer(customerID) {
     await connection.close();
   }
 }
+async function getAllOrdersByCustomer(customerID) {
+  const connection = await sql.connect(dbConfig);
 
+  try {
+    const result = await connection
+      .request()
+      .input("CustomerID", sql.Int, customerID)
+      .query(`
+        SELECT
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          o.TotalAmount,
+          o.PaymentMethod,
+          o.PaymentStatus,
+          fs.StallName,
+          COALESCE(SUM(oi.Quantity), 0) AS ItemCount
+        FROM Orders o
+
+        INNER JOIN FoodStall fs
+          ON o.StallID = fs.StallID
+
+        LEFT JOIN OrderItem oi
+          ON o.OrderID = oi.OrderID
+
+        WHERE o.CustomerID = @CustomerID
+
+        GROUP BY
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          o.TotalAmount,
+          o.PaymentMethod,
+          o.PaymentStatus,
+          fs.StallName
+
+        ORDER BY
+          o.OrderDateTime DESC,
+          o.OrderID DESC;
+      `);
+
+    return result.recordset;
+  } finally {
+    await connection.close();
+  }
+}
 module.exports = {
   createOrder,
   getRecentOrdersByCustomer,
+  getAllOrdersByCustomer,
 };
