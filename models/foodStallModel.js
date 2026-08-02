@@ -86,6 +86,7 @@ async function getFoodStallsForNEASearch() {
                     fs.StallUnitNo,
                     fs.ImageURL,
 
+                    hc.HawkerCentreID,
                     hc.HCName,
 
                     i.InspectionDate,
