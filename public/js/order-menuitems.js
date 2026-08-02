@@ -263,6 +263,8 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         deliveryAddressSection.style.display = "none";
       }
+
+      displayCheckoutSummary();
     });
   });
 
@@ -325,7 +327,11 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please log in before placing an order.");
       return;
     }
+    const subtotal = calculateCartTotal();
 
+    const deliveryFee = calculateDeliveryFee(selectedOrderType.value);
+
+    const totalAmount = subtotal + deliveryFee;
     const orderData = {
       customerID: parseInt(customerID),
 
@@ -335,11 +341,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       paymentMethod: selectedPayment.value,
 
+      subtotal: subtotal,
+
+      deliveryFee: deliveryFee,
+
+      totalAmount: totalAmount,
+
       specialRequest: specialRequestInput.value.trim() || null,
 
       items: cart.map((item) => ({
         menuItemID: item.MenuItemID,
-
         quantity: item.Quantity,
       })),
     };
@@ -454,7 +465,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return total + Number(item.ItemPrice) * item.Quantity;
     }, 0);
   }
-
+  function calculateDeliveryFee(orderType) {
+    return orderType === "Delivery" ? 3 : 0;
+  }
   function displayCart() {
     cartItemsContainer.innerHTML = "";
 
@@ -594,33 +607,53 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayCheckoutSummary() {
     checkoutSummary.innerHTML = "";
 
+    const selectedOrderType = document.querySelector(
+      'input[name="orderType"]:checked',
+    );
+
+    const orderType = selectedOrderType ? selectedOrderType.value : "Pickup";
+
+    const subtotal = calculateCartTotal();
+    const deliveryFee = calculateDeliveryFee(orderType);
+    const totalAmount = subtotal + deliveryFee;
+
     cart.forEach((item) => {
       const itemSubtotal = Number(item.ItemPrice) * item.Quantity;
 
       checkoutSummary.innerHTML += `
-                <div class="checkout-item">
-                    <p>
-                        ${escapeHTML(item.ItemName)}
-                        × ${item.Quantity}
-                    </p>
+      <div class="checkout-item">
+        <p>
+          ${escapeHTML(item.ItemName)}
+          × ${item.Quantity}
+        </p>
 
-                    <p>
-                        $${itemSubtotal.toFixed(2)}
-                    </p>
-                </div>
-            `;
+        <p>
+          $${itemSubtotal.toFixed(2)}
+        </p>
+      </div>
+    `;
     });
 
     checkoutSummary.innerHTML += `
-            <hr>
+    <hr>
 
-            <p class="checkout-total">
-                <strong>
-                    Total:
-                    $${calculateCartTotal().toFixed(2)}
-                </strong>
-            </p>
-        `;
+    <div class="checkout-item">
+      <p>Subtotal</p>
+      <p>$${subtotal.toFixed(2)}</p>
+    </div>
+
+    <div class="checkout-item">
+      <p>Delivery Fee</p>
+      <p>$${deliveryFee.toFixed(2)}</p>
+    </div>
+
+    <p class="checkout-total">
+      <strong>
+        Total:
+        $${totalAmount.toFixed(2)}
+      </strong>
+    </p>
+  `;
   }
 
   displayCart();

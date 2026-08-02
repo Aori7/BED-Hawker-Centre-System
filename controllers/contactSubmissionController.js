@@ -1,121 +1,154 @@
-const contactSubmissionModel =
-    require("../models/contactSubmissionModel");
+const contactSubmissionModel = require("../models/contactSubmissionModel");
+
+async function getContactTargets(req, res) {
+  try {
+    const targets = await contactSubmissionModel.getContactTargets();
+
+    res.status(200).json(targets);
+  } catch (error) {
+    console.error("Get contact targets controller error:", error);
+
+    res.status(500).json({
+      error: "Unable to retrieve contact targets",
+    });
+  }
+}
 
 async function createContactSubmission(req, res) {
-    try {
-        const {
-            customerID,
-            name,
-            email,
-            subject,
-            message,
-            submissionType
-        } = req.body;
+  try {
+    const {
+      customerID,
+      name,
+      email,
+      subject,
+      message,
+      submissionType,
+      targetType,
+      stallID,
+      hawkerCentreID,
+      operatorID,
+    } = req.body;
 
-        if (
-            !name ||
-            !email ||
-            !subject ||
-            !message ||
-            !submissionType
-        ) {
-            return res.status(400).json({
-                error:
-                    "Name, email, subject, message and submission type are required"
-            });
-        }
-
-        const allowedSubmissionTypes = [
-            "Complaint",
-            "Feedback",
-            "Suggestion",
-            "Others"
-        ];
-
-        if (
-            !allowedSubmissionTypes.includes(
-                submissionType
-            )
-        ) {
-            return res.status(400).json({
-                error: "Invalid submission type"
-            });
-        }
-
-        const emailPattern =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-            return res.status(400).json({
-                error: "Please enter a valid email address"
-            });
-        }
-
-        if (name.length > 100) {
-            return res.status(400).json({
-                error:
-                    "Name cannot exceed 100 characters"
-            });
-        }
-
-        if (subject.length > 150) {
-            return res.status(400).json({
-                error:
-                    "Subject cannot exceed 150 characters"
-            });
-        }
-
-        if (message.length > 1000) {
-            return res.status(400).json({
-                error:
-                    "Message cannot exceed 1000 characters"
-            });
-        }
-
-        const result =
-            await contactSubmissionModel
-                .createContactSubmission({
-                    customerID:
-                        customerID
-                            ? parseInt(customerID)
-                            : null,
-
-                    name:
-                        name.trim(),
-
-                    email:
-                        email.trim(),
-
-                    subject:
-                        subject.trim(),
-
-                    message:
-                        message.trim(),
-
-                    submissionType
-                });
-
-        res.status(201).json({
-            message:
-                "Contact submission sent successfully",
-
-            submissionID:
-                result.SubmissionID
-        });
-
-    } catch (error) {
-        console.error(
-            "Create contact submission controller error:",
-            error
-        );
-
-        res.status(500).json({
-            error:
-                "Unable to submit contact form"
-        });
+    if (
+      !name ||
+      !email ||
+      !subject ||
+      !message ||
+      !submissionType ||
+      !targetType
+    ) {
+      return res.status(400).json({
+        error:
+          "Name, email, subject, message, submission type and target type are required",
+      });
     }
+
+    const allowedSubmissionTypes = [
+      "Complaint",
+      "Feedback",
+      "Suggestion",
+      "Others",
+    ];
+
+    const allowedTargetTypes = ["Stall", "HawkerCentre", "Operator", "General"];
+
+    if (!allowedSubmissionTypes.includes(submissionType)) {
+      return res.status(400).json({
+        error: "Invalid submission type",
+      });
+    }
+
+    if (!allowedTargetTypes.includes(targetType)) {
+      return res.status(400).json({
+        error: "Invalid target type",
+      });
+    }
+
+    const parsedStallID = stallID ? parseInt(stallID) : null;
+
+    const parsedHawkerCentreID = hawkerCentreID
+      ? parseInt(hawkerCentreID)
+      : null;
+
+    const parsedOperatorID = operatorID ? parseInt(operatorID) : null;
+
+    if (
+      targetType === "Stall" &&
+      (!parsedStallID || parsedHawkerCentreID || parsedOperatorID)
+    ) {
+      return res.status(400).json({
+        error: "Please select one valid stall",
+      });
+    }
+
+    if (
+      targetType === "HawkerCentre" &&
+      (!parsedHawkerCentreID || parsedStallID || parsedOperatorID)
+    ) {
+      return res.status(400).json({
+        error: "Please select one valid hawker centre",
+      });
+    }
+
+    if (
+      targetType === "Operator" &&
+      (!parsedOperatorID || parsedStallID || parsedHawkerCentreID)
+    ) {
+      return res.status(400).json({
+        error: "Please select one valid operator",
+      });
+    }
+
+    if (
+      targetType === "General" &&
+      (parsedStallID || parsedHawkerCentreID || parsedOperatorID)
+    ) {
+      return res.status(400).json({
+        error:
+          "General submissions cannot include a stall, hawker centre or operator",
+      });
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email)) {
+      return res.status(400).json({
+        error: "Please enter a valid email address",
+      });
+    }
+
+    const result = await contactSubmissionModel.createContactSubmission({
+      customerID: customerID ? parseInt(customerID) : null,
+
+      name: name.trim(),
+      email: email.trim(),
+      subject: subject.trim(),
+      message: message.trim(),
+      submissionType,
+      targetType,
+
+      stallID: parsedStallID,
+
+      hawkerCentreID: parsedHawkerCentreID,
+
+      operatorID: parsedOperatorID,
+    });
+
+    res.status(201).json({
+      message: "Contact submission sent successfully",
+
+      submissionID: result.SubmissionID,
+    });
+  } catch (error) {
+    console.error("Create contact submission controller error:", error);
+
+    res.status(500).json({
+      error: "Unable to submit contact form",
+    });
+  }
 }
 
 module.exports = {
-    createContactSubmission
+  getContactTargets,
+  createContactSubmission,
 };

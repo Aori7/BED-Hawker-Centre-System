@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="css/pages/main-hawkers.css" />
     <link rel="stylesheet" href="css/pages/order.css" />
     <link rel="stylesheet" href="css/pages/order-history.css" />
+    <link rel="stylesheet" href="../css/pages/contact-us-target.css" />
+
     <!-- font chosen by ada: Archivo -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -411,43 +413,105 @@
           <div class="title">
             <h2>Get In Touch</h2>
           </div>
-          <form action="">
+          <form id="contact-form">
             <label for="name">Name:</label>
             <input
               type="text"
               id="name"
               name="name"
+              maxlength="100"
               placeholder="Your name.."
+              required
             />
 
-            <label for="email">Email:</label>
+            <label for="name">Email:</label>
             <input
               type="email"
               id="email"
               name="email"
+              maxlength="100"
               placeholder="Your email.."
+              required
             />
 
-            <label for="subject">Subject:</label>
-            <select id="subject" name="subject">
-              <option value="">Select a subject</option>
+            <label for="submission-type"> Submission Type: </label>
+
+            <select id="submission-type" name="submissionType" required>
+              <option value="">Select a type</option>
+
               <option value="Complaint">Complaint</option>
+
               <option value="Feedback">Feedback</option>
+
               <option value="Suggestion">Suggestion</option>
+
               <option value="Others">Others</option>
             </select>
+
+            <div class="contact-target-box">
+              <div class="contact-target-heading">
+                <span class="material-symbols-rounded">near_me</span>
+
+                <div>
+                  <strong>Who is this about?</strong>
+                  <p id="target-help-text">Choose who your message is about.</p>
+                </div>
+              </div>
+
+              <label for="target-type"> Target Type: </label>
+
+              <select id="target-type" name="targetType" required>
+                <option value="">Select a target</option>
+
+                <option value="General">General HawkerSG Support</option>
+
+                <option value="Stall">Specific Stall</option>
+
+                <option value="HawkerCentre">Specific Hawker Centre</option>
+
+                <option value="Operator">Specific Operator</option>
+              </select>
+
+              <div
+                id="target-selection-group"
+                class="target-selection-group"
+                hidden
+              >
+                <label for="target-id" id="target-selection-label">
+                  Select Target
+                </label>
+
+                <select id="target-id" name="targetID">
+                  <option value="">Select an option</option>
+                </select>
+              </div>
+            </div>
+
+            <label for="subject"> Subject: </label>
+
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              maxlength="150"
+              placeholder="Enter the subject"
+              required
+            />
 
             <label for="message">Message:</label>
             <textarea
               id="message"
               name="message"
+              maxlength="1000"
               placeholder="Write your message.."
               style="height: 200px"
+              required
             ></textarea>
 
             <input type="submit" value="Submit" id="submitbtn" />
           </form>
         </div>
+
         <div class="contact-info">
           <div class="contact-business-info">
             <div class="title">
@@ -686,6 +750,7 @@
     <script src="js/swiper.js"></script>
     <script src="js/authUI.js"></script>
     <script src="/js/order-history.js"></script>
+    <script src="../js/contact-us.js"></script>
     <script src="js/index.js"></script>
   </body>
 </html>

@@ -75,10 +75,9 @@ async function createOrder(orderData) {
       });
     }
 
-    // Delivery currently has no calculated delivery fee
-    const deliveryFee = 0;
-    const totalAmount = subtotal + deliveryFee;
+    const deliveryFee = orderType === "Delivery" ? 3 : 0;
 
+    const totalAmount = subtotal + deliveryFee;
     /*
         For now, payment remains Pending because
         there is no real payment gateway yet.
@@ -246,8 +245,7 @@ async function getAllOrdersByCustomer(customerID) {
   try {
     const result = await connection
       .request()
-      .input("CustomerID", sql.Int, customerID)
-      .query(`
+      .input("CustomerID", sql.Int, customerID).query(`
         SELECT
           o.OrderID,
           o.OrderDateTime,
@@ -295,8 +293,7 @@ async function getReceiptByOrderID(orderID, customerID) {
     const orderResult = await connection
       .request()
       .input("OrderID", sql.Int, orderID)
-      .input("CustomerID", sql.Int, customerID)
-      .query(`
+      .input("CustomerID", sql.Int, customerID).query(`
         SELECT
           o.OrderID,
           o.OrderDateTime,
@@ -322,8 +319,7 @@ async function getReceiptByOrderID(orderID, customerID) {
 
     const itemsResult = await connection
       .request()
-      .input("OrderID", sql.Int, orderID)
-      .query(`
+      .input("OrderID", sql.Int, orderID).query(`
         SELECT
           OrderItemID,
           ItemName,
