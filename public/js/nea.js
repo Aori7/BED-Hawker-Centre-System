@@ -1024,10 +1024,19 @@ async function setupInspectionHistory() {
                         inspection.HygieneGrade ===
                             selectedGrade;
 
-                    const matchesStatus =
-                        selectedStatus === "all" ||
-                        inspection.InspectionStatus ===
-                            selectedStatus;
+                    let matchesStatus = true;
+
+                    if (selectedStatus === "Compliant") {
+                        matchesStatus =
+                            inspection.HygieneGrade === "A" ||
+                            inspection.HygieneGrade === "B";
+                    }
+
+                    if (selectedStatus === "Non-Compliant") {
+                        matchesStatus =
+                            inspection.HygieneGrade === "C" ||
+                            inspection.HygieneGrade === "D";
+                    }
 
                     return (
                         matchesSearch &&
@@ -1313,8 +1322,14 @@ function renderInspectionHistory(
                     "en-SG"
                 );
 
+            const complianceStatus =
+                inspection.HygieneGrade === "A" ||
+                inspection.HygieneGrade === "B"
+                    ? "Compliant"
+                    : "Non-Compliant";
+
             const statusClass =
-                inspection.InspectionStatus
+                complianceStatus
                     .toLowerCase()
                     .replaceAll(" ", "-");
 
@@ -1344,7 +1359,7 @@ function renderInspectionHistory(
                 inspection.HygieneGrade;
 
             row.dataset.status =
-                inspection.InspectionStatus;
+                complianceStatus;
 
             row.dataset.officer =
                 `Officer ${inspection.OfficerID}`;
@@ -1392,7 +1407,7 @@ function renderInspectionHistory(
                     <span
                         class="nea-status-badge nea-status-${statusClass}"
                     >
-                        ${inspection.InspectionStatus}
+                        ${complianceStatus}
                     </span>
                 </td>
 
@@ -1703,10 +1718,6 @@ function setupStallSearch() {
                 const grade =
                     stall.HygieneGrade ??
                     "-";
-
-                const status =
-                    stall.InspectionStatus ??
-                    "Not Inspected";
                 
                 const imageSource =
                     stall.ImageURL?.startsWith("http")
@@ -1715,12 +1726,27 @@ function setupStallSearch() {
                             ? `../${stall.ImageURL}`
                             : "../images/picture-icon.jpg";
 
+                let complianceStatus =
+                    "Not Inspected";
+
+                if (
+                    stall.HygieneGrade === "A" ||
+                    stall.HygieneGrade === "B"
+                ) {
+                    complianceStatus =
+                        "Compliant";
+                } else if (
+                    stall.HygieneGrade === "C" ||
+                    stall.HygieneGrade === "D"
+                ) {
+                    complianceStatus =
+                        "Non-Compliant";
+                }
+
                 const statusClass =
-                        status === "Completed"
-                            ? "nea-status-compliant"
-                        : status === "Cancelled"
-                            ? "nea-status-non-compliant"
-                            : "nea-status-pending";
+                    complianceStatus
+                        .toLowerCase()
+                        .replaceAll(" ", "-");
 
                 const gradeClass =
                     stall.HygieneGrade
@@ -1734,7 +1760,7 @@ function setupStallSearch() {
                         data-stall="${stall.StallName}"
                         data-centre="${stall.HCName}"
                         data-grade="${grade}"
-                        data-status="${status}"
+                        data-status="${complianceStatus}"
                     >
 
                         <div class="stall-image-container">
@@ -1766,8 +1792,8 @@ function setupStallSearch() {
                                     <p>${stall.HCName}</p>
                                 </div>
 
-                                <span class="nea-status-badge ${statusClass}">
-                                    ${status}
+                                <span class="nea-status-badge nea-status-${statusClass}">
+                                    ${complianceStatus}
                                 </span>
 
                             </div>
@@ -1968,24 +1994,29 @@ function applyStallQueryParameters(
     statusFilter
 ) {
     const queryParameters =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
 
-    const searchValue =
+    const search =
         queryParameters.get("search");
 
-    const statusValue =
+    const status =
         queryParameters.get("status");
 
-    if (searchValue) {
-        searchInput.value = searchValue;
+    if (search) {
+        searchInput.value = search;
     }
 
-    if (statusValue === "non-compliant") {
-        statusFilter.value = "Non-Compliant";
-    }
-
-    if (statusValue === "compliant") {
-        statusFilter.value = "Compliant";
+    if (
+        status &&
+        [
+            "Compliant",
+            "Non-Compliant",
+            "Not Inspected"
+        ].includes(status)
+    ) {
+        statusFilter.value = status;
     }
 }
 
