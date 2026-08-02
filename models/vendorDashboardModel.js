@@ -4,10 +4,8 @@ const dbConfig = require("../dbConfig");
 // Get revenue by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/revenue?startDate=2026-07-01&endDate=2026-08-01
 async function getRevenueByStallId(stallId, startDate, endDate) {
-  let connection;
   try {
-    // connects your Node.js application to Microsoft SQL Server
-    connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig);
     // SQL query used to retive data
     const query = `SELECT
       COALESCE(SUM(TotalAmount), 0) AS Revenue
@@ -137,14 +135,14 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
       SELECT
         SUM(
           CASE
-            WHEN OrderStatus <> 'Cancelled' THEN 1
+            WHEN OrderStatus = 'Completed' THEN 1
             ELSE 0
           END
         ) AS TotalOrders,
         SUM(
           CASE
             WHEN OrderType = 'Dine-in'
-              AND OrderStatus <> 'Cancelled'
+              AND OrderStatus = 'Completed'
             THEN 1
             ELSE 0
           END
@@ -152,7 +150,7 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
         SUM(
           CASE
             WHEN OrderType = 'Pickup'
-              AND OrderStatus <> 'Cancelled'
+              AND OrderStatus = 'Completed'
             THEN 1
             ELSE 0
           END
@@ -160,7 +158,7 @@ async function getOrdersBreakdownByStallId(stallId, startDate, endDate) {
         SUM(
           CASE
             WHEN OrderType = 'Delivery'
-              AND OrderStatus <> 'Cancelled'
+              AND OrderStatus = 'Completed'
             THEN 1
             ELSE 0
           END
@@ -236,7 +234,7 @@ async function getOrderTrendByStallId(stallId, startDate, endDate, filterType) {
         COUNT(OrderID) AS TotalOrders
       FROM Orders
       WHERE StallID = @stallId
-        AND OrderStatus <> 'Cancelled'
+        AND OrderStatus = 'Completed'
         AND OrderDateTime >= @startDate
         AND OrderDateTime < @endDate
       GROUP BY ${period}
@@ -299,8 +297,6 @@ async function getTopMenuItemsByStallId(stallId, startDate, endDate) {
   }
 }
 
-// Get unavailable menu items by stall ID
-// test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
 // Get unavailable menu items by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/unavailable-menu-items
 async function getUnavailableMenuItemsByStallId(stallId) {
