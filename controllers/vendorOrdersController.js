@@ -4,9 +4,9 @@ const vendorOrdersModel = require("../models/vendorOrdersModel");
 // test run: http://localhost:3000/vendor-orders/1
 async function getOrdersByStallId(req, res) {
   try {
-    const orders = await vendorOrdersModel.getOrdersByStallId(
-      req.params.stallId,
-    );
+    const stallId = parseInt(req.params.stallId, 10);
+
+    const orders = await vendorOrdersModel.getOrdersByStallId(stallId);
 
     res.status(200).json(orders);
   } catch (error) {
@@ -22,9 +22,12 @@ async function getOrdersByStallId(req, res) {
 // test run: http://localhost:3000/vendor-orders/1/1/status
 async function updateOrderStatus(req, res) {
   try {
+    const stallId = parseInt(req.params.stallId, 10);
+    const orderId = parseInt(req.params.orderId, 10);
+
     const updatedOrder = await vendorOrdersModel.updateOrderStatus(
-      req.params.stallId,
-      req.params.orderId,
+      stallId,
+      orderId,
       req.body.OrderStatus,
     );
 

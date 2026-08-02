@@ -2,41 +2,62 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- shared stylesheets -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+    <!-- Shared stylesheets -->
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
-    <!-- Profile page stylesheet -->
+
+    <!-- Page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-profile.css" />
+
     <!-- Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
+
     <!-- Google rounded icons -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-    <title>Vendor Profile</title>
+
+    <title>Vendor Profile Page</title>
   </head>
   <body data-page="vendor-profile">
-    <!-- navigation bar -->
+    <!-- Navigation bar -->
     <nav
       class="nav-bar"
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
+      <div class="logo">
+        <a href="index.html">
+          <!-- Image of logo sourced from Google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
       <a class="nav-link" href="vendor-home.html" data-nav-target="home">
         Home
       </a>
       <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
         Menu
       </a>
-      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+      <a
+        class="nav-link"
+        href="vendor-orders.html"
+        data-nav-target="orders"
+      >
         Orders
       </a>
       <a
@@ -56,252 +77,236 @@
       <a
         class="nav-link active"
         href="vendor-profile.html"
-        aria-current="page"
         data-nav-target="profile"
+        aria-current="page"
       >
         Profile
       </a>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Logout</button>
+        </a>
+      </div>
     </nav>
 
-    <!-- page -->
+    <!-- Profile page -->
     <main class="vendor-profile-layout" id="vendor-profile-page">
       <section class="profile-content">
-        <!-- page heading -->
-        <div class="profile-page-heading">
-          <h2>Profile</h2>
+        <!-- Page heading -->
+        <header class="profile-page-heading">
+          <div>
+            <h1>Profile</h1>
+            <p class="profile-page-description">
+              View your vendor account details and manage your contact
+              information and password.
+            </p>
+          </div>
+        </header>
 
-          <p class="profile-page-description">
-            Manage your stall information, business details and account
-            settings.
-          </p>
-        </div>
+        <!-- Loading message -->
+        <p class="profile-page-message" id="profile-page-message">
+          Loading profile...
+        </p>
 
-        <!-- profile grid -->
-        <div class="profile-grid">
-          <!-- stall information -->
+        <!-- Profile summary -->
+        <section class="profile-card profile-summary-card" id="profile-summary">
+          <div class="profile-summary-icon">
+            <span class="material-symbols-rounded">account_circle</span>
+          </div>
+
+          <div class="profile-summary-details">
+            <p class="profile-summary-label">Stall owner account</p>
+            <h2 id="profile-summary-name">Loading...</h2>
+            <p id="profile-summary-email"></p>
+          </div>
+        </section>
+
+        <!-- Profile cards -->
+        <div class="profile-grid" id="profile-grid">
+          <!-- Account information -->
           <section class="profile-card">
             <div class="profile-card-header">
-              <h3>Stall Information</h3>
+              <div>
+                <h2>Account Information</h2>
+                <p>These details identify your vendor account.</p>
+              </div>
             </div>
 
-            <form id="stall-information-form" class="profile-card-body">
-              <div class="profile-logo">
-                <div class="profile-logo-preview">
-                  <span class="material-symbols-rounded"> storefront </span>
-                </div>
-
-                <button
-                  type="button"
-                  class="profile-upload-button"
-                  id="change-logo-button"
-                >
-                  Change Logo
-                </button>
-              </div>
-
+            <div class="profile-card-body">
               <label class="profile-field">
-                <span> Stall Name </span>
-
-                <input
-                  type="text"
-                  id="stall-name"
-                  name="stallName"
-                  value="Ah Seng Chicken Rice"
-                  required
-                />
+                <span>User ID</span>
+                <input type="text" id="profile-user-id" readonly />
               </label>
 
               <label class="profile-field">
-                <span> Cuisine </span>
-
-                <input
-                  type="text"
-                  id="stall-cuisine"
-                  name="cuisine"
-                  value="Chinese"
-                  required
-                />
+                <span>Owner ID</span>
+                <input type="text" id="profile-owner-id" readonly />
               </label>
 
               <label class="profile-field">
-                <span> Stall Description </span>
-
-                <textarea id="stall-description" name="description" rows="5">
-Traditional chicken rice made fresh daily using premium ingredients.
-                </textarea>
-              </label>
-              <label class="profile-field">
-                <span> Hawker Centre </span>
-
-                <input
-                  type="text"
-                  id="stall-location"
-                  name="location"
-                  value="Maxwell Food Centre"
-                  required
-                />
+                <span>Email Address</span>
+                <input type="email" id="profile-email" readonly />
               </label>
 
               <label class="profile-field">
-                <span> Unit Number </span>
-
-                <input
-                  type="text"
-                  id="stall-unit"
-                  name="unit"
-                  value="#01-01"
-                  required
-                />
+                <span>NRIC</span>
+                <input type="text" id="profile-nric" readonly />
               </label>
 
-              <div class="profile-card-footer">
-                <button type="submit" class="profile-save-button">
-                  Save Changes
-                </button>
-              </div>
-            </form>
+              <p class="profile-help-text">
+                Contact an administrator if any read-only account information is
+                incorrect.
+              </p>
+            </div>
           </section>
 
-          <!-- contact information -->
+          <!-- Contact information -->
           <section class="profile-card">
             <div class="profile-card-header">
-              <h3>Contact Information</h3>
+              <div>
+                <h2>Contact Information</h2>
+                <p>Update the name and mobile number linked to your account.</p>
+              </div>
             </div>
 
-            <form id="contact-information-form" class="profile-card-body">
+            <form id="profile-form" class="profile-card-body">
               <label class="profile-field">
-                <span> Contact Person </span>
-
+                <span>Owner Name</span>
                 <input
                   type="text"
-                  id="contact-name"
-                  name="contactName"
-                  value="Ah Seng"
+                  id="owner-name"
+                  name="ownerName"
+                  maxlength="100"
                   required
                 />
               </label>
 
               <label class="profile-field">
-                <span> Email Address </span>
-
-                <input
-                  type="email"
-                  id="contact-email"
-                  name="email"
-                  value="ahseng@email.com"
-                  required
-                />
-              </label>
-
-              <label class="profile-field">
-                <span> Phone Number </span>
-
+                <span>Contact Number</span>
                 <input
                   type="tel"
-                  id="contact-phone"
-                  name="phone"
-                  value="91234567"
+                  id="contact-number"
+                  name="contactNumber"
+                  inputmode="numeric"
+                  maxlength="8"
+                  pattern="[89][0-9]{7}"
+                  placeholder="81234567"
                   required
                 />
               </label>
 
+              <p
+                class="profile-form-message"
+                id="profile-form-message"
+                hidden
+              ></p>
+
               <div class="profile-card-footer">
-                <button type="submit" class="profile-save-button">
+                <button
+                  type="submit"
+                  class="profile-save-button"
+                  id="save-profile-button"
+                >
                   Save Changes
                 </button>
               </div>
             </form>
           </section>
 
-          <!-- business information -->
-          <section class="profile-card">
+          <!-- Password and security -->
+          <section class="profile-card profile-security-card">
             <div class="profile-card-header">
-              <h3>Business Information</h3>
-            </div>
-
-            <form id="business-information-form" class="profile-card-body">
-              <label class="profile-field">
-                <span> Business Name </span>
-
-                <input
-                  type="text"
-                  id="business-name"
-                  name="businessName"
-                  value="Ah Seng Chicken Rice Pte Ltd"
-                />
-              </label>
-
-              <label class="profile-field">
-                <span> UEN Number </span>
-
-                <input
-                  type="text"
-                  id="business-uen"
-                  name="uen"
-                  value="202612345A"
-                />
-              </label>
-
-              <label class="profile-field">
-                <span> GST Registered </span>
-
-                <select id="business-gst" name="gstRegistered">
-                  <option value="yes">Yes</option>
-
-                  <option value="no" selected>No</option>
-                </select>
-              </label>
-
-              <div class="profile-card-footer">
-                <button type="submit" class="profile-save-button">
-                  Save Changes
-                </button>
+              <div>
+                <h2>Password &amp; Security</h2>
+                <p>Use a strong password that you do not use elsewhere.</p>
               </div>
-            </form>
-          </section>
-
-          <!-- password & security -->
-          <section class="profile-card">
-            <div class="profile-card-header">
-              <h3>Password & Security</h3>
             </div>
 
             <form id="password-form" class="profile-card-body">
               <label class="profile-field">
-                <span> Current Password </span>
-
-                <input
-                  type="password"
-                  id="current-password"
-                  name="currentPassword"
-                  required
-                />
+                <span>Current Password</span>
+                <div class="password-input-container">
+                  <input
+                    type="password"
+                    id="current-password"
+                    name="currentPassword"
+                    autocomplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle-button"
+                    data-password-target="current-password"
+                    aria-label="Show current password"
+                  >
+                    <span class="material-symbols-rounded">visibility</span>
+                  </button>
+                </div>
               </label>
 
               <label class="profile-field">
-                <span> New Password </span>
-
-                <input
-                  type="password"
-                  id="new-password"
-                  name="newPassword"
-                  required
-                />
+                <span>New Password</span>
+                <div class="password-input-container">
+                  <input
+                    type="password"
+                    id="new-password"
+                    name="newPassword"
+                    minlength="8"
+                    maxlength="100"
+                    autocomplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle-button"
+                    data-password-target="new-password"
+                    aria-label="Show new password"
+                  >
+                    <span class="material-symbols-rounded">visibility</span>
+                  </button>
+                </div>
               </label>
 
               <label class="profile-field">
-                <span> Confirm Password </span>
-
-                <input
-                  type="password"
-                  id="confirm-password"
-                  name="confirmPassword"
-                  required
-                />
+                <span>Confirm New Password</span>
+                <div class="password-input-container">
+                  <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirmPassword"
+                    minlength="8"
+                    maxlength="100"
+                    autocomplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle-button"
+                    data-password-target="confirm-password"
+                    aria-label="Show confirmed password"
+                  >
+                    <span class="material-symbols-rounded">visibility</span>
+                  </button>
+                </div>
               </label>
+
+              <p class="profile-help-text">
+                Your new password must contain at least 8 characters.
+              </p>
+
+              <p
+                class="profile-form-message"
+                id="password-form-message"
+                hidden
+              ></p>
 
               <div class="profile-card-footer">
-                <button type="submit" class="profile-save-button">
+                <button
+                  type="submit"
+                  class="profile-save-button"
+                  id="update-password-button"
+                >
                   Update Password
                 </button>
               </div>
@@ -311,7 +316,19 @@ Traditional chicken rice made fresh daily using premium ingredients.
       </section>
     </main>
 
-    <!-- page javascript -->
+    <!-- Success message -->
+    <div
+      class="success-toast"
+      id="success-toast"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="material-symbols-rounded">check_circle</span>
+      <span id="success-toast-message">Changes saved successfully.</span>
+    </div>
+
+    <!-- Profile page JavaScript -->
     <script src="../js/vendor-profile.js"></script>
   </body>
 </html>

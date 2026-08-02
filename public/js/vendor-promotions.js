@@ -1,31 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* DOM elements */
+  const accessToken = sessionStorage.getItem("accessToken");
+  let selectedStallId = sessionStorage.getItem("selectedStallId");
+  let selectedPromotion = null;
+  let pendingPromotionStatus = null;
+  let menuItems = [];
+
+  // Element selectors
   const switchStallButton = document.querySelector("#switch-stall-button");
   const stallDropdown = document.querySelector("#stall-dropdown");
-  const stallOptions = document.querySelectorAll(".stall-option");
   const selectedStallName = document.querySelector("#selected-stall-name");
   const selectedStallAddress = document.querySelector(
     "#selected-stall-address",
   );
-
-  const statusLinks = document.querySelectorAll(".status-link");
-  const promotionSections = document.querySelectorAll(
-    ".promotion-status-section",
-  );
-
   const searchInput = document.querySelector("#promotion-search-input");
-  const categoryFilter = document.querySelector("#category-filter");
   const noResultsMessage = document.querySelector("#no-promotion-results");
-
-  const promotionCards = () => document.querySelectorAll(".promotion-card");
-  const promotionMenuButtons = document.querySelectorAll(
-    ".promotion-menu-button",
+  const activeGrid = document.querySelector(
+    "#active-promotions .promotion-grid",
   );
-
+  const inactiveGrid = document.querySelector(
+    "#inactive-promotions .promotion-grid",
+  );
   const addPromotionButton = document.querySelector("#add-promotion-button");
   const addPromotionDialog = document.querySelector("#add-promotion-dialog");
-
-  /* Promotion dialogs */
   const editPromotionDialog = document.querySelector("#edit-promotion-dialog");
   const removePromotionDialog = document.querySelector(
     "#remove-promotion-dialog",
@@ -33,173 +29,609 @@ document.addEventListener("DOMContentLoaded", () => {
   const promotionStatusDialog = document.querySelector(
     "#promotion-status-dialog",
   );
-
-  /* Dialog buttons */
+  const addPromotionForm = document.querySelector("#add-promotion-form");
+  const editPromotionForm = document.querySelector("#edit-promotion-form");
+  const closeDialogButtons = document.querySelectorAll(".close-dialog-button");
   const confirmRemovePromotionButton = document.querySelector(
     "#confirm-remove-promotion",
   );
   const confirmPromotionStatusButton = document.querySelector(
     "#confirm-promotion-status",
   );
-
-  /* Dialog text */
   const removePromotionMessage = document.querySelector(
     "#remove-promotion-message",
   );
   const promotionStatusMessage = document.querySelector(
     "#promotion-status-message",
   );
+  const addMenuItemsContainer = document.querySelector(
+    "#add-promotion-dialog .promotion-menu-items",
+  );
+  const editMenuItemsContainer = document.querySelector(
+    "#edit-promotion-dialog .promotion-menu-items",
+  );
 
-  /* Selected promotion */
-  let selectedPromotionCard = null;
-  let pendingPromotionStatus = null;
+  // Redirect when not logged in
+  if (!accessToken) {
+    alert("Please log in first.");
+    window.location.href = "login.html";
+    return;
+  }
 
-  const addPromotionForm = document.querySelector("#add-promotion-form");
-  const closeDialogButtons = document.querySelectorAll(".close-dialog-button");
+  // Send request to backend
+  async function vendorFetch(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        ...options.headers,
+      },
+    });
 
-  /* -------------------- */
-  /* Stall selector */
-  /* -------------------- */
+    const data = await response.json();
 
-  /* Closes the stall dropdown */
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed.");
+    }
+    return data;
+  }
+
+  // Prevent unsafe HTML
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // Get stall options
+  function getStallOptions() {
+    return document.querySelectorAll(".stall-option");
+  }
+
+  // Create one stall option
+  function createStallOption(stall) {
+    const address = [stall.StallUnitNo, stall.HCName]
+      .filter(Boolean)
+      .join(" · ");
+    return `
+      <button
+        type="button"
+        class="stall-option"
+        data-stall-id="${stall.StallID}"
+        data-stall-name="${escapeHtml(stall.StallName)}"
+        data-stall-address="${escapeHtml(address)}"
+        data-action="select-stall"
+      >
+        <span class="stall-option-name">${escapeHtml(stall.StallName)}</span>
+        <span class="stall-option-location">${escapeHtml(address)}</span>
+      </button>
+    `;
+  }
+
+  // Show page message
+  function showPromotionMessage(message) {
+    if (!noResultsMessage) {
+      return;
+    }
+    noResultsMessage.textContent = message;
+    noResultsMessage.hidden = false;
+  }
+
+  // Load vendor stalls
+  async function loadVendorStalls() {
+    try {
+      const stalls = await vendorFetch("/vendor-stalls");
+
+      if (!Array.isArray(stalls) || stalls.length === 0) {
+        selectedStallId = null;
+        sessionStorage.removeItem("selectedStallId");
+
+        if (selectedStallName) {
+          selectedStallName.textContent = "No stalls found";
+        }
+
+        if (selectedStallAddress) {
+          selectedStallAddress.textContent = "";
+        }
+
+        if (stallDropdown) {
+          stallDropdown.innerHTML = "";
+        }
+
+        showPromotionMessage("No stalls are linked to this vendor.");
+        return false;
+      }
+
+      if (stallDropdown) {
+        stallDropdown.innerHTML = stalls.map(createStallOption).join("");
+      }
+
+      const selectedStallExists = stalls.some(
+        (stall) => String(stall.StallID) === String(selectedStallId),
+      );
+
+      if (!selectedStallExists) {
+        selectedStallId = String(stalls[0].StallID);
+        sessionStorage.setItem("selectedStallId", selectedStallId);
+      }
+      displaySelectedStall();
+      return true;
+    } catch (error) {
+      console.error("Error loading vendor stalls:", error);
+
+      if (selectedStallName) {
+        selectedStallName.textContent = "Unable to load stalls";
+      }
+      showPromotionMessage(error.message);
+      return false;
+    }
+  }
+
+  // Close stall dropdown
   function closeStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
     }
-
     switchStallButton.setAttribute("aria-expanded", "false");
     stallDropdown.hidden = true;
   }
 
-  /* Opens or closes the stall dropdown */
+  // Toggle stall dropdown
   function toggleStallDropdown() {
     if (!switchStallButton || !stallDropdown) {
       return;
     }
-
     const isOpen = switchStallButton.getAttribute("aria-expanded") === "true";
-
     switchStallButton.setAttribute("aria-expanded", String(!isOpen));
     stallDropdown.hidden = isOpen;
   }
 
-  /* Changes the selected stall */
-  function selectStall(option) {
-    if (!selectedStallName || !selectedStallAddress) {
+  // Display selected stall
+  function displaySelectedStall() {
+    if (!selectedStallId) {
       return;
     }
 
-    selectedStallName.textContent = option.dataset.stallName || "";
-    selectedStallAddress.textContent = option.dataset.stallAddress || "";
+    const selectedOption = document.querySelector(
+      `.stall-option[data-stall-id="${selectedStallId}"]`,
+    );
 
-    stallOptions.forEach((stallOption) => {
-      stallOption.classList.remove("active");
+    if (!selectedOption) {
+      return;
+    }
+
+    getStallOptions().forEach((option) => {
+      option.classList.remove("active");
     });
 
-    option.classList.add("active");
-    closeStallDropdown();
+    selectedOption.classList.add("active");
+
+    if (selectedStallName) {
+      selectedStallName.textContent = selectedOption.dataset.stallName || "";
+    }
+
+    if (selectedStallAddress) {
+      selectedStallAddress.textContent =
+        selectedOption.dataset.stallAddress || "";
+    }
+
+    const addStallId = document.querySelector("#add-promotion-stall-id");
+
+    if (addStallId) {
+      addStallId.value = selectedStallId;
+    }
   }
 
-  /* -------------------- */
-  /* Promotion helpers */
-  /* -------------------- */
+  // Format date
+  function formatDate(dateValue) {
+    if (!dateValue) {
+      return "-";
+    }
 
-  /* Returns all promotion cards */
-  function getPromotionCards() {
-    return document.querySelectorAll(".promotion-card");
+    return new Date(dateValue).toLocaleDateString("en-SG", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   }
 
-  /* Returns a promotion card's status */
-  function getPromotionStatus(card) {
-    return card.dataset.promotionStatus;
+  // Format date for input
+  function formatDateInput(dateValue) {
+    if (!dateValue) {
+      return "";
+    }
+    return new Date(dateValue).toISOString().split("T")[0];
   }
 
-  /* Returns a promotion name */
-  function getPromotionName(card) {
-    return card.dataset.promotionName || "Promotion";
+  // Format discount
+  function formatDiscount(promotion) {
+    if (promotion.DiscountType === "Percentage") {
+      return `${Number(promotion.DiscountValue)}% off`;
+    }
+
+    if (promotion.DiscountType === "Fixed Amount") {
+      return `$${Number(promotion.DiscountValue).toFixed(2)} off`;
+    }
+
+    return "Free item";
   }
 
-  /* -------------------- */
-  /* Search */
-  /* -------------------- */
+  // Create affected items
+  function createAffectedItems(items) {
+    if (!Array.isArray(items) || items.length === 0) {
+      return `
+        <details class="affected-items-dropdown">
+          <summary class="affected-items-summary">
+            <span>Affected items</span>
+            <span class="affected-items-count">0 items</span>
+          </summary>
+          <p>No menu items selected.</p>
+        </details>
+      `;
+    }
 
-  /* Filters promotion cards */
+    return `
+      <details class="affected-items-dropdown">
+        <summary class="affected-items-summary">
+          <span>Affected items</span>
+          <span class="affected-items-count">
+            ${items.length} ${items.length === 1 ? "item" : "items"}
+          </span>
+        </summary>
+        <ul class="affected-items-list">
+          ${items
+            .map((item) => `<li>${escapeHtml(item.ItemName)}</li>`)
+            .join("")}
+        </ul>
+      </details>
+    `;
+  }
+
+  // Create one promotion card
+  function createPromotionCard(promotion) {
+    const isActive = Boolean(promotion.IsActive);
+    const status = isActive ? "active" : "inactive";
+    const statusText = isActive ? "Active" : "Inactive";
+    const cardClass = isActive ? "" : " promotion-card-inactive";
+    const statusClass = isActive ? "active-status" : "inactive-status";
+    const changeStatusText = isActive ? "Mark inactive" : "Mark active";
+    const menuItemIds = (promotion.AffectedMenuItems || [])
+      .map((item) => item.MenuItemID)
+      .join(",");
+
+    return `
+      <article
+        class="promotion-card${cardClass}"
+        data-promotion-id="${promotion.PromotionID}"
+        data-promotion-name="${escapeHtml(promotion.PromotionName)}"
+        data-promotion-description="${escapeHtml(
+          promotion.PromotionDescription || "",
+        )}"
+        data-discount-type="${escapeHtml(promotion.DiscountType)}"
+        data-discount-value="${promotion.DiscountValue}"
+        data-start-date="${formatDateInput(promotion.StartDate)}"
+        data-end-date="${formatDateInput(promotion.EndDate)}"
+        data-promotion-status="${status}"
+        data-menu-item-ids="${menuItemIds}"
+        data-resource="promotion"
+      >
+        <header class="promotion-card-header">
+          <div class="promotion-heading">
+            <div class="promotion-title-row">
+              <h3 class="promotion-name">
+                ${escapeHtml(promotion.PromotionName)}
+              </h3>
+              <span class="promotion-status ${statusClass}">
+                ${statusText}
+              </span>
+            </div>
+            <p class="promotion-description">
+              ${escapeHtml(
+                promotion.PromotionDescription || "No description provided.",
+              )}
+            </p>
+          </div>
+          <div class="promotion-menu">
+            <button
+              class="promotion-menu-button"
+              type="button"
+              aria-label="Open ${escapeHtml(promotion.PromotionName)} actions"
+              aria-expanded="false"
+              data-action="toggle-promotion-menu"
+            >
+              &#8942;
+            </button>
+            <div class="promotion-menu-dropdown">
+              <button
+                class="change-status-action"
+                type="button"
+                data-action="change-promotion-status"
+              >
+                ${changeStatusText}
+              </button>
+              <button
+                class="edit-action"
+                type="button"
+                data-action="edit-promotion"
+              >
+                Edit
+              </button>
+              <button
+                class="remove-action"
+                type="button"
+                data-action="remove-promotion"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </header>
+        <div class="promotion-card-body">
+          <dl class="promotion-information">
+            <div class="promotion-detail">
+              <dt>Discount</dt>
+              <dd>${formatDiscount(promotion)}</dd>
+            </div>
+            <div class="promotion-detail">
+              <dt>Start date</dt>
+              <dd>${formatDate(promotion.StartDate)}</dd>
+            </div>
+            <div class="promotion-detail">
+              <dt>End date</dt>
+              <dd>${formatDate(promotion.EndDate)}</dd>
+            </div>
+          </dl>
+          ${createAffectedItems(promotion.AffectedMenuItems)}
+        </div>
+      </article>
+    `;
+  }
+
+  // Render promotions
+  function renderPromotions(promotions) {
+    if (activeGrid) {
+      activeGrid.innerHTML = "";
+    }
+
+    if (inactiveGrid) {
+      inactiveGrid.innerHTML = "";
+    }
+
+    if (!Array.isArray(promotions) || promotions.length === 0) {
+      showPromotionMessage("No promotions found for this stall.");
+      return;
+    }
+
+    const activePromotions = promotions.filter((promotion) =>
+      Boolean(promotion.IsActive),
+    );
+    const inactivePromotions = promotions.filter(
+      (promotion) => !Boolean(promotion.IsActive),
+    );
+
+    if (activeGrid) {
+      activeGrid.innerHTML = activePromotions.map(createPromotionCard).join("");
+    }
+
+    if (inactiveGrid) {
+      inactiveGrid.innerHTML = inactivePromotions
+        .map(createPromotionCard)
+        .join("");
+    }
+
+    if (noResultsMessage) {
+      noResultsMessage.hidden = true;
+    }
+
+    filterPromotions();
+  }
+
+  // Load promotions
+  async function loadPromotions() {
+    if (!selectedStallId) {
+      showPromotionMessage("Select a stall to view promotions.");
+      return;
+    }
+
+    try {
+      const promotions = await vendorFetch(
+        `/vendor-promotions/${selectedStallId}`,
+      );
+
+      renderPromotions(promotions);
+    } catch (error) {
+      console.error("Error loading promotions:", error);
+      showPromotionMessage(error.message);
+    }
+  }
+
+  // Load menu items
+  async function loadMenuItems() {
+    if (!selectedStallId) {
+      menuItems = [];
+      return;
+    }
+
+    try {
+      menuItems = await vendorFetch(`/vendor-menu/${selectedStallId}`);
+    } catch (error) {
+      console.error("Error loading menu items:", error);
+      menuItems = [];
+    }
+  }
+
+  // Create menu-item checkboxes
+  function createMenuItemCheckboxes(
+    container,
+    currentPromotionId = null,
+    selectedIds = [],
+  ) {
+    if (!container) {
+      return;
+    }
+
+    const availableItems = menuItems.filter((item) => {
+      return (
+        !item.PromotionID ||
+        String(item.PromotionID) === String(currentPromotionId)
+      );
+    });
+
+    if (availableItems.length === 0) {
+      container.innerHTML = "<p>No available menu items.</p>";
+      return;
+    }
+
+    container.innerHTML = availableItems
+      .map((item) => {
+        const checked = selectedIds.includes(Number(item.MenuItemID))
+          ? " checked"
+          : "";
+
+        return `
+          <label class="dialog-checkbox">
+            <input
+              type="checkbox"
+              name="menuItems"
+              value="${item.MenuItemID}"
+              ${checked}
+            />
+            <span>${escapeHtml(item.ItemName)}</span>
+          </label>
+        `;
+      })
+      .join("");
+  }
+
+  // Get selected menu-item IDs
+  function getSelectedMenuItemIds(container) {
+    if (!container) {
+      return [];
+    }
+
+    return Array.from(
+      container.querySelectorAll('input[type="checkbox"]:checked'),
+    ).map((checkbox) => Number(checkbox.value));
+  }
+
+  // Convert discount type for backend
+  function getBackendDiscountType(value) {
+    if (value === "percentage") {
+      return "Percentage";
+    }
+    if (value === "fixed") {
+      return "Fixed Amount";
+    }
+    return "Free Item";
+  }
+
+  // Convert discount type for form
+  function getFormDiscountType(value) {
+    if (value === "Percentage") {
+      return "percentage";
+    }
+    if (value === "Fixed Amount") {
+      return "fixed";
+    }
+    return "free-item";
+  }
+
+  // Get promotion form data
+  function getPromotionFormData(prefix, menuItemsContainer) {
+    const discountType = document.querySelector(
+      `#${prefix}-discount-type`,
+    ).value;
+
+    let discountValue = Number(
+      document.querySelector(`#${prefix}-discount-value`).value,
+    );
+
+    if (discountType === "free-item") {
+      discountValue = 1;
+    }
+
+    return {
+      PromotionName: document
+        .querySelector(`#${prefix}-promotion-name`)
+        .value.trim(),
+      PromotionDescription:
+        document
+          .querySelector(`#${prefix}-promotion-description`)
+          .value.trim() || null,
+      DiscountType: getBackendDiscountType(discountType),
+      DiscountValue: discountValue,
+      StartDate: document.querySelector(`#${prefix}-start-date`).value,
+      EndDate: document.querySelector(`#${prefix}-end-date`).value,
+      IsActive:
+        document.querySelector(`#${prefix}-promotion-status`).value ===
+        "active",
+      MenuItemIDs: getSelectedMenuItemIds(menuItemsContainer),
+    };
+  }
+
+  // Filter promotions
   function filterPromotions() {
-    const searchTerm = searchInput
-      ? searchInput.value.trim().toLowerCase()
-      : "";
+    const searchTerm = (searchInput?.value || "").trim().toLowerCase();
+    const cards = document.querySelectorAll(".promotion-card");
+    let visibleCount = 0;
 
-    const selectedCategory = categoryFilter ? categoryFilter.value : "all";
-
-    let visiblePromotionCount = 0;
-
-    getPromotionCards().forEach((card) => {
+    cards.forEach((card) => {
       const promotionName = (card.dataset.promotionName || "").toLowerCase();
-      const promotionCategory = card.dataset.category || "";
 
-      const matchesSearch = promotionName.includes(searchTerm);
+      const promotionDescription = (
+        card.dataset.promotionDescription || ""
+      ).toLowerCase();
 
-      const matchesCategory =
-        selectedCategory === "all" || promotionCategory === selectedCategory;
-
-      const shouldShow = matchesSearch && matchesCategory;
+      const shouldShow =
+        promotionName.includes(searchTerm) ||
+        promotionDescription.includes(searchTerm);
 
       card.hidden = !shouldShow;
 
       if (shouldShow) {
-        visiblePromotionCount++;
+        visibleCount += 1;
       }
     });
 
-    if (noResultsMessage) {
-      noResultsMessage.hidden = visiblePromotionCount !== 0;
+    if (noResultsMessage && cards.length > 0) {
+      noResultsMessage.textContent = "No promotions match your search.";
+      noResultsMessage.hidden = visibleCount !== 0;
     }
   }
 
-  /* -------------------- */
-  /* Sidebar */
-  /* -------------------- */
-
-  /* Updates the active sidebar link */
-  function setActiveSidebarLink(link) {
-    statusLinks.forEach((statusLink) => {
-      statusLink.classList.remove("active");
-    });
-
-    link.classList.add("active");
+  // Open dialog
+  function openDialog(dialog) {
+    if (!dialog) {
+      return;
+    }
+    dialog.hidden = false;
+    document.body.style.overflow = "hidden";
   }
 
-  /* Watches which promotion section is visible */
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) {
-          return;
-        }
+  // Close dialog
+  function closeDialog(dialog) {
+    if (!dialog) {
+      return;
+    }
+    dialog.hidden = true;
+    document.body.style.overflow = "";
+  }
 
-        const matchingLink = document.querySelector(
-          `.status-link[href="#${entry.target.id}"]`,
-        );
+  // Close all dialogs
+  function closeAllDialogs() {
+    document.querySelectorAll(".promotion-dialog").forEach((dialog) => {
+      dialog.hidden = true;
+    });
+    document.body.style.overflow = "";
+    selectedPromotion = null;
+    pendingPromotionStatus = null;
+  }
 
-        if (!matchingLink) {
-          return;
-        }
-
-        setActiveSidebarLink(matchingLink);
-      });
-    },
-    {
-      root: null,
-      rootMargin: "-25% 0px -60% 0px",
-      threshold: 0,
-    },
-  );
-
-  /* -------------------- */
-  /* Promotion menu */
-  /* -------------------- */
-
-  /* Closes every promotion menu */
+  // Close promotion menus
   function closeAllPromotionMenus(excludedDropdown = null) {
     document
       .querySelectorAll(".promotion-menu-dropdown.open")
@@ -209,7 +641,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         dropdown.classList.remove("open");
-
         const button = dropdown.previousElementSibling;
 
         if (button) {
@@ -218,369 +649,364 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  /* Opens or closes a promotion menu */
+  // Toggle promotion menu
   function togglePromotionMenu(button) {
     const dropdown = button.nextElementSibling;
 
     if (!dropdown) {
       return;
     }
-
     const isOpen = dropdown.classList.contains("open");
-
     closeAllPromotionMenus(dropdown);
-
     dropdown.classList.toggle("open", !isOpen);
     button.setAttribute("aria-expanded", String(!isOpen));
   }
 
-  /* -------------------- */
-  /* Dialog helpers */
-  /* -------------------- */
+  // Update discount field
+  function updateDiscountField(prefix) {
+    const type = document.querySelector(`#${prefix}-discount-type`);
+    const field = document.querySelector(`#${prefix}-discount-value-field`);
+    const label = document.querySelector(`#${prefix}-discount-value-label`);
+    const input = document.querySelector(`#${prefix}-discount-value`);
 
-  /* Opens a dialog */
-  function openDialog(dialog) {
-    if (!dialog) {
+    if (!type || !field || !label || !input) {
       return;
     }
 
-    dialog.hidden = false;
-    document.body.style.overflow = "hidden";
-  }
-
-  /* Closes a dialog */
-  function closeDialog(dialog) {
-    if (!dialog) {
+    if (type.value === "percentage") {
+      field.hidden = false;
+      label.textContent = "Percentage (%)";
+      input.placeholder = "20";
+      input.required = true;
       return;
     }
 
-    dialog.hidden = true;
-    document.body.style.overflow = "";
-  }
-
-  /* Closes every dialog */
-  function closeAllDialogs() {
-    document.querySelectorAll(".promotion-dialog").forEach((dialog) => {
-      dialog.hidden = true;
-    });
-
-    document.body.style.overflow = "";
-  }
-
-  /* -------------------- */
-  /* Promotion status */
-  /* -------------------- */
-
-  /* Updates a promotion's status */
-  function updatePromotionStatus(card, newStatus) {
-    const statusBadge = card.querySelector(".promotion-status");
-    const changeStatusButton = card.querySelector(".change-status-action");
-
-    const targetSection =
-      newStatus === "active" ? "#active-promotions" : "#inactive-promotions";
-
-    const targetGrid = document.querySelector(
-      `${targetSection} .promotion-grid`,
-    );
-
-    card.dataset.promotionStatus = newStatus;
-
-    if (newStatus === "active") {
-      card.classList.remove("promotion-card-inactive");
-
-      if (statusBadge) {
-        statusBadge.classList.remove("inactive-status");
-        statusBadge.classList.add("active-status");
-        statusBadge.textContent = "Active";
-      }
-
-      if (changeStatusButton) {
-        changeStatusButton.textContent = "Mark inactive";
-      }
-    } else {
-      card.classList.add("promotion-card-inactive");
-
-      if (statusBadge) {
-        statusBadge.classList.remove("active-status");
-        statusBadge.classList.add("inactive-status");
-        statusBadge.textContent = "Inactive";
-      }
-
-      if (changeStatusButton) {
-        changeStatusButton.textContent = "Mark active";
-      }
+    if (type.value === "fixed") {
+      field.hidden = false;
+      label.textContent = "Discount amount ($)";
+      input.placeholder = "2.50";
+      input.required = true;
+      return;
     }
 
-    if (targetGrid) {
-      targetGrid.appendChild(card);
+    if (type.value === "free-item") {
+      field.hidden = true;
+      input.required = false;
+      input.value = "1";
+      return;
+    }
+    field.hidden = false;
+    label.textContent = "Discount value";
+    input.placeholder = "";
+    input.required = true;
+  }
+
+  // Open add dialog
+  function openAddPromotionDialog() {
+    if (!selectedStallId) {
+      alert("Please select a stall first.");
+      return;
     }
 
-    closeAllPromotionMenus();
-    filterPromotions();
-  }
-  /* -------------------- */
-  /* Promotion actions */
-  /* -------------------- */
-
-  /* Changes a promotion's status */
-  function changePromotionStatus(card) {
-    const currentStatus = getPromotionStatus(card);
-    const newStatus = currentStatus === "active" ? "inactive" : "active";
-
-    updatePromotionStatus(card, newStatus);
+    addPromotionForm?.reset();
+    createMenuItemCheckboxes(addMenuItemsContainer);
+    updateDiscountField("add");
+    openDialog(addPromotionDialog);
   }
 
-  /* Opens the edit promotion dialog */
-  function openEditPromotion(card) {
-    closeAllPromotionMenus();
+  // Open edit dialog
+  function openEditPromotionDialog(card) {
+    selectedPromotion = card;
 
-    selectedPromotionCard = card;
+    const selectedIds = (card.dataset.menuItemIds || "")
+      .split(",")
+      .filter(Boolean)
+      .map(Number);
 
+    document.querySelector("#edit-promotion-id").value =
+      card.dataset.promotionId;
     document.querySelector("#edit-promotion-name").value =
-      card.querySelector(".promotion-name")?.textContent || "";
-
+      card.dataset.promotionName || "";
     document.querySelector("#edit-promotion-description").value =
-      card.querySelector(".promotion-description")?.textContent || "";
+      card.dataset.promotionDescription || "";
+    document.querySelector("#edit-discount-type").value = getFormDiscountType(
+      card.dataset.discountType,
+    );
+    document.querySelector("#edit-discount-value").value =
+      card.dataset.discountValue || "";
+    document.querySelector("#edit-start-date").value =
+      card.dataset.startDate || "";
+    document.querySelector("#edit-end-date").value = card.dataset.endDate || "";
+    document.querySelector("#edit-promotion-status").value =
+      card.dataset.promotionStatus;
 
+    createMenuItemCheckboxes(
+      editMenuItemsContainer,
+      card.dataset.promotionId,
+      selectedIds,
+    );
+    updateDiscountField("edit");
+    closeAllPromotionMenus();
     openDialog(editPromotionDialog);
   }
 
-  /* Opens the remove dialog */
-  function deletePromotion(card) {
+  // Open remove dialog
+  function openRemovePromotionDialog(card) {
+    selectedPromotion = card;
+
+    if (removePromotionMessage) {
+      removePromotionMessage.textContent = `Remove "${card.dataset.promotionName}"?`;
+    }
     closeAllPromotionMenus();
-
-    selectedPromotionCard = card;
-
-    removePromotionMessage.textContent = `Remove "${getPromotionName(card)}"?`;
-
     openDialog(removePromotionDialog);
   }
 
-  /* -------------------- */
-  /* Card initialisation */
-  /* -------------------- */
+  // Open status dialog
+  function openStatusDialog(card) {
+    selectedPromotion = card;
+    pendingPromotionStatus =
+      card.dataset.promotionStatus === "active" ? "inactive" : "active";
 
-  /* Initialises a promotion card */
-  function initialisePromotionCard(card) {
-    const changeStatusButton = card.querySelector(".change-status-action");
-    const editButton = card.querySelector(".edit-action");
-    const removeButton = card.querySelector(".remove-action");
-
-    changeStatusButton?.addEventListener("click", () => {
-      changePromotionStatus(card);
-    });
-
-    editButton?.addEventListener("click", () => {
-      openEditPromotion(card);
-    });
-
-    removeButton?.addEventListener("click", () => {
-      deletePromotion(card);
-    });
-  }
-
-  /* Initialises every promotion card */
-  function initialisePromotionCards() {
-    getPromotionCards().forEach((card) => {
-      initialisePromotionCard(card);
-    });
-  }
-
-  /* -------------------- */
-  /* Stall selector */
-  /* -------------------- */
-
-  function initialiseStallSelector() {
-    if (switchStallButton && stallDropdown) {
-      switchStallButton.addEventListener("click", (event) => {
-        event.stopPropagation();
-        toggleStallDropdown();
-      });
+    if (promotionStatusMessage) {
+      promotionStatusMessage.textContent = `Mark "${card.dataset.promotionName}" as ${pendingPromotionStatus}?`;
     }
 
-    stallOptions.forEach((option) => {
-      option.addEventListener("click", () => {
-        selectStall(option);
+    closeAllPromotionMenus();
+    openDialog(promotionStatusDialog);
+  }
+
+  // Create promotion
+  addPromotionForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const promotionData = getPromotionFormData("add", addMenuItemsContainer);
+
+    try {
+      await vendorFetch(`/vendor-promotions/${selectedStallId}`, {
+        method: "POST",
+        body: JSON.stringify(promotionData),
       });
-    });
-  }
+      closeDialog(addPromotionDialog);
+      addPromotionForm.reset();
+      await loadMenuItems();
+      await loadPromotions();
+      alert("Promotion created successfully.");
+    } catch (error) {
+      console.error("Error creating promotion:", error);
+      alert(error.message);
+    }
+  });
 
-  /* -------------------- */
-  /* Search */
-  /* -------------------- */
-
-  function initialiseSearch() {
-    searchInput?.addEventListener("input", filterPromotions);
-
-    categoryFilter?.addEventListener("change", filterPromotions);
-  }
-
-  /* -------------------- */
-  /* Sidebar */
-  /* -------------------- */
-
-  function initialiseSidebar() {
-    statusLinks.forEach((link) => {
-      link.addEventListener("click", () => {
-        setActiveSidebarLink(link);
-      });
-    });
-
-    promotionSections.forEach((section) => {
-      sectionObserver.observe(section);
-    });
-  }
-
-  /* -------------------- */
-  /* Promotion menus */
-  /* -------------------- */
-
-  function initialisePromotionMenus() {
-    promotionMenuButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.stopPropagation();
-        togglePromotionMenu(button);
-      });
-    });
-  }
-
-  /* -------------------- */
-  /* Dialogs */
-  /* -------------------- */
-
-  function initialiseDialogs() {
-    addPromotionButton?.addEventListener("click", () => {
-      openDialog(addPromotionDialog);
-    });
-
-    closeDialogButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const dialog = button.closest(".promotion-dialog");
-
-        if (dialog) {
-          closeDialog(dialog);
-        }
-      });
-    });
-
-    addPromotionDialog?.addEventListener("click", (event) => {
-      if (event.target === addPromotionDialog) {
-        closeDialog(addPromotionDialog);
-      }
-    });
-  }
-
-  /* -------------------- */
-  /* Global events */
-  /* -------------------- */
-
-  function initialiseGlobalEvents() {
-    document.addEventListener("click", (event) => {
-      if (!event.target.closest(".stall-switcher")) {
-        closeStallDropdown();
-      }
-
-      if (!event.target.closest(".promotion-menu")) {
-        closeAllPromotionMenus();
-      }
-    });
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") {
-        return;
-      }
-
-      closeStallDropdown();
-      closeAllPromotionMenus();
-      closeAllDialogs();
-    });
-  }
-
-  /* -------------------- */
-  /* Add promotion form */
-  /* -------------------- */
-
-  /* Handles the add promotion form */
-  function handleAddPromotion(event) {
+  // Update promotion
+  editPromotionForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    /*
-      TODO:
-      Replace this frontend placeholder
-      with a POST request.
-    */
+    const promotionId = document.querySelector("#edit-promotion-id").value;
+    const promotionData = getPromotionFormData("edit", editMenuItemsContainer);
 
-    console.log("Add promotion submitted.");
+    try {
+      await vendorFetch(
+        `/vendor-promotions/${selectedStallId}/${promotionId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(promotionData),
+        },
+      );
 
-    closeDialog(addPromotionDialog);
-    addPromotionForm.reset();
-  }
+      closeDialog(editPromotionDialog);
+      await loadMenuItems();
+      await loadPromotions();
+      alert("Promotion updated successfully.");
+    } catch (error) {
+      console.error("Error updating promotion:", error);
+      alert(error.message);
+    }
+  });
 
-  /* -------------------- */
-  /* Discount type */
-  /* -------------------- */
-
-  function initialiseDiscountType() {
-    const discountType = document.querySelector("#add-discount-type");
-    const discountValueField = document.querySelector(
-      "#add-discount-value-field",
-    );
-    const discountValueLabel = document.querySelector(
-      "#add-discount-value-label",
-    );
-    const discountValue = document.querySelector("#add-discount-value");
-
-    if (!discountType) {
+  // Delete promotion
+  confirmRemovePromotionButton?.addEventListener("click", async () => {
+    if (!selectedPromotion) {
       return;
     }
 
-    discountType.addEventListener("change", () => {
-      switch (discountType.value) {
-        case "percentage":
-          discountValueField.hidden = false;
-          discountValueLabel.textContent = "Percentage (%)";
-          discountValue.placeholder = "20";
-          break;
+    const promotionId = selectedPromotion.dataset.promotionId;
 
-        case "fixed":
-          discountValueField.hidden = false;
-          discountValueLabel.textContent = "Discount Amount ($)";
-          discountValue.placeholder = "2.50";
-          break;
+    try {
+      await vendorFetch(
+        `/vendor-promotions/${selectedStallId}/${promotionId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
-        case "free-item":
-          discountValueField.hidden = true;
-          break;
+      closeDialog(removePromotionDialog);
+      await loadMenuItems();
+      await loadPromotions();
+      alert("Promotion removed successfully.");
+    } catch (error) {
+      console.error("Error deleting promotion:", error);
+      alert(error.message);
+    }
+  });
 
-        default:
-          discountValueField.hidden = false;
-          discountValueLabel.textContent = "Discount value";
-          discountValue.placeholder = "";
+  // Change promotion status
+  confirmPromotionStatusButton?.addEventListener("click", async () => {
+    if (!selectedPromotion || !pendingPromotionStatus) {
+      return;
+    }
+
+    const promotionId = selectedPromotion.dataset.promotionId;
+    const selectedIds = (selectedPromotion.dataset.menuItemIds || "")
+      .split(",")
+      .filter(Boolean)
+      .map(Number);
+
+    const promotionData = {
+      PromotionName: selectedPromotion.dataset.promotionName,
+      PromotionDescription:
+        selectedPromotion.dataset.promotionDescription || null,
+      DiscountType: selectedPromotion.dataset.discountType,
+      DiscountValue: Number(selectedPromotion.dataset.discountValue),
+      StartDate: selectedPromotion.dataset.startDate,
+      EndDate: selectedPromotion.dataset.endDate,
+      IsActive: pendingPromotionStatus === "active",
+      MenuItemIDs: selectedIds,
+    };
+
+    try {
+      await vendorFetch(
+        `/vendor-promotions/${selectedStallId}/${promotionId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify(promotionData),
+        },
+      );
+
+      closeDialog(promotionStatusDialog);
+      await loadPromotions();
+    } catch (error) {
+      console.error("Error updating promotion status:", error);
+      alert(error.message);
+    }
+  });
+
+  // Stall dropdown button
+  switchStallButton?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleStallDropdown();
+  });
+
+  // Select stall
+  stallDropdown?.addEventListener("click", async (event) => {
+    const option = event.target.closest(".stall-option");
+    if (!option) {
+      return;
+    }
+    selectedStallId = option.dataset.stallId;
+    sessionStorage.setItem("selectedStallId", selectedStallId);
+    displaySelectedStall();
+    closeStallDropdown();
+    await loadMenuItems();
+    await loadPromotions();
+  });
+
+  // Promotion actions
+  document.addEventListener("click", (event) => {
+    const menuButton = event.target.closest(".promotion-menu-button");
+
+    if (menuButton) {
+      event.stopPropagation();
+      togglePromotionMenu(menuButton);
+      return;
+    }
+
+    const card = event.target.closest(".promotion-card");
+
+    if (!card) {
+      return;
+    }
+    if (event.target.closest(".change-status-action")) {
+      openStatusDialog(card);
+      return;
+    }
+    if (event.target.closest(".edit-action")) {
+      openEditPromotionDialog(card);
+      return;
+    }
+    if (event.target.closest(".remove-action")) {
+      openRemovePromotionDialog(card);
+    }
+  });
+
+  // Open add dialog
+  addPromotionButton?.addEventListener("click", () => {
+    openAddPromotionDialog();
+  });
+
+  // Close dialog buttons
+  closeDialogButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const dialog = button.closest(".promotion-dialog");
+      closeDialog(dialog);
+    });
+  });
+
+  // Close dialog background
+  document.querySelectorAll(".promotion-dialog").forEach((dialog) => {
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        closeDialog(dialog);
       }
     });
+  });
+
+  // Search promotions
+  searchInput?.addEventListener("input", filterPromotions);
+
+  // Discount type changes
+  document
+    .querySelector("#add-discount-type")
+    ?.addEventListener("change", () => {
+      updateDiscountField("add");
+    });
+
+  document
+    .querySelector("#edit-discount-type")
+    ?.addEventListener("change", () => {
+      updateDiscountField("edit");
+    });
+
+  // Close dropdowns outside
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".stall-switcher")) {
+      closeStallDropdown();
+    }
+
+    if (!event.target.closest(".promotion-menu")) {
+      closeAllPromotionMenus();
+    }
+  });
+
+  // Close with Escape
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+    closeStallDropdown();
+    closeAllPromotionMenus();
+    closeAllDialogs();
+  });
+
+  // Initial page load
+  async function initialisePromotionsPage() {
+    const stallsLoaded = await loadVendorStalls();
+
+    if (!stallsLoaded) {
+      return;
+    }
+
+    await loadMenuItems();
+    await loadPromotions();
   }
 
-  /* -------------------- */
-  /* Forms */
-  /* -------------------- */
-
-  function initialiseForms() {
-    addPromotionForm?.addEventListener("submit", handleAddPromotion);
-  }
-
-  /* -------------------- */
-  /* Initial page setup */
-  /* -------------------- */
-
-  initialiseStallSelector();
-  initialiseSearch();
-  initialiseSidebar();
-  initialisePromotionMenus();
-  initialiseDialogs();
-  initialiseGlobalEvents();
-  initialisePromotionCards();
-  initialiseDiscountType();
-  initialiseForms();
-
-  filterPromotions();
+  initialisePromotionsPage();
 });

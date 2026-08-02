@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* DOM elements */
+  const accessToken = sessionStorage.getItem("accessToken");
+  let selectedStallId = sessionStorage.getItem("selectedStallId");
+
+  // Element selectors
   const switchStallButton = document.querySelector("#switch-stall-button");
   const stallDropdown = document.querySelector("#stall-dropdown");
-  const stallOptions = document.querySelectorAll(".stall-option");
   const selectedStallName = document.querySelector("#selected-stall-name");
   const selectedStallAddress = document.querySelector(
     "#selected-stall-address",
   );
   const searchInput = document.querySelector("#order-search-input");
   const statusFilter = document.querySelector("#status-filter");
-  const paymentFilter = document.querySelector("#payment-filter");
   const typeFilter = document.querySelector("#type-filter");
   const dateFilter = document.querySelector("#date-filter");
   const clearFilterButton = document.querySelector("#clear-filter-button");
-  const paymentStatusFilter = document.querySelector("#payment-status-filter");
   const ordersTableBody = document.querySelector("#orders-table-body");
   const noOrdersMessage = document.querySelector("#no-orders-message");
   const orderDialog = document.querySelector("#order-dialog");
@@ -22,106 +22,187 @@ document.addEventListener("DOMContentLoaded", () => {
   const dialogSecondaryClose = document.querySelector(
     "#dialog-secondary-close",
   );
-  const statusDropdowns = document.querySelectorAll(".order-status-select");
-  /* stall selector */
+
+  // Redirect when not logged in
+  if (!accessToken) {
+    alert("Please log in first.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Send request to backend
+  async function vendorFetch(url, options = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        ...options.headers,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Request failed.");
+    }
+    return data;
+  }
+
+  // Prevent unsafe HTML
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  // Get stall options
+  function getStallOptions() {
+    return document.querySelectorAll(".stall-option");
+  }
+
+  // Create one stall option
+  function createStallOption(stall) {
+    const address = [stall.StallUnitNo, stall.HCName]
+      .filter(Boolean)
+      .join(" · ");
+
+    return `
+      <button
+        type="button"
+        class="stall-option"
+        data-stall-id="${stall.StallID}"
+        data-stall-name="${escapeHtml(stall.StallName)}"
+        data-stall-address="${escapeHtml(address)}"
+        data-action="select-stall"
+      >
+        <span class="stall-option-name">${escapeHtml(stall.StallName)}</span>
+        <span class="stall-option-location">${escapeHtml(address)}</span>
+      </button>
+    `;
+  }
+
+  // Show orders message
+  function showOrdersMessage(message) {
+    if (!noOrdersMessage) {
+      return;
+    }
+
+    noOrdersMessage.textContent = message;
+    noOrdersMessage.hidden = false;
+  }
+
+  // Load stalls from backend
+  async function loadVendorStalls() {
+    try {
+      const stalls = await vendorFetch("/vendor-stalls");
+
+      if (!Array.isArray(stalls) || stalls.length === 0) {
+        selectedStallId = null;
+        sessionStorage.removeItem("selectedStallId");
+
+        if (selectedStallName) {
+          selectedStallName.textContent = "No stalls found";
+        }
+
+        if (selectedStallAddress) {
+          selectedStallAddress.textContent = "";
+        }
+
+        if (stallDropdown) {
+          stallDropdown.innerHTML = "";
+        }
+        showOrdersMessage("No stalls are linked to this vendor.");
+        return false;
+      }
+
+      if (stallDropdown) {
+        stallDropdown.innerHTML = stalls.map(createStallOption).join("");
+      }
+
+      const selectedStallExists = stalls.some(
+        (stall) => String(stall.StallID) === String(selectedStallId),
+      );
+
+      if (!selectedStallExists) {
+        selectedStallId = String(stalls[0].StallID);
+        sessionStorage.setItem("selectedStallId", selectedStallId);
+      }
+
+      displaySelectedStall();
+      return true;
+    } catch (error) {
+      console.error("Error loading vendor stalls:", error);
+
+      if (selectedStallName) {
+        selectedStallName.textContent = "Unable to load stalls";
+      }
+      showOrdersMessage(error.message);
+      return false;
+    }
+  }
+
+  // Close stall dropdown
   function closeStallDropdown() {
-    if (!switchStallButton || !stallDropdown) return;
+    if (!switchStallButton || !stallDropdown) {
+      return;
+    }
+
     switchStallButton.setAttribute("aria-expanded", "false");
     stallDropdown.hidden = true;
   }
+
+  // Toggle stall dropdown
   function toggleStallDropdown() {
-    if (!switchStallButton || !stallDropdown) return;
+    if (!switchStallButton || !stallDropdown) {
+      return;
+    }
+
     const isOpen = switchStallButton.getAttribute("aria-expanded") === "true";
+
     switchStallButton.setAttribute("aria-expanded", String(!isOpen));
     stallDropdown.hidden = isOpen;
   }
-  function selectStall(option) {
-    if (!selectedStallName || !selectedStallAddress) return;
-    selectedStallName.textContent = option.dataset.stallName || "";
-    selectedStallAddress.textContent = option.dataset.stallAddress || "";
-    stallOptions.forEach((stallOption) =>
-      stallOption.classList.remove("active"),
-    );
-    option.classList.add("active");
-    localStorage.setItem(
-      "selectedVendorStall",
-      JSON.stringify({
-        id: option.dataset.stallId || "",
-        name: option.dataset.stallName || "",
-        address: option.dataset.stallAddress || "",
-      }),
-    );
-    closeStallDropdown();
-  }
-  function restoreSelectedStall() {
-    let savedStall = null;
-    try {
-      savedStall = JSON.parse(
-        localStorage.getItem("selectedVendorStall") || "null",
-      );
-    } catch (error) {
-      localStorage.removeItem("selectedVendorStall");
+
+  // Display selected stall
+  function displaySelectedStall() {
+    if (!selectedStallId) {
+      return;
     }
-    if (!savedStall) return;
-    const matchingOption = Array.from(stallOptions).find((option) => {
-      return option.dataset.stallId === savedStall.id;
+
+    const selectedOption = document.querySelector(
+      `.stall-option[data-stall-id="${selectedStallId}"]`,
+    );
+
+    if (!selectedOption) {
+      return;
+    }
+    getStallOptions().forEach((option) => {
+      option.classList.remove("active");
     });
-    if (matchingOption) selectStall(matchingOption);
-  }
-  /* order filters */
-  function filterOrders() {
-    const searchTerm = (searchInput?.value || "").trim().toLowerCase();
-    const selectedStatus = statusFilter?.value || "all";
-    const selectedPayment = paymentFilter?.value || "all";
-    const selectedType = typeFilter?.value || "all";
-    const selectedDate = dateFilter?.value || "";
-    const selectedPaymentStatus = paymentStatusFilter?.value || "all";
-    const rows = ordersTableBody?.querySelectorAll(".order-row") || [];
-    let visibleCount = 0;
-    rows.forEach((row) => {
-      const searchableText =
-        `${row.dataset.orderId || ""} ${row.dataset.customerId || ""} ${row.dataset.date || ""}`.toLowerCase();
-      const matchesSearch = searchableText.includes(searchTerm);
-      const matchesStatus =
-        selectedStatus === "all" || row.dataset.orderStatus === selectedStatus;
-      const matchesPayment =
-        selectedPayment === "all" ||
-        row.dataset.paymentMethod === selectedPayment;
-      const matchesType =
-        selectedType === "all" || row.dataset.orderType === selectedType;
-      const matchesDate = !selectedDate || row.dataset.date === selectedDate;
-      const matchesPaymentStatus =
-        selectedPaymentStatus === "all" ||
-        row.dataset.paymentStatus === selectedPaymentStatus;
-      const shouldShow =
-        matchesSearch &&
-        matchesStatus &&
-        matchesPayment &&
-        matchesPaymentStatus &&
-        matchesType &&
-        matchesDate;
-      row.hidden = !shouldShow;
-      if (shouldShow) visibleCount += 1;
-    });
-    if (noOrdersMessage) noOrdersMessage.hidden = visibleCount !== 0;
-  }
-  function clearFilters() {
-    if (searchInput) searchInput.value = "";
-    if (statusFilter) statusFilter.value = "all";
-    if (paymentFilter) paymentFilter.value = "all";
-    if (typeFilter) typeFilter.value = "all";
-    if (dateFilter) dateFilter.value = "";
-    if (paymentStatusFilter) paymentStatusFilter.value = "all";
-    filterOrders();
+
+    selectedOption.classList.add("active");
+
+    if (selectedStallName) {
+      selectedStallName.textContent = selectedOption.dataset.stallName || "";
+    }
+
+    if (selectedStallAddress) {
+      selectedStallAddress.textContent =
+        selectedOption.dataset.stallAddress || "";
+    }
   }
 
-  /* order dialog */
+  // Format date and time
   function formatDateTime(dateString) {
-    if (!dateString) return "-";
+    if (!dateString) {
+      return "-";
+    }
 
-    const date = new Date(dateString);
-
-    return date.toLocaleString("en-SG", {
+    return new Date(dateString).toLocaleString("en-SG", {
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -131,136 +212,411 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function formatDeliveryFee(fee) {
-    const amount = Number(fee);
-    return amount > 0 ? `$${amount.toFixed(2)}` : "-";
+  // Format date for filter
+  function formatDateValue(dateString) {
+    if (!dateString) {
+      return "";
+    }
+
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
-  function openOrderDetails(row) {
-    if (!orderDialog || !dialogOrderId || !dialogBody) return;
+  // Format money
+  function formatMoney(value) {
+    return `$${Number(value || 0).toFixed(2)}`;
+  }
 
-    const statusText =
-      row.querySelector(".order-status-select")?.value ||
-      row.dataset.orderStatus ||
-      "-";
-    const menuItems = JSON.parse(row.dataset.menuItems || "[]");
-    const menuItemsHtml = menuItems
-      .map((item) => {
-        const lineTotal = (item.quantity * item.price).toFixed(2);
+  // Get status class
+  function getStatusClass(status) {
+    switch (status) {
+      case "Pending":
+        return "status-pending";
+      case "Preparing":
+        return "status-preparing";
+      case "Ready for Collection":
+        return "status-ready";
+      case "Completed":
+        return "status-completed";
+      case "Cancelled":
+        return "status-cancelled";
+      default:
+        return "";
+    }
+  }
 
-        return `
-      <div class="dialog-menu-item">
-        <span>${item.menuItemName}</span>
-        <span>x${item.quantity}</span>
-        <span>$${lineTotal}</span>
-      </div>
-    `;
+  // Create status options
+  function createStatusOptions(selectedStatus) {
+    const statuses = [
+      "Pending",
+      "Preparing",
+      "Ready for Collection",
+      "Completed",
+      "Cancelled",
+    ];
+
+    return statuses
+      .map((status) => {
+        const selected = status === selectedStatus ? " selected" : "";
+        return `<option value="${status}"${selected}>${status}</option>`;
       })
       .join("");
+  }
 
-    dialogOrderId.textContent = row.dataset.orderId || "Order";
+  // Create one order row
+  function createOrderRow(order) {
+    const customerName = order.CustomerName || "Unknown customer";
+    const specialRequest = order.SpecialRequest ? "✓" : "-";
+    const orderItems = encodeURIComponent(
+      JSON.stringify(order.OrderItems || []),
+    );
 
+    return `
+      <tr
+        class="order-row"
+        data-order-id="${order.OrderID}"
+        data-customer-id="${order.CustomerID}"
+        data-customer-name="${escapeHtml(customerName)}"
+        data-date="${formatDateValue(order.OrderDateTime)}"
+        data-date-time="${escapeHtml(order.OrderDateTime)}"
+        data-order-type="${escapeHtml(order.OrderType)}"
+        data-order-status="${escapeHtml(order.OrderStatus)}"
+        data-subtotal="${order.Subtotal}"
+        data-delivery-fee="${order.DeliveryFee}"
+        data-total="${order.TotalAmount}"
+        data-special-request="${escapeHtml(order.SpecialRequest || "")}"
+        data-order-items="${orderItems}"
+      >
+        <td data-label="Order ID"><strong>#${order.OrderID}</strong></td>
+        <td data-label="Customer">
+          <strong>${escapeHtml(customerName)}</strong><br>
+          <span>#${order.CustomerID}</span>
+        </td>
+        <td data-label="Date & Time">
+          <time datetime="${escapeHtml(order.OrderDateTime)}">
+            ${formatDateTime(order.OrderDateTime)}
+          </time>
+        </td>
+        <td data-label="Total">${formatMoney(order.TotalAmount)}</td>
+        <td data-label="Order Type">${escapeHtml(order.OrderType)}</td>
+        <td class="special-request" data-label="Special Request">${specialRequest}</td>
+        <td data-label="Order Status">
+          <select
+            class="order-status-select ${getStatusClass(order.OrderStatus)}"
+            aria-label="Update order ${order.OrderID} status"
+          >
+            ${createStatusOptions(order.OrderStatus)}
+          </select>
+        </td>
+        <td class="order-actions">
+          <button
+            type="button"
+            class="view-details-button"
+            data-action="view-order-details"
+          >
+            See details
+          </button>
+        </td>
+      </tr>
+    `;
+  }
+
+  // Render orders
+  function renderOrders(orders) {
+    if (!ordersTableBody) {
+      return;
+    }
+
+    ordersTableBody.innerHTML = "";
+
+    if (!Array.isArray(orders) || orders.length === 0) {
+      showOrdersMessage("No orders found for this stall.");
+      return;
+    }
+
+    ordersTableBody.innerHTML = orders.map(createOrderRow).join("");
+
+    if (noOrdersMessage) {
+      noOrdersMessage.hidden = true;
+    }
+    filterOrders();
+  }
+
+  // Load orders from backend
+  async function loadOrders() {
+    if (!selectedStallId) {
+      showOrdersMessage("Select a stall to view its orders.");
+      return;
+    }
+
+    try {
+      const orders = await vendorFetch(`/vendor-orders/${selectedStallId}`);
+      renderOrders(orders);
+    } catch (error) {
+      console.error("Error loading orders:", error);
+      showOrdersMessage(error.message);
+    }
+  }
+
+  // Filter orders
+  function filterOrders() {
+    const searchTerm = (searchInput?.value || "").trim().toLowerCase();
+    const selectedStatus = statusFilter?.value || "all";
+    const selectedType = typeFilter?.value || "all";
+    const selectedDate = dateFilter?.value || "";
+    const rows = ordersTableBody?.querySelectorAll(".order-row") || [];
+    let visibleCount = 0;
+
+    rows.forEach((row) => {
+      const searchableText =
+        `${row.dataset.orderId || ""} ${row.dataset.customerId || ""} ${row.dataset.customerName || ""}`.toLowerCase();
+      const matchesSearch = searchableText.includes(searchTerm);
+      const matchesStatus =
+        selectedStatus === "all" || row.dataset.orderStatus === selectedStatus;
+      const matchesType =
+        selectedType === "all" || row.dataset.orderType === selectedType;
+      const matchesDate = !selectedDate || row.dataset.date === selectedDate;
+      const shouldShow =
+        matchesSearch && matchesStatus && matchesType && matchesDate;
+      row.hidden = !shouldShow;
+
+      if (shouldShow) {
+        visibleCount += 1;
+      }
+    });
+
+    if (noOrdersMessage && rows.length > 0) {
+      noOrdersMessage.textContent =
+        "No orders match the selected search and filters.";
+      noOrdersMessage.hidden = visibleCount !== 0;
+    }
+  }
+
+  // Clear filters
+  function clearFilters() {
+    if (searchInput) {
+      searchInput.value = "";
+    }
+
+    if (statusFilter) {
+      statusFilter.value = "all";
+    }
+
+    if (typeFilter) {
+      typeFilter.value = "all";
+    }
+
+    if (dateFilter) {
+      dateFilter.value = "";
+    }
+    filterOrders();
+  }
+
+  // Open order details
+  function openOrderDetails(row) {
+    if (!orderDialog || !dialogOrderId || !dialogBody) {
+      return;
+    }
+
+    let orderItems = [];
+
+    try {
+      orderItems = JSON.parse(
+        decodeURIComponent(row.dataset.orderItems || "%5B%5D"),
+      );
+    } catch (error) {
+      console.error("Error reading order items:", error);
+    }
+
+    const menuItemsHtml = orderItems.length
+      ? orderItems
+          .map((item) => {
+            return `
+            <div class="dialog-menu-item">
+              <span>${escapeHtml(item.ItemName)}</span>
+              <span>x${item.Quantity}</span>
+              <span>${formatMoney(item.Subtotal)}</span>
+            </div>
+          `;
+          })
+          .join("")
+      : "<p>No menu items found.</p>";
+
+    dialogOrderId.textContent = `Order #${row.dataset.orderId}`;
     dialogBody.innerHTML = `
-    <div class="dialog-detail"><span>Order ID</span><span>${row.dataset.orderId || "-"}</span></div>
-    <div class="dialog-detail"><span>Customer ID</span><span>${row.dataset.customerId || "-"}</span></div>
-    <div class="dialog-detail"><span>Order Type</span><span>${row.dataset.orderType || "-"}</span></div>
-    <div class="dialog-detail"><span>Order Date & Time</span><span>${formatDateTime(row.dataset.date)}</span></div>
-    <div class="dialog-detail"><span>Order Status</span><span>${statusText}</span></div>
-    <div class="dialog-detail"><span>Subtotal</span><span>$${Number(row.dataset.subtotal).toFixed(2)}</span></div>
-    <div class="dialog-detail"><span>Delivery Fee</span><span>${formatDeliveryFee(row.dataset.deliveryFee)}</span></div>
-    <div class="dialog-detail"><span>Total Amount</span><span>$${Number(row.dataset.total).toFixed(2)}</span></div>
-    <div class="dialog-detail"><span>Payment Method</span><span>${row.dataset.paymentMethod || "-"}</span></div>
-    <div class="dialog-detail"><span>Payment Status</span><span>${row.dataset.paymentStatus || "-"}</span></div>
-    <div class="dialog-detail"><span>Special Request</span><span>${row.dataset.specialRequest || "-"}</span></div>
+      <div class="dialog-detail">
+        <span>Order ID</span>
+        <span>#${row.dataset.orderId || "-"}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Customer</span>
+        <span>${escapeHtml(row.dataset.customerName || "-")} (#${row.dataset.customerId || "-"})</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Order Type</span>
+        <span>${escapeHtml(row.dataset.orderType || "-")}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Order Date & Time</span>
+        <span>${formatDateTime(row.dataset.dateTime)}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Order Status</span>
+        <span>${escapeHtml(row.dataset.orderStatus || "-")}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Subtotal</span>
+        <span>${formatMoney(row.dataset.subtotal)}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Delivery Fee</span>
+        <span>${formatMoney(row.dataset.deliveryFee)}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Total Amount</span>
+        <span>${formatMoney(row.dataset.total)}</span>
+      </div>
+      <div class="dialog-detail">
+        <span>Special Request</span>
+        <span>${escapeHtml(row.dataset.specialRequest || "-")}</span>
+      </div>
+      <div class="dialog-menu">
+        <h3>Menu Items</h3>
+        ${menuItemsHtml}
+      </div>
+    `;
 
-    <div class="dialog-menu">
-      <h3>Menu Items</h3>
-      ${menuItemsHtml}
-    </div>
-  `;
     orderDialog.hidden = false;
     document.body.style.overflow = "hidden";
   }
-  /* event listeners */
-  if (switchStallButton) {
-    switchStallButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toggleStallDropdown();
-    });
+
+  // Update status appearance
+  function updateStatusAppearance(dropdown, status) {
+    dropdown.classList.remove(
+      "status-pending",
+      "status-preparing",
+      "status-ready",
+      "status-completed",
+      "status-cancelled",
+    );
+
+    const statusClass = getStatusClass(status);
+
+    if (statusClass) {
+      dropdown.classList.add(statusClass);
+    }
   }
-  stallOptions.forEach((option) => {
-    option.addEventListener("click", () => {
-      selectStall(option);
-    });
+
+  // Update order status
+  async function updateOrderStatus(row, dropdown) {
+    const orderId = row.dataset.orderId;
+    const previousStatus = row.dataset.orderStatus;
+    const newStatus = dropdown.value;
+
+    try {
+      await vendorFetch(`/vendor-orders/${selectedStallId}/${orderId}/status`, {
+        method: "PUT",
+        body: JSON.stringify({
+          OrderStatus: newStatus,
+        }),
+      });
+
+      row.dataset.orderStatus = newStatus;
+      updateStatusAppearance(dropdown, newStatus);
+      filterOrders();
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      dropdown.value = previousStatus;
+      updateStatusAppearance(dropdown, previousStatus);
+      alert(error.message);
+    }
+  }
+
+  // Stall dropdown button
+  switchStallButton?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleStallDropdown();
   });
+
+  // Select stall
+  stallDropdown?.addEventListener("click", async (event) => {
+    const option = event.target.closest(".stall-option");
+
+    if (!option) {
+      return;
+    }
+
+    selectedStallId = option.dataset.stallId;
+    sessionStorage.setItem("selectedStallId", selectedStallId);
+    displaySelectedStall();
+    closeStallDropdown();
+    await loadOrders();
+  });
+
+  // Close stall dropdown outside
   document.addEventListener("click", (event) => {
-    if (!event.target.closest(".stall-switcher")) closeStallDropdown();
+    if (!event.target.closest(".stall-switcher")) {
+      closeStallDropdown();
+    }
   });
-  [
-    searchInput,
-    statusFilter,
-    paymentFilter,
-    paymentStatusFilter,
-    typeFilter,
-    dateFilter,
-  ].forEach((control) => {
-    const eventName =
-      control?.tagName === "INPUT" && control.type === "search"
-        ? "input"
-        : "change";
-    control?.addEventListener(eventName, filterOrders);
-  });
+
+  // Filter controls
+  searchInput?.addEventListener("input", filterOrders);
+  statusFilter?.addEventListener("change", filterOrders);
+  typeFilter?.addEventListener("change", filterOrders);
+  dateFilter?.addEventListener("change", filterOrders);
   clearFilterButton?.addEventListener("click", clearFilters);
+
+  // View order details
   ordersTableBody?.addEventListener("click", (event) => {
     const detailsButton = event.target.closest(".view-details-button");
-    if (!detailsButton) return;
+
+    if (!detailsButton) {
+      return;
+    }
+
     const row = detailsButton.closest(".order-row");
-    if (row) openOrderDetails(row);
+
+    if (row) {
+      openOrderDetails(row);
+    }
   });
+
+  // Change order status
+  ordersTableBody?.addEventListener("change", async (event) => {
+    const dropdown = event.target.closest(".order-status-select");
+
+    if (!dropdown) {
+      return;
+    }
+
+    const row = dropdown.closest(".order-row");
+
+    if (row) {
+      await updateOrderStatus(row, dropdown);
+    }
+  });
+
+  // Close order dialog
   dialogSecondaryClose?.addEventListener("click", () => {
+    if (!orderDialog) {
+      return;
+    }
     orderDialog.hidden = true;
     document.body.style.overflow = "";
   });
-  statusDropdowns.forEach((dropdown) => {
-    dropdown.addEventListener("change", () => {
-      const row = dropdown.closest(".order-row");
 
-      row.dataset.orderStatus = dropdown.value;
+  // Initial page load
+  async function initialiseOrdersPage() {
+    const stallsLoaded = await loadVendorStalls();
 
-      dropdown.classList.remove(
-        "status-pending",
-        "status-preparing",
-        "status-ready",
-        "status-completed",
-        "status-cancelled",
-      );
-
-      switch (dropdown.value) {
-        case "Pending":
-          dropdown.classList.add("status-pending");
-          break;
-
-        case "Preparing":
-          dropdown.classList.add("status-preparing");
-          break;
-
-        case "Ready for Collection":
-          dropdown.classList.add("status-ready");
-          break;
-
-        case "Completed":
-          dropdown.classList.add("status-completed");
-          break;
-
-        case "Cancelled":
-          dropdown.classList.add("status-cancelled");
-          break;
-      }
-
-      console.log(`${row.dataset.orderId} → ${dropdown.value}`);
-    });
-  });
-  /* initialisation */
-  restoreSelectedStall();
-  filterOrders();
+    if (!stallsLoaded) {
+      return;
+    }
+    await loadOrders();
+  }
+  initialiseOrdersPage();
 });
