@@ -1718,10 +1718,6 @@ function setupStallSearch() {
                 const grade =
                     stall.HygieneGrade ??
                     "-";
-
-                const status =
-                    stall.InspectionStatus ??
-                    "Not Inspected";
                 
                 const imageSource =
                     stall.ImageURL?.startsWith("http")
@@ -1730,12 +1726,27 @@ function setupStallSearch() {
                             ? `../${stall.ImageURL}`
                             : "../images/picture-icon.jpg";
 
+                let complianceStatus =
+                    "Not Inspected";
+
+                if (
+                    stall.HygieneGrade === "A" ||
+                    stall.HygieneGrade === "B"
+                ) {
+                    complianceStatus =
+                        "Compliant";
+                } else if (
+                    stall.HygieneGrade === "C" ||
+                    stall.HygieneGrade === "D"
+                ) {
+                    complianceStatus =
+                        "Non-Compliant";
+                }
+
                 const statusClass =
-                        status === "Completed"
-                            ? "nea-status-compliant"
-                        : status === "Cancelled"
-                            ? "nea-status-non-compliant"
-                            : "nea-status-pending";
+                    complianceStatus
+                        .toLowerCase()
+                        .replaceAll(" ", "-");
 
                 const gradeClass =
                     stall.HygieneGrade
@@ -1749,7 +1760,7 @@ function setupStallSearch() {
                         data-stall="${stall.StallName}"
                         data-centre="${stall.HCName}"
                         data-grade="${grade}"
-                        data-status="${status}"
+                        data-status="${complianceStatus}"
                     >
 
                         <div class="stall-image-container">
@@ -1781,8 +1792,8 @@ function setupStallSearch() {
                                     <p>${stall.HCName}</p>
                                 </div>
 
-                                <span class="nea-status-badge ${statusClass}">
-                                    ${status}
+                                <span class="nea-status-badge nea-status-${statusClass}">
+                                    ${complianceStatus}
                                 </span>
 
                             </div>
