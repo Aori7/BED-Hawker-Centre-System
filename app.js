@@ -2,8 +2,8 @@ const express = require("express");
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
 // // Load environment variables
-const dotenv = require("dotenv");
-dotenv.config();
+const dotenv = require("dotenv"); // ruimin
+dotenv.config(); // ruimin
 
 // Import - ada's
 const customerController = require("./controllers/customerController");
@@ -16,6 +16,7 @@ const menuItemRoutes = require("./routes/menuItemRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
+const vendorRoutes = require("./routes/vendorRoutes");
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 // Import - dayana's
@@ -62,6 +63,7 @@ app.use( "/cleaning-schedules",operatorCleaningRoutes);
 app.use("/inspections-schedules",operatorInspectionRoutes);
 app.use("/operator-dashboard",operatorDashboardRoutes);
 //rui min's
+app.use("/vendors", vendorRoutes);
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
 //dayana's

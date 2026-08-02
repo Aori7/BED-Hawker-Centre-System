@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return "North";
     }
 
-    if (latitude <= 1.30) {
+    if (latitude <= 1.3) {
       return "South";
     }
 
@@ -44,14 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayCurrentPage() {
     hawkerList.innerHTML = "";
 
-    const startIndex =
-      (currentPage - 1) * recordsPerPage;
+    const startIndex = (currentPage - 1) * recordsPerPage;
 
-    const endIndex =
-      startIndex + recordsPerPage;
+    const endIndex = startIndex + recordsPerPage;
 
-    const currentRecords =
-      filteredHawkerCentres.slice(startIndex, endIndex);
+    const currentRecords = filteredHawkerCentres.slice(startIndex, endIndex);
 
     if (currentRecords.length === 0) {
       hawkerList.innerHTML = `
@@ -65,19 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     currentRecords.forEach((hawker) => {
-    const region = getHawkerRegion(hawker);
+      const region = getHawkerRegion(hawker);
 
-    const imagePath =
-      hawker.ImageURL || "../images/picture-icon.jpg";
+      const imagePath = hawker.ImageURL || "../images/picture-icon.jpg";
 
-    const description =
-      hawker.Description ||
-      "Discover stalls and local food available at this hawker centre.";
+      const description =
+        hawker.Description ||
+        "Discover stalls and local food available at this hawker centre.";
 
-    const card = document.createElement("article");
-    card.classList.add("hawker-card");
+      const card = document.createElement("article");
+      card.classList.add("hawker-card");
 
-    card.innerHTML = `
+      card.innerHTML = `
       <div class="hawker-card-image">
         <img
           src="${escapeHTML(imagePath)}"
@@ -127,8 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    hawkerList.appendChild(card);
-  });
+      hawkerList.appendChild(card);
+    });
 
     displayPagination();
   }
@@ -136,9 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function displayPagination() {
     pagination.innerHTML = "";
 
-    const totalPages = Math.ceil(
-      filteredHawkerCentres.length / recordsPerPage
-    );
+    const totalPages = Math.ceil(filteredHawkerCentres.length / recordsPerPage);
 
     if (totalPages <= 1) {
       return;
@@ -157,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.scrollTo({
           top: document.querySelector(".all-hawker").offsetTop - 80,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     });
@@ -180,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.scrollTo({
           top: document.querySelector(".all-hawker").offsetTop - 80,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       });
 
@@ -200,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.scrollTo({
           top: document.querySelector(".all-hawker").offsetTop - 80,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     });
@@ -210,13 +204,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadHawkerCentres() {
     try {
-      const response = await fetch("/hawker-centres");
+      const response = await fetch("/hawker-centres/available");
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.error || "Unable to retrieve hawker centres"
-        );
+        throw new Error(data.error || "Unable to retrieve hawker centres");
       }
 
       hawkerCentres = data;
@@ -224,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       currentPage = 1;
       displayCurrentPage();
-
     } catch (error) {
       console.error("Load hawker centres error:", error);
 
@@ -237,30 +228,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function searchHawkerCentres() {
-    const searchText =
-      searchInput.value.trim().toLowerCase();
+    const searchText = searchInput.value.trim().toLowerCase();
 
     filteredHawkerCentres = hawkerCentres.filter((hawker) => {
-      const name =
-        hawker.HCName?.toLowerCase() || "";
+      const name = hawker.HCName?.toLowerCase() || "";
 
-      const address =
-        hawker.HCAddress?.toLowerCase() || "";
+      const address = hawker.HCAddress?.toLowerCase() || "";
 
-      return (
-        name.includes(searchText) ||
-        address.includes(searchText)
-      );
+      return name.includes(searchText) || address.includes(searchText);
     });
 
     currentPage = 1;
     displayCurrentPage();
   }
 
-  searchButton.addEventListener(
-    "click",
-    searchHawkerCentres
-  );
+  searchButton.addEventListener("click", searchHawkerCentres);
 
   searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -270,18 +252,15 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   hawkerList.addEventListener("click", (event) => {
-    const viewStallsButton =
-      event.target.closest(".view-stalls-btn");
+    const viewStallsButton = event.target.closest(".view-stalls-btn");
 
     if (!viewStallsButton) {
       return;
     }
 
-    const hawkerCentreID =
-      viewStallsButton.dataset.hawkerId;
+    const hawkerCentreID = viewStallsButton.dataset.hawkerId;
 
-    window.location.href =
-      `/html/order-stall.html?hawkerCentreID=${hawkerCentreID}`;
+    window.location.href = `/html/order-stall.html?hawkerCentreID=${hawkerCentreID}`;
   });
 
   loadHawkerCentres();
