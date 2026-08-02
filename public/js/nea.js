@@ -1994,24 +1994,29 @@ function applyStallQueryParameters(
     statusFilter
 ) {
     const queryParameters =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
 
-    const searchValue =
+    const search =
         queryParameters.get("search");
 
-    const statusValue =
+    const status =
         queryParameters.get("status");
 
-    if (searchValue) {
-        searchInput.value = searchValue;
+    if (search) {
+        searchInput.value = search;
     }
 
-    if (statusValue === "non-compliant") {
-        statusFilter.value = "Non-Compliant";
-    }
-
-    if (statusValue === "compliant") {
-        statusFilter.value = "Compliant";
+    if (
+        status &&
+        [
+            "Compliant",
+            "Non-Compliant",
+            "Not Inspected"
+        ].includes(status)
+    ) {
+        statusFilter.value = status;
     }
 }
 
