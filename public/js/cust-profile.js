@@ -5,7 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const customerID = sessionStorage.getItem("customerID");
     const userID = sessionStorage.getItem("userID");
     const accessToken = sessionStorage.getItem("accessToken");
+    function handleExpiredSession() {
+        sessionStorage.clear();
 
+        alert("Your session has expired. Please log in again.");
+
+        window.location.href = "/html/login.html";
+    }
     if (
         !isLoggedIn ||
         !userID ||
@@ -79,6 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             const data = await response.json();
+
+            if (response.status === 401 || response.status === 403) {
+                handleExpiredSession();
+                return;
+            }
 
             if (!response.ok) {
                 alert(data.error || "Unable to load profile");
