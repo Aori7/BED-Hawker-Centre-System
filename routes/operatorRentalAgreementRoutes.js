@@ -1,34 +1,53 @@
 const express = require("express");
 
-const router = express.Router();
-
 const rentalAgreementController =
     require("../controllers/operatorRentalAgreementController");
 
+const {
+    authenticateToken,
+    authorizeRoles
+} = require("../middleware/authMiddleware");
 
+const router = express.Router();
 
-// get all rental agreements
+// GET all rental agreements
 router.get(
     "/",
+    authenticateToken,
+    authorizeRoles("Operator"),
     rentalAgreementController.getAllRentalAgreements
 );
 
+// GET rental agreement by ID
 router.get(
-    "/:id", rentalAgreementController.getRentalAgreementById);
+    "/:id",
+    authenticateToken,
+    authorizeRoles("Operator"),
+    rentalAgreementController.getRentalAgreementById
+);
 
-module.exports = router;
-
+// POST create rental agreement
 router.post(
     "/",
+    authenticateToken,
+    authorizeRoles("Operator"),
     rentalAgreementController.createRentalAgreement
 );
 
+// PUT update rental agreement
 router.put(
     "/:id",
+    authenticateToken,
+    authorizeRoles("Operator"),
     rentalAgreementController.updateRentalAgreement
 );
 
+// DELETE / terminate rental agreement
 router.delete(
     "/:id",
+    authenticateToken,
+    authorizeRoles("Operator"),
     rentalAgreementController.deleteRentalAgreement
 );
+
+module.exports = router;
