@@ -9,14 +9,18 @@
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
 
-    <!-- Profile page stylesheet -->
+    <!-- Page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-profile.css" />
 
     <!-- Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
 
@@ -26,7 +30,7 @@
       rel="stylesheet"
     />
 
-    <title>Vendor Profile</title>
+    <title>Vendor Profile Page</title>
   </head>
   <body data-page="vendor-profile">
     <!-- Navigation bar -->
@@ -35,13 +39,25 @@
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
+      <div class="logo">
+        <a href="index.html">
+          <!-- Image of logo sourced from Google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
       <a class="nav-link" href="vendor-home.html" data-nav-target="home">
         Home
       </a>
       <a class="nav-link" href="vendor-menu.html" data-nav-target="menu">
         Menu
       </a>
-      <a class="nav-link" href="vendor-orders.html" data-nav-target="orders">
+      <a
+        class="nav-link"
+        href="vendor-orders.html"
+        data-nav-target="orders"
+      >
         Orders
       </a>
       <a
@@ -61,11 +77,17 @@
       <a
         class="nav-link active"
         href="vendor-profile.html"
-        aria-current="page"
         data-nav-target="profile"
+        aria-current="page"
       >
         Profile
       </a>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Logout</button>
+        </a>
+      </div>
     </nav>
 
     <!-- Profile page -->

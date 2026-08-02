@@ -9,10 +9,14 @@
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
 
-    <!-- Menu page stylesheet -->
+    <!-- Page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-menu.css" />
 
     <!-- Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,9 +30,8 @@
       rel="stylesheet"
     />
 
-    <title>Vendor Menu</title>
+    <title>Vendor Menu Page</title>
   </head>
-
   <body data-page="vendor-menu">
     <!-- Navigation bar -->
     <nav
@@ -36,14 +39,22 @@
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
+      <div class="logo">
+        <a href="index.html">
+          <!-- Image of logo sourced from Google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
       <a class="nav-link" href="vendor-home.html" data-nav-target="home">
         Home
       </a>
       <a
         class="nav-link active"
         href="vendor-menu.html"
-        aria-current="page"
         data-nav-target="menu"
+        aria-current="page"
       >
         Menu
       </a>
@@ -67,6 +78,12 @@
       <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
         Profile
       </a>
+
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Logout</button>
+        </a>
+      </div>
     </nav>
 
     <!-- Stall selector -->

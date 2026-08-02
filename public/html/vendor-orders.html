@@ -9,14 +9,18 @@
     <link rel="stylesheet" href="../css/layout.css" />
     <link rel="stylesheet" href="../css/components.css" />
 
-    <!-- Orders page stylesheet -->
+    <!-- Page stylesheet -->
     <link rel="stylesheet" href="../css/pages/vendor-orders.css" />
 
     <!-- Google fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Noto+Serif:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
       rel="stylesheet"
     />
 
@@ -26,9 +30,8 @@
       rel="stylesheet"
     />
 
-    <title>Vendor Orders</title>
+    <title>Vendor Orders Page</title>
   </head>
-
   <body data-page="vendor-orders">
     <!-- Navigation bar -->
     <nav
@@ -36,6 +39,14 @@
       id="vendor-navigation"
       data-component="vendor-navigation"
     >
+      <div class="logo">
+        <a href="index.html">
+          <!-- Image of logo sourced from Google icons -->
+          <span class="material-symbols-rounded">restaurant_menu</span>
+          <h1 id="logotitle">Hawker<em>SG</em></h1>
+        </a>
+      </div>
+
       <a class="nav-link" href="vendor-home.html" data-nav-target="home">
         Home
       </a>
@@ -45,8 +56,8 @@
       <a
         class="nav-link active"
         href="vendor-orders.html"
-        aria-current="page"
         data-nav-target="orders"
+        aria-current="page"
       >
         Orders
       </a>
@@ -67,8 +78,13 @@
       <a class="nav-link" href="vendor-profile.html" data-nav-target="profile">
         Profile
       </a>
-    </nav>
 
+      <div class="loginbutton">
+        <a href="login.html" id="login-link">
+          <button id="login-btn">Logout</button>
+        </a>
+      </div>
+    </nav>
     <!-- Stall selector -->
     <header
       class="orders-stall-selector"
