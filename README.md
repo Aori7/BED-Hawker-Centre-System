@@ -1,96 +1,100 @@
-# HawkerSG - Backend Development
-BED/SPM Hawker Centre Management System
+# HawkerSG – Singapore Hawker Centre Management System
 
-## Prerequisites
+## Overview
 
-Before running the project, ensure the following software is installed:
-
-- Node.js
-- SQL Server
-- SQL Server Management Studio (SSMS)
-- Visual Studio Code
+HawkerSG is a web application developed for the Back-End Development assignment. It allows customers to browse hawker centres, order food and submit feedback, while vendors, operators and NEA officers each have their own management functions.
 
 ---
 
-## Clone the Repository
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+- Node.js
+- Express.js
+- Microsoft SQL Server
+- MSSQL
+- JWT
+- bcrypt
+- Joi
+- Jest
+- Supertest
+- Postman
+
+---
+
+## Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone <repository-url>
-cd BED-Hawker-Centre-System
 ```
 
 ---
 
-## Install Dependencies
+### 2. Create a `.env` file
 
-Install all required Node.js packages:
-
-```bash
-npm install
-```
-
-or install individually:
-
-```bash
-npm install express
-npm install mssql
-npm install dotenv
-npm install joi
-```
-
----
-
-## Environment Variables
-
-Create a `.env` file in the root directory.
+Create a `.env` file in the project root.
 
 Example:
 
 ```env
-DB_USER=your_sql_username
-DB_PASSWORD=your_sql_password
+DB_USER=hawker_admin
+DB_PASSWORD=hawkeradmin
 DB_SERVER=localhost
 DB_DATABASE=hawker_db_bed
 DB_PORT=1433
+ACCESS_TOKEN_SECRET=your_secret_key
+PORT=3000
 ```
 
-**Do not commit your `.env` file to GitHub.**
+Suggested SQL Server login:
 
----
+```
+Username: hawker_admin
+Password: hawkeradmin
+```
 
-## Database Setup
-
-1. Open SQL Server Management Studio.
-2. Create a database named:
+Make sure your database is named:
 
 ```
 hawker_db_bed
 ```
 
-3. Run the provided SQL scripts to create all required tables.
+---
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
 
 ---
 
-## Running the Project
+### 4. Create the database
 
-Start the backend server:
+Run the SQL scripts in the following order:
+
+1. Create_Tables.sql
+2. Insert_Records.sql
+
+Then create the default user accounts:
+
+```bash
+node seedUsers.js
+```
+
+---
+
+### 5. Start the server
 
 ```bash
 node app.js
 ```
 
-If the connection is successful, you should see:
-
-```text
-Database connection established successfully
-Server listening on port 3000
-```
-
----
-
-## Accessing the Application
-
-Open your browser and navigate to:
+The application should now be running on:
 
 ```
 http://localhost:3000
@@ -98,35 +102,94 @@ http://localhost:3000
 
 ---
 
-## Project Structure
+## Default Login Accounts
+
+### Vendor
+
+Email:
 
 ```
-BED-Hawker-Centre-System
-│
-├── app.js
-├── dbConfig.js
-├── .env
-├── package.json
-├── package-lock.json
-│
-├── controllers/
-├── middleware/
-├── models/
-├── routes/
-│
-└── public/
-    ├── css/
-    ├── html/
-    ├── images/
-    ├── js/
-    └── index.html
+stallowner1@hawkersg.com
+```
+
+Password:
+
+```
+stallowner123
 ```
 
 ---
 
-## Notes
+### Operator
 
-- `node_modules` is ignored using `.gitignore`.
-- `.env` is ignored using `.gitignore`.
-- Database credentials are stored securely using environment variables.
-- SQL Server must be running before starting the application.
+Email:
+
+```
+operator1@hawkersg.com
+```
+
+Password:
+
+```
+operator123
+```
+
+---
+
+### NEA Officer
+
+Email:
+
+```
+neaofficer1@hawkersg.com
+```
+
+Password:
+
+```
+neaofficer123
+```
+
+---
+
+## Running Tests
+
+Run all unit tests:
+
+```bash
+npm test
+```
+
+---
+
+## Common Issues
+
+### Database login error
+
+Check that:
+
+- SQL Server is running.
+- SQL Server Authentication is enabled.
+- The username and password in `.env` are correct.
+
+---
+
+### Cannot connect to SQL Server
+
+Enable TCP/IP in **SQL Server Configuration Manager**, then restart the SQL Server service.
+
+---
+
+### Missing packages
+
+If packages are missing, run:
+
+```bash
+npm install
+```
+
+---
+
+## Credits
+
+Please refer to **Credit** in the application for external assets, images, libraries and AI usage acknowledgements.
