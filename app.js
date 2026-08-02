@@ -16,6 +16,7 @@ const menuItemRoutes = require("./routes/menuItemRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const contactSubmissionRoutes = require("./routes/contactSubmissionRoutes");
 // Improt - vendor (rm's)
+const vendorStallsRoutes = require("./routes/vendorStallsRoutes");
 const vendorDashboardRoutes = require("./routes/vendorDashboardRoutes");
 const vendorPromotionRoutes = require("./routes/vendorPromotionRoutes");
 const vendorMenuRoutes = require("./routes/vendorMenuRoutes");
@@ -66,6 +67,7 @@ app.use( "/cleaning-schedules",operatorCleaningRoutes);
 app.use("/inspections-schedules",operatorInspectionRoutes);
 app.use("/operator-dashboard",operatorDashboardRoutes);
 //rui min's
+app.use("/vendor-stalls", vendorStallsRoutes);
 app.use("/vendor-dashboard", vendorDashboardRoutes);
 app.use("/vendor-promotions", vendorPromotionRoutes);
 app.use("/vendor-menu", vendorMenuRoutes);
