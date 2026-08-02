@@ -288,8 +288,65 @@ async function getAllOrdersByCustomer(customerID) {
     await connection.close();
   }
 }
+async function getReceiptByOrderID(orderID, customerID) {
+  const connection = await sql.connect(dbConfig);
+
+  try {
+    const orderResult = await connection
+      .request()
+      .input("OrderID", sql.Int, orderID)
+      .input("CustomerID", sql.Int, customerID)
+      .query(`
+        SELECT
+          o.OrderID,
+          o.OrderDateTime,
+          o.OrderStatus,
+          o.OrderType,
+          o.PaymentMethod,
+          o.PaymentStatus,
+          o.Subtotal,
+          o.DeliveryFee,
+          o.TotalAmount,
+          o.SpecialRequest,
+          fs.StallName
+        FROM Orders o
+        INNER JOIN FoodStall fs
+          ON o.StallID = fs.StallID
+        WHERE o.OrderID = @OrderID
+        AND o.CustomerID = @CustomerID
+      `);
+
+    if (orderResult.recordset.length === 0) {
+      return null;
+    }
+
+    const itemsResult = await connection
+      .request()
+      .input("OrderID", sql.Int, orderID)
+      .query(`
+        SELECT
+          OrderItemID,
+          ItemName,
+          Quantity,
+          UnitPrice,
+          Subtotal,
+          SpecialRequest
+        FROM OrderItem
+        WHERE OrderID = @OrderID
+        ORDER BY OrderItemID ASC
+      `);
+
+    return {
+      ...orderResult.recordset[0],
+      Items: itemsResult.recordset,
+    };
+  } finally {
+    await connection.close();
+  }
+}
 module.exports = {
   createOrder,
   getRecentOrdersByCustomer,
   getAllOrdersByCustomer,
+  getReceiptByOrderID,
 };

@@ -21,7 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalSpent = document.getElementById("total-spent");
 
   const favouriteStall = document.getElementById("favourite-stall");
+  const receiptModalOverlay = document.getElementById("receipt-modal-overlay");
 
+  const receiptContent = document.getElementById("receipt-content");
+
+  const closeReceiptModal = document.getElementById("close-receipt-modal");
   if (
     !openHistoryBtn ||
     !closeHistoryBtn ||
@@ -464,6 +468,167 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function showReceipt(orderID) {
+    if (!receiptModalOverlay || !receiptContent) {
+      console.error("Receipt modal elements are missing.");
+      return;
+    }
+
+    const customerID = sessionStorage.getItem("customerID");
+    const accessToken = sessionStorage.getItem("accessToken");
+
+    try {
+      receiptModalOverlay.classList.add("show");
+
+      receiptContent.innerHTML = `
+      <p class="receipt-loading">
+        Loading receipt...
+      </p>
+    `;
+
+      const response = await fetch(
+        `/orders/customer/${customerID}/${orderID}/receipt`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        },
+      );
+
+      const receipt = await response.json();
+
+      if (!response.ok) {
+        throw new Error(receipt.error || "Unable to load receipt");
+      }
+
+      const orderDate = new Date(receipt.OrderDateTime);
+
+      const itemsHTML = receipt.Items.map((item) => {
+        return `
+          <div class="receipt-item">
+            <div>
+              <strong>${item.ItemName}</strong>
+              <span>
+                ${item.Quantity} ×
+                $${Number(item.UnitPrice).toFixed(2)}
+              </span>
+            </div>
+
+            <strong>
+              $${Number(item.Subtotal).toFixed(2)}
+            </strong>
+          </div>
+        `;
+      }).join("");
+
+      receiptContent.innerHTML = `
+      <div class="receipt-header">
+        <span class="material-symbols-rounded">
+          restaurant_menu
+        </span>
+
+        <h2>HawkerSG</h2>
+
+        <p>Order Receipt</p>
+      </div>
+
+      <div class="receipt-info">
+        <div>
+          <span>Order ID</span>
+          <strong>#${receipt.OrderID}</strong>
+        </div>
+
+        <div>
+          <span>Date</span>
+          <strong>
+            ${orderDate.toLocaleDateString("en-SG")}
+          </strong>
+        </div>
+
+        <div>
+          <span>Time</span>
+          <strong>
+            ${orderDate.toLocaleTimeString("en-SG", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </strong>
+        </div>
+      </div>
+
+      <div class="receipt-stall">
+        <span>Ordered from</span>
+        <h3>${receipt.StallName}</h3>
+      </div>
+
+      <div class="receipt-items">
+        ${itemsHTML}
+      </div>
+
+      <div class="receipt-totals">
+        <div>
+          <span>Subtotal</span>
+          <strong>
+            $${Number(receipt.Subtotal).toFixed(2)}
+          </strong>
+        </div>
+
+        <div>
+          <span>Delivery Fee</span>
+          <strong>
+            $${Number(receipt.DeliveryFee).toFixed(2)}
+          </strong>
+        </div>
+
+        <div class="receipt-total-row">
+          <span>Total</span>
+          <strong>
+            $${Number(receipt.TotalAmount).toFixed(2)}
+          </strong>
+        </div>
+      </div>
+
+      <div class="receipt-bottom">
+        <p>
+          <strong>Order Type:</strong>
+          ${receipt.OrderType}
+        </p>
+
+        <p>
+          <strong>Payment:</strong>
+          ${receipt.PaymentMethod}
+          (${receipt.PaymentStatus})
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          ${receipt.OrderStatus}
+        </p>
+      </div>
+
+      <p class="receipt-thank-you">
+        Thank you for supporting Singapore's hawkers!
+      </p>
+    `;
+    } catch (error) {
+      receiptContent.innerHTML = `
+      <p class="receipt-error">
+        ${error.message}
+      </p>
+    `;
+    }
+  }
+  if (closeReceiptModal && receiptModalOverlay) {
+    closeReceiptModal.addEventListener("click", () => {
+      receiptModalOverlay.classList.remove("show");
+    });
+
+    receiptModalOverlay.addEventListener("click", (event) => {
+      if (event.target === receiptModalOverlay) {
+        receiptModalOverlay.classList.remove("show");
+      }
+    });
+  }
   function openHistory() {
     historySidebar.classList.add("active");
 
@@ -502,7 +667,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (receiptButton) {
       const orderID = receiptButton.dataset.orderId;
 
-      alert(`Receipt for Order #${orderID} will be implemented next.`);
+      showReceipt(orderID);
     }
 
     if (reorderButton) {
@@ -511,5 +676,24 @@ document.addEventListener("DOMContentLoaded", () => {
       alert(`Reorder for Order #${orderID} will be implemented next.`);
     }
   });
+  if (fullHistoryList) {
+    fullHistoryList.addEventListener("click", (event) => {
+      const receiptButton = event.target.closest(".full-receipt-btn");
+
+      const reorderButton = event.target.closest(".full-reorder-btn");
+
+      if (receiptButton) {
+        const orderID = receiptButton.dataset.orderId;
+
+        showReceipt(orderID);
+      }
+
+      if (reorderButton) {
+        const orderID = reorderButton.dataset.orderId;
+
+        alert(`Reorder for Order #${orderID} will be implemented next.`);
+      }
+    });
+  }
   loadFullOrderHistory();
 });

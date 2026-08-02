@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/layout.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/pages/about-us.css" />
-
+<link rel="stylesheet" href="../css/pages/order-history.css" />
     <!-- font chosen by ada: Archivo -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -174,7 +174,22 @@
         </a>
       </div>
     </aside>
+    <div id="receipt-modal-overlay" class="receipt-modal-overlay">
+      <div class="receipt-modal">
+        <button
+          type="button"
+          id="close-receipt-modal"
+          class="close-receipt-modal material-symbols-rounded"
+          aria-label="Close receipt"
+        >
+          close
+        </button>
 
+        <div id="receipt-content">
+          <p>Loading receipt...</p>
+        </div>
+      </div>
+    </div>
     <footer id="footercontainer">
       <div class="footer-glow footer-glow-one"></div>
       <div class="footer-glow footer-glow-two"></div>
