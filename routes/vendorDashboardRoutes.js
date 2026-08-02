@@ -1,13 +1,14 @@
 const express = require("express");
 const vendorDashboardController = require("../controllers/vendorDashboardController");
 const vendorDashboardValidation = require("../middleware/vendorDashboardValidation");
-const router = express.Router();
 // auth vendor - user & stall
 const {
   authenticateToken,
   authorizeRoles,
 } = require("../middleware/authMiddleware");
 const { validateVendorStall } = require("../middleware/vendorValidation");
+
+const router = express.Router();
 
 // Get revenue by stall ID
 // test run: http://localhost:3000/vendor-dashboard/1/revenue?startDate=2026-07-01&endDate=2026-08-01

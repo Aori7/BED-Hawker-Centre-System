@@ -1,4 +1,4 @@
-// Validate stall ID (remove after adding auth features)
+// Validate stall ID
 function validateStallId(req, res, next) {
   const stallId = parseInt(req.params.stallId, 10);
 
