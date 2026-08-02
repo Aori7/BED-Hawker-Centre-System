@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setupHamburgerMenu();
 });
 
+const accessToken =
+    sessionStorage.getItem("accessToken");
 
 /* dashboard functions */
 
@@ -18,6 +20,52 @@ function setupDashboard() {
     updateDashboardDate();
     animateDashboardStatistics();
     setupQuickStallSearch();
+    loadDashboardOfficerName();
+}
+
+async function loadDashboardOfficerName() {
+    const officerNameElement =
+        document.getElementById(
+            "dashboard-officer-name"
+        );
+
+    if (!officerNameElement) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/dashboard/officer-profile",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const officer =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                officer.error ||
+                "Unable to retrieve officer profile"
+            );
+        }
+
+        officerNameElement.textContent =
+            officer.OfficerName;
+
+    } catch (error) {
+        console.error(
+            "Load officer name error:",
+            error
+        );
+
+        officerNameElement.textContent =
+            "Officer";
+    }
 }
 
 function updateDashboardDate() {
@@ -139,6 +187,57 @@ async function setupInspectionForm() {
         return;
     }
 
+    let loggedInOfficerID = null;
+
+    try {
+        const response = await fetch(
+            "/dashboard/officer-profile",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        const officer =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                officer.error ||
+                "Unable to retrieve officer profile"
+            );
+        }
+
+        loggedInOfficerID =
+            Number(officer.OfficerID);
+
+        if (
+            !Number.isInteger(
+                loggedInOfficerID
+            ) ||
+            loggedInOfficerID <= 0
+        ) {
+            throw new Error(
+                "Invalid officer profile"
+            );
+        }
+
+    } catch (error) {
+        console.error(
+            "Load officer profile error:",
+            error
+        );
+
+        showInspectionMessage(
+            "Unable to identify the logged-in NEA officer.",
+            "error"
+        );
+
+        return;
+    }
+
     const hawkerCentreSelect =
         document.getElementById(
             "hawker-centre"
@@ -257,21 +356,27 @@ async function setupInspectionForm() {
             const selectedGrade =
                 document.querySelector(
                     'input[name="hygieneGrade"]:checked'
-                );
+                ); 
 
             const inspectionData = {
-                officerID: 1,
+                officerID:
+                    loggedInOfficerID,
+
                 stallID: parseInt(
                     foodStallSelect.value
                 ),
+
                 inspectionDate:
                     inspectionDate.value,
+
                 inspectionScore:
                     parseInt(
                         inspectionScore.value
                     ),
+
                 hygieneGrade:
                     selectedGrade.value,
+
                 remark:
                     remarks.value.trim()
             };
@@ -281,10 +386,15 @@ async function setupInspectionForm() {
                     "/inspections",
                     {
                         method: "POST",
+
                         headers: {
                             "Content-Type":
-                                "application/json"
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${accessToken}`
                         },
+
                         body: JSON.stringify(
                             inspectionData
                         )
@@ -301,8 +411,18 @@ async function setupInspectionForm() {
                     );
                 }
 
+                const selectedStallOption =
+                    foodStallSelect.options[
+                        foodStallSelect.selectedIndex
+                    ];
+
+                const selectedStallName =
+                    selectedStallOption
+                        ? selectedStallOption.textContent.trim()
+                        : "the selected food stall";
+
                 showInspectionMessage(
-                    result.message,
+                    `Inspection recorded successfully for ${selectedStallName}.`,
                     "success"
                 );
 
@@ -354,17 +474,39 @@ async function loadInspectionHawkerCentres(
 
     try {
         const response = await fetch(
-            "/hawker-centres"
+            "/food-stalls/search/nea"
         );
 
-        const hawkerCentres =
+        const foodStalls =
             await response.json();
 
         if (!response.ok) {
             throw new Error(
+                foodStalls.error ||
                 "Unable to load hawker centres"
             );
         }
+
+        const hawkerCentres =
+            new Map();
+
+        foodStalls.forEach(
+            (foodStall) => {
+                const hawkerCentreID =
+                    foodStall.HawkerCentreID ??
+                    foodStall.HCID;
+
+                if (
+                    hawkerCentreID !== null &&
+                    hawkerCentreID !== undefined
+                ) {
+                    hawkerCentres.set(
+                        String(hawkerCentreID),
+                        foodStall.HCName
+                    );
+                }
+            }
+        );
 
         hawkerCentreSelect.innerHTML = `
             <option value="">
@@ -372,17 +514,39 @@ async function loadInspectionHawkerCentres(
             </option>
         `;
 
-        hawkerCentres.forEach(
-            (hawkerCentre) => {
-                hawkerCentreSelect.innerHTML += `
-                    <option
-                        value="${hawkerCentre.HawkerCentreID}"
-                    >
-                        ${hawkerCentre.HCName}
-                    </option>
-                `;
-            }
-        );
+        Array.from(
+            hawkerCentres.entries()
+        )
+            .sort(
+                (
+                    firstCentre,
+                    secondCentre
+                ) =>
+                    firstCentre[1]
+                        .localeCompare(
+                            secondCentre[1]
+                        )
+            )
+            .forEach(
+                ([
+                    hawkerCentreID,
+                    hawkerCentreName
+                ]) => {
+                    hawkerCentreSelect.innerHTML += `
+                        <option
+                            value="${hawkerCentreID}"
+                        >
+                            ${hawkerCentreName}
+                        </option>
+                    `;
+                }
+            );
+
+        foodStallSelect.innerHTML = `
+            <option value="">
+                Select a food stall
+            </option>
+        `;
 
         foodStallSelect.disabled = true;
 
@@ -408,11 +572,14 @@ async function loadInspectionFoodStalls(
             `/food-stalls/hawker-centre/${hawkerCentreID}`
         );
 
-        const foodStalls =
-            await response.json();
+        const foodStalls = await response.json();
+
+        console.log(foodStalls);
+        console.log(foodStalls[0]);
 
         if (!response.ok) {
             throw new Error(
+                foodStalls.error ||
                 "Unable to load food stalls"
             );
         }
@@ -436,7 +603,8 @@ async function loadInspectionFoodStalls(
             }
         );
 
-        foodStallSelect.disabled = false;
+        foodStallSelect.disabled =
+            foodStalls.length === 0;
 
     } catch (error) {
         console.error(
@@ -451,11 +619,6 @@ async function loadInspectionFoodStalls(
         `;
 
         foodStallSelect.disabled = true;
-
-        showInspectionMessage(
-            "Unable to load food stalls.",
-            "error"
-        );
     }
 }
 
@@ -710,12 +873,35 @@ async function setupInspectionHistory() {
     const emptyState = document.getElementById(
         "history-empty-state"
     );
+    const previousButton = document.getElementById(
+        "history-previous-btn"
+    );
+
+    const nextButton = document.getElementById(
+        "history-next-btn"
+    );
+
+    const pageNumberContainer = document.getElementById(
+        "history-page-numbers"
+    );
 
     let inspections = [];
 
+    let filteredInspections = [];
+
+    let currentPage = 1;
+
+    const recordsPerPage = 10;
+
     try {
         const response = await fetch(
-            "/inspections"
+            "/inspections",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
         );
 
         const result = await response.json();
@@ -723,16 +909,19 @@ async function setupInspectionHistory() {
         if (!response.ok) {
             throw new Error(
                 result.error ||
-                "Unable to retrieve inspection history"
+                "Unable to record inspection"
             );
         }
 
         inspections = result;
 
-        renderInspectionHistory(
-            inspections,
-            tableBody
-        );
+        filteredInspections = [
+            ...inspections
+        ];
+
+        currentPage = 1;
+
+    displayInspectionHistoryPage();
 
     } catch (error) {
         console.error(
@@ -749,6 +938,51 @@ async function setupInspectionHistory() {
         `;
 
         return;
+    }
+
+    if (previousButton) {
+        previousButton.addEventListener(
+            "click",
+            () => {
+                if (currentPage > 1) {
+                    currentPage--;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        );
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener(
+            "click",
+            () => {
+                const totalPages =
+                    Math.ceil(
+                        filteredInspections.length /
+                        recordsPerPage
+                    );
+
+                if (
+                    currentPage <
+                    totalPages
+                ) {
+                    currentPage++;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            }
+        );
     }
 
     function updateInspectionHistory() {
@@ -860,10 +1094,11 @@ async function setupInspectionHistory() {
             }
         );
 
-        renderInspectionHistory(
-            matchingInspections,
-            tableBody
-        );
+        filteredInspections = matchingInspections;
+
+        currentPage = 1;
+
+        displayInspectionHistoryPage();
 
         if (resultCount) {
             resultCount.textContent =
@@ -921,6 +1156,110 @@ async function setupInspectionHistory() {
                     "show"
                 );
             }
+        }
+    }
+
+    function displayInspectionHistoryPage() {
+        const totalPages =
+            Math.max(
+                1,
+                Math.ceil(
+                    filteredInspections.length /
+                    recordsPerPage
+                )
+            );
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        const startIndex =
+            (currentPage - 1) *
+            recordsPerPage;
+
+        const endIndex =
+            startIndex +
+            recordsPerPage;
+
+        const recordsForCurrentPage =
+            filteredInspections.slice(
+                startIndex,
+                endIndex
+            );
+
+        renderInspectionHistory(
+            recordsForCurrentPage,
+            tableBody
+        );
+
+        updateInspectionPagination(
+            totalPages
+        );
+    }
+
+    function updateInspectionPagination(
+        totalPages
+    ) {
+        if (previousButton) {
+            previousButton.disabled =
+                currentPage === 1;
+        }
+
+        if (nextButton) {
+            nextButton.disabled =
+                currentPage === totalPages;
+        }
+
+        if (!pageNumberContainer) {
+            return;
+        }
+
+        pageNumberContainer.innerHTML = "";
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= totalPages;
+            pageNumber++
+        ) {
+            const pageButton =
+                document.createElement(
+                    "button"
+                );
+
+            pageButton.type = "button";
+
+            pageButton.textContent =
+                pageNumber;
+
+            pageButton.className =
+                "history-page-btn";
+
+            if (
+                pageNumber === currentPage
+            ) {
+                pageButton.classList.add(
+                    "active"
+                );
+            }
+
+            pageButton.addEventListener(
+                "click",
+                () => {
+                    currentPage =
+                        pageNumber;
+
+                    displayInspectionHistoryPage();
+
+                    window.scrollTo({
+                        top: 500,
+                        behavior: "smooth"
+                    });
+                }
+            );
+
+            pageNumberContainer.appendChild(
+                pageButton
+            );
         }
     }
 
@@ -1019,10 +1358,6 @@ function renderInspectionHistory(
                 </td>
 
                 <td>
-                    ${inspectionDate}
-                </td>
-
-                <td>
                     <strong>
                         ${inspection.StallName}
                     </strong>
@@ -1034,6 +1369,10 @@ function renderInspectionHistory(
 
                 <td>
                     ${inspection.HCName}
+                </td>
+
+                <td>
+                    ${inspectionDate}
                 </td>
 
                 <td>
@@ -1707,7 +2046,16 @@ async function setupHygieneGrades() {
     async function loadHygieneGrades() {
         try {
             const response = await fetch(
-                "/hygiene-grades"
+                "/hygiene-grades",
+                {
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                Authorization:
+                        `Bearer ${accessToken}`
+                    },
+                }
             );
 
             const result =
@@ -2301,7 +2649,9 @@ function setupHygieneUpdateModal(
                     method: "PUT",
                     headers: {
                         "Content-Type":
-                            "application/json"
+                            "application/json",
+                        Authorization:
+                            `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({
                         hygieneGrade:
@@ -2556,11 +2906,6 @@ async function setupStallDetails() {
             queryParameters.get("stallId")
         );
 
-    console.log(
-        "stall details page loaded:",
-        stallID
-    );
-
     if (
         !Number.isInteger(stallID) ||
         stallID <= 0
@@ -2613,16 +2958,16 @@ async function setupStallDetails() {
 async function loadStallDetails(stallID) {
     try {
         const response = await fetch(
-            `/stall-details/${stallID}`
+            `/stall-details/${stallID}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
 
         const stall =
             await response.json();
-
-        console.log(
-            "stall details response:",
-            stall
-        );
 
         if (!response.ok) {
             throw new Error(
@@ -2782,7 +3127,12 @@ async function loadStallDetailsHistory(
 
     try {
         const response = await fetch(
-            `/stall-details/${stallID}/inspections`
+            `/stall-details/${stallID}/inspections`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
 
         const inspections =
@@ -2987,7 +3337,14 @@ async function loadDashboardStatistics() {
             return;
         }
 
-        const response = await fetch("/dashboard/statistics");
+        const response = await fetch(
+            "/dashboard/statistics",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
+        );
 
         const statistics = await response.json();
 
@@ -3026,15 +3383,14 @@ async function loadTodayInspectionCount() {
     }
 
     try {
-        const response = await fetch(
-            "/dashboard/today"
-        );
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to retrieve today's inspections"
+            const response = await fetch(
+                "/dashboard/today",
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                }
             );
-        }
 
         const result = await response.json();
 
@@ -3063,14 +3419,13 @@ async function loadRecentInspections() {
     try {
 
         const response = await fetch(
-            "/dashboard/recent"
+            "/dashboard/recent",
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }
         );
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to retrieve recent inspections."
-            );
-        }
 
         const inspections =
             await response.json();

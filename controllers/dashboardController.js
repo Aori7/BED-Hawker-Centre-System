@@ -4,7 +4,6 @@ const dashboardModel = require(
     "../models/dashboardModel"
 );
 
-
 // get dashboard statistics
 async function getDashboardStatistics(req, res) {
     try {
@@ -39,7 +38,6 @@ async function getDashboardStatistics(req, res) {
     }
 }
 
-
 // get recent inspections
 async function getRecentInspections(req, res) {
     try {
@@ -61,7 +59,6 @@ async function getRecentInspections(req, res) {
         });
     }
 }
-
 
 // get today's inspection count
 async function getTodayInspectionCount(req, res) {
@@ -87,7 +84,6 @@ async function getTodayInspectionCount(req, res) {
         });
     }
 }
-
 
 // update inspection status
 async function updateInspectionStatus(req, res) {
@@ -169,10 +165,46 @@ async function updateInspectionStatus(req, res) {
     }
 }
 
+// get logged in nea officer details
+async function getOfficerProfile(req, res) {
+    try {
+        const userID =
+            req.user.userID;
+
+        const officer =
+            await dashboardModel
+                .getOfficerProfile(
+                    userID
+                );
+
+        if (!officer) {
+            return res.status(404).json({
+                error:
+                    "NEA officer profile not found"
+            });
+        }
+
+        res.status(200).json(
+            officer
+        );
+
+    } catch (error) {
+        console.error(
+            "Get officer profile error:",
+            error
+        );
+
+        res.status(500).json({
+            error:
+                "Error retrieving NEA officer profile"
+        });
+    }
+}
 
 module.exports = {
     getDashboardStatistics,
     getRecentInspections,
     getTodayInspectionCount,
-    updateInspectionStatus
+    updateInspectionStatus,
+    getOfficerProfile
 };
