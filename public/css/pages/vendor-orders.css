@@ -7,7 +7,7 @@
   --white-color: rgb(255, 255, 255);
   --muted-text-color: rgb(105, 105, 105);
   --border-color: rgba(34, 34, 34, 0.12);
-  --nav-height: 64px;
+  --nav-height: 86px;
   --stall-selector-height: 76px;
   --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
   --popup-shadow: 0 18px 35px rgba(34, 34, 34, 0.16);
@@ -121,6 +121,7 @@ button {
   margin: 0;
   overflow: hidden;
   color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
   line-height: 1.1;
@@ -134,7 +135,98 @@ button {
   position: relative;
   justify-self: end;
 }
-.switch-stall-button,
+
+.switch-stall-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 15px;
+  border: 0;
+  border-radius: 10px;
+  background-color: var(--orange-color);
+  color: var(--white-color);
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(196, 72, 12, 0.2);
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.switch-stall-button:hover {
+  transform: translateY(-2px);
+  background-color: var(--dark-orange-color);
+  box-shadow: 0 11px 18px rgba(250, 129, 18, 0.28);
+}
+
+.switch-stall-button .material-symbols-rounded {
+  font-size: 21px;
+}
+
+.dropdown-arrow {
+  transition: transform 180ms ease;
+}
+
+.switch-stall-button[aria-expanded="true"] .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.stall-dropdown {
+  position: absolute;
+  z-index: 1300;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(330px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  background-color: var(--white-color);
+  box-shadow: var(--popup-shadow);
+}
+
+.stall-option {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid rgb(241, 236, 227);
+  border-radius: 0;
+  background-color: var(--white-color);
+  color: var(--black-text-color);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.stall-option:last-child {
+  border-bottom: 0;
+}
+
+.stall-option:hover {
+  background-color: rgb(255, 244, 232);
+}
+
+.stall-option.active {
+  background-color: rgb(255, 240, 223);
+}
+
+.stall-option-name {
+  font-size: 15px;
+  font-weight: 750;
+}
+
+.stall-option-location {
+  color: var(--muted-text-color);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .primary-button,
 .view-details-button {
   display: inline-flex;
@@ -143,75 +235,14 @@ button {
   justify-content: center;
   gap: 9px;
   padding: 10px 15px;
-  color: var(--white-color);
-  background-color: var(--orange-color);
   border: 0;
   border-radius: 10px;
+  background-color: var(--orange-color);
+  color: var(--white-color);
   font-weight: 700;
-  box-shadow: 0 6px 12px rgba(196, 72, 12, 0.2);
-  transition:
-    background-color 160ms ease,
-    transform 160ms ease,
-    box-shadow 160ms ease;
+  cursor: pointer;
 }
-.switch-stall-button:hover,
-.primary-button:hover,
-.view-details-button:hover {
-  transform: translateY(-2px);
-  background-color: var(--dark-orange-color);
-  box-shadow: 0 11px 18px rgba(250, 129, 18, 0.28);
-}
-.switch-stall-button .material-symbols-rounded {
-  font-size: 21px;
-}
-.dropdown-arrow {
-  transition: transform 180ms ease;
-}
-.switch-stall-button[aria-expanded="true"] .dropdown-arrow {
-  transform: rotate(180deg);
-}
-.stall-dropdown {
-  position: absolute;
-  z-index: 1300;
-  top: calc(100% + 10px);
-  right: 0;
-  width: min(330px, calc(100vw - 32px));
-  overflow: hidden;
-  background-color: var(--white-color);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--popup-shadow);
-}
-.stall-option {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 4px;
-  padding: 14px 16px;
-  color: var(--black-text-color);
-  background-color: var(--white-color);
-  border: 0;
-  border-bottom: 1px solid #f1ece3;
-  text-align: left;
-  transition: background-color 150ms ease;
-}
-.stall-option:last-child {
-  border-bottom: 0;
-}
-.stall-option:hover {
-  background-color: #fff4e8;
-}
-.stall-option.active {
-  background-color: #fff0df;
-}
-.stall-option-name {
-  font-size: 15px;
-  font-weight: 750;
-}
-.stall-option-location {
-  color: var(--muted-text-color);
-  font-size: 12px;
-  line-height: 1.4;
-}
+
 /* Page content */
 .orders-page {
   --orders-page-padding: clamp(24px, 5vw, 72px);
@@ -661,4 +692,36 @@ body:has(.order-dialog:not([hidden]))::before {
     grid-template-columns: 1fr;
     gap: 3px;
   }
+}
+
+.menu-page-heading,
+.orders-page-heading,
+.feedback-page-heading,
+.profile-page-heading {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.menu-page-heading h1,
+.menu-page-heading h2,
+.orders-page-heading h1,
+.feedback-page-heading h1,
+.profile-page-heading h1 {
+  margin: 0;
+  color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.menu-page-description,
+.orders-page-heading p,
+.page-description,
+.profile-page-description {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--muted-text-color);
+  font-size: 15px;
+  line-height: 1.6;
 }

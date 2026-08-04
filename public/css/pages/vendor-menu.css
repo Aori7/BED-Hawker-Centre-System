@@ -19,7 +19,7 @@
   --menu-border: #e7ddcc;
   --menu-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   --menu-popup-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
-  --nav-height: 64px;
+  --nav-height: 86px;
   --stall-selector-height: 76px;
   --sidebar-width: 220px;
 }
@@ -441,12 +441,17 @@ select {
 /* menu item image */
 .menu-image {
   position: relative;
+  width: 100%;
   min-height: 260px;
   overflow: hidden;
   border: 1px solid var(--menu-border);
   border-radius: 18px;
   background-color: var(--menu-surface);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 .menu-image::after {
   content: "";
   position: absolute;
@@ -775,8 +780,11 @@ Keep the controls easier to see and click.
 
 /* dialog header */
 .menu-dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   padding: 22px 28px;
-  border-bottom: 1px solid var(--menu-border);
+  border-bottom: 1px solid var(--promotion-border);
   background: var(--orange-color);
 }
 
@@ -784,7 +792,8 @@ Keep the controls easier to see and click.
   margin: 0;
   color: var(--white-color);
   font-family: "Archivo", sans-serif;
-  font-size: 28px;
+  font-size: 1.45rem;
+  font-weight: 750;
 }
 
 /* dialog body */
@@ -1010,3 +1019,35 @@ Keep the controls easier to see and click.
 .more-menu .action-menu button {
   border-radius: 0 !important;
 } */
+
+.menu-page-heading,
+.orders-page-heading,
+.feedback-page-heading,
+.profile-page-heading {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.menu-page-heading h1,
+.menu-page-heading h2,
+.orders-page-heading h1,
+.feedback-page-heading h1,
+.profile-page-heading h1 {
+  margin: 0;
+  color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.menu-page-description,
+.orders-page-heading p,
+.page-description,
+.profile-page-description {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--muted-text-color);
+  font-size: 15px;
+  line-height: 1.6;
+}

@@ -11,7 +11,7 @@
   --complaint-color: rgb(190, 55, 55);
   --complaint-background: rgb(255, 237, 237);
   --success-color: rgb(42, 125, 68);
-  --nav-height: 64px;
+  --nav-height: 86px;
   --stall-selector-height: 76px;
   --card-shadow: 0 10px 24px rgba(34, 34, 34, 0.1);
   --popup-shadow: 0 18px 35px rgba(34, 34, 34, 0.16);
@@ -50,17 +50,19 @@ textarea:focus-visible {
 }
 /* navigation bar */
 .nav-bar {
+  height: var(--nav-height);
+  min-height: var(--nav-height);
+  padding: 10px 32px;
+  box-sizing: border-box;
   position: fixed;
   z-index: 1200;
   top: 0;
   right: 0;
   left: 0;
   display: flex;
-  min-height: var(--nav-height);
   align-items: center;
   justify-content: center;
   gap: 28px;
-  padding: 10px 24px;
   background-color: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid rgba(34, 34, 34, 0.08);
   box-shadow: 0 4px 16px rgba(34, 34, 34, 0.06);
@@ -126,6 +128,7 @@ textarea:focus-visible {
   margin: 0;
   overflow: hidden;
   color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
   line-height: 1.1;
@@ -182,8 +185,9 @@ textarea:focus-visible {
   right: 0;
   width: min(330px, calc(100vw - 32px));
   overflow: hidden;
-  background-color: var(--white-color);
   border: 1px solid var(--border-color);
+  border-radius: 0;
+  background-color: var(--white-color);
   box-shadow: var(--popup-shadow);
 }
 .stall-option {
@@ -192,11 +196,13 @@ textarea:focus-visible {
   flex-direction: column;
   gap: 4px;
   padding: 14px 16px;
-  color: var(--black-text-color);
-  background-color: var(--white-color);
   border: 0;
-  border-bottom: 1px solid #f1ece3;
+  border-bottom: 1px solid rgb(241, 236, 227);
+  border-radius: 0;
+  background-color: var(--white-color);
+  color: var(--black-text-color);
   text-align: left;
+  cursor: pointer;
   transition: background-color 150ms ease;
 }
 .stall-option:last-child {
@@ -894,4 +900,36 @@ textarea:focus-visible {
     bottom: 16px;
     left: 16px;
   }
+}
+
+.menu-page-heading,
+.orders-page-heading,
+.feedback-page-heading,
+.profile-page-heading {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.menu-page-heading h1,
+.menu-page-heading h2,
+.orders-page-heading h1,
+.feedback-page-heading h1,
+.profile-page-heading h1 {
+  margin: 0;
+  color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.menu-page-description,
+.orders-page-heading p,
+.page-description,
+.profile-page-description {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--muted-text-color);
+  font-size: 15px;
+  line-height: 1.6;
 }
