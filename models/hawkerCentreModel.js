@@ -84,7 +84,7 @@ async function getAvailableHawkerCentres() {
                     FROM FoodStall fs
                     WHERE fs.HawkerCentreID = hc.HawkerCentreID
                     AND fs.IsActive = 1
-                ) >= 3
+                ) >= 5
 
                 AND NOT EXISTS (
                     SELECT 1

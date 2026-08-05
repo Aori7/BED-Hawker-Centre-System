@@ -32,12 +32,6 @@ body {
   min-height: 100vh;
   overflow-x: clip;
   color: var(--black-text-color);
-  background-color: var(--lighter-beige);
-  /*
-    Overrides the background image from global.css for
-    this dashboard page.
-  */
-  background-image: none;
   font-family: "Noto Sans", Arial, Helvetica, sans-serif;
   line-height: 1.5;
 }

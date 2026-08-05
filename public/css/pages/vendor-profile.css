@@ -593,3 +593,35 @@ input:focus-visible {
     padding: 17px;
   }
 }
+
+.menu-page-heading,
+.orders-page-heading,
+.feedback-page-heading,
+.profile-page-heading {
+  display: block;
+  margin-bottom: 28px;
+}
+
+.menu-page-heading h1,
+.menu-page-heading h2,
+.orders-page-heading h1,
+.feedback-page-heading h1,
+.profile-page-heading h1 {
+  margin: 0;
+  color: var(--black-text-color);
+  font-family: "Archivo", sans-serif;
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.menu-page-description,
+.orders-page-heading p,
+.page-description,
+.profile-page-description {
+  max-width: 620px;
+  margin: 12px 0 0;
+  color: var(--muted-text-color);
+  font-size: 15px;
+  line-height: 1.6;
+}
