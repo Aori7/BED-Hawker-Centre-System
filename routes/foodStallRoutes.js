@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const foodStallController =
-    require("../controllers/foodStallController");
+const foodStallController = require("../controllers/foodStallController");
 
-    //get all food stalls with their latest inspection details for nea search
+//get all food stalls with their latest inspection details for nea search
+router.get("/search/nea", foodStallController.getFoodStallsForNEASearch); //dayana
+// base path: /food-stalls
 router.get(
-    "/search/nea",
-    foodStallController.getFoodStallsForNEASearch
+  "/hawker-centre/:hawkerCentreID",
+  foodStallController.getStallsByHawkerCentre,
 );
-
-router.get("/hawker-centre/:hawkerCentreID",foodStallController.getStallsByHawkerCentre);
-router.get("/:stallID",foodStallController.getFoodStallById);
+router.get("/:stallID", foodStallController.getFoodStallById);
 
 module.exports = router;

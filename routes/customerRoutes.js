@@ -3,8 +3,7 @@ const router = express.Router();
 
 const customerController = require("../controllers/customerController");
 const {authenticateToken, authorizeRoles } = require("../middleware/authMiddleware");
-
-
+// base path: /customers
 router.post("/register", customerController.registerCustomer);
 router.post("/login", customerController.loginCustomer);
 //profile management
