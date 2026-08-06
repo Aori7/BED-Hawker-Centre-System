@@ -7,7 +7,7 @@ const {authenticateToken, authorizeRoles } = require("../middleware/authMiddlewa
 
 router.post("/register", customerController.registerCustomer);
 router.post("/login", customerController.loginCustomer);
-
+//profile management
 router.get("/:id/profile", authenticateToken, authorizeRoles("Customer"), customerController.getCustomerProfile);
 router.put("/:id/profile",authenticateToken, authorizeRoles("Customer"),customerController.updateCustomerProfile);
 router.put("/:userID/password",authenticateToken, authorizeRoles("Customer"),customerController.changeCustomerPassword);

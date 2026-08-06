@@ -6,7 +6,7 @@ const dotenv = require("dotenv"); // ruimin
 dotenv.config(); // ruimin
 
 // Import - ada's
-const customerController = require("./controllers/customerController");
+// const customerController = require("./controllers/customerController");
 const customerRoutes = require("./routes/customerRoutes");
 const authRoutes = require("./routes/authRoutes");
 const hawkerCentreRoutes = require("./routes/hawkerCentreRoutes");
@@ -50,13 +50,9 @@ app.use(express.static("public"));
 app.use("/customers", customerRoutes);
 app.use("/auth", authRoutes);
 app.use("/hawker-centres", hawkerCentreRoutes);
-app.use("/dashboard", dashboardRoutes);
-
 app.use("/food-stalls", foodStallRoutes);
 app.use("/menu-items", menuItemRoutes);
-
 app.use("/orders", orderRoutes);
-
 app.use("/contact-submissions", contactSubmissionRoutes);
 //calista's
 app.use("/rental-agreements", operatorRentalAgreementRoutes);
@@ -78,6 +74,7 @@ app.use("/vendor-profile", vendorProfileRoutes);
 app.use("/inspections", inspectionRoutes);
 app.use("/hygiene-grades", hygieneGradeRoutes);
 app.use("/stall-details", stallDetailsRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 //start server
 module.exports = app;

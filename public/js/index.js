@@ -1,8 +1,6 @@
 const homepageHawkerList = document.getElementById("homepage-hawker-list");
 const accessToken = sessionStorage.getItem("accessToken");
-
 const isLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
-
 const userRole = sessionStorage.getItem("userRole");
 
 function getHawkerRegion(hawkerCentre) {

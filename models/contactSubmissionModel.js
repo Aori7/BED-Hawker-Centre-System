@@ -14,7 +14,7 @@ async function getContactTargets() {
         FROM HawkerCentre
         WHERE IsActive = 1
         ORDER BY HCName
-      `);
+      `); // selects active hcs
 
     const stallResult = await connection.request().query(`
         SELECT
@@ -27,7 +27,7 @@ async function getContactTargets() {
           ON fs.HawkerCentreID = hc.HawkerCentreID
         WHERE fs.IsActive = 1
         ORDER BY fs.StallName
-      `);
+      `); // selects active stalls
 
     const operatorResult = await connection.request().query(`
         SELECT
@@ -35,7 +35,7 @@ async function getContactTargets() {
           OperatorName AS name
         FROM Operator
         ORDER BY OperatorName
-      `);
+      `); // selects all operators
 
     return {
       hawkerCentres: hawkerResult.recordset,
@@ -60,7 +60,7 @@ async function createContactSubmission(submissionData) {
     connection = await sql.connect(dbConfig);
 
     const result = await connection
-      .request()
+      .request() // creating new req obj using this db connection
       .input("CustomerID", sql.Int, submissionData.customerID)
       .input("Name", sql.VarChar(100), submissionData.name)
       .input("Email", sql.VarChar(100), submissionData.email)
@@ -84,7 +84,7 @@ async function createContactSubmission(submissionData) {
           HawkerCentreID,
           OperatorID
         )
-        OUTPUT INSERTED.SubmissionID
+        OUTPUT INSERTED.SubmissionID -- temporarily represent the new row added
         VALUES
         (
           @CustomerID,
