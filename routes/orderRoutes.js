@@ -4,7 +4,7 @@ const {authenticateToken, authorizeRoles } = require("../middleware/authMiddlewa
 const {
     validateCreateOrder
 } = require("../middleware/orderValidation");
-
+// base path: /orders
 const router = express.Router();
 router.get("/customer/:customerID/recent",authenticateToken,authorizeRoles("Customer"),orderController.getRecentOrders);
 router.post("/", authenticateToken, authorizeRoles("Customer"),validateCreateOrder, orderController.createOrder);

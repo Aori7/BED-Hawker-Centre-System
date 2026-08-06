@@ -5,7 +5,7 @@ const {
   authorizeRoles,
 } = require("../middleware/authMiddleware");
 const router = express.Router();
-
+// base path: /hawker-centres
 router.get("/", hawkerCentreController.getAllHawkerCentres);
 
 router.get(
