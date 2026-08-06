@@ -333,585 +333,900 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==================================================
-  // HAWKER STATISTICS PAGE
-  // LEAFLET IS NOT INITIALISED HERE
-  // ==================================================
+// HAWKER STATISTICS PAGE
+// ==================================================
 
-  const pieCanvas =
-    document.getElementById("pieChart");
+const pieCanvas =
+document.getElementById("pieChart");
 
-  if (pieCanvas) {
-    initialiseDashboardPage();
-  }
+if (pieCanvas) {
+initialiseDashboardPage();
+}
 
-  function initialiseDashboardPage() {
-    const hawkerSelect =
-      document.getElementById(
-        "hawkerCentreSelect"
+function initialiseDashboardPage() {
+const hawkerSelect =
+  document.getElementById(
+    "hawkerCentreSelect"
+  );
+
+const metricSelect =
+  document.getElementById(
+    "metricSelect"
+  );
+
+const hawkerName =
+  document.querySelector(
+    ".hawker-details h3"
+  );
+
+const hawkerDescription =
+  document.querySelector(
+    ".hawker-desc"
+  );
+
+const hawkerImage =
+  document.querySelector(
+    ".hawker-img img"
+  );
+
+const chartSummary =
+  document.getElementById(
+    "chartSummary"
+  );
+
+const chartClickInfo =
+  document.getElementById(
+    "chartClickInfo"
+  );
+
+const context =
+  pieCanvas.getContext("2d");
+
+let currentDashboardData = null;
+let currentPieSegments = [];
+
+// ==================================================
+// LOAD STALLS INTO DROPDOWN
+// ==================================================
+
+async function loadFoodStalls() {
+  hawkerSelect.innerHTML = `
+    <option
+      value=""
+      selected
+      disabled
+    >
+      ▼ Select Stall
+    </option>
+  `;
+
+  try {
+    /*
+      Uses your existing route:
+      GET /food-stalls/hawker-centre/:hawkerCentreID
+    */
+
+    const hawkerCentreIDs =
+      Object.values(
+        hawkerCentres
+      ).map(
+        (centre) => centre.id
       );
 
-    const metricSelect =
-      document.getElementById(
-        "metricSelect"
-      );
-
-    const hawkerName =
-      document.querySelector(
-        ".hawker-details h3"
-      );
-
-    const hawkerDescription =
-      document.querySelector(
-        ".hawker-desc"
-      );
-
-    const hawkerImage =
-      document.querySelector(
-        ".hawker-img img"
-      );
-
-    const chartSummary =
-      document.getElementById(
-        "chartSummary"
-      );
-
-    const chartClickInfo =
-      document.getElementById(
-        "chartClickInfo"
-      );
-
-    const context =
-      pieCanvas.getContext("2d");
-
-    let dashboardData = null;
-    let pieSegments = [];
-
-    function drawPie(segments) {
-      const safeSegments =
-        segments.map((segment) => ({
-          ...segment,
-
-          value: Math.max(
-            0,
-            Number(segment.value) || 0
+    const requests =
+      hawkerCentreIDs.map(
+        (hawkerCentreID) =>
+          apiRequest(
+            `/food-stalls/hawker-centre/${hawkerCentreID}`
           )
-        }));
-
-      pieSegments = safeSegments;
-
-      const total =
-        safeSegments.reduce(
-          (sum, segment) =>
-            sum + segment.value,
-          0
-        );
-
-      const centreX =
-        pieCanvas.width / 2;
-
-      const centreY =
-        pieCanvas.height / 2;
-
-      const radius =
-        Math.min(
-          pieCanvas.width,
-          pieCanvas.height
-        ) * 0.4;
-
-      context.clearRect(
-        0,
-        0,
-        pieCanvas.width,
-        pieCanvas.height
       );
 
-      if (total === 0) {
-        context.beginPath();
+    const results =
+      await Promise.all(requests);
 
-        context.arc(
-          centreX,
-          centreY,
-          radius,
-          0,
-          Math.PI * 2
-        );
-
-        context.fillStyle = "#dddddd";
-        context.fill();
-
-        context.fillStyle = "#333333";
-        context.font =
-          "16px Archivo, sans-serif";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-
-        context.fillText(
-          "No data",
-          centreX,
-          centreY
-        );
-
-        return;
-      }
-
-      const colours = [
-        "#ff8c1a",
-        "#111111",
-        "#f2c14e",
-        "#5c8001",
-        "#9c89b8"
-      ];
-
-      let startAngle =
-        -Math.PI / 2;
-
-      safeSegments.forEach(
-        (segment, index) => {
-          const sliceAngle =
-            (
-              segment.value /
-              total
-            ) *
-            Math.PI *
-            2;
-
-          context.beginPath();
-          context.moveTo(
-            centreX,
-            centreY
-          );
-
-          context.arc(
-            centreX,
-            centreY,
-            radius,
-            startAngle,
-            startAngle + sliceAngle
-          );
-
-          context.closePath();
-
-          context.fillStyle =
-            colours[
-              index % colours.length
-            ];
-
-          context.fill();
-
-          segment.startAngle =
-            startAngle;
-
-          segment.endAngle =
-            startAngle +
-            sliceAngle;
-
-          startAngle += sliceAngle;
-        }
-      );
-    }
-
-    function displaySummary(items) {
-      chartSummary.innerHTML =
-        items
-          .map(
-            (item) => `
-              <p>
-                <strong>
-                  ${escapeHtml(item.label)}
-                </strong>
-                -
-                ${escapeHtml(item.value)}
-              </p>
-            `
-          )
-          .join("");
-    }
-
-    function renderSelectedMetric() {
-      if (!dashboardData) {
-        return;
-      }
-
-      const selectedMetric =
-        metricSelect.value;
-
-      if (
-        selectedMetric ===
-          "profitLost" ||
-        selectedMetric ===
-          "profitLoss"
-      ) {
-        const revenue =
-          Number(
-            dashboardData.profitLoss
-              .totalRevenue || 0
-          );
-
-        const expenses =
-          Number(
-            dashboardData.profitLoss
-              .totalExpenses || 0
-          );
-
-        const net =
-          Number(
-            dashboardData.profitLoss
-              .netProfitLoss || 0
-          );
-
-        drawPie([
-          {
-            label: "Revenue",
-            value: revenue
-          },
-
-          {
-            label: "Expenses",
-            value: expenses
+    const allStalls =
+      results.flatMap(
+        (result) => {
+          if (Array.isArray(result)) {
+            return result;
           }
-        ]);
 
-        displaySummary([
-          {
-            label: "Revenue",
-            value: `$${revenue.toFixed(2)}`
-          },
-
-          {
-            label: "Expenses",
-            value: `$${expenses.toFixed(2)}`
-          },
-
-          {
-            label: "Net Profit/Loss",
-            value: `$${net.toFixed(2)}`
-          }
-        ]);
-
-        return;
-      }
-
-      if (
-        selectedMetric === "reviews"
-      ) {
-        const reviews =
-          dashboardData.reviews;
-
-        const resolved =
-          Number(
-            reviews.resolvedComplaints ||
-            0
-          );
-
-        const pending =
-          Number(
-            reviews.pendingComplaints ||
-            0
-          );
-
-        const inProgress =
-          Number(
-            reviews.inProgressComplaints ||
-            0
-          );
-
-        const closed =
-          Number(
-            reviews.closedComplaints ||
-            0
-          );
-
-        drawPie([
-          {
-            label: "Resolved",
-            value: resolved
-          },
-
-          {
-            label: "Pending",
-            value: pending
-          },
-
-          {
-            label: "In Progress",
-            value: inProgress
-          },
-
-          {
-            label: "Closed",
-            value: closed
-          }
-        ]);
-
-        displaySummary([
-          {
-            label: "Total Complaints",
-            value: String(
-              reviews.totalComplaints ||
-              0
+          if (
+            Array.isArray(
+              result?.data
             )
-          },
-
-          {
-            label: "Resolved",
-            value: String(resolved)
-          },
-
-          {
-            label: "Pending",
-            value: String(pending)
-          },
-
-          {
-            label: "In Progress",
-            value: String(inProgress)
-          },
-
-          {
-            label: "Closed",
-            value: String(closed)
+          ) {
+            return result.data;
           }
-        ]);
 
-        return;
-      }
-
-      const hygiene =
-        dashboardData.hygieneGrades;
-
-      const gradeA =
-        Number(hygiene.gradeA || 0);
-
-      const gradeB =
-        Number(hygiene.gradeB || 0);
-
-      const gradeC =
-        Number(hygiene.gradeC || 0);
-
-      const gradeD =
-        Number(hygiene.gradeD || 0);
-
-      drawPie([
-        {
-          label: "Grade A",
-          value: gradeA
-        },
-
-        {
-          label: "Grade B",
-          value: gradeB
-        },
-
-        {
-          label: "Grade C",
-          value: gradeC
-        },
-
-        {
-          label: "Grade D",
-          value: gradeD
+          return [];
         }
-      ]);
+      );
 
-      displaySummary([
-        {
-          label: "Total Inspections",
-          value: String(
-            hygiene.totalInspections ||
-            0
-          )
-        },
+    const activeStalls =
+      allStalls.filter(
+        (stall) =>
+          stall.IsActive ===
+            undefined ||
+          stall.IsActive === null ||
+          stall.IsActive === 1 ||
+          stall.IsActive === true
+      );
 
-        {
-          label: "Average Score",
-          value: Number(
-            hygiene
-              .averageInspectionScore ||
-            0
-          ).toFixed(1)
-        },
-
-        {
-          label: "Grade A",
-          value: String(gradeA)
-        },
-
-        {
-          label: "Grade B",
-          value: String(gradeB)
-        },
-
-        {
-          label: "Grade C",
-          value: String(gradeC)
-        },
-
-        {
-          label: "Grade D",
-          value: String(gradeD)
-        }
-      ]);
-    }
-
-    async function loadDashboard(
-      hawkerCentreID
+    if (
+      activeStalls.length === 0
     ) {
-      chartSummary.innerHTML = `
-        <p>Loading statistics...</p>
+      hawkerSelect.innerHTML = `
+        <option value="">
+          No stalls available
+        </option>
       `;
 
-      chartClickInfo.textContent = "";
-
-      try {
-        dashboardData =
-          await apiRequest(
-            `/operator-dashboard/${operatorID}/hawker-centre/${hawkerCentreID}`
-          );
-
-        renderSelectedMetric();
-      } catch (error) {
-        dashboardData = null;
-
-        drawPie([]);
-
-        chartSummary.innerHTML = `
-          <p>Unable to load statistics.</p>
-        `;
-
-        chartClickInfo.textContent =
-          error.message;
-
-        console.error(error);
-      }
-    }
-
-    function selectHawker(value) {
-      const key =
-        getHawkerKey(value);
-
-      const hawker =
-        hawkerCentres[key];
-
       hawkerName.textContent =
-        hawker.name;
+        "No Stall Available";
 
       hawkerDescription.textContent =
-        hawker.description;
+        "No active stalls were found.";
 
-      hawkerImage.src =
-        hawker.image;
+      drawPie([]);
 
-      hawkerImage.alt =
-        hawker.name;
+      chartSummary.innerHTML = `
+        <p>No statistics available.</p>
+      `;
 
-      // Leaflet remains controlled by leaflet.js.
-      loadDashboard(hawker.id);
+      return;
     }
 
-    hawkerSelect.addEventListener(
-      "change",
-      (event) => {
-        selectHawker(
-          event.target.value
+    activeStalls.forEach(
+      (stall) => {
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        /*
+          Dropdown value stores StallID.
+        */
+        option.value =
+          stall.StallID;
+
+        /*
+          Keep HawkerCentreID for the
+          dashboard API.
+        */
+        option.dataset.hawkerCentreId =
+          stall.HawkerCentreID;
+
+        option.dataset.stallName =
+          stall.StallName || "";
+
+        option.dataset.description =
+          stall.StallDescription ||
+          stall.Description ||
+          "";
+
+        option.dataset.image =
+          stall.ImageURL || "";
+
+        option.dataset.unit =
+          stall.StallUnitNo || "";
+
+        option.textContent =
+          stall.StallName ||
+          `Stall ${stall.StallID}`;
+
+        hawkerSelect.appendChild(
+          option
         );
       }
     );
 
-    metricSelect.addEventListener(
-      "change",
-      renderSelectedMetric
+    /*
+      Automatically display first stall.
+    */
+    hawkerSelect.selectedIndex = 1;
+
+    await selectStall(
+      hawkerSelect.options[1]
     );
 
-    pieCanvas.addEventListener(
-      "click",
-      (event) => {
-        if (!pieSegments.length) {
-          return;
-        }
-
-        const rectangle =
-          pieCanvas.getBoundingClientRect();
-
-        const scaleX =
-          pieCanvas.width /
-          rectangle.width;
-
-        const scaleY =
-          pieCanvas.height /
-          rectangle.height;
-
-        const x =
-          (
-            event.clientX -
-            rectangle.left
-          ) *
-          scaleX;
-
-        const y =
-          (
-            event.clientY -
-            rectangle.top
-          ) *
-          scaleY;
-
-        const centreX =
-          pieCanvas.width / 2;
-
-        const centreY =
-          pieCanvas.height / 2;
-
-        const radius =
-          Math.min(
-            pieCanvas.width,
-            pieCanvas.height
-          ) * 0.4;
-
-        const distance =
-          Math.sqrt(
-            (x - centreX) ** 2 +
-            (y - centreY) ** 2
-          );
-
-        if (distance > radius) {
-          return;
-        }
-
-        let angle =
-          Math.atan2(
-            y - centreY,
-            x - centreX
-          );
-
-        if (
-          angle < -Math.PI / 2
-        ) {
-          angle += Math.PI * 2;
-        }
-
-        const selected =
-          pieSegments.find(
-            (segment) =>
-              angle >=
-                segment.startAngle &&
-              angle <
-                segment.endAngle
-          );
-
-        if (selected) {
-          chartClickInfo.textContent =
-            `${selected.label}: ${selected.value}`;
-        }
-      }
+  } catch (error) {
+    console.error(
+      "Unable to load stalls:",
+      error
     );
 
-    const initialValue =
-      hawkerSelect.value &&
-      hawkerSelect.value !== ""
-        ? hawkerSelect.value
-        : "laupasat";
+    hawkerSelect.innerHTML = `
+      <option value="">
+        Unable to load stalls
+      </option>
+    `;
 
-    selectHawker(initialValue);
+    hawkerName.textContent =
+      "Unable to Load Stalls";
+
+    hawkerDescription.textContent =
+      error.message;
+
+    drawPie([]);
+
+    chartSummary.innerHTML = `
+      <p>Unable to load statistics.</p>
+    `;
   }
+}
+
+// ==================================================
+// SELECT STALL
+// ==================================================
+
+async function selectStall(option) {
+  if (
+    !option ||
+    !option.value
+  ) {
+    return;
+  }
+
+  const stallID =
+    Number(option.value);
+
+  try {
+    /*
+      Uses your existing route:
+      GET /food-stalls/:stallID
+    */
+
+    const result =
+      await apiRequest(
+        `/food-stalls/${stallID}`
+      );
+
+    const stall =
+      result?.data ||
+      result?.stall ||
+      result;
+
+    const stallName =
+      stall.StallName ||
+      option.dataset.stallName ||
+      option.textContent.trim();
+
+    const stallUnit =
+      stall.StallUnitNo ||
+      option.dataset.unit ||
+      "";
+
+    const description =
+      stall.StallDescription ||
+      stall.Description ||
+      option.dataset.description ||
+      "";
+
+    const image =
+      stall.ImageURL ||
+      option.dataset.image ||
+      "";
+
+    const hawkerCentreID =
+      Number(
+        stall.HawkerCentreID ||
+        option.dataset
+          .hawkerCentreId
+      );
+
+    hawkerName.textContent =
+      stallUnit
+        ? `${stallName} — ${stallUnit}`
+        : stallName;
+
+    hawkerDescription.textContent =
+      description ||
+      "No stall description available.";
+
+    if (image) {
+      hawkerImage.src = image;
+    }
+
+    hawkerImage.alt =
+      stallName;
+
+    await loadDashboardData(
+      hawkerCentreID
+    );
+
+  } catch (error) {
+    console.error(
+      "Unable to retrieve stall details:",
+      error
+    );
+
+    /*
+      Fallback to data already stored
+      in the dropdown option.
+    */
+
+    hawkerName.textContent =
+      option.dataset.stallName ||
+      option.textContent.trim();
+
+    hawkerDescription.textContent =
+      option.dataset.description ||
+      "No stall description available.";
+
+    if (
+      option.dataset.image
+    ) {
+      hawkerImage.src =
+        option.dataset.image;
+    }
+
+    const hawkerCentreID =
+      Number(
+        option.dataset
+          .hawkerCentreId
+      );
+
+    if (hawkerCentreID) {
+      await loadDashboardData(
+        hawkerCentreID
+      );
+    }
+  }
+}
+
+// ==================================================
+// OLD DASHBOARD API LOGIC
+// ==================================================
+
+async function loadDashboardData(
+  hawkerCentreID
+) {
+  chartSummary.innerHTML = `
+    <p>Loading statistics...</p>
+  `;
+
+  chartClickInfo.textContent = "";
+
+  try {
+    currentDashboardData =
+      await apiRequest(
+        `/operator-dashboard/${operatorID}/hawker-centre/${hawkerCentreID}`
+      );
+
+    renderDashboardMetric();
+
+  } catch (error) {
+    currentDashboardData = null;
+
+    drawPie([]);
+
+    chartSummary.innerHTML = `
+      <p>Unable to load statistics.</p>
+    `;
+
+    chartClickInfo.textContent =
+      error.message;
+
+    console.error(
+      "Unable to load dashboard:",
+      error
+    );
+  }
+}
+
+// ==================================================
+// OLD DASHBOARD METRIC LOGIC
+// ==================================================
+
+function renderDashboardMetric() {
+  if (!currentDashboardData) {
+    return;
+  }
+
+  const metric =
+    metricSelect.value;
+
+  if (
+    metric === "profitLost" ||
+    metric === "profitLoss"
+  ) {
+    const profitLoss =
+      currentDashboardData
+        .profitLoss || {};
+
+    const revenue =
+      Number(
+        profitLoss
+          .totalRevenue || 0
+      );
+
+    const expenses =
+      Number(
+        profitLoss
+          .totalExpenses || 0
+      );
+
+    const net =
+      Number(
+        profitLoss
+          .netProfitLoss || 0
+      );
+
+    drawPie([
+      {
+        label: "Revenue",
+        value: revenue
+      },
+      {
+        label: "Expenses",
+        value: expenses
+      }
+    ]);
+
+    updateSummary([
+      {
+        label: "Revenue",
+        value:
+          `$${revenue.toFixed(2)}`
+      },
+      {
+        label: "Expenses",
+        value:
+          `$${expenses.toFixed(2)}`
+      },
+      {
+        label:
+          "Net Profit/Loss",
+        value:
+          `$${net.toFixed(2)}`
+      }
+    ]);
+
+    return;
+  }
+
+  if (metric === "reviews") {
+    const reviews =
+      currentDashboardData
+        .reviews || {};
+
+    const resolved =
+      Number(
+        reviews
+          .resolvedComplaints || 0
+      );
+
+    const pending =
+      Number(
+        reviews
+          .pendingComplaints || 0
+      );
+
+    const inProgress =
+      Number(
+        reviews
+          .inProgressComplaints || 0
+      );
+
+    const closed =
+      Number(
+        reviews
+          .closedComplaints || 0
+      );
+
+    drawPie([
+      {
+        label: "Resolved",
+        value: resolved
+      },
+      {
+        label: "Pending",
+        value: pending
+      },
+      {
+        label: "In Progress",
+        value: inProgress
+      },
+      {
+        label: "Closed",
+        value: closed
+      }
+    ]);
+
+    updateSummary([
+      {
+        label:
+          "Total Complaints",
+        value:
+          reviews
+            .totalComplaints || 0
+      },
+      {
+        label: "Resolved",
+        value: resolved
+      },
+      {
+        label: "Pending",
+        value: pending
+      },
+      {
+        label:
+          "In Progress",
+        value: inProgress
+      },
+      {
+        label: "Closed",
+        value: closed
+      }
+    ]);
+
+    return;
+  }
+
+  const hygiene =
+    currentDashboardData
+      .hygieneGrades || {};
+
+  const gradeA =
+    Number(
+      hygiene.gradeA || 0
+    );
+
+  const gradeB =
+    Number(
+      hygiene.gradeB || 0
+    );
+
+  const gradeC =
+    Number(
+      hygiene.gradeC || 0
+    );
+
+  const gradeD =
+    Number(
+      hygiene.gradeD || 0
+    );
+
+  drawPie([
+    {
+      label: "Grade A",
+      value: gradeA
+    },
+    {
+      label: "Grade B",
+      value: gradeB
+    },
+    {
+      label: "Grade C",
+      value: gradeC
+    },
+    {
+      label: "Grade D",
+      value: gradeD
+    }
+  ]);
+
+  updateSummary([
+    {
+      label:
+        "Total Inspections",
+      value:
+        hygiene
+          .totalInspections || 0
+    },
+    {
+      label:
+        "Average Score",
+      value:
+        Number(
+          hygiene
+            .averageInspectionScore ||
+          0
+        ).toFixed(1)
+    },
+    {
+      label: "Grade A",
+      value: gradeA
+    },
+    {
+      label: "Grade B",
+      value: gradeB
+    },
+    {
+      label: "Grade C",
+      value: gradeC
+    },
+    {
+      label: "Grade D",
+      value: gradeD
+    }
+  ]);
+}
+
+// ==================================================
+// OLD SUMMARY LOGIC
+// ==================================================
+
+function updateSummary(items) {
+  chartSummary.innerHTML =
+    items
+      .map(
+        (item) => `
+          <p>
+            <strong>
+              ${escapeHtml(
+                item.label
+              )}
+            </strong>
+            -
+            ${escapeHtml(
+              String(item.value)
+            )}
+          </p>
+        `
+      )
+      .join("");
+}
+
+// ==================================================
+// OLD PIE CHART LOGIC
+// ==================================================
+
+function drawPie(segments) {
+  const safeSegments =
+    segments.map(
+      (segment) => ({
+        ...segment,
+
+        value: Math.max(
+          0,
+          Number(
+            segment.value
+          ) || 0
+        )
+      })
+    );
+
+  currentPieSegments =
+    safeSegments;
+
+  const total =
+    safeSegments.reduce(
+      (sum, segment) =>
+        sum + segment.value,
+      0
+    );
+
+  const centreX =
+    pieCanvas.width / 2;
+
+  const centreY =
+    pieCanvas.height / 2;
+
+  const radius =
+    Math.min(
+      pieCanvas.width,
+      pieCanvas.height
+    ) * 0.4;
+
+  context.clearRect(
+    0,
+    0,
+    pieCanvas.width,
+    pieCanvas.height
+  );
+
+  if (total === 0) {
+    context.beginPath();
+
+    context.arc(
+      centreX,
+      centreY,
+      radius,
+      0,
+      Math.PI * 2
+    );
+
+    context.fillStyle =
+      "#dddddd";
+
+    context.fill();
+
+    context.fillStyle =
+      "#333333";
+
+    context.font =
+      "16px Archivo, sans-serif";
+
+    context.textAlign =
+      "center";
+
+    context.textBaseline =
+      "middle";
+
+    context.fillText(
+      "No data",
+      centreX,
+      centreY
+    );
+
+    return;
+  }
+
+  const colours = [
+    "#ff8c1a",
+    "#111111",
+    "#f2c14e",
+    "#5c8001",
+    "#9c89b8"
+  ];
+
+  let startAngle =
+    -Math.PI / 2;
+
+  safeSegments.forEach(
+    (segment, index) => {
+      const sliceAngle =
+        (
+          segment.value /
+          total
+        ) *
+        Math.PI *
+        2;
+
+      context.beginPath();
+
+      context.moveTo(
+        centreX,
+        centreY
+      );
+
+      context.arc(
+        centreX,
+        centreY,
+        radius,
+        startAngle,
+        startAngle +
+          sliceAngle
+      );
+
+      context.closePath();
+
+      context.fillStyle =
+        colours[
+          index %
+            colours.length
+        ];
+
+      context.fill();
+
+      segment.startAngle =
+        startAngle;
+
+      segment.endAngle =
+        startAngle +
+        sliceAngle;
+
+      startAngle +=
+        sliceAngle;
+    }
+  );
+}
+
+// ==================================================
+// EVENTS
+// ==================================================
+
+hawkerSelect.addEventListener(
+  "change",
+  async (event) => {
+    const selectedOption =
+      event.target.options[
+        event.target
+          .selectedIndex
+      ];
+
+    await selectStall(
+      selectedOption
+    );
+  }
+);
+
+metricSelect.addEventListener(
+  "change",
+  renderDashboardMetric
+);
+
+pieCanvas.addEventListener(
+  "click",
+  (event) => {
+    if (
+      !currentPieSegments.length
+    ) {
+      return;
+    }
+
+    const rectangle =
+      pieCanvas
+        .getBoundingClientRect();
+
+    const scaleX =
+      pieCanvas.width /
+      rectangle.width;
+
+    const scaleY =
+      pieCanvas.height /
+      rectangle.height;
+
+    const x =
+      (
+        event.clientX -
+        rectangle.left
+      ) *
+      scaleX;
+
+    const y =
+      (
+        event.clientY -
+        rectangle.top
+      ) *
+      scaleY;
+
+    const centreX =
+      pieCanvas.width / 2;
+
+    const centreY =
+      pieCanvas.height / 2;
+
+    const radius =
+      Math.min(
+        pieCanvas.width,
+        pieCanvas.height
+      ) * 0.4;
+
+    const distance =
+      Math.sqrt(
+        (x - centreX) ** 2 +
+        (y - centreY) ** 2
+      );
+
+    if (distance > radius) {
+      return;
+    }
+
+    let angle =
+      Math.atan2(
+        y - centreY,
+        x - centreX
+      );
+
+    if (
+      angle <
+      -Math.PI / 2
+    ) {
+      angle +=
+        Math.PI * 2;
+    }
+
+    const selected =
+      currentPieSegments.find(
+        (segment) =>
+          angle >=
+            segment.startAngle &&
+          angle <
+            segment.endAngle
+      );
+
+    if (selected) {
+      chartClickInfo.textContent =
+        `${selected.label}: ${selected.value}`;
+    }
+  }
+);
+
+loadFoodStalls();
+}
 
   // ==================================================
   // PROFILE PAGE
