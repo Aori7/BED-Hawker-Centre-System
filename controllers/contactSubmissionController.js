@@ -1,5 +1,6 @@
 const contactSubmissionModel = require("../models/contactSubmissionModel");
 
+// target refers to directing submission to a specific stall, hawker centre or operator etc
 async function getContactTargets(req, res) {
   try {
     const targets = await contactSubmissionModel.getContactTargets();
@@ -13,7 +14,7 @@ async function getContactTargets(req, res) {
     });
   }
 }
-
+//creating a new submission
 async function createContactSubmission(req, res) {
   try {
     const {
@@ -27,7 +28,7 @@ async function createContactSubmission(req, res) {
       stallID,
       hawkerCentreID,
       operatorID,
-    } = req.body;
+    } = req.body; // get the data from the frontend
 
     if (
       !name ||
