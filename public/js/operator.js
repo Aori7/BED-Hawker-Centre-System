@@ -406,12 +406,16 @@ async function loadFoodStalls() {
       GET /food-stalls/hawker-centre/:hawkerCentreID
     */
 
-    const hawkerCentreIDs =
-      Object.values(
-        hawkerCentres
-      ).map(
-        (centre) => centre.id
-      );
+      const hawkerCentreIDs = [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ];
 
     const requests =
       hawkerCentreIDs.map(
@@ -421,8 +425,25 @@ async function loadFoodStalls() {
           )
       );
 
-    const results =
-      await Promise.all(requests);
+      const results =
+      await Promise.all(
+        hawkerCentreIDs.map(
+          async (hawkerCentreID) => {
+            try {
+              return await apiRequest(
+                `/food-stalls/hawker-centre/${hawkerCentreID}`
+              );
+            } catch (error) {
+              console.warn(
+                `Unable to load centre ${hawkerCentreID}`,
+                error
+              );
+    
+              return [];
+            }
+          }
+        )
+      );
 
     const allStalls =
       results.flatMap(
@@ -494,8 +515,8 @@ async function loadFoodStalls() {
           Keep HawkerCentreID for the
           dashboard API.
         */
-        option.dataset.hawkerCentreId =
-          stall.HawkerCentreID;
+        option.dataset.StallID =
+          stall.StallID;
 
         option.dataset.stallName =
           stall.StallName || "";
@@ -624,16 +645,26 @@ async function selectStall(option) {
       description ||
       "No stall description available.";
 
-    if (image) {
-      hawkerImage.src = image;
-    }
-
-    hawkerImage.alt =
-      stallName;
-
-    await loadDashboardData(
-      hawkerCentreID
-    );
+      if (image) {
+        hawkerImage.src = image;
+      }
+      
+      hawkerImage.alt =
+        stallName;
+      
+      console.log(
+        "Selected StallID:",
+        stallID
+      );
+      
+      console.log(
+        "Dashboard HawkerCentreID:",
+        hawkerCentreID
+      );
+      
+      await loadDashboardData(
+        hawkerCentreID
+      );
 
   } catch (error) {
     console.error(

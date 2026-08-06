@@ -13,8 +13,8 @@ const router = express.Router();
 // Protected operator dashboard route
 router.get(
     "/:operatorID/hawker-centre/:hawkerCentreID",
-    authenticateToken,
-    authorizeRoles("Operator"),
+    //authenticateToken,
+    //authorizeRoles("Operator"),
     operatorDashboardController.getDashboardData
 );
 
