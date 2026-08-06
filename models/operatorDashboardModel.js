@@ -64,9 +64,6 @@ async function getDashboardData(
                                 WHEN
                                     o.OrderStatus =
                                         'Completed'
-                                    AND
-                                    o.PaymentStatus =
-                                        'Paid'
                                 THEN
                                     o.TotalAmount
                                 ELSE
